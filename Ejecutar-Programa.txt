@@ -1,0 +1,1 @@
+Para ejecutar sin problemas el servidor se necesitas dos comandos, el primero "npm run dev" y despues "php artisan serve"
