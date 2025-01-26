@@ -14,6 +14,13 @@ class AuthorController extends Controller
         $authors = Author::All();
         return response()->json(["success" => true, "data" => $authors], 200);
     }
+
+
+    public function show(Author $author)
+    {
+        $authors = Author::find($author);
+        return response()->json(["success" => true, "data" => $author], 200);
+    }
     public function store(Request $request)
     {
         // Primer método con validación

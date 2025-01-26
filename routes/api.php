@@ -56,3 +56,4 @@ Route::get("author", [AuthorController::class, 'index']);
 Route::post("author", [AuthorController::class, "store"]);
 Route::delete("author/{author}", [AuthorController::class, "destroy"]);
 Route::put("author/{author}", [AuthorController::class, "update"]);
+Route::get("author/{author}", [AuthorController::class, "show"]);
