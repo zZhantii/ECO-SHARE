@@ -1,5 +1,18 @@
 <template>
+    <h1>Nabo</h1>
+
+    <AppFooter></AppFooter>
 </template>
+
+<script>
+import AppFooter from "@/layouts/AppFooter.vue";
+
+export default {
+    components: {
+        AppFooter,
+    },
+};
+</script>
 <!--
 <template>
     <div class="demo" id="edit-demo">
