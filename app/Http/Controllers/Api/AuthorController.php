@@ -42,4 +42,23 @@ class AuthorController extends Controller
 
         return $request->all();
     }
+
+    public function show(Author $author)
+    {
+        return response()->json(['status' => 485, 'success' => true, 'data' => $author]);
+    }
+
+    public function update(Request $request, Author $author)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'max:255'],
+            'surname' => ['required', 'max:255']
+        ]);
+
+        $data = $validator->validated();
+
+        $author->update($data);
+
+        return response()->json(['status' => 485, 'success' => true, 'data' => $author]);
+    }
 }

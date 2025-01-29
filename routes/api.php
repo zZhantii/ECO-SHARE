@@ -55,3 +55,6 @@ Route::get('get-post/{id}', [PostControllerAdvance::class, 'getPost']);
 // ApiController
 Route::get('author', [PostControllerAdvance::class, 'index']);
 Route::post('author', [PostControllerAdvance::class, 'store']);
+Route::delete('author/{author}', [PostControllerAdvance::class, 'destroy']);
+Route::get('author/{author}', [PostControllerAdvance::class, 'show']);
+Route::put('author', [PostControllerAdvance::class, 'update']);
