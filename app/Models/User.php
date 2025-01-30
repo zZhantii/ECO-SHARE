@@ -22,7 +22,8 @@ class User extends Authenticatable implements HasMedia
         'email',
         'password',
         'surname1',
-        'surname2'
+        'surname2',
+        'profile_photo'
     ];
 
     /**
@@ -51,7 +52,7 @@ class User extends Authenticatable implements HasMedia
 
     public function assignaments()
     {
-        return $this->hasMany(UserAssignment::class,'user_id');
+        return $this->hasMany(UserAssignment::class, 'user_id');
     }
 
 

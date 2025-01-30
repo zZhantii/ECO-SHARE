@@ -13,12 +13,15 @@ return new class extends Migration
     {
         Schema::create('vehicles', function (Blueprint $table) {
             $table->id('vehicle_id');
-            $table->string('mode');
+            $table->bigInteger('user_id')->unsigned();
+            $table->string('plate');
             $table->string('brand');
-            $table->decimal('consumption', 8, 2);
-            $table->integer('pax_number');
-            $table->string('plate')->unique();
+            $table->string('model');
+            $table->decimal('consumption', 5, 2)->nullable();
+            $table->integer('pax_number')->nullable();
             $table->timestamps();
+
+            $table->foreign('user_id')->references('user_id')->on('users');
         });
     }
 
