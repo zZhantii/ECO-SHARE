@@ -1,8 +1,9 @@
-<template>
+<template setup>
     <div class="grid">
         <div class="col-12">
             <div class="card">
                 <div class="table-title">
+                    {{ author }}
                     <div class="row">
                         <div class="col-sm-8"><h2>Editar Autores</h2></div>
                     </div>
@@ -13,8 +14,8 @@
                             type="text"
                             class="form-control"
                             id="id"
+                            v-model="author.id"
                             readonly
-                            v-model="id"
                         />
                     </div>
 
@@ -34,7 +35,7 @@
                             type="text"
                             class="form-control"
                             id="surname"
-                            v-model="author.surname"
+                            v-model="author.lastname"
                         />
                     </div>
 
@@ -48,7 +49,11 @@
                         />
                     </div>
 
-                    <button type="submit" class="btn btn-primary" @click="">
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        @click="updateAuthor()"
+                    >
                         Guardar cambios
                     </button>
                 </div>
@@ -56,17 +61,37 @@
         </div>
     </div>
 </template>
+
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
+import * as yup from "yup";
 
 const route = useRoute();
-const id = route.params.id;
-const author = ref({});
+const schema = yup.object({
+    id: yup.number().required(),
+    name: yup.string().required().max(50),
+    surname: yup.string().required().min(3),
+    email: yup.string().email().required(),
+});
+
 onMounted(() => {
-    axios.get(`/api/author/${id}`).then((response) => {
+    console.log(route.params.id);
+
+    axios.get("api/author/" + route.params.id).then((response) => {
         author.value = response.data.data;
     });
 });
+
+const updateAuthor = async () => {
+    console.log("updateAuthor");
+
+    axios
+        .put("api/author/" + route.params.id, $author.value)
+        .then((response) => {
+            author.value = response.data.data;
+        });
+};
 </script>
+
 <style scoped></style>
