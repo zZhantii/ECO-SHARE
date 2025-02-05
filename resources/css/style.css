@@ -1,0 +1,221 @@
+/* Borrar de este archivo y ponerlo en el head del html
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+*/
+
+body {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    overflow-x: hidden;
+
+    /* Mejora el redenrizado de las fuentes puestas en la pagina */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tittles */
+
+h1 {
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 3.25rem;
+}
+
+h2 {
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 2.25rem;
+}
+
+h3 {
+    font-family: inherit;
+    font-weight: 500;
+    font-size: 2.25rem;
+}
+
+/* Links */
+
+a {
+    font-family: inherit;
+    font-weight: 500;
+    font-size: 1rem;
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+    color: #054851;
+}
+
+a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 100%;
+    height: 2px;
+    background-color: #054851;
+    /* Ease-in-out hace la animación de forma suave */
+    transition: transform 0.3s ease-in-out;
+    transform: scaleX(0);
+    transform-origin: right;
+}
+
+a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+.a-secondary {
+    color: #054851;
+}
+
+.a-secondary::after {
+    display: none;
+}
+
+.a-secondary:hover {
+    color: black;
+}
+
+/* Paragraphs */
+
+p {
+    font-family: inherit;
+    font-weight: 400;
+    font-size: 1rem;
+}
+
+/* Botones */
+
+.btn-primary {
+    font-family: inherit;
+    font-weight: 500;
+    font-size: 1rem;
+    color: white;
+    text-decoration: none;
+    padding: 15px 25px;
+    border: #02AEF8 1px solid;
+    border-radius: 8px;
+    background-color: #02AEF8;
+}
+
+.btn-primary:hover {
+    background-color: white;
+    color: #054851;
+    border: #054851 1px solid;
+}
+
+.btn-primary:active {
+    background-color: #054851;
+    color: white;
+    box-shadow: inset 0px 7px 22px -1px rgba(0, 0, 0, 0.64);
+}
+
+.btn-primary::after {
+    display: none;
+}
+
+.btn-secondary {
+    font-family: inherit;
+    font-weight: 500;
+    font-size: 1rem;
+    color: #054851;
+    text-decoration: none;
+    padding: 15px 25px;
+    border: #054851 1px solid;
+    border-radius: 8px;
+    background-color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #02AEF8;
+    color: white;
+    border: #02AEF8 1px solid;
+}
+
+.btn-secondary:active {
+    background-color: #054851;
+    color: white;
+    box-shadow: inset 0px 7px 22px -1px rgba(0, 0, 0, 0.64);
+}
+
+.btn-secondary::after {
+    display: none;
+}
+
+.btn-header-primary {
+    font-family: inherit;
+    font-weight: 500;
+    font-size: 1rem;
+    color: white;
+    text-decoration: none;
+    padding: 15px 25px;
+    border: black 1px solid;
+    border-radius: 8px;
+    background-color: black;
+}
+
+.btn-header-primary:hover {
+    background-color: white;
+    color: #054851;
+    border: #054851 1px solid;
+}
+
+.btn-header-primary:active {
+    background-color: #054851;
+    color: white;
+    box-shadow: inset 0px 7px 22px -1px rgba(0, 0, 0, 0.64);
+}
+
+.btn-header-primary::after {
+    display: none;
+}
+
+.btn-header-secondary {
+    font-family: inherit;
+    font-weight: 500;
+    font-size: 1rem;
+    color: #054851;
+    text-decoration: none;
+    padding: 15px 25px;
+    border: #054851 1px solid;
+    border-radius: 8px;
+    background-color: white;
+}
+
+.btn-header-secondary:hover {
+    background-color: #054851;
+    color: white;
+    border: #054851 1px solid;
+}
+
+.btn-header-secondary:active {
+    background-color: #054851;
+    color: white;
+    box-shadow: inset 0px 7px 22px -1px rgba(0, 0, 0, 0.64);
+}
+
+.btn-header-secondary::after {
+    display: none;
+}
+
+/* Img */
+
+img {
+    min-width: 350px;
+    min-height: 350px;
+    border-radius: 15px;
+}
+
+/* svg */
+
+.logo {
+    width: 75px;
+    height: 35px;
+}
+
+svg {
+    width: 25px;
+    height: 25px;
+}

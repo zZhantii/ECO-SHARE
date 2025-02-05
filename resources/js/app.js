@@ -64,6 +64,7 @@ import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
 import 'sweetalert2/dist/sweetalert2.min.css';
 import '../css/theme.css';
+import '../css/style.css';
 
 const app = createApp({
     created() {
@@ -85,7 +86,7 @@ app.use(ConfirmationService);
 const i18n = installI18n(app);
 const l = langStore();
 l.$subscribe((_, state) => {
-    console.info('state: '+ state.locale);
+    console.info('state: ' + state.locale);
     loadMessages(state.locale)
 });
 
