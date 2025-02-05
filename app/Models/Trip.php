@@ -42,4 +42,9 @@ class Trip extends Model
     {
         return $this->belongsToMany(User::class, 'user_rates', 'user_id');
     }
+
+    protected $casts = [
+        'start_point' => 'array',
+        'end_point' => 'array'
+    ];
 }

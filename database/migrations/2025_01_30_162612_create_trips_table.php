@@ -17,8 +17,9 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('vehicle_id');
 
-            $table->string('start_point');
-            $table->string('end_point');
+
+            $table->json('start_point');
+            $table->json('end_point');
             $table->timestamp('departure_time')->useCurrent();
             $table->integer('available_seats');
             $table->decimal('price', 10, 2);
