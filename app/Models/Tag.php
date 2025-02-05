@@ -10,6 +10,13 @@ class Tag extends Model
     use HasFactory;
 
     protected $fillable = [
-        'tag_name',
+        'tag_id',
+        'tag_name'
     ];
+
+    // Relacion trips-tags N:M (M Tags)
+    public function trip()
+    {
+        return $this->belongsToMany(Trip::class, 'trip_taps', 'trip_id');
+    }
 }

@@ -12,16 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('vehicles', function (Blueprint $table) {
-            $table->id('vehicle_id');
-            $table->bigInteger('user_id')->unsigned();
-            $table->string('plate');
+            $table->id();
+            // Foreign key
+            $table->unsignedBigInteger('user_id');
+
+            $table->string('plate')->unique();
             $table->string('brand');
             $table->string('model');
             $table->decimal('consumption', 5, 2)->nullable();
-            $table->integer('pax_number')->nullable();
+            $table->integer('pax_number');
+            $table->boolean('validation')->default(false);
             $table->timestamps();
 
-            $table->foreign('user_id')->references('user_id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

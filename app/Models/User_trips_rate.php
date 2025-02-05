@@ -5,7 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class reserve extends Model
+class User_trips_rate extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'trip_id',
+        'rate',
+        'comment'
+    ];
 }
