@@ -22,7 +22,8 @@ class User extends Authenticatable implements HasMedia
         'email',
         'password',
         'surname1',
-        'surname2'
+        'surname2',
+        'profile_photo'
     ];
 
     /**
@@ -51,9 +52,8 @@ class User extends Authenticatable implements HasMedia
 
     public function assignaments()
     {
-        return $this->hasMany(UserAssignment::class,'user_id');
+        return $this->hasMany(UserAssignment::class, 'user_id');
     }
-
 
     public function registerMediaCollections(): void
     {
@@ -70,5 +70,33 @@ class User extends Authenticatable implements HasMedia
                 ->width(env('IMAGE_WIDTH', 300))
                 ->height(env('IMAGE_HEIGHT', 300));
         }
+    }
+
+    // Foreign Key
+
+    // Relacion usuarios-vehiculos 1:N (1 Usuarios)
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicle::class, 'user_id');
+    }
+
+    // Relacion users-trips 1:N (1 Usuarios)
+    public function trips()
+    {
+        return $this->hasMany(Trip::class, 'user_id');
+    }
+
+    // Relacion user_trips_rates N:M (N Usuarios)
+    public function rates()
+    {
+        return $this->belongsToMany(Trip::class, 'user_trips_rates', 'trip_id')
+            ->withPivot('rating', 'comment');
+    }
+
+    // Relacion user_trips_reserves N:M (N Usuarios)
+    public function reserves()
+    {
+        return $this->belongsToMany(Trip::class, 'user_trips_reserves', 'trip_id')
+            ->withPivot('seats_reserved', 'reservation_date', 'check_in');
     }
 }
