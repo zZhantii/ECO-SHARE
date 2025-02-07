@@ -1,7 +1,9 @@
 <template>
-    <nav class="navbar navbar-expand-md navbar-light bg-white">
+    <nav class="navbar navbar-expand-md bg-nav-color">
         <div class="container">
-            <router-link to="/" class="navbar-brand">LOGO</router-link>
+            <router-link to="/" class="navbar-brand"
+                ><SVGLogo class="logo"
+            /></router-link>
             <a
                 class="navbar-toggler"
                 type="button"
@@ -20,39 +22,43 @@
                     <li>
                         <router-link
                             :to="{ name: 'public-posts.index' }"
-                            class="nav-link"
+                            class="primary-a nav-link"
                             >Publicar</router-link
                         >
                     </li>
                     <li>
-                        <router-link to="" class="nav-link"
+                        <router-link to="" class="primary-a nav-link"
                             >Empresa</router-link
                         >
                     </li>
                 </ul>
-                <ul class="navbar-nav mt-2 mt-lg-0 ms-auto">
+                <ul
+                    class="navbar-nav mt-2 mt-lg-0 ms-auto gap-3 align-items-center"
+                >
                     <li class="nav-item">
-                        <router-link to="" class="nav-link">Ayuda</router-link>
+                        <router-link to="" class="primary-a nav-link"
+                            >Ayuda</router-link
+                        >
                     </li>
 
-                    <template v-if="!authStore().user?.name">
-                        <li class="nav-item">
-                            <router-link
-                                :to="{ name: 'auth.login' }"
-                                class="nav-link"
-                                >Iniciar sesión</router-link
-                            >
-                        </li>
-                        <li class="nav-item">
-                            <router-link class="nav-link" to="/register">{{
-                                $t("Registro")
-                            }}</router-link>
-                        </li>
-                    </template>
-                    <li v-if="authStore().user?.name">{}</li>
+                    <li class="nav-item">
+                        <router-link
+                            :to="{ name: 'auth.login' }"
+                            class="primary-a nav-link"
+                            >Iniciar sesión</router-link
+                        >
+                    </li>
+                    <li class="">
+                        <router-link class="" to="/register">
+                            <Button
+                                label="Registro"
+                                class="btn-header-secondary"
+                        /></router-link>
+                    </li>
+
                     <li v-if="authStore().user?.name" class="nav-item dropdown">
                         <a
-                            class="nav-link dropdown-toggle"
+                            class="primary-link dropdown-toa"
                             href="#"
                             role="button"
                             data-bs-toggle="dropdown"
@@ -94,6 +100,19 @@
 import useAuth from "@/composables/auth";
 import LocaleSwitcher from "../components/LocaleSwitcher.vue";
 import { authStore } from "../store/auth";
+import SVGLogo from "../components/SVGLogo.vue";
+
+import Button from "primevue/button";
 
 const { processing, logout } = useAuth();
 </script>
+
+<style scoped>
+.bg-nav-color {
+    background-color: black;
+}
+.nav-link {
+    color: white;
+    font-weight: 600;
+}
+</style>

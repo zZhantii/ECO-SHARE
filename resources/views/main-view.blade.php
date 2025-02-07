@@ -12,9 +12,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>SQL Check</title>
+    <title>ECO-SHARE™ | Ride smart</title>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <!--<link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">-->
     <script>
         window.config = @json($config);

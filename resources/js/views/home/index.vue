@@ -1,7 +1,5 @@
 <template>
-    <h1>Nabo</h1>
-
-    <AppFooter></AppFooter>
+    <h1>HOME</h1>
 </template>
 
 <script>
