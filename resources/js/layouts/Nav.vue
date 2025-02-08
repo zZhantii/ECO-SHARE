@@ -13,7 +13,7 @@
                 aria-expanded="false"
                 aria-label="Toggle navigation"
             >
-                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon toggle-icon"></span>
             </a>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -22,19 +22,19 @@
                     <li>
                         <router-link
                             :to="{ name: 'public-posts.index' }"
-                            class="primary-a nav-link"
+                            class="primary-a nav-link text-center text-md-start"
                             >Publicar</router-link
                         >
                     </li>
                     <li>
-                        <router-link to="" class="primary-a nav-link"
+                        <router-link
+                            to=""
+                            class="primary-a nav-link text-center text-md-start"
                             >Empresa</router-link
                         >
                     </li>
                 </ul>
-                <ul
-                    class="navbar-nav mt-2 mt-lg-0 ms-auto gap-3 align-items-center"
-                >
+                <ul class="navbar-nav mt-lg-0 ms-auto gap-3 align-items-center">
                     <li class="nav-item">
                         <router-link to="" class="primary-a nav-link"
                             >Ayuda</router-link

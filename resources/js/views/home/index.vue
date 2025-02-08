@@ -2,15 +2,7 @@
     <h1>HOME</h1>
 </template>
 
-<script>
-import AppFooter from "@/layouts/AppFooter.vue";
-
-export default {
-    components: {
-        AppFooter,
-    },
-};
-</script>
+<script></script>
 <!--
 <template>
     <div class="demo" id="edit-demo">
