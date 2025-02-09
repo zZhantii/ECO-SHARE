@@ -102,8 +102,6 @@ import LocaleSwitcher from "../components/LocaleSwitcher.vue";
 import { authStore } from "../store/auth";
 import SVGLogo from "../components/SVGLogo.vue";
 
-import Button from "primevue/button";
-
 const { processing, logout } = useAuth();
 </script>
 

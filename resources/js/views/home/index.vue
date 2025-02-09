@@ -1,8 +1,38 @@
 <template>
-    <h1>HOME</h1>
+    <main>
+        <section id="home-finder-section" class="container-fluid p-2 w-100">
+            <div
+                class="container m-sm-2 m-md-5 h-auto h-md-25 d-block d-md-flex flex-row justify-content-around align-items-center gap-5"
+            >
+                <h1 class="text-dark">
+                    <span class="green-item">ECO</span>-SHARE
+                </h1>
+                <div>
+                    <p class="highlighted-text d-none d-md-block">
+                        Menos gasto, más verde.
+                    </p>
+                    <p class="highlighted-text d-none d-md-block">
+                        Olvídate de lo demás.
+                    </p>
+                    <p class="highlighted-text d-block d-md-none fs-1 mb-1">
+                        Menos gasto, más verde.
+                    </p>
+                    <p class="highlighted-text d-block d-md-none fs-1">
+                        Olvídate de lo demás.
+                    </p>
+                </div>
+            </div>
+            <div class="container h-50 mt-5">
+                <TripFinder />
+            </div>
+        </section>
+        <section class="container-fluid home-section"></section>
+    </main>
 </template>
 
-<script></script>
+<script setup>
+import TripFinder from "../../components/TripFinder.vue";
+</script>
 <!--
 <template>
     <div class="demo" id="edit-demo">

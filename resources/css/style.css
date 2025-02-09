@@ -171,7 +171,7 @@ p {
     text-decoration: none !important;
     padding: 10px 15px !important;
     border: black 1px solid !important;
-    border-radius: 30px !important;
+    border-radius: 25px !important;
     background-color: black !important;
 }
 
@@ -199,7 +199,7 @@ p {
     text-decoration: none !important;
     padding: 10px 15px !important;
     border: #054851 1px solid !important;
-    border-radius: 30px !important;
+    border-radius: 25px !important;
     background-color: white !important;
 }
 
@@ -241,4 +241,54 @@ svg {
 
 .navbar-toggler-icon {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cpath stroke='white' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E") !important;
+}
+
+#home-finder-section {
+    background-image: linear-gradient(
+            to top,
+            rgba(255, 255, 255, 5),
+            rgba(255, 255, 255, 0.7)
+        ),
+        url("images/main_banner.png");
+    height: 600px;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.home-section {
+    background-color: white;
+    height: 700px;
+}
+
+.green-item {
+    color: #27a211;
+}
+
+.highlighted-text {
+    font-weight: 700;
+    font-size: 3.25rem;
+    color: black;
+    line-height: 3.25rem;
+}
+
+#trip-finder {
+    background-color: white;
+    height: 60px;
+    border-radius: 10px;
+    width: 100%;
+    margin-top: 100px;
+    box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.15);
+}
+
+.btn-trip-finder {
+    height: 100%;
+    padding: 10px 15px;
+    border-bottom-left-radius: 0 !important;
+    border-top-left-radius: 0 !important;
+    background-color: #02aef8 !important;
+    border: none !important;
+}
+
+.btn-trip-finder:hover {
+    background-color: #054851 !important;
 }

@@ -1,10 +1,8 @@
 <template>
     <div>
-        <Navbar />
+        <header><Navbar /></header>
 
-        <main>
-            <router-view></router-view>
-        </main>
+        <router-view></router-view>
 
         <AppFooter></AppFooter>
     </div>

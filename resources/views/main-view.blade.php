@@ -15,6 +15,8 @@
     <title>ECO-SHARE™ | Ride smart</title>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <!--<link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">-->
     <script>
