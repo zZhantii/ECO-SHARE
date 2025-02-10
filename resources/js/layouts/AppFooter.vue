@@ -15,16 +15,16 @@ const logoUrl = computed(() => {
     <div class="layout-footer">
         <div class="container mt-4">
             <div class="row gap-4 justify-content-between">
-                <div class="col-md-2 text-md-center">
+                <div class="col-md-2 text-center">
                     <a href="#">PREGUNTAS FRECUENTES</a>
                 </div>
-                <div class="col-md-2 text-md-center">
+                <div class="col-md-2 text-center">
                     <a href="#">TÉRMINOS Y CONDICIONES</a>
                 </div>
-                <div class="col-md-2 text-md-center">
+                <div class="col-md-2 text-center">
                     <a href="#">POLÍTICA DE COOKIES</a>
                 </div>
-                <div class="col-md-2 text-md-center">
+                <div class="col-md-2 text-center">
                     <a href="#">POLÍTICA DE PRIVACIDAD</a>
                 </div>
             </div>
@@ -114,8 +114,8 @@ const logoUrl = computed(() => {
                             version="1.2"
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 1024 1024"
-                            width="150"
-                            height="150"
+                            width="300"
+                            height="300"
                         >
                             <title>DALL·E 2025-01-23 16</title>
                             <defs>
