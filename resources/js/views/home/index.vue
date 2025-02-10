@@ -40,8 +40,8 @@ import TripFinder from "../../components/TripFinder.vue";
             <screen ref="screen">
                 <g v-for="edge in graph.edges" @click.stop="select(edge)" :key="edge.id">
                     <edge :class="selection && selection.id === edge.id && 'selected'"
-                          :data="edge"
-                          :nodes="graph.nodes">
+                        :data="edge"
+                        :nodes="graph.nodes">
                     </edge>
                 </g>
                 <g v-for="node in graph.nodes" :key="node.id">
@@ -54,12 +54,12 @@ import TripFinder from "../../components/TripFinder.vue";
         </div>
         <div class="sidebar">
             <codemirror v-model="editText" :options="{
-          mode: 'text/javascript',
-          theme: 'default',
-          lineWrapping: true,
-          scrollbarStyle: null,
-          styleActiveLine: true,
-          line: true,
+        mode: 'text/javascript',
+        theme: 'default',
+        lineWrapping: true,
+        scrollbarStyle: null,
+        styleActiveLine: true,
+        line: true,
         }"
                         style="font-size: 13.3333px; font-family: monospace; -webkit-text-size-adjust: 100%; height: 100%"
             ></codemirror>
