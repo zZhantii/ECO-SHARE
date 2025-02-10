@@ -52,9 +52,8 @@ Route::get('get-posts', [PostControllerAdvance::class, 'getPosts']);
 Route::get('get-category-posts/{id}', [PostControllerAdvance::class, 'getCategoryByPosts']);
 Route::get('get-post/{id}', [PostControllerAdvance::class, 'getPost']);
 
-// ApiController
-Route::get('author', [PostControllerAdvance::class, 'index']);
-Route::post('author', [PostControllerAdvance::class, 'store']);
-Route::delete('author/{author}', [PostControllerAdvance::class, 'destroy']);
-Route::get('author/{author}', [PostControllerAdvance::class, 'show']);
-Route::put('author', [PostControllerAdvance::class, 'update']);
+Route::get("author", [AuthorController::class, 'index']);
+Route::post("author", [AuthorController::class, "store"]);
+Route::delete("author/{author}", [AuthorController::class, "destroy"]);
+Route::put("author/{author}", [AuthorController::class, "update"]);
+Route::get("author/{author}", [AuthorController::class, "show"]);
