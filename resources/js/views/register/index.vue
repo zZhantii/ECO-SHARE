@@ -5,15 +5,15 @@
                 <div class="col-md-6">
                     <div class="card border-0 bg-transparent">
                         <div
-                            class="card-header bg-transparent d-flex align-items-center justify-content-around"
+                            class="card-header bg-transparent d-flex flex-column align-items-center justify-content-around"
                         >
                             <img
                                 src="/images/Logo_es.svg"
                                 alt="Logotipo"
-                                height="150px"
+                                height="75px"
                             />
 
-                            <h2>{{ $t("¡Registrate ya!") }}</h2>
+                            <h2>{{ $t("¡Regístrate ya!") }}</h2>
                         </div>
                         <div class="card-body">
                             <form @submit.prevent="submitRegister">
@@ -101,19 +101,9 @@
 
                                     <!-- Buttons -->
                                     <div class="d-flex gap-4 mt-4">
-                                        <button
-                                            class="btn btn-primary w-50 mt-4"
-                                            :class="{
-                                                'opacity-25': processing,
-                                            }"
-                                            :disabled="processing"
-                                        >
-                                            {{ $t("register") }}
-                                        </button>
-
                                         <router-link
                                             to="/"
-                                            class="primary-a mt-4 d-flex justify-content-center align-items-center gap-3 mx-auto"
+                                            class="primary-a mt-4 d-flex justify-content-center align-items-center gap-3 me-5"
                                         >
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
@@ -127,6 +117,16 @@
                                                 ></path></svg
                                             >{{ $t("Back") }}
                                         </router-link>
+
+                                        <button
+                                            class="btn btn-primary w-100 mt-4"
+                                            :class="{
+                                                'opacity-25': processing,
+                                            }"
+                                            :disabled="processing"
+                                        >
+                                            {{ $t("register") }}
+                                        </button>
                                     </div>
                                 </div>
                             </form>
@@ -150,5 +150,9 @@ const { registerForm, validationErrors, processing, submitRegister } =
     display: flex;
     align-items: center;
     height: 100vh;
+}
+
+.w-100 {
+    width: 100% !important;
 }
 </style>

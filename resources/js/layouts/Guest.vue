@@ -4,13 +4,13 @@
 
         <router-view></router-view>
 
-        <AppFooter v-if="!hideHeader"></AppFooter>
+        <AppFooter v-if="!hideFooter"></AppFooter>
     </div>
 </template>
 <script setup>
 import Navbar from "./Nav.vue";
 import AppFooter from "./AppFooter.vue";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
@@ -19,20 +19,26 @@ const route = useRoute();
 const hideHeader = ref(false);
 const hideFooter = ref(false);
 
-onMounted(() => {
-    // Coger la ruta actual
+const visibilityRoute = () => {
     const [firstPart, routeName] = route.name.split(".");
-    // console.log(routeName);
+    console.log(routeName);
+
+    const routeNames = ["register", "login"];
 
     // Si la ruta es register, oculta el header y el footer
-    if (routeName === "register") {
+    if (routeNames.includes(routeName)) {
         hideHeader.value = true;
         hideFooter.value = true;
     } else {
         hideHeader.value = false;
         hideFooter.value = false;
     }
-});
+};
+
+onMounted(visibilityRoute);
+
+// Ver los cambios cuando cambia de ruta
+watch(route, visibilityRoute);
 </script>
 
 <style scoped>
