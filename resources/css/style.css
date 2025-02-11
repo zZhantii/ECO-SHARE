@@ -1,0 +1,256 @@
+/* Borrar de este archivo y ponerlo en el head del html
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+*/
+
+body {
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    overflow-x: hidden;
+
+    /* Mejora el redenrizado de las fuentes puestas en la pagina */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tittles */
+
+h1 {
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 3.25rem;
+}
+
+h2 {
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 2.25rem;
+}
+
+h3 {
+    font-family: inherit;
+    font-weight: 500;
+    font-size: 2.25rem;
+}
+
+/* Links */
+
+.primary-a {
+    font-weight: 600;
+    text-decoration: none;
+    position: relative;
+    color: #054851;
+}
+
+.primary-a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 100%;
+    height: 2px;
+    background-color: #054851;
+    /* Ease-in-out hace la animación de forma suave */
+    transition: transform 0.3s ease-in-out;
+    transform: scaleX(0);
+    transform-origin: right;
+}
+
+.primary-a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+.secondary-a,
+.icon-rrss {
+    font-weight: 600 !important;
+    position: relative;
+    color: #ffff !important;
+    transition: color 0.3s ease-in-out;
+}
+
+.secondary-a::after,
+.icon-rrss::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -10px;
+    width: 100%;
+    height: 2px;
+    background-color: black;
+    transition: transform 0.3s ease-in-out;
+    transform: scaleX(0);
+    transform-origin: right;
+}
+
+.icon-rrss:hover {
+    color: black !important;
+}
+.secondary-a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+/* Paragraphs */
+
+p {
+    font-family: inherit;
+    font-weight: 400;
+    font-size: 1.2rem;
+}
+
+/* Botones */
+
+.btn-primary {
+    font-family: inherit !important;
+    font-weight: 500 !important;
+    font-size: 1rem !important;
+    color: white !important;
+    text-decoration: none !important;
+    padding: 10px 15px !important;
+    border: #02aef8 1px solid !important;
+    border-radius: 10px !important;
+    background-color: #02aef8 !important;
+    width: fit-content !important;
+}
+
+.btn-primary:hover {
+    background-color: white !important;
+    color: #054851 !important;
+    border: #054851 1px solid !important;
+}
+
+.btn-primary:active {
+    background-color: #054851 !important;
+    color: white !important;
+    box-shadow: inset 0px 7px 22px -1px rgba(0, 0, 0, 0.64) !important;
+}
+
+.btn-primary::after {
+    display: none !important;
+}
+
+.btn-secondary {
+    font-family: inherit !important;
+    font-weight: 500 !important;
+    font-size: 1rem !important;
+    color: #054851 !important;
+    text-decoration: none !important;
+    padding: 10px 15px !important;
+    border: #054851 1px solid;
+    border-radius: 10px !important;
+    background-color: white !important;
+    font-weight: 600 !important;
+}
+
+.btn-secondary:hover {
+    background-color: #02aef8 !important;
+    color: white !important;
+    border: #02aef8 1px solid !important;
+}
+.p-button-label {
+    font-weight: 600 !important;
+}
+
+.btn-secondary:active {
+    background-color: #054851 !important;
+    color: white !important;
+    box-shadow: inset 0px 7px 22px -1px rgba(0, 0, 0, 0.64) !important;
+}
+
+.btn-secondary::after {
+    display: none !important;
+}
+
+.btn-header-primary {
+    font-family: inherit !important;
+    font-weight: 500 !important;
+    font-size: 1rem !important;
+    color: white !important;
+    text-decoration: none !important;
+    padding: 10px 15px !important;
+    border: black 1px solid !important;
+    border-radius: 25px !important;
+    background-color: black !important;
+}
+
+.btn-header-primary:hover {
+    background-color: white !important;
+    color: #054851 !important;
+    border: #054851 1px solid !important;
+}
+
+.btn-header-primary:active {
+    background-color: #054851 !important;
+    color: white !important;
+    box-shadow: inset 0px 7px 22px -1px rgba(0, 0, 0, 0.64) !important;
+}
+
+.btn-header-primary::after {
+    display: none !important;
+}
+
+.btn-header-secondary {
+    font-family: inherit !important;
+    font-weight: 500 !important;
+    font-size: 1rem !important;
+    color: #054851 !important;
+    text-decoration: none !important;
+    padding: 10px 15px !important;
+    border: #054851 1px solid !important;
+    border-radius: 25px !important;
+    background-color: white !important;
+}
+
+.btn-header-secondary:hover {
+    background-color: #054851 !important;
+    color: white !important;
+    border: #054851 1px solid !important;
+}
+
+.btn-header-secondary:active {
+    background-color: #054851 !important;
+    color: white !important;
+    box-shadow: inset 0px 7px 22px -1px rgba(0, 0, 0, 0.64) !important;
+}
+
+.btn-header-secondary::after {
+    display: none !important;
+}
+
+/* Img */
+
+img {
+    /* min-width: 350px;
+    min-height: 350px; */
+    border-radius: 35px;
+}
+
+/* svg */
+
+svg {
+    width: 25px;
+    height: 25px;
+}
+
+.logo {
+    width: 120px;
+    height: 60px;
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cpath stroke='white' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E") !important;
+}
+
+.green-item {
+    color: #27a211;
+}
+
+.highlighted-text {
+    font-weight: 700;
+    font-size: 3.25rem;
+    color: black;
+    line-height: 3.25rem;
+}
