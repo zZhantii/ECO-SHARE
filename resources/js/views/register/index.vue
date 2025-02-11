@@ -132,8 +132,6 @@
             </div>
         </section>
     </main>
-        </section>
-    </main>
 </template>
 
 <script setup>

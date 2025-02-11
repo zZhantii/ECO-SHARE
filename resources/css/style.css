@@ -259,11 +259,8 @@ svg {
 }
 
 #home-finder-section {
-    background-image: linear-gradient(to top,
-            background-image: linear-gradient(to top,
-                rgba(255, 255, 255, 5),
-                rgba(255, 255, 255, 0.7)),
-            rgba(255, 255, 255, 0.7)),
+    background-image:
+        linear-gradient(to top, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.7)),
         url("images/main_banner.png");
     height: 600px;
     background-repeat: no-repeat;
