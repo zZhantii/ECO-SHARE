@@ -94,37 +94,38 @@ h3 {
 p {
     font-family: inherit;
     font-weight: 400;
-    font-size: 1rem;
+    font-size: 1.2rem;
 }
 
 /* Botones */
 
 .btn-primary {
-    font-family: inherit;
-    font-weight: 500;
-    font-size: 1rem;
-    color: white;
-    text-decoration: none;
-    padding: 10px 15px;
-    border: #02aef8 1px solid;
-    border-radius: 10px;
-    background-color: #02aef8;
+    font-family: inherit !important;
+    font-weight: 500 !important;
+    font-size: 1rem !important;
+    color: white !important;
+    text-decoration: none !important;
+    padding: 10px 15px !important;
+    border: #02aef8 1px solid !important;
+    border-radius: 10px !important;
+    background-color: #02aef8 !important;
+    width: fit-content !important;
 }
 
 .btn-primary:hover {
-    background-color: white;
-    color: #054851;
-    border: #054851 1px solid;
+    background-color: white !important;
+    color: #054851 !important;
+    border: #054851 1px solid !important;
 }
 
 .btn-primary:active {
-    background-color: #054851;
-    color: white;
-    box-shadow: inset 0px 7px 22px -1px rgba(0, 0, 0, 0.64);
+    background-color: #054851 !important;
+    color: white !important;
+    box-shadow: inset 0px 7px 22px -1px rgba(0, 0, 0, 0.64) !important;
 }
 
 .btn-primary::after {
-    display: none;
+    display: none !important;
 }
 
 .btn-secondary {
@@ -217,13 +218,10 @@ p {
     display: none !important;
 }
 
-/* Inputs */
-
-.img {
-    min-width: 350px;
-    min-height: 350px;
-    border-radius: 305px;
-}
+img {
+    /* min-width: 350px;
+    min-height: 350px; */
+    border-radius: 35px;
 
 /* Inputs */
 
@@ -258,11 +256,6 @@ svg {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cpath stroke='white' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E") !important;
 }
 
-.home-section {
-    background-color: white;
-    height: 700px;
-}
-
 .green-item {
     color: #27a211;
 }
@@ -272,26 +265,4 @@ svg {
     font-size: 3.25rem;
     color: black;
     line-height: 3.25rem;
-}
-
-#trip-finder {
-    background-color: white;
-    height: 60px;
-    border-radius: 10px;
-    width: 100%;
-    margin-top: 100px;
-    box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.15);
-}
-
-.btn-trip-finder {
-    height: 100%;
-    padding: 10px 15px;
-    border-bottom-left-radius: 0 !important;
-    border-top-left-radius: 0 !important;
-    background-color: #02aef8 !important;
-    border: none !important;
-}
-
-.btn-trip-finder:hover {
-    background-color: #054851 !important;
 }
