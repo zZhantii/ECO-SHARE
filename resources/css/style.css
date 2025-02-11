@@ -88,6 +88,7 @@ h3 {
 .icon-rrss:hover {
     color: black !important;
 }
+
 .secondary-a:hover::after {
     transform: scaleX(1);
     transform-origin: left;
@@ -149,6 +150,7 @@ p {
     color: white !important;
     border: #02aef8 1px solid !important;
 }
+
 .p-button-label {
     font-weight: 600 !important;
 }
@@ -221,10 +223,25 @@ p {
 
 /* Img */
 
-img {
+.img {
     min-width: 350px;
     min-height: 350px;
     border-radius: 305px;
+}
+
+/* Inputs */
+
+.form-control {
+    background-color: #eeeeee;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 0;
+}
+
+.form-control:focus {
+    background-color: #eeeeee;
+    border: 2px solid black;
+    box-shadow: none;
 }
 
 /* svg */
@@ -244,11 +261,9 @@ svg {
 }
 
 #home-finder-section {
-    background-image: linear-gradient(
-            to top,
+    background-image: linear-gradient(to top,
             rgba(255, 255, 255, 5),
-            rgba(255, 255, 255, 0.7)
-        ),
+            rgba(255, 255, 255, 0.7)),
         url("images/main_banner.png");
     height: 600px;
     background-repeat: no-repeat;
