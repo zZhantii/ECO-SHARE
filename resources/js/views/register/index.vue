@@ -132,11 +132,16 @@
             </div>
         </section>
     </main>
+        </section>
+    </main>
 </template>
 
 <script setup>
 import useAuth from "@/composables/auth";
+import useAuth from "@/composables/auth";
 
+const { registerForm, validationErrors, processing, submitRegister } =
+    useAuth();
 const { registerForm, validationErrors, processing, submitRegister } =
     useAuth();
 </script>
