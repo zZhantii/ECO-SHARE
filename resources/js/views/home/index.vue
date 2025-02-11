@@ -31,10 +31,12 @@
         <section
             class="container-fluid w-100 h-auto home-section d-block d-md-flex flex-row-reverse justify-content-center gap-2"
         >
-            <div class="container col-none-12 col-md-4 mb-5">
+            <div
+                class="container col-none-12 col-md-4 mb-5 d-flex justify-content-center"
+            >
                 <img
                     src="images/home_airport.webp"
-                    class="image-style"
+                    class="image-style img-fluid"
                     alt="avión despegando de un aeropuerto"
                 />
             </div>
@@ -58,10 +60,12 @@
         <section
             class="container-fluid w-100 h-auto home-section d-block d-md-flex flex-row justify-content-center gap-2"
         >
-            <div class="container col-none-12 col-md-4 mb-5">
+            <div
+                class="container col-none-12 col-md-4 mb-5 d-flex justify-content-center"
+            >
                 <img
                     src="images/inside_car.webp"
-                    class="image-style"
+                    class="image-style img-fluid"
                     alt="avión despegando de un aeropuerto"
                 />
             </div>
@@ -84,10 +88,12 @@
         <section
             class="container-fluid w-100 h-auto mb-4 home-section last-section d-block d-md-flex flex-row-reverse justify-content-center gap-2"
         >
-            <div class="container col-none-12 col-md-4 mb-5">
+            <div
+                class="container col-none-12 col-md-4 mb-5 d-flex justify-content-center"
+            >
                 <img
                     src="images/green_world.webp"
-                    class="image-style"
+                    class="image-style img-fluid"
                     alt="avión despegando de un aeropuerto"
                 />
             </div>
@@ -132,6 +138,7 @@ import TripFinder from "../../components/TripFinder.vue";
     background-color: white;
     height: 700px;
 }
+
 .image-style {
     border-radius: 0px !important;
     max-width: 100% !important;
