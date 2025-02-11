@@ -2,12 +2,12 @@
     <main>
         <section id="home-finder-section" class="container-fluid p-2 w-100">
             <div
-                class="container m-sm-2 m-md-5 h-auto h-md-25 d-block d-md-flex flex-row justify-content-around align-items-center gap-5"
+                class="container col-12 col-md-6 m-none-2 m-md-5 mt-8 h-25 h-md-25 d-block d-md-flex flex-row justify-content-around align-items-center gap-2"
             >
                 <h1 class="text-dark">
                     <span class="green-item">ECO</span>-SHARE
                 </h1>
-                <div>
+                <div col-12 col-md-6>
                     <p class="highlighted-text d-none d-md-block">
                         Menos gasto, más verde.
                     </p>
@@ -22,17 +22,125 @@
                     </p>
                 </div>
             </div>
-            <div class="container h-50 mt-5">
-                <TripFinder />
+            <div
+                class="container h-none-auto mt-5 mt-md-0 h-md-25 d-flex align-items-center"
+            >
+                <TripFinder class="mt-8" />
             </div>
         </section>
-        <section class="container-fluid home-section"></section>
+        <section
+            class="container-fluid w-100 h-auto home-section d-block d-md-flex flex-row-reverse justify-content-center gap-2"
+        >
+            <div class="container col-none-12 col-md-4 mb-5">
+                <img
+                    src="images/home_airport.webp"
+                    class="image-style"
+                    alt="avión despegando de un aeropuerto"
+                />
+            </div>
+            <div
+                class="container col-none-12 col-md-4 mb-5 d-flex flex-column justify-content-between"
+            >
+                <h2>
+                    Olvida Uber y BlaBlaCar, Comparte tu viaje, ahorra más y
+                    cuida el planeta.¡Viaja inteligente!
+                </h2>
+                <p class="d-none d-md-block">
+                    Con nuestra plataforma, conectar con otros viajeros es
+                    fácil, seguro y económico. Ahorra en combustible, optimiza
+                    cada trayecto y disminuye tu huella de carbono. ¡Únete y haz
+                    que cada kilómetro cuente!
+                </p>
+
+                <Button label="Inicia sesión" class="btn-primary" />
+            </div>
+        </section>
+        <section
+            class="container-fluid w-100 h-auto home-section d-block d-md-flex flex-row justify-content-center gap-2"
+        >
+            <div class="container col-none-12 col-md-4 mb-5">
+                <img
+                    src="images/inside_car.webp"
+                    class="image-style"
+                    alt="avión despegando de un aeropuerto"
+                />
+            </div>
+            <div
+                class="container col-none-12 col-md-4 mb-5 d-flex flex-column justify-content-between"
+            >
+                <h2>
+                    Un viaje compartido, un planeta agradecido. Registra tu
+                    coche y publica tu recorrido.
+                </h2>
+                <p class="d-none d-md-block">
+                    Publica tu recorrido, encuentra pasajeros y contribuye a un
+                    mundo más sostenible. Viajar acompañado es más económico,
+                    ecológico y social. ¡Únete y haz la diferencia!
+                </p>
+
+                <Button label="Publica tu viaje" class="btn-primary" />
+            </div>
+        </section>
+        <section
+            class="container-fluid w-100 h-auto mb-4 home-section last-section d-block d-md-flex flex-row-reverse justify-content-center gap-2"
+        >
+            <div class="container col-none-12 col-md-4 mb-5">
+                <img
+                    src="images/green_world.webp"
+                    class="image-style"
+                    alt="avión despegando de un aeropuerto"
+                />
+            </div>
+            <div
+                class="container col-none-12 col-md-4 mb-5 d-flex flex-column justify-content-between"
+            >
+                <h2>¡Haz la diferencia, viaja y comparte!</h2>
+                <p class="d-none d-md-block">
+                    Cada vez que compartes tu viaje, ayudas a limpiar el aire,
+                    reducir la contaminación y hacer de nuestras ciudades un
+                    lugar más verde. Al usar nuestra app, ahorras dinero, tiempo
+                    y contribuyes a un futuro más sostenible. ¡El planeta te lo
+                    agradecerá!
+                </p>
+
+                <Button label="Regístrate ahora" class="btn-primary" />
+            </div>
+        </section>
     </main>
 </template>
 
 <script setup>
 import TripFinder from "../../components/TripFinder.vue";
 </script>
+<style scoped>
+#home-finder-section {
+    background-image: linear-gradient(
+            to top,
+            rgba(255, 255, 255, 5),
+            rgba(255, 255, 255, 0.7)
+        ),
+        url("images/main_banner.webp");
+    height: 620px;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.home-section {
+    padding: 30px;
+    padding-top: 80px;
+    padding-bottom: 80px;
+    background-color: white;
+    height: 700px;
+}
+.image-style {
+    border-radius: 0px !important;
+    max-width: 100% !important;
+}
+
+.last-section {
+    background-color: #f6f6f6 !important;
+}
+</style>
 <!--
 <template>
     <div class="demo" id="edit-demo">
