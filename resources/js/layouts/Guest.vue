@@ -5,7 +5,6 @@
         <router-view></router-view>
 
         <AppFooter v-if="!hideHeader"></AppFooter>
-        <AppFooter v-if="!hideHeader"></AppFooter>
     </div>
 </template>
 <script setup>
@@ -29,26 +28,9 @@ onMounted(() => {
     if (routeName === "register") {
         hideHeader.value = true;
         hideFooter.value = true;
-    }
-});
-import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
-
-const route = useRoute();
-
-// Variables para ocultar el header y el footer
-const hideHeader = ref(false);
-const hideFooter = ref(false);
-
-onMounted(() => {
-    // Coger la ruta actual
-    const [firstPart, routeName] = route.name.split(".");
-    // console.log(routeName);
-
-    // Si la ruta es register, oculta el header y el footer
-    if (routeName === "register") {
-        hideHeader.value = true;
-        hideFooter.value = true;
+    } else {
+        hideHeader.value = false;
+        hideFooter.value = false;
     }
 });
 </script>

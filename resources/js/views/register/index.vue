@@ -100,9 +100,7 @@
                                     </div>
 
                                     <!-- Buttons -->
-                                    <div
-                                        class="d-flex flex items-center justify-end mt-4"
-                                    >
+                                    <div class="d-flex gap-4 mt-4">
                                         <button
                                             class="btn btn-primary w-50 mt-4"
                                             :class="{
@@ -112,16 +110,22 @@
                                         >
                                             {{ $t("register") }}
                                         </button>
-                                        <router-link to="/">
-                                            <button
-                                                class="btn btn-secondary w-50 mt-4"
-                                                :class="{
-                                                    'opacity-25': processing,
-                                                }"
-                                                :disabled="processing"
+
+                                        <router-link
+                                            to="/"
+                                            class="primary-a mt-4 d-flex justify-content-center align-items-center gap-3 mx-auto"
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24"
+                                                height="24"
+                                                fill="#000000"
+                                                viewBox="0 0 256 256"
                                             >
-                                                {{ $t("Back") }}
-                                            </button>
+                                                <path
+                                                    d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"
+                                                ></path></svg
+                                            >{{ $t("Back") }}
                                         </router-link>
                                     </div>
                                 </div>
@@ -136,10 +140,7 @@
 
 <script setup>
 import useAuth from "@/composables/auth";
-import useAuth from "@/composables/auth";
 
-const { registerForm, validationErrors, processing, submitRegister } =
-    useAuth();
 const { registerForm, validationErrors, processing, submitRegister } =
     useAuth();
 </script>
