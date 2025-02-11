@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -22,6 +21,7 @@ return new class extends Migration
             $table->decimal('consumption', 5, 2)->nullable();
             $table->integer('pax_number');
             $table->boolean('validation')->default(false);
+            $table->string('fuel_type');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
