@@ -48,7 +48,7 @@ async function requireAdmin(to, from, next) {
         if (hasAdmin(user.roles)) {
             next();
         } else {
-            next("/app");
+            next("/profile");
         }
     } else {
         next("/login");
@@ -109,12 +109,12 @@ export default [
     },
 
     {
-        path: "/app",
+        path: "/profile",
         component: AuthenticatedUserLayout,
         // redirect: {
         //     name: 'admin.index'
         // },
-        name: "app",
+        name: "profile",
         beforeEnter: requireLogin,
         meta: { breadCrumb: "Dashboard" },
     },
