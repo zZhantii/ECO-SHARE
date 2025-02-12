@@ -20,7 +20,7 @@ export default function useAuth() {
 
 
     const loginForm = reactive({
-        email: '',
+        alias: '',
         password: '',
         remember: false
     })
@@ -66,6 +66,7 @@ export default function useAuth() {
                 await router.push({ name: 'admin.index' })
             })
             .catch(error => {
+                console.error('Login error:', error.response?.data);
                 if (error.response?.data) {
                     validationErrors.value = error.response.data.errors
                 }
