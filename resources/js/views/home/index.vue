@@ -82,6 +82,7 @@
 </template>
 
 <script setup>
+import { RouterLink } from "vue-router";
 import TripFinder from "../../components/TripFinder.vue";
 </script>
 <style scoped>

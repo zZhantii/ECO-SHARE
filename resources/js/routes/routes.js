@@ -105,6 +105,11 @@ export default [
                 component: () => import("../views/auth/passwords/Reset.vue"),
                 beforeEnter: guest,
             },
+            {
+                path: "trips",
+                name: "",
+                component: () => import("../views/trips/index.vue"),
+            },
         ],
     },
 
