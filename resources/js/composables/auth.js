@@ -39,6 +39,7 @@ export default function useAuth() {
     const registerForm = reactive({
         alias: '',
         name: '',
+        surname1: '',
         email: '',
         password: '',
         password_confirmation: ''
@@ -97,6 +98,7 @@ export default function useAuth() {
                 if (error.response?.data) {
                     validationErrors.value = error.response.data.errors
                 }
+                throw error;
             })
             .finally(() => processing.value = false)
     }
