@@ -14,21 +14,21 @@
 
                             <form @submit.prevent="submitLogin">
                                 <!-- alias -->
-                                <div class="mb-3 d-flex justify-content-center">
-                                    <input v-model="loginForm.alias" id="alias" type="text" class="form-control w-75" :placeholder="$t('alias')" required autofocus autocomplete="username" />
-                                    <!-- Validation Errors
+                                <div class="mb-3 d-flex align-items-center flex-column">
+                                    <input v-model="loginForm.alias" id="alias" type="text" class="form-control w-75" :placeholder="$t('Alias')" required autofocus autocomplete="username" />
+                                    <!-- Validation Errors -->
                                     <div class="text-danger mt-1">
                                         <div v-for="message in validationErrors?.alias">
                                             {{ message }}
                                         </div>
-                                    </div> -->
+                                    </div>
                                     <Toast />
                                 </div>
                                 <!-- Password -->
-                                <div class="mb-3 d-flex justify-content-center">
+                                <div class="mb-3 d-flex align-items-center flex-column">
                                     <input v-model="loginForm.password" id="password" type="password" :placeholder="$t('password')" class="form-control w-75" required autocomplete="current-password" />
                                     <!-- Validation Errors -->
-                                    <div class="text-danger-600 mt-1">
+                                    <div class="text-danger mt-1">
                                         <div v-for="message in validationErrors?.password">
                                             {{ message }}
                                         </div>
@@ -56,7 +56,7 @@
 
                                     <button class="btn btn-primary w-100" :class="{
                                         'opacity-25': processing,
-                                    }" :disabled="processing" @click="onFormSubmitLogin()">
+                                    }" :disabled="processing" @click="onFormSubmitLogin">
                                         {{ $t("login") }}
                                     </button>
                                 </div>
@@ -77,8 +77,8 @@ import { useToast } from "primevue/usetoast";
 import { Toast } from "primevue";
 
 yup.setLocale(es);
-
 const toast = useToast();
+
 const { loginForm, validationErrors, processing, submitLogin } = useAuth();
 
 const loginSchema = yup.object().shape({
@@ -88,18 +88,30 @@ const loginSchema = yup.object().shape({
 
 const onFormSubmitLogin = async () => {
     try {
-        // Valida los datos del formulario
-        await loginSchema.validate(loginForm, { abortEarly: false })
-
-        await submitLogin();
-
-        toast.add({ severity: "success", summary: "Success", detail: "Inicio de sesión correctamente", life: 3000 });
-    } catch (error) {
-        error.inner.forEach((err) => {
-            validationErrors[err.path] = err.errors;
+        await loginSchema.validate(loginForm, { abortEarly: false });
+        await submitRegister();
+        toast.add({
+            severity: "success",
+            summary: "Registro exitoso",
+            detail: "Te has registrado correctamente",
+            life: 3000,
         });
-        toast.add({ severity: "error", summary: "Error", detail: "Nombre de usuario o contraseña incorrectos", life: 3000 });
-    };
+    } catch (error) {
+        if (error.inner) {
+            error.inner.forEach((e) => {
+                if (!validationErrors.value[e.path]) {
+                    validationErrors.value[e.path] = [];
+                }
+                validationErrors.value[e.path].push(e.message);
+            });
+        }
+        toast.add({
+            severity: "error",
+            summary: "Error",
+            detail: "Por favor, corrija los errores en el formulario.",
+            life: 3000,
+        });
+    }
 }
 
 </script>

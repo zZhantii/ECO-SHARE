@@ -37,6 +37,7 @@ export default function useAuth() {
     })
 
     const registerForm = reactive({
+        alias: '',
         name: '',
         email: '',
         password: '',
@@ -75,8 +76,7 @@ export default function useAuth() {
     }
 
     const submitRegister = async () => {
-        if (processing.value) return
-
+        console.log('registerForm');
         processing.value = true
         validationErrors.value = {}
 
@@ -93,6 +93,7 @@ export default function useAuth() {
                 await router.push({ name: 'auth.login' })
             })
             .catch(error => {
+                console.error('Registration error:', error.response?.data);
                 if (error.response?.data) {
                     validationErrors.value = error.response.data.errors
                 }

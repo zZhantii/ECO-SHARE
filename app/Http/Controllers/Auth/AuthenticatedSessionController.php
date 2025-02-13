@@ -38,7 +38,7 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
-//        $token = $request->session()->regenerate();
+        //        $token = $request->session()->regenerate();
         $token = $request->user()->createToken($request->userAgent())->plainTextToken;
         //$user= $request->user();
         //$user['rol']=User::find($user['id'])->load('roles')->roles[0]->name;
@@ -84,6 +84,7 @@ class AuthenticatedSessionController extends Controller
         }
 
         $user = User::create([
+            'alias' => $request['alias'],
             'email' => $request['email'],
             'password' => Hash::make($request['password']),
             'name' => $request['name'],
