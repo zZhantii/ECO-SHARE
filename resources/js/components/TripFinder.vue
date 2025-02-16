@@ -30,7 +30,6 @@ const value = ref();
 const router = useRouter();
 
 const submitFinder = () => {
-    console.log("funciona");
     router.push({ path: '/trips', query: { date: date.value, value: value.value } });
 };
 </script>

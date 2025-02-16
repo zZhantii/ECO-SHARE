@@ -66,16 +66,16 @@ export default [
                 name: "home",
                 component: () => import("../views/home/index.vue"),
             },
-            {
-                path: "posts",
-                name: "public-posts.index",
-                component: () => import("../views/posts/index.vue"),
-            },
-            {
-                path: "posts/:id",
-                name: "public-posts.details",
-                component: () => import("../views/posts/details.vue"),
-            },
+            // {
+            //     path: "posts",
+            //     name: "public-posts.index",
+            //     component: () => import("../views/posts/index.vue"),
+            // },
+            // {
+            //     path: "posts/:id",
+            //     name: "public-posts.details",
+            //     component: () => import("../views/posts/details.vue"),
+            // },
             {
                 path: "category/:id",
                 name: "category-posts.index",
@@ -106,10 +106,15 @@ export default [
                 beforeEnter: guest,
             },
             {
-                path: "trips",
-                name: "",
-                component: () => import("../views/trips/index.vue"),
+                path: '/trips',
+                name: 'TripsIndex',
+                component: () => import("../views/trips/index.vue")
             },
+            {
+                path: '/trips/post',
+                name: 'PostTrips',
+                component: () => import("../views/trips/postTrips.vue")
+            }
         ],
     },
 

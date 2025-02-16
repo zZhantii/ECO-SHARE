@@ -89,7 +89,6 @@ const loginSchema = yup.object().shape({
 const onFormSubmitLogin = async () => {
     try {
         await loginSchema.validate(loginForm, { abortEarly: false });
-        await submitRegister();
         toast.add({
             severity: "success",
             summary: "Registro exitoso",

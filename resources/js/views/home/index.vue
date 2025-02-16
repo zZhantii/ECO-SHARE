@@ -57,8 +57,7 @@
                     mundo más sostenible. Viajar acompañado es más económico,
                     ecológico y social. ¡Únete y haz la diferencia!
                 </p>
-
-                <router-link to="/" class="btn-primary">Publica tu viaje</router-link>
+                <router-link :to="{ name: 'PostTrips' }" class="btn-primary">Publica tu viaje</router-link>
             </div>
         </section>
         <section class="container-fluid w-100 h-auto mb-4 home-section last-section d-block d-md-flex flex-row-reverse justify-content-center gap-2">

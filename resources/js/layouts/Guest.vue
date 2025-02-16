@@ -1,6 +1,8 @@
 <template>
     <div>
-        <header v-if="!hideHeader"><Navbar /></header>
+        <header v-if="!hideHeader">
+            <Navbar />
+        </header>
 
         <router-view></router-view>
 
