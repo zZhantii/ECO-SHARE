@@ -1,10 +1,11 @@
 <template>
-    <div class="layout-wrapper" :class="containerClass">
-        <header><Nav /></header>
+    <!-- <div class="layout-wrapper" :class="containerClass"> -->
 
-        <!-- <app-topbar></app-topbar> -->
+    <header><Nav /></header>
 
-        <!-- <div class="layout-sidebar">
+    <!-- <app-topbar></app-topbar> -->
+
+    <!-- <div class="layout-sidebar">
             <Menu :model="items" class="w-full md:w-13rem menu border-0" appendTo="self">
                 <template #start>
                     <button class="relative overflow-hidden w-full p-link flex align-items-center p-2 pl-0 text-color hover:surface-200 border-noround">
@@ -33,10 +34,10 @@
                 </template>
 
             </Menu> -->
-        <!--            <app-sidebar></app-sidebar>-->
-        <!-- </div> -->
+    <!--            <app-sidebar></app-sidebar>-->
+    <!-- </div> -->
 
-        <!-- <div class="layout-main-container">
+    <!-- <div class="layout-main-container">
             <div class="card mb-2 bread">
                 <Breadcrumb :home="home" :model="crumbs">
                     <template #item="{ item, props }">
@@ -69,16 +70,16 @@
                     </template>
                 </Breadcrumb>
             </div> -->
-        <div class="layout-main">
-            <!--                <Suspense>-->
-            <router-view></router-view>
-            <!--                </Suspense>-->
-            <!-- </div> -->
-            <app-footer></app-footer>
-        </div>
+    <!-- <div class="layout-main"> -->
+    <!--                <Suspense>-->
+    <router-view></router-view>
+    <!--                </Suspense>-->
+    <!-- </div> -->
+    <app-footer></app-footer>
+    <!-- </div> -->
 
-        <!-- <div class="layout-mask"></div> -->
-    </div>
+    <!-- <div class="layout-mask"></div> -->
+    <!-- </div> -->
 </template>
 
 <script setup>

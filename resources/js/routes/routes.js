@@ -114,9 +114,16 @@ export default [
         // redirect: {
         //     name: 'admin.index'
         // },
-        name: "profile",
+        // name: "profile",
         beforeEnter: requireLogin,
-        meta: { breadCrumb: "Dashboard" },
+        // meta: { breadCrumb: "Dashboard" },
+        children: [
+            {
+                name: "profile",
+                path: "",
+                component: () => import("../views/profile/index.vue"),
+            },
+        ],
     },
 
     {

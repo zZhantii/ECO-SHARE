@@ -1,6 +1,7 @@
 <template>
     <div class="layout-wrapper" :class="containerClass">
-        <app-topbar></app-topbar>
+        <Nav />
+        <!-- <app-topbar></app-topbar>
         <div class="layout-sidebar">
             <app-sidebar></app-sidebar>
         </div>
@@ -37,48 +38,49 @@
             <app-footer></app-footer>
         </div>
 
-        <div class="layout-mask"></div>
+        <div class="layout-mask"></div> -->
     </div>
 </template>
 
 <script setup>
-import { computed, watch, ref } from 'vue';
+import { computed, watch, ref } from "vue";
 import { useRoute } from "vue-router";
-import Breadcrumb from 'primevue/breadcrumb';
-
-import AppTopbar from './AppTopbar.vue';
-import AppFooter from './AppFooter.vue';
-import AppSidebar from './AppSidebar.vue';
-import { useLayout } from '../composables/layout';
+import Breadcrumb from "primevue/breadcrumb";
+import Nav from "./Nav.vue";
+import AppTopbar from "./AppTopbar.vue";
+import AppFooter from "./AppFooter.vue";
+import AppSidebar from "./AppSidebar.vue";
+import { useLayout } from "../composables/layout";
 
 const route = useRoute();
 
 const home = ref({
-    icon: 'pi pi-home',
-    route: '/admin'
+    icon: "pi pi-home",
+    route: "/admin",
 });
 
 const crumbs = computed(() => {
-    let pathArray = route.path.split("/")
-      pathArray.shift()
+    let pathArray = route.path.split("/");
+    pathArray.shift();
 
-      let breadcrumbs = pathArray.reduce((breadcrumbArray, path, idx) => {
-
+    let breadcrumbs = pathArray.reduce((breadcrumbArray, path, idx) => {
         breadcrumbArray.push({
             route: breadcrumbArray[idx - 1]
-            ? "" + breadcrumbArray[idx - 1].route + "/" + path
-            : "/" + path,
-          label: route.matched[idx]?.meta.breadCrumb || path,
-          disabled: idx + 1 === pathArray.length || route.matched[idx]?.meta.linked===false,
+                ? "" + breadcrumbArray[idx - 1].route + "/" + path
+                : "/" + path,
+            label: route.matched[idx]?.meta.breadCrumb || path,
+            disabled:
+                idx + 1 === pathArray.length ||
+                route.matched[idx]?.meta.linked === false,
         });
 
         return breadcrumbArray;
-      }, [])
-      return breadcrumbs;
-    });
+    }, []);
+    return breadcrumbs;
+});
 
 function selected(crumb) {
-     //Console.log(crumb);
+    //Console.log(crumb);
 }
 
 const { layoutConfig, layoutState, isSidebarActive } = useLayout();
@@ -95,15 +97,17 @@ watch(isSidebarActive, (newVal) => {
 
 const containerClass = computed(() => {
     return {
-        'layout-theme-light': layoutConfig.darkTheme.value === 'light',
-        'layout-theme-dark': layoutConfig.darkTheme.value === 'dark',
-        'layout-overlay': layoutConfig.menuMode.value === 'overlay',
-        'layout-static': layoutConfig.menuMode.value === 'static',
-        'layout-static-inactive': layoutState.staticMenuDesktopInactive.value && layoutConfig.menuMode.value === 'static',
-        'layout-overlay-active': layoutState.overlayMenuActive.value,
-        'layout-mobile-active': layoutState.staticMenuMobileActive.value,
-        'p-input-filled': layoutConfig.inputStyle.value === 'filled',
-        'p-ripple-disabled': !layoutConfig.ripple.value
+        "layout-theme-light": layoutConfig.darkTheme.value === "light",
+        "layout-theme-dark": layoutConfig.darkTheme.value === "dark",
+        "layout-overlay": layoutConfig.menuMode.value === "overlay",
+        "layout-static": layoutConfig.menuMode.value === "static",
+        "layout-static-inactive":
+            layoutState.staticMenuDesktopInactive.value &&
+            layoutConfig.menuMode.value === "static",
+        "layout-overlay-active": layoutState.overlayMenuActive.value,
+        "layout-mobile-active": layoutState.staticMenuMobileActive.value,
+        "p-input-filled": layoutConfig.inputStyle.value === "filled",
+        "p-ripple-disabled": !layoutConfig.ripple.value,
     };
 });
 const bindOutsideClickListener = () => {
@@ -115,26 +119,30 @@ const bindOutsideClickListener = () => {
                 layoutState.menuHoverActive.value = false;
             }
         };
-        document.addEventListener('click', outsideClickListener.value);
+        document.addEventListener("click", outsideClickListener.value);
     }
 };
 const unbindOutsideClickListener = () => {
     if (outsideClickListener.value) {
-        document.removeEventListener('click', outsideClickListener);
+        document.removeEventListener("click", outsideClickListener);
         outsideClickListener.value = null;
     }
 };
 const isOutsideClicked = (event) => {
-    const sidebarEl = document.querySelector('.layout-sidebar');
-    const topbarEl = document.querySelector('.layout-menu-button');
+    const sidebarEl = document.querySelector(".layout-sidebar");
+    const topbarEl = document.querySelector(".layout-menu-button");
 
-    return !(sidebarEl.isSameNode(event.target) || sidebarEl.contains(event.target) || topbarEl.isSameNode(event.target) || topbarEl.contains(event.target));
+    return !(
+        sidebarEl.isSameNode(event.target) ||
+        sidebarEl.contains(event.target) ||
+        topbarEl.isSameNode(event.target) ||
+        topbarEl.contains(event.target)
+    );
 };
-
 </script>
 
 <style lang="scss">
-.bread{
-    padding:.1rem;
+.bread {
+    padding: 0.1rem;
 }
 </style>

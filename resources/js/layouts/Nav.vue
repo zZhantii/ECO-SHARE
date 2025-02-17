@@ -68,7 +68,11 @@
                             aria-expanded="false"
                         >
                             <Avatar
-                                :label="avatarLetter"
+                                :label="
+                                    authStore()
+                                        .user?.name.charAt(0)
+                                        .toUpperCase()
+                                "
                                 class="mr-2"
                                 size="large"
                             />
@@ -76,7 +80,12 @@
                         <ul
                             class="dropdown-menu dropdown-menu-end custom-dropdown"
                         >
-                            <li>
+                            <li
+                                v-if="
+                                    authStore().user?.roles[0].name == 'admin'
+                                "
+                                class="nav-item"
+                            >
                                 <router-link
                                     class="dropdown-item primary-a"
                                     to="/admin"
@@ -124,8 +133,6 @@ const { processing, logout } = useAuth();
 
 const { user } = authStore();
 const avatarLetter = user?.name?.charAt(0).toUpperCase();
-
-console.log(user);
 </script>
 
 <style scoped>
