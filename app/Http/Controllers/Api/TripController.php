@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Trip;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 
 class TripController extends Controller
@@ -14,5 +14,10 @@ class TripController extends Controller
     {
         $trips = Trip::All();
         return response()->json(["success" => true, "data" => $trips], 200);
+    }
+
+    public function postTrips(Request $request)
+    {
+        $validator = Validator::make($request->all(), []);
     }
 }
