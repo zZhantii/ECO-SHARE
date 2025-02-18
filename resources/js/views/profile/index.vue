@@ -182,6 +182,7 @@
                                 class="ms-5 mt-3 ms-5 d-flex flex-column align-items-center"
                             >
                                 <li
+                                    v-if="vehiclesList.length > 0"
                                     v-for="vehicle in vehiclesList"
                                     @click="openDialog(vehicle.id)"
                                     class="primary-a ms-5 w-50 mb-3 d-flex justify-content-between align-items-center gap-5"
@@ -191,7 +192,10 @@
                                         class="fas fa-ellipsis-v"
                                     />
                                 </li>
+                                <h2 v-else>No tienes vehículos registrados</h2>
+
                                 <Dialog
+                                    v-if="isOpen == true"
                                     v-model:visible="visibleVehicleDialog"
                                     modal
                                     header="Editar vehículo"
@@ -251,12 +255,30 @@
                                             showButtons
                                         />
                                     </div>
-                                    <Button
-                                        label="Guardar"
-                                        class="btn-primary mt-3"
-                                        @click="handleVehicleUpdate(vehicle.id)"
-                                    />
+                                    <div
+                                        class="d-flex justify-content-between align-items-end"
+                                    >
+                                        <Button
+                                            label="Guardar"
+                                            class="btn-primary mt-3"
+                                            @click="
+                                                handleVehicleUpdate(vehicle.id)
+                                            "
+                                        />
+                                        <ConfirmPopup />
+
+                                        <Button
+                                            @click="confirm2(selectedVehicle)"
+                                            class="h-100"
+                                            label="Eliminar"
+                                            icon="fa fa-trash"
+                                            severity="danger"
+                                            outlined
+                                        ></Button>
+                                    </div>
+                                    <Toast />
                                 </Dialog>
+
                                 <Button
                                     label="Añadir vehículo"
                                     class="btn-primary mt-3"
@@ -279,12 +301,19 @@ import { computed } from "vue";
 import useVehicles from "@/composables/vehicles.js";
 import { da } from "yup-locales";
 import { find } from "lodash";
+import { useConfirm } from "primevue/useconfirm";
+import { useToast } from "primevue/usetoast";
+
+const confirm = useConfirm();
+const toast = useToast();
+const isOpen = ref(false);
 const { updateProfile } = useProfile();
 const { getUser, user } = useUsers();
-const { getVehicles, vehicle, vehiclesList, updateVehicle } = useVehicles();
+const { getVehicles, vehicle, vehiclesList, updateVehicle, deleteVehicle } =
+    useVehicles();
 const visible = ref(false);
 let selectedVehicle = ref({});
-let visibleVehicleDialog = ref(false);
+const visibleVehicleDialog = ref(false);
 const data = ref({});
 const tempData = ref({});
 const options = ["Gasolina", "Diésel"];
@@ -299,15 +328,59 @@ onMounted(async () => {
         email: user.value[0]?.email,
     };
     tempData.value = { ...data.value };
+    getVehicles();
 });
 
 const fullSurname = computed(() => {
     return `${data.value.surname1} ${data.value.surname2}`;
 });
+const confirm2 = (event) => {
+    try {
+        confirm.require({
+            target: event.currentTarget,
+            message: "¿Estás seguro/a que quieres eliminar este vehículo?",
+            icon: "pi pi-info-circle",
+            rejectProps: {
+                label: "Cancelar",
+                severity: "secondary",
+                outlined: true,
+            },
+            acceptProps: {
+                label: "Eliminar",
+                severity: "danger",
+            },
+            accept: () => {
+                deleteVehicle(event);
+                toast.add({
+                    severity: "info",
+                    summary: "Eliminado",
+                    detail: "Vehículo eliminado con éxito",
+                    life: 3000,
+                });
+                vehiclesList.value.splice(event);
+                visibleVehicleDialog.value = false;
+                isOpen.value = false;
+            },
+            reject: () => {
+                toast.add({
+                    severity: "error",
+                    summary: "Rejected",
+                    detail: "You have rejected",
+                    life: 3000,
+                });
+                isOpen = false;
+            },
+        });
+    } catch (error) {
+        console.error("Error en el elemento:", event.currentTarget);
+        console.error("Error:", error);
+    }
+};
 
 function openDialog(id) {
+    isOpen.value = true;
     visibleVehicleDialog.value = true;
-    selectedVehicle = vehiclesList.value.find((v) => v.id == id);
+    selectedVehicle.value = { ...vehiclesList.value.find((v) => v.id == id) };
 }
 
 function handleUserUpdate() {
@@ -317,12 +390,19 @@ function handleUserUpdate() {
 }
 
 function handleVehicleUpdate() {
-    updateVehicle(selectedVehicle);
+    updateVehicle(selectedVehicle.value);
     vehiclesList.value.map((v) => {
-        if (v.id == selectedVehicle.id) {
-            v.value = selectedVehicle;
+        console.log(v.id + " " + selectedVehicle.value.id);
+        console.log(v);
+        if (v.id == selectedVehicle.value.id) {
+            v.brand = selectedVehicle.value.brand;
+            v.model = selectedVehicle.value.model;
+            v.fuel_type = selectedVehicle.value.fuel_type;
+            v.pax_number = selectedVehicle.value.pax_number;
         }
+        console.log(v);
     });
+
     visibleVehicleDialog.value = false;
 }
 </script>
@@ -351,5 +431,9 @@ li:hover {
 
 #tab-pannel {
     min-height: 70vh;
+}
+
+Button {
+    padding: 10px 15px !important;
 }
 </style>

@@ -1,3 +1,4 @@
+import { Toast } from "primevue";
 import { ref, inject } from "vue";
 
 const vehicle = ref({
@@ -23,7 +24,6 @@ export default function useVehicles() {
                 vehiclesList.value.push(e);
             }
         });
-        console.log(vehiclesList.value);
     }
 
     const updateVehicle = async (vehicle) => {
@@ -50,11 +50,21 @@ export default function useVehicles() {
             .finally(() => (isLoading.value = false));
     };
 
+    const deleteVehicle = async (vehicle) => {
+        console.log("Comienza a borrar");
+        console.log(vehicle.id);
+        axios
+            .delete("http://localhost:8000/api/vehicle/" + vehicle.id)
+            .then((response) => {});
+        console.log("Se acaba el borrar");
+    };
+
     return {
         vehicle,
         vehiclesList,
         getVehicles,
         updateVehicle,
         validationErrors,
+        deleteVehicle,
     };
 }

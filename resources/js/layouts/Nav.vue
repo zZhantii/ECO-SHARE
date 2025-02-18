@@ -94,7 +94,7 @@
                             </li>
                             <li>
                                 <router-link
-                                    to="/profile"
+                                    to="/auth/profile"
                                     class="dropdown-item primary-a"
                                     >Perfil</router-link
                                 >

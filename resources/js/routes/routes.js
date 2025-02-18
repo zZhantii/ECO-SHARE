@@ -109,7 +109,7 @@ export default [
     },
 
     {
-        path: "/profile",
+        path: "/auth",
         component: AuthenticatedUserLayout,
         // redirect: {
         //     name: 'admin.index'
@@ -119,8 +119,8 @@ export default [
         // meta: { breadCrumb: "Dashboard" },
         children: [
             {
-                name: "profile",
-                path: "",
+                name: "auth.profile",
+                path: "profile",
                 component: () => import("../views/profile/index.vue"),
             },
         ],

@@ -28,4 +28,10 @@ class VehicleController extends Controller
         return response()->json(['success' => true, "data" => $vehicle], 200);
 
     }
+
+    public function destroy(Vehicle $vehicle)
+    {
+        $vehicle->delete();
+        return response()->json(['success' => true, "data" => "Vehicle deleted successfully"], 200);
+    }
 }

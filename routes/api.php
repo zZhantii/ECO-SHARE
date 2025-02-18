@@ -31,7 +31,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::put('/role-permissions', [PermissionController::class, 'updateRolePermissions']);
     Route::apiResource('permissions', PermissionController::class);
 
-
+    Route::put('vehicle/{vehicle}', [VehicleController::class, 'update']);
+    Route::get('vehicle', [VehicleController::class, 'index']);
+    Route::delete('vehicle/{vehicle}', [VehicleController::class, 'destroy']);
 
     Route::get('category-list', [CategoryController::class, 'getList']);
     Route::get('user', [ProfileController::class, 'user']);
@@ -62,6 +64,5 @@ Route::post("author", [AuthorController::class, "store"]);
 Route::delete("author/{author}", [AuthorController::class, "destroy"]);
 Route::put("author/{author}", [AuthorController::class, "update"]);
 Route::get("author/{author}", [AuthorController::class, "show"]);
-Route::put('vehicle/{vehicle}', [VehicleController::class, 'update']);
-Route::get('vehicle', [VehicleController::class, 'index']);
+
 
