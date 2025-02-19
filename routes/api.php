@@ -64,7 +64,8 @@ Route::get("author/{author}", [AuthorController::class, "show"]);
 
 // Trips
 Route::get("trip", [TripController::class, 'index']);
-Route::post("trip", [TripController::class, 'postTrips']);
+Route::post("trip", [TripController::class, 'store']);
 
 // Vehicles
 Route::get("vehicle", [VehicleController::class, 'index']);
+Route::get("vehicle/{vehicle}", [VehicleController::class, 'show']);

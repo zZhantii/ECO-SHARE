@@ -108,12 +108,14 @@ export default [
             {
                 path: '/trips',
                 name: 'TripsIndex',
-                component: () => import("../views/trips/index.vue")
+                component: () => import("../views/trips/index.vue"),
+                beforeEnter: requireLogin,
             },
             {
                 path: '/trips/post',
                 name: 'PostTrips',
-                component: () => import("../views/trips/postTrips.vue")
+                component: () => import("../views/trips/postTrips.vue"),
+                beforeEnter: requireLogin,
             }
         ],
     },

@@ -15,4 +15,15 @@ class VehicleController extends Controller
         $vehicles = Vehicle::All();
         return response()->json(["success" => true, "data" => $vehicles], 200);
     }
+
+    public function show($id)
+    {
+        $vehicleDetails = Vehicle::find($id);
+
+        if (!$vehicleDetails) {
+            return response()->json(['message' => 'Vehículo no encontrado'], 404);
+        }
+
+        return response()->json($vehicleDetails);
+    }
 }
