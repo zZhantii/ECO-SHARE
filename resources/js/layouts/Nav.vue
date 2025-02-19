@@ -70,7 +70,7 @@
                             <Avatar
                                 :label="
                                     authStore()
-                                        .user?.name.charAt(0)
+                                        .user?.alias.charAt(0)
                                         .toUpperCase()
                                 "
                                 class="mr-2"

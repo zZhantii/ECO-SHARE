@@ -48,7 +48,7 @@ async function requireAdmin(to, from, next) {
         if (hasAdmin(user.roles)) {
             next();
         } else {
-            next("/profile");
+            next("/auth/profile");
         }
     } else {
         next("/login");

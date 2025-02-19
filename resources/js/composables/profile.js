@@ -18,7 +18,6 @@ export default function useProfile() {
 
     const updateProfile = async (profile) => {
         if (isLoading.value) return;
-        console.log(profile);
 
         isLoading.value = true;
         validationErrors.value = {};

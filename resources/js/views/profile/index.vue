@@ -1,6 +1,6 @@
 <template>
     <main id="tab-pannel" class="bg-white">
-        <div class="p-0 col-11 d-flex justify-content-center">
+        <form class="p-0 col-11 d-flex justify-content-center">
             <Tabs class="col-none-11 col-md-6 mt-4 mt-5" value="0">
                 <TabList class="ms-4 col-11">
                     <Tab class="col-none-5 col-md-8 color-og fs-5 p-2" value="0"
@@ -20,7 +20,7 @@
                                 <div class="gap-4 col-none-11 col-md-9">
                                     <Avatar
                                         :label="
-                                            data.name?.charAt(0).toUpperCase()
+                                            data.alias?.charAt(0).toUpperCase()
                                         "
                                         class="mr-2 mb-3 avatar"
                                         size="xlarge"
@@ -77,12 +77,17 @@
                                         <Button
                                             class="mt-3 me-2 btn-primary"
                                             label="Editar datos personales"
-                                            @click="visible = true"
+                                            @click="
+                                                (visible = true),
+                                                    (tempData.value = {
+                                                        ...data.value,
+                                                    })
+                                            "
                                         />
                                         <Button
                                             class="mt-3 btn-secondary"
                                             label="Cambiar contraseña"
-                                            @click="visible = true"
+                                            @click="visiblePassDialog = true"
                                         />
                                     </div>
 
@@ -162,13 +167,71 @@
                                                 type="button"
                                                 label="Cancelar"
                                                 severity="secondary"
-                                                @click="visible = false"
+                                                @click="resetForm"
                                             ></Button>
                                             <Button
                                                 type="button"
                                                 label="Guardar"
                                                 class="btn-primary"
                                                 @click="handleUserUpdate"
+                                            ></Button>
+                                        </div>
+                                    </Dialog>
+                                    <Dialog
+                                        v-if="visiblePassDialog"
+                                        v-model:visible="visiblePassDialog"
+                                        modal
+                                        header="Cambiar contraseña"
+                                        :style="{ width: '25rem' }"
+                                    >
+                                        <span
+                                            class="text-surface-500 dark:text-surface-400 block mb-8"
+                                            >Actualiza la contraseña.</span
+                                        >
+                                        <div
+                                            class="flex items-center gap-4 mb-4"
+                                        >
+                                            <label
+                                                for="pwd1"
+                                                class="font-semibold w-24"
+                                                >Nueva contraseña</label
+                                            >
+                                            <InputText
+                                                id="pwd1"
+                                                v-model="pwd1"
+                                                class="flex-auto"
+                                                autocomplete="off"
+                                                min="8"
+                                            />
+                                        </div>
+                                        <div
+                                            class="flex items-center gap-4 mb-4"
+                                        >
+                                            <label
+                                                for="pwd2"
+                                                class="font-semibold w-24"
+                                                >Repite la contraseña</label
+                                            >
+                                            <InputText
+                                                id="pwd2"
+                                                v-model="pwd2"
+                                                class="flex-auto"
+                                                autocomplete="off"
+                                                min="8"
+                                            />
+                                        </div>
+
+                                        <div class="flex justify-end gap-2">
+                                            <Button
+                                                type="button"
+                                                label="Cancelar"
+                                                severity="secondary"
+                                                @click="resetForm"
+                                            ></Button>
+                                            <Button
+                                                type="button"
+                                                label="Guardar"
+                                                @click="handlePassUpdate"
                                             ></Button>
                                         </div>
                                     </Dialog>
@@ -195,7 +258,7 @@
                                 <h2 v-else>No tienes vehículos registrados</h2>
 
                                 <Dialog
-                                    v-if="isOpen == true"
+                                    v-if="visibleVehicleDialog == true"
                                     v-model:visible="visibleVehicleDialog"
                                     modal
                                     header="Editar vehículo"
@@ -276,7 +339,6 @@
                                             outlined
                                         ></Button>
                                     </div>
-                                    <Toast />
                                 </Dialog>
 
                                 <Button
@@ -289,7 +351,8 @@
                     </TabPanel>
                 </TabPanels>
             </Tabs>
-        </div>
+        </form>
+        <Toast />
     </main>
 </template>
 <script setup>
@@ -299,14 +362,15 @@ import { onMounted, ref } from "vue";
 import useProfile from "@/composables/profile.js";
 import { computed } from "vue";
 import useVehicles from "@/composables/vehicles.js";
-import { da } from "yup-locales";
+import * as yup from "yup";
+import { es } from "yup-locales";
 import { find } from "lodash";
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
+import Toast from "primevue/toast";
 
 const confirm = useConfirm();
 const toast = useToast();
-const isOpen = ref(false);
 const { updateProfile } = useProfile();
 const { getUser, user } = useUsers();
 const { getVehicles, vehicle, vehiclesList, updateVehicle, deleteVehicle } =
@@ -314,18 +378,41 @@ const { getVehicles, vehicle, vehiclesList, updateVehicle, deleteVehicle } =
 const visible = ref(false);
 let selectedVehicle = ref({});
 const visibleVehicleDialog = ref(false);
+const visiblePassDialog = ref(false);
 const data = ref({});
 const tempData = ref({});
 const options = ["Gasolina", "Diésel"];
+const pwd1 = ref("");
+const pwd2 = ref("");
+const updateSchema = yup.object().shape({
+    id: yup.number().required(),
+    alias: yup.string().required(),
+    name: yup.string().required("El campo nombre es obligatorio"),
+    surname1: yup.string().required("El campo apellido es obligatorio"),
+    surname2: yup.string().required("El campo apellido es obligatorio"),
+    email: yup
+        .string()
+        .email()
+        .required("El correo electrónico es obligatorio"),
+});
+
+const updatePassSchema = yup.object().shape({
+    password: yup
+        .string()
+        .required("La contraseña es obligatoria")
+        .min(8, "La contraseña debe tener al menos 8 carácteres"),
+});
 
 onMounted(async () => {
     user.value = await getUser(authStore().user?.id);
     data.value = {
+        id: user.value[0]?.id,
         alias: user.value[0]?.alias,
         name: user.value[0]?.name,
         surname1: user.value[0]?.surname1,
         surname2: user.value[0]?.surname2,
         email: user.value[0]?.email,
+        password: user.value[0]?.password,
     };
     tempData.value = { ...data.value };
     getVehicles();
@@ -359,7 +446,6 @@ const confirm2 = (event) => {
                 });
                 vehiclesList.value.splice(event);
                 visibleVehicleDialog.value = false;
-                isOpen.value = false;
             },
             reject: () => {
                 toast.add({
@@ -368,7 +454,6 @@ const confirm2 = (event) => {
                     detail: "You have rejected",
                     life: 3000,
                 });
-                isOpen = false;
             },
         });
     } catch (error) {
@@ -378,29 +463,90 @@ const confirm2 = (event) => {
 };
 
 function openDialog(id) {
-    isOpen.value = true;
     visibleVehicleDialog.value = true;
     selectedVehicle.value = { ...vehiclesList.value.find((v) => v.id == id) };
 }
 
-function handleUserUpdate() {
-    updateProfile(tempData.value);
-    data.value = { ...tempData.value };
+async function handlePassUpdate() {
+    if (pwd1.value != "" && pwd1.value == pwd2.value) {
+        try {
+            tempData.value.password = pwd1.value;
+            let tempPassword = { value: tempData.value.password };
+            console.log(tempPassword);
+            await updatePassSchema.validate({ password: tempPassword.value });
+            toast.add({
+                severity: "success",
+                summary: "Contraseña actualizada",
+                detail: "La contraseña ha sido cambiada con éxito.",
+                life: 3000,
+            });
+            updateProfile(tempData.value);
+            data.value = { ...tempData.value };
+            visiblePassDialog.value = false;
+        } catch (Error) {
+            toast.add({
+                severity: "error",
+                summary: "La contraseña debe tener mínimo 8 caracteres",
+                detail: Error.message,
+                life: 3000,
+            });
+        }
+    } else {
+        toast.add({
+            severity: "error",
+            summary: "Contraseñas inválidas",
+            detail: "Las contraseñas no coinciden",
+            life: 3000,
+        });
+    }
+}
+
+async function handleUserUpdate() {
+    try {
+        await updateSchema.validate({
+            id: tempData.value.id,
+            alias: tempData.value.alias,
+            name: tempData.value.name,
+            surname1: tempData.value.surname1,
+            surname2: tempData.value.surname2,
+            email: tempData.value.email,
+        });
+
+        toast.add({
+            severity: "success",
+            summary: "Perfil actualizado",
+            detail: "Los datos del perfil han sido actualizados con éxito.",
+            life: 3000,
+        });
+
+        updateProfile(tempData.value);
+
+        data.value = { ...tempData.value };
+        visible.value = false;
+    } catch (Error) {
+        toast.add({
+            severity: "error",
+            summary: "Datos incorrectos",
+            detail: Error.message,
+            life: 3000,
+        });
+    }
+}
+
+function resetForm() {
     visible.value = false;
+    tempData.value = { ...data.value };
 }
 
 function handleVehicleUpdate() {
     updateVehicle(selectedVehicle.value);
     vehiclesList.value.map((v) => {
-        console.log(v.id + " " + selectedVehicle.value.id);
-        console.log(v);
         if (v.id == selectedVehicle.value.id) {
             v.brand = selectedVehicle.value.brand;
             v.model = selectedVehicle.value.model;
             v.fuel_type = selectedVehicle.value.fuel_type;
             v.pax_number = selectedVehicle.value.pax_number;
         }
-        console.log(v);
     });
 
     visibleVehicleDialog.value = false;

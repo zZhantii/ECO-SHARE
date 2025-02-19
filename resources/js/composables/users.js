@@ -10,6 +10,7 @@ export default function useUsers() {
         surname1: "",
         surname2: "",
         email: "",
+        password: "",
     });
 
     const router = useRouter();
@@ -53,8 +54,9 @@ export default function useUsers() {
 
     const getUser = async (id) => {
         const response = await axios.get("/api/user/" + id);
-        user.value = response.data.data; // Aquí actualizas el ref correctamente
-        return user.value; // Devuelves el usuario actualizado
+        user.value = response.data.data;
+
+        return user.value;
     };
 
     const createUserDB = async (id) => {
