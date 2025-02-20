@@ -52,7 +52,7 @@
                                         <h3 class="mt-3 mb-5">¿Que Vehiculo utilizarás?</h3>
                                         <div class="d-flex align-items-center">
                                             <FloatLabel class="" variant="on">
-                                                <Select v-model="tripData.vehicle_selected" inputId="on_label" :options="vehicles" optionValue="id" optionLabel="brand" class="w-full" />
+                                                <Select v-model="tripData.vehicle_id" inputId="on_label" :options="vehicles" optionValue="id" optionLabel="brand" class="w-full" />
                                                 <label for="on_label">Selecciones su vehiculo</label>
                                             </FloatLabel>
                                         </div>
@@ -88,13 +88,14 @@
                                             <div>
                                                 <h4 class="mb-3">Detalles del vehiculo</h4>
                                                 <ul class="d-flex flex-column gap-3">
-                                                    <li>Marca: {{ selectedVehicleDetails.brand }}</li>
-                                                    <li>Modelo: {{ selectedVehicleDetails.model }}</li>
-                                                    <li>Matrícula: {{ selectedVehicleDetails.plate }}</li>
-                                                    <li>Consumo: {{ selectedVehicleDetails.consumption }}</li>
-                                                    <li>Número de asientos: {{ selectedVehicleDetails.pax_number }}</li>
-                                                    <li>Tipo de gasolina: {{ selectedVehicleDetails.fuel_type }}</li>
+                                                    <li v-if="selectedVehicleDetails">{{ selectedVehicleDetails.brand ? `Marca: ${selectedVehicleDetails.brand}` : 'Marca no disponible' }}</li>
+                                                    <li v-if="selectedVehicleDetails">{{ selectedVehicleDetails.model ? `Modelo: ${selectedVehicleDetails.model}` : 'Modelo no disponible' }}</li>
+                                                    <li v-if="selectedVehicleDetails">{{ selectedVehicleDetails.plate ? `Matrícula: ${selectedVehicleDetails.plate}` : 'Matrícula no disponible' }}</li>
+                                                    <li v-if="selectedVehicleDetails">{{ selectedVehicleDetails.consumption ? `Consumo: ${selectedVehicleDetails.consumption}` : 'Consumo no disponible' }}</li>
+                                                    <li v-if="selectedVehicleDetails">{{ selectedVehicleDetails.pax_number ? `Número de asientos: ${selectedVehicleDetails.pax_number}` : 'Número de asientos no disponible' }}</li>
+                                                    <li v-if="selectedVehicleDetails">{{ selectedVehicleDetails.fuel_type ? `Tipo de gasolina: ${selectedVehicleDetails.fuel_type}` : 'Tipo de gasolina no disponible' }}</li>
                                                 </ul>
+
                                             </div>
                                             <div>
                                                 <h4 class="mb-3">Detalles del viaje</h4>
@@ -143,6 +144,7 @@ import { useToast } from "primevue/usetoast";
 import { Toast } from "primevue";
 import { onMounted, ref, watch } from 'vue';
 import { start } from '@popperjs/core';
+import { authStore } from "../../store/auth";
 
 // DataBase
 import axios from 'axios';
@@ -154,14 +156,9 @@ const route = useRoute();
 
 const toast = useToast();
 
-const tripData = ref({
-    start_point: "",
-    end_point: "",
-    vehicle_selected: 0,
-    available_seats: 1,
-});
-
-const next = ref(false);
+let user_id = ref(0);
+user_id.value = authStore().user.id;
+console.log("userId", user_id.value);
 
 onMounted(async () => {
     const savedTrip = sessionStorage.getItem("tripData");
@@ -177,9 +174,20 @@ onMounted(async () => {
     }
 });
 
+const tripData = ref({
+    user_id: user_id.value,
+    start_point: "",
+    end_point: "",
+    vehicle_id: 0,
+    available_seats: 1,
+    price: 50.00,
+});
+
+const next = ref(false);
+
 const selectedVehicleDetails = ref(null);
 
-watch(() => tripData.value.vehicle_selected, async (id) => {
+watch(() => tripData.value.vehicle_id, async (id) => {
     if (id) {
         router.push({ query: { vehicle: id } });
         await findVehicleById(id);
@@ -191,12 +199,11 @@ watch(() => tripData.value.vehicle_selected, async (id) => {
 watch(() => [
     tripData.value.start_point,
     tripData.value.end_point,
-    tripData.value.vehicle_selected,
+    tripData.value.vehicle_id,
     tripData.value.available_seats
 ], () => {
     next.value = false;
 });
-
 
 
 const findVehicleById = async (id) => {
@@ -237,19 +244,19 @@ const saveOption = async () => {
 
 const vehicles = ref([]);
 const CarSchema = yup.object().shape({
-    vehicle_selected: yup.number().required('El vehículo es obligatorio').min(1, 'Debe seleccionar un vehículo válido'),
+    vehicle_id: yup.number().required('El vehículo es obligatorio').min(1, 'Debe seleccionar un vehículo válido'),
     available_seats: yup.number().required('Debe indicar los asientos disponibles').min(1, 'Debe haber al menos un asiento disponible'),
 });
 
 const saveOptionCar = async () => {
     try {
-        await CarSchema.validate({ vehicle_selected: tripData.value.vehicle_selected, available_seats: tripData.value.available_seats });
+        await CarSchema.validate({ vehicle_id: tripData.value.vehicle_id, available_seats: tripData.value.available_seats });
         next.value = false;
         saveTripData();
         toast.add({
             severity: 'success',
             summary: 'Guardado con éxito',
-            detail: `Vehículo: ${tripData.value.vehicle_selected} | Asientos: ${tripData.value.available_seats}`,
+            detail: `Vehículo: ${tripData.value.vehicle_id} | Asientos: ${tripData.value.available_seats}`,
             life: 3000,
         });
     } catch (error) {
@@ -259,12 +266,15 @@ const saveOptionCar = async () => {
 };
 
 const postTrips = async () => {
+    tripData.value.user_id = user_id.value;
+
     try {
         console.log("Enviando datos del viaje: ", tripData.value);
         const response = await axios.post('/api/trip', tripData.value);
         toast.add({ severity: 'success', summary: '¡Viaje registrado!', detail: 'El viaje ha sido guardado exitosamente.', life: 3000 });
         sessionStorage.removeItem("tripData");
     } catch (error) {
+        console.error("Error en la solicitud POST:", error);
         toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo registrar el viaje.', life: 3000 });
     }
 };
