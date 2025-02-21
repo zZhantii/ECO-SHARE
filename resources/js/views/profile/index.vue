@@ -52,12 +52,34 @@
                                         <Button class="mt-3 btn-secondary" label="Cambiar contraseña" @click="visiblePassDialog = true" />
                                     </div>
 
-                                    <Dialog v-if="visible" v-model:visible="visible" modal header="Editar perfil" :style="{ width: '40rem' }">
-                                        <span class="text-surface-500 dark:text-surface-400 block mb-8">Edita tu información
-                                            personal.</span>
-                                        <div class="flex items-center gap-4 mb-4">
-                                            <label for="name" class="font-semibold w-25">Nombre</label>
-                                            <InputText v-model="tempData.name" id="username" class="flex-auto" autocomplete="off" />
+
+                                    <Dialog
+                                        v-if="visible"
+                                        v-model:visible="visible"
+                                        modal
+                                        header="Editar perfil"
+                                        :style="{ width: '40rem' }"
+                                    >
+                                        <span
+                                            class="text-surface-500 dark:text-surface-400 block mb-8"
+                                            >Edita tu información
+                                            personal.</span
+                                        >
+                                        <div
+                                            class="flex items-center gap-4 mb-4"
+                                        >
+                                            <label
+                                                for="name"
+                                                class="font-semibold w-25"
+                                                >Nombre</label
+                                            >
+                                            <InputText
+                                                v-model="tempData.name"
+                                                id="username"
+                                                class="flex-auto"
+                                                autocomplete="off"
+                                            />
+
                                         </div>
                                         <div class="flex items-center gap-4 mb-4">
                                             <label for="surname1" class="font-semibold w-25">Primer apellido</label>
@@ -202,7 +224,7 @@ onMounted(async () => {
         email: user.value[0]?.email,
     };
     tempData.value = { ...data.value };
-    getVehicles();
+    getVehicles(user);
 });
 
 const fullSurname = computed(() => {
