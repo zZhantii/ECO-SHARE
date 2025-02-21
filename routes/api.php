@@ -6,7 +6,6 @@ use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\PostControllerAdvance;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\RoleController;
-use App\Http\Controllers\Api\VehicleController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
@@ -35,9 +34,15 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::put('/role-permissions', [PermissionController::class, 'updateRolePermissions']);
     Route::apiResource('permissions', PermissionController::class);
 
+    // Vehicles
     Route::put('vehicle/{vehicle}', [VehicleController::class, 'update']);
     Route::get('vehicle', [VehicleController::class, 'index']);
     Route::delete('vehicle/{vehicle}', [VehicleController::class, 'destroy']);
+    Route::get("vehicle/{vehicle}", [VehicleController::class, 'show']);
+
+    // Trips
+    Route::get("trip", [TripController::class, 'index']);
+    Route::post("trip", [TripController::class, 'store']);
 
     Route::get('category-list', [CategoryController::class, 'getList']);
     Route::get('user', [ProfileController::class, 'user']);
@@ -68,11 +73,3 @@ Route::post("author", [AuthorController::class, "store"]);
 Route::delete("author/{author}", [AuthorController::class, "destroy"]);
 Route::put("author/{author}", [AuthorController::class, "update"]);
 Route::get("author/{author}", [AuthorController::class, "show"]);
-
-// Trips
-Route::get("trip", [TripController::class, 'index']);
-Route::post("trip", [TripController::class, 'store']);
-
-// Vehicles
-Route::get("vehicle", [VehicleController::class, 'index']);
-Route::get("vehicle/{vehicle}", [VehicleController::class, 'show']);
