@@ -105,18 +105,6 @@ export default [
                 component: () => import("../views/auth/passwords/Reset.vue"),
                 beforeEnter: guest,
             },
-            {
-                path: '/trips',
-                name: 'TripsIndex',
-                component: () => import("../views/trips/index.vue"),
-                beforeEnter: requireLogin,
-            },
-            {
-                path: '/trips/post',
-                name: 'PostTrips',
-                component: () => import("../views/trips/postTrips.vue"),
-                beforeEnter: requireLogin,
-            }
         ],
     },
 
@@ -135,6 +123,18 @@ export default [
                 path: "profile",
                 component: () => import("../views/profile/index.vue"),
             },
+            {
+                path: '/trips',
+                name: 'TripsIndex',
+                component: () => import("../views/trips/index.vue"),
+                beforeEnter: requireLogin,
+            },
+            {
+                path: '/trips/post',
+                name: 'PostTrips',
+                component: () => import("../views/trips/postTrips.vue"),
+                beforeEnter: requireLogin,
+            }
         ],
     },
 
