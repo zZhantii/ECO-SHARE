@@ -48,7 +48,7 @@ async function requireAdmin(to, from, next) {
         if (hasAdmin(user.roles)) {
             next();
         } else {
-            next("/app");
+            next("/auth/profile");
         }
     } else {
         next("/login");
@@ -109,14 +109,21 @@ export default [
     },
 
     {
-        path: "/app",
+        path: "/auth",
         component: AuthenticatedUserLayout,
         // redirect: {
         //     name: 'admin.index'
         // },
-        name: "app",
+        // name: "profile",
         beforeEnter: requireLogin,
-        meta: { breadCrumb: "Dashboard" },
+        // meta: { breadCrumb: "Dashboard" },
+        children: [
+            {
+                name: "auth.profile",
+                path: "profile",
+                component: () => import("../views/profile/index.vue"),
+            },
+        ],
     },
 
     {
