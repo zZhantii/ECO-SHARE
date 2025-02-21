@@ -15,23 +15,32 @@ class VehicleTableSeeder extends Seeder
     {
         $vehicle1 = Vehicle::create([
             'id' => 1,
+            'user_id' => 1,
             'brand' => 'FORD',
             'model' => 'MOUSTANG',
+            'plate' => '5678-XYZ',
+            'pax_number' => 4,
             'consumption' => 10.0,
             'fuel_type' => "GASOLINE",
         ]);
 
         $vehicle2 = Vehicle::create([
             'id' => 2,
+            'user_id' => 1,
             'brand' => 'SEAT',
             'model' => 'PANDA',
+            'plate' => '1234-BCD',
+            'pax_number' => 4,
             'consumption' => 6.2,
             'fuel_type' => "GASOLINE",
         ]);
         $vehicle2 = Vehicle::create([
             'id' => 3,
+            'user_id' => 1,
             'brand' => 'MERCEDES',
             'model' => 'CLASE A',
+            'plate' => '9012-MNP',
+            'pax_number' => 4,
             'consumption' => 8.2,
             'fuel_type' => "DIESEL",
         ]);
