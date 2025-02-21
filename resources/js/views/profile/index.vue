@@ -92,6 +92,7 @@
                                     </div>
 
                                     <Dialog
+                                        v-if="visible"
                                         v-model:visible="visible"
                                         modal
                                         header="Editar perfil"
@@ -414,7 +415,7 @@ onMounted(async () => {
         email: user.value[0]?.email,
     };
     tempData.value = { ...data.value };
-    getVehicles();
+    getVehicles(user);
 });
 
 const fullSurname = computed(() => {
