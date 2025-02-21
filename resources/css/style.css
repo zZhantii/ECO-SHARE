@@ -223,21 +223,6 @@ img {
     border-radius: 35px;
 }
 
-/* Inputs */
-
-.form-control {
-    background-color: #eeeeee;
-    padding: 10px 15px;
-    border-radius: 8px;
-    border: 0;
-}
-
-.form-control:focus {
-    background-color: #eeeeee;
-    border: 2px solid black;
-    box-shadow: none;
-}
-
 /* svg */
 
 svg {

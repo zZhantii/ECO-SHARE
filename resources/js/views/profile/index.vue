@@ -3,236 +3,93 @@
         <form class="p-0 col-11 d-flex justify-content-center">
             <Tabs class="col-none-11 col-md-6 mt-4 mt-5" value="0">
                 <TabList class="ms-4 col-11">
-                    <Tab class="col-none-5 col-md-8 color-og fs-5 p-2" value="0"
-                        >Información personal</Tab
-                    >
-                    <Tab
-                        class="col-none-5 col-md-8 color-og fs-5 p-2"
-                        value="1"
-                        @click="getVehicles"
-                        >Gestionar vehículos</Tab
-                    >
+                    <Tab class="col-none-5 col-md-8 color-og fs-5 p-2" value="0">Información personal</Tab>
+                    <Tab class="col-none-5 col-md-8 color-og fs-5 p-2" value="1" @click="getVehicles">Gestionar vehículos</Tab>
                 </TabList>
                 <TabPanels class="mt-2">
                     <TabPanel value="0">
                         <div class="container">
                             <div class="mt-4 col-11 d-block d-md-flex gap-3">
                                 <div class="gap-4 col-none-11 col-md-9">
-                                    <Avatar
-                                        :label="
-                                            data.alias?.charAt(0).toUpperCase()
-                                        "
-                                        class="mr-2 mb-3 avatar"
-                                        size="xlarge"
-                                        style="
+                                    <Avatar :label="data.alias?.charAt(0).toUpperCase()
+                                        " class="mr-2 mb-3 avatar" size="xlarge" style="
                                             background-color: #ece9fc;
                                             color: #2a1261;
-                                        "
-                                    />
+                                        " />
                                     <p class="fs-2 mb-5">
                                         <strong>{{ data.alias }} </strong>
                                     </p>
-                                    <Button
-                                        label="Añadir fotografía"
-                                        class="btn-secondary"
-                                        icon="pi pi-plus"
-                                    />
+                                    <Button label="Añadir fotografía" class="btn-secondary" icon="pi pi-plus" />
                                 </div>
-                                <div
-                                    class="container d-flex flex-column mt-5 justify-content-center col-none-11 col-md-9"
-                                >
+                                <div class="container d-flex flex-column mt-5 justify-content-center col-none-11 col-md-9">
                                     <div></div>
-                                    <div
-                                        class="d-flex align-items-center justify-content-between gap-3"
-                                    >
-                                        <label class="w-50 mb-3" for=""
-                                            >Nombre</label
-                                        >
+                                    <div class="d-flex align-items-center justify-content-between gap-3">
+                                        <label class="w-50 mb-3" for="">Nombre</label>
                                         <p class="w-50">
                                             <strong> {{ data.name }}</strong>
                                         </p>
                                     </div>
-                                    <div
-                                        class="d-flex align-items-center justify-content-between gap-3"
-                                    >
-                                        <label class="w-50" for=""
-                                            >Apellidos</label
-                                        >
+                                    <div class="d-flex align-items-center justify-content-between gap-3">
+                                        <label class="w-50" for="">Apellidos</label>
                                         <p class="w-50 mb-3">
                                             <strong> {{ fullSurname }}</strong>
                                         </p>
                                     </div>
 
-                                    <div
-                                        class="d-flex align-items-center justify-content-between gap-3"
-                                    >
-                                        <label class="w-50" for=""
-                                            >Correo Electrónico</label
-                                        >
+                                    <div class="d-flex align-items-center justify-content-between gap-3">
+                                        <label class="w-50" for="">Correo Electrónico</label>
                                         <p class="w-50 mb-4">
                                             <strong> {{ data.email }}</strong>
                                         </p>
                                     </div>
                                     <div class="d-flex justify-content-between">
-                                        <Button
-                                            class="mt-3 me-2 btn-primary"
-                                            label="Editar datos personales"
-                                            @click="
-                                                (visible = true),
-                                                    (tempData.value = {
-                                                        ...data.value,
-                                                    })
-                                            "
-                                        />
-                                        <Button
-                                            class="mt-3 btn-secondary"
-                                            label="Cambiar contraseña"
-                                            @click="visiblePassDialog = true"
-                                        />
+                                        <Button class="mt-3 me-2 btn-primary" label="Editar datos personales" @click="
+                                            (visible = true),
+                                            (tempData.value = {
+                                                ...data.value,
+                                            })
+                                            " />
+                                        <Button class="mt-3 btn-secondary" label="Cambiar contraseña" @click="visiblePassDialog = true" />
                                     </div>
 
-                                    <Dialog
-                                        v-model:visible="visible"
-                                        modal
-                                        header="Editar perfil"
-                                        :style="{ width: '40rem' }"
-                                    >
-                                        <span
-                                            class="text-surface-500 dark:text-surface-400 block mb-8"
-                                            >Edita tu información
-                                            personal.</span
-                                        >
-                                        <div
-                                            class="flex items-center gap-4 mb-4"
-                                        >
-                                            <label
-                                                for="name"
-                                                class="font-semibold w-25"
-                                                >Nombre</label
-                                            >
-                                            <InputText
-                                                v-model="tempData.name"
-                                                id="username"
-                                                class="flex-auto"
-                                                autocomplete="off"
-                                            />
+                                    <Dialog v-if="visible" v-model:visible="visible" modal header="Editar perfil" :style="{ width: '40rem' }">
+                                        <span class="text-surface-500 dark:text-surface-400 block mb-8">Edita tu información
+                                            personal.</span>
+                                        <div class="flex items-center gap-4 mb-4">
+                                            <label for="name" class="font-semibold w-25">Nombre</label>
+                                            <InputText v-model="tempData.name" id="username" class="flex-auto" autocomplete="off" />
                                         </div>
-                                        <div
-                                            class="flex items-center gap-4 mb-4"
-                                        >
-                                            <label
-                                                for="surname1"
-                                                class="font-semibold w-25"
-                                                >Primer apellido</label
-                                            >
-                                            <InputText
-                                                v-model="tempData.surname1"
-                                                id="surname1"
-                                                class="flex-auto"
-                                                autocomplete="off"
-                                            />
+                                        <div class="flex items-center gap-4 mb-4">
+                                            <label for="surname1" class="font-semibold w-25">Primer apellido</label>
+                                            <InputText v-model="tempData.surname1" id="surname1" class="flex-auto" autocomplete="off" />
                                         </div>
-                                        <div
-                                            class="flex items-center gap-4 mb-4"
-                                        >
-                                            <label
-                                                for="surname2"
-                                                class="font-semibold w-25"
-                                                >Segundo apellido</label
-                                            >
-                                            <InputText
-                                                v-model="tempData.surname2"
-                                                id="surname2"
-                                                class="flex-auto"
-                                                autocomplete="off"
-                                            />
+                                        <div class="flex items-center gap-4 mb-4">
+                                            <label for="surname2" class="font-semibold w-25">Segundo apellido</label>
+                                            <InputText v-model="tempData.surname2" id="surname2" class="flex-auto" autocomplete="off" />
                                         </div>
-                                        <div
-                                            class="flex items-center gap-4 mb-8"
-                                        >
-                                            <label
-                                                for="email"
-                                                class="font-semibold w-25"
-                                                >Email</label
-                                            >
-                                            <InputText
-                                                v-model="tempData.email"
-                                                id="email"
-                                                class="flex-auto"
-                                                autocomplete="off"
-                                            />
+                                        <div class="flex items-center gap-4 mb-8">
+                                            <label for="email" class="font-semibold w-25">Email</label>
+                                            <InputText v-model="tempData.email" id="email" class="flex-auto" autocomplete="off" />
                                         </div>
                                         <div class="flex justify-end gap-2">
-                                            <Button
-                                                type="button"
-                                                label="Cancelar"
-                                                severity="secondary"
-                                                @click="resetForm"
-                                            ></Button>
-                                            <Button
-                                                type="button"
-                                                label="Guardar"
-                                                class="btn-primary"
-                                                @click="handleUserUpdate"
-                                            ></Button>
+                                            <Button type="button" label="Cancelar" severity="secondary" @click="resetForm"></Button>
+                                            <Button type="button" label="Guardar" class="btn-primary" @click="handleUserUpdate"></Button>
                                         </div>
                                     </Dialog>
-                                    <Dialog
-                                        v-if="visiblePassDialog"
-                                        v-model:visible="visiblePassDialog"
-                                        modal
-                                        header="Cambiar contraseña"
-                                        :style="{ width: '25rem' }"
-                                    >
-                                        <span
-                                            class="text-surface-500 dark:text-surface-400 block mb-8"
-                                            >Actualiza la contraseña.</span
-                                        >
-                                        <div
-                                            class="flex items-center gap-4 mb-4"
-                                        >
-                                            <label
-                                                for="pwd1"
-                                                class="font-semibold w-24"
-                                                >Nueva contraseña</label
-                                            >
-                                            <InputText
-                                                id="pwd1"
-                                                v-model="pwd1"
-                                                class="flex-auto"
-                                                autocomplete="off"
-                                                min="8"
-                                            />
+                                    <Dialog v-if="visiblePassDialog" v-model:visible="visiblePassDialog" modal header="Cambiar contraseña" :style="{ width: '25rem' }">
+                                        <span class="text-surface-500 dark:text-surface-400 block mb-8">Actualiza la contraseña.</span>
+                                        <div class="flex items-center gap-4 mb-4">
+                                            <label for="pwd1" class="font-semibold w-24">Nueva contraseña</label>
+                                            <InputText id="pwd1" v-model="pwd1" class="flex-auto" autocomplete="off" min="8" />
                                         </div>
-                                        <div
-                                            class="flex items-center gap-4 mb-4"
-                                        >
-                                            <label
-                                                for="pwd2"
-                                                class="font-semibold w-24"
-                                                >Repite la contraseña</label
-                                            >
-                                            <InputText
-                                                id="pwd2"
-                                                v-model="pwd2"
-                                                class="flex-auto"
-                                                autocomplete="off"
-                                                min="8"
-                                            />
+                                        <div class="flex items-center gap-4 mb-4">
+                                            <label for="pwd2" class="font-semibold w-24">Repite la contraseña</label>
+                                            <InputText id="pwd2" v-model="pwd2" class="flex-auto" autocomplete="off" min="8" />
                                         </div>
 
                                         <div class="flex justify-end gap-2">
-                                            <Button
-                                                type="button"
-                                                label="Cancelar"
-                                                severity="secondary"
-                                                @click="resetForm"
-                                            ></Button>
-                                            <Button
-                                                type="button"
-                                                label="Guardar"
-                                                @click="handlePassUpdate"
-                                            ></Button>
+                                            <Button type="button" label="Cancelar" severity="secondary" @click="resetForm"></Button>
+                                            <Button type="button" label="Guardar" @click="handlePassUpdate"></Button>
                                         </div>
                                     </Dialog>
                                 </div>
@@ -241,111 +98,42 @@
                     </TabPanel>
                     <TabPanel value="1">
                         <div>
-                            <ul
-                                class="ms-5 mt-3 ms-5 d-flex flex-column align-items-center"
-                            >
-                                <li
-                                    v-if="vehiclesList.length > 0"
-                                    v-for="vehicle in vehiclesList"
-                                    @click="openDialog(vehicle.id)"
-                                    class="primary-a ms-5 w-50 mb-3 d-flex justify-content-between align-items-center gap-5"
-                                >
+                            <ul class="ms-5 mt-3 ms-5 d-flex flex-column align-items-center">
+                                <li v-if="vehiclesList.length > 0" v-for="vehicle in vehiclesList" @click="openDialog(vehicle.id)" class="primary-a ms-5 w-50 mb-3 d-flex justify-content-between align-items-center gap-5">
                                     {{ vehicle.brand }} -
-                                    {{ vehicle.model }} ({{ vehicle.plate }})<i
-                                        class="fas fa-ellipsis-v"
-                                    />
+                                    {{ vehicle.model }} ({{ vehicle.plate }})<i class="fas fa-ellipsis-v" />
                                 </li>
                                 <h2 v-else>No tienes vehículos registrados</h2>
 
-                                <Dialog
-                                    v-if="visibleVehicleDialog == true"
-                                    v-model:visible="visibleVehicleDialog"
-                                    modal
-                                    header="Editar vehículo"
-                                    :style="{ width: '40rem' }"
-                                >
-                                    <span
-                                        class="text-surface-500 dark:text-surface-400 block mb-8"
-                                        >Edita los datos de tu vehículo</span
-                                    >
+                                <Dialog v-if="visibleVehicleDialog == true" v-model:visible="visibleVehicleDialog" modal header="Editar vehículo" :style="{ width: '40rem' }">
+                                    <span class="text-surface-500 dark:text-surface-400 block mb-8">Edita los datos de tu vehículo</span>
                                     <div class="flex items-center gap-4 mb-4">
-                                        <label
-                                            for="name"
-                                            class="font-semibold w-25"
-                                            >Marca</label
-                                        >
-                                        <InputText
-                                            v-model="selectedVehicle.brand"
-                                            class="flex-auto"
-                                            autocomplete="off"
-                                        />
+                                        <label for="name" class="font-semibold w-25">Marca</label>
+                                        <InputText v-model="selectedVehicle.brand" class="flex-auto" autocomplete="off" />
                                     </div>
                                     <div class="flex items-center gap-4 mb-4">
-                                        <label
-                                            for="name"
-                                            class="font-semibold w-25"
-                                            >Marca</label
-                                        >
-                                        <InputText
-                                            v-model="selectedVehicle.model"
-                                            class="flex-auto"
-                                            autocomplete="off"
-                                        />
+                                        <label for="name" class="font-semibold w-25">Marca</label>
+                                        <InputText v-model="selectedVehicle.model" class="flex-auto" autocomplete="off" />
                                     </div>
                                     <div class="flex items-center gap-4 mb-4">
-                                        <label
-                                            for="name"
-                                            class="font-semibold w-25"
-                                            >Combustible</label
-                                        >
-                                        <SelectButton
-                                            v-model="selectedVehicle.fuel_type"
-                                            :options="options"
-                                            aria-labelledby="basic"
-                                        />
+                                        <label for="name" class="font-semibold w-25">Combustible</label>
+                                        <SelectButton v-model="selectedVehicle.fuel_type" :options="options" aria-labelledby="basic" />
                                     </div>
                                     <div class="flex items-center gap-4 mb-4">
-                                        <label
-                                            for="name"
-                                            class="font-semibold w-25"
-                                            >Plazas</label
-                                        >
-                                        <InputNumber
-                                            v-model="selectedVehicle.pax_number"
-                                            inputId="integeronly"
-                                            :min="1"
-                                            :max="5"
-                                            showButtons
-                                        />
+                                        <label for="name" class="font-semibold w-25">Plazas</label>
+                                        <InputNumber v-model="selectedVehicle.pax_number" inputId="integeronly" :min="1" :max="5" showButtons />
                                     </div>
-                                    <div
-                                        class="d-flex justify-content-between align-items-end"
-                                    >
-                                        <Button
-                                            label="Guardar"
-                                            class="btn-primary mt-3"
-                                            @click="
-                                                handleVehicleUpdate(vehicle.id)
-                                            "
-                                        />
+                                    <div class="d-flex justify-content-between align-items-end">
+                                        <Button label="Guardar" class="btn-primary mt-3" @click="
+                                            handleVehicleUpdate(vehicle.id)
+                                            " />
                                         <ConfirmPopup />
 
-                                        <Button
-                                            @click="confirm2(selectedVehicle)"
-                                            class="h-100"
-                                            label="Eliminar"
-                                            icon="fa fa-trash"
-                                            severity="danger"
-                                            outlined
-                                        ></Button>
+                                        <Button @click="confirm2(selectedVehicle)" class="h-100" label="Eliminar" icon="fa fa-trash" severity="danger" outlined></Button>
                                     </div>
                                 </Dialog>
 
-                                <Button
-                                    label="Añadir vehículo"
-                                    class="btn-primary mt-3"
-                                    @click="handleVehicleUpdate"
-                                />
+                                <Button label="Añadir vehículo" class="btn-primary mt-3" @click="handleVehicleUpdate" />
                             </ul>
                         </div>
                     </TabPanel>
@@ -550,6 +338,7 @@ function handleVehicleUpdate() {
 .color-og {
     color: #054851 !important;
 }
+
 .avatar {
     height: 80px;
     width: 80px;
@@ -559,6 +348,7 @@ p,
 label {
     font-size: 1.1rem;
 }
+
 li,
 ul {
     padding: 10px;

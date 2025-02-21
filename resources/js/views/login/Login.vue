@@ -15,7 +15,7 @@
                             <form @submit.prevent="submitLogin">
                                 <!-- alias -->
                                 <div class="mb-3 d-flex align-items-center flex-column">
-                                    <input v-model="loginForm.alias" id="alias" type="text" class="form-control w-75" :placeholder="$t('Alias')" required autofocus autocomplete="username" />
+                                    <InputText v-model="loginForm.alias" id="alias" type="text" class="w-75" :placeholder="$t('Alias')" required autofocus autocomplete="username" />
                                     <!-- Validation Errors -->
                                     <div class="text-danger mt-1">
                                         <div v-for="message in validationErrors?.alias">
@@ -26,7 +26,7 @@
                                 </div>
                                 <!-- Password -->
                                 <div class="mb-3 d-flex align-items-center flex-column">
-                                    <input v-model="loginForm.password" id="password" type="password" :placeholder="$t('password')" class="form-control w-75" required autocomplete="current-password" />
+                                    <InputText v-model="loginForm.password" id="password" type="password" :placeholder="$t('password')" class="w-75" required autocomplete="current-password" />
                                     <!-- Validation Errors -->
                                     <div class="text-danger mt-1">
                                         <div v-for="message in validationErrors?.password">
@@ -35,8 +35,8 @@
                                     </div>
                                 </div>
                                 <!-- Remember me -->
-                                <div class="form-check w-75 d-flex justify-content-center">
-                                    <input class="form-check-input mx-3" type="checkbox" name="remember" v-model="loginForm.remember" id="flexCheckIndeterminate" />
+                                <div class="form-check w-75 d-flex justify-content-center align-items-center">
+                                    <Checkbox class="mx-3" v-model="loginForm.remember" name="remember" id="flexCheckIndeterminate" value="" />
                                     <label class="form-check-label" for="flexCheckIndeterminate">
                                         {{ $t("remember_me") }}
                                     </label>
@@ -74,7 +74,7 @@ import useAuth from "@/composables/auth";
 import * as yup from "yup";
 import { es } from "yup-locales";
 import { useToast } from "primevue/usetoast";
-import { Toast } from "primevue";
+import { InputText, Toast } from "primevue";
 
 yup.setLocale(es);
 const toast = useToast();

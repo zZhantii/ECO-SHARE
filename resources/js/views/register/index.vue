@@ -14,7 +14,7 @@
                                 <div class="">
                                     <!-- Alias -->
                                     <div class="d-flex align-items-center flex-column">
-                                        <input v-model="registerForm.alias" id="alias" type="text" :placeholder="$t('Alias')" class="form-control w-75 mt-4" autofocus />
+                                        <InputText v-model="registerForm.alias" id="alias" type="text" :placeholder="$t('Alias')" class="form-control w-75 mt-4" autofocus />
                                         <!-- Validation Errors -->
                                         <div class="text-danger mt-1">
                                             <div v-for="message in validationErrors.alias" :key="message">
@@ -24,7 +24,7 @@
                                     </div>
                                     <!-- Name -->
                                     <div class="d-flex align-items-center flex-column">
-                                        <input v-model="registerForm.name" id="name" type="text" :placeholder="$t('name')" class="form-control w-75 mt-4" autofocus />
+                                        <InputText v-model="registerForm.name" id="name" type="text" :placeholder="$t('name')" class="form-control w-75 mt-4" autofocus />
                                         <!-- Validation Errors -->
                                         <div class="text-danger mt-1">
                                             <div v-for="message in validationErrors.name" :key="message">
@@ -34,7 +34,7 @@
                                     </div>
                                     <!-- surname1 -->
                                     <div class="d-flex align-items-center flex-column">
-                                        <input v-model="registerForm.surname1" id="surname1" type="text" :placeholder="$t('Surname1')" class="form-control w-75 mt-4" autofocus />
+                                        <InputText v-model="registerForm.surname1" id="surname1" type="text" :placeholder="$t('Surname1')" class="form-control w-75 mt-4" autofocus />
                                         <!-- Validation Errors -->
                                         <div class="text-danger mt-1">
                                             <div v-for="message in validationErrors.surname1" :key="message">
@@ -44,7 +44,7 @@
                                     </div>
                                     <!-- Email -->
                                     <div class="d-flex align-items-center flex-column">
-                                        <input v-model="registerForm.email" id="email" type="email" :placeholder="$t('email')" class="form-control w-75 mt-4" autocomplete="username" />
+                                        <InputText v-model="registerForm.email" id="email" type="email" :placeholder="$t('email')" class="form-control w-75 mt-4" autocomplete="username" />
                                         <!-- Validation Errors -->
                                         <div class="text-danger mt-1">
                                             <div v-for="message in validationErrors.email" :key="message">
@@ -54,7 +54,7 @@
                                     </div>
                                     <!-- Password -->
                                     <div class="d-flex align-items-center flex-column">
-                                        <input v-model="registerForm.password" id="password" type="password" :placeholder="$t('password')" class="form-control w-75 mt-4" autocomplete="current-password" />
+                                        <InputText v-model="registerForm.password" id="password" type="password" :placeholder="$t('password')" class="form-control w-75 mt-4" autocomplete="current-password" />
                                         <!-- Validation Errors -->
                                         <div class="text-danger mt-1">
                                             <div v-for="message in validationErrors.password" :key="message">
@@ -63,7 +63,7 @@
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center flex-column">
-                                        <input v-model="registerForm.password_confirmation" id="password_confirmation" type="password" :placeholder="$t('confirm_password')" class="form-control w-75 mt-4" autocomplete="current-password" />
+                                        <InputText v-model="registerForm.password_confirmation" id="password_confirmation" type="password" :placeholder="$t('confirm_password')" class="form-control w-75 mt-4" autocomplete="current-password" />
                                         <!-- Validation Errors -->
                                         <div class="text-danger mt-1">
                                             <div v-for="message in validationErrors.password_confirmation" :key="message">
