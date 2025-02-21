@@ -10,7 +10,7 @@ import useAuth from "./composables/auth";
 import { installI18n, loadMessages } from "./plugins/i18n";
 import { langStore } from "@/store/lang";
 import "./plugins/axios.js";
-
+console.log(router.getRoutes());
 /*PRIMEVUE */
 import PrimeVue from "primevue/config";
 import Accordion from "primevue/accordion";
@@ -22,6 +22,7 @@ import Button from "primevue/button";
 import DatePicker from "primevue/datepicker";
 import Checkbox from "primevue/checkbox";
 import ColorPicker from "primevue/colorpicker";
+import ConfirmPopup from "primevue/confirmpopup";
 import Column from "primevue/column";
 import ColumnGroup from "primevue/columngroup";
 import ConfirmationService from "primevue/confirmationservice";
@@ -144,7 +145,7 @@ app.component("Editor", Editor);
 app.component("IconField", IconField);
 app.component("InputIcon", InputIcon);
 app.component("MeterGroup", MeterGroup);
-
+app.component("ConfirmPopup", ConfirmPopup);
 app.directive("tooltip", Tooltip);
 app.directive("ripple", Ripple);
 app.directive("styleclass", StyleClass);

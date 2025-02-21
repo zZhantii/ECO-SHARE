@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateProfileRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class ProfileController extends Controller
@@ -17,10 +18,17 @@ class ProfileController extends Controller
     {
         $profile = Auth::user();
         $profile->name = $request->name;
+        $profile->surname1 = $request->surname1;
+        $profile->surname2 = $request->surname2;
         $profile->email = $request->email;
 
+        if (!empty($request->password)) {
+            $profile->password = Hash::make($request->password) ?? $profile->password;
+        }
+
         if ($profile->save()) {
-            return $this->successResponse($profile, 'User updated');;
+            return $this->successResponse($profile, 'User updated');
+            ;
         }
         return response()->json(['status' => 403, 'success' => false]);
     }

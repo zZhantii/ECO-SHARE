@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\PostControllerAdvance;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\VehicleController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
@@ -34,9 +35,15 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::put('/role-permissions', [PermissionController::class, 'updateRolePermissions']);
     Route::apiResource('permissions', PermissionController::class);
 
+    Route::put('vehicle/{vehicle}', [VehicleController::class, 'update']);
+    Route::get('vehicle', [VehicleController::class, 'index']);
+    Route::delete('vehicle/{vehicle}', [VehicleController::class, 'destroy']);
+
     Route::get('category-list', [CategoryController::class, 'getList']);
-    Route::get('/user', [ProfileController::class, 'user']);
-    Route::put('/user', [ProfileController::class, 'update']);
+    Route::get('user', [ProfileController::class, 'user']);
+    Route::put('user', [ProfileController::class, 'update']);
+    Route::get('user/{user}', [UserController::class, 'show']);
+
 
     Route::get('abilities', function (Request $request) {
         return $request->user()->roles()->with('permissions')

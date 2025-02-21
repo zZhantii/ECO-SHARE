@@ -13,7 +13,7 @@ const logoUrl = computed(() => {
 </script>
 
 <template>
-    <div class="layout-footer">
+    <footer class="layout-footer">
         <div class="container mt-4 mb-2">
             <div class="row gap-4 justify-content-between">
                 <div class="col-md-2 text-md-center">
@@ -135,7 +135,7 @@ const logoUrl = computed(() => {
                 </div>
             </div>
         </div>
-    </div>
+    </footer>
 </template>
 <style lang="scss" scoped>
 .layout-footer {

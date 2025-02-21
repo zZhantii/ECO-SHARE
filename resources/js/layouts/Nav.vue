@@ -19,34 +19,39 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav mt-lg-0 ms-auto gap-3 align-items-center">
-                    <li class="nav-item">
+                    <li v-if="!authStore().user?.name" class="nav-item">
                         <router-link to="" class="primary-a nav-link">Ayuda</router-link>
                     </li>
 
-                    <li class="nav-item">
+                    <li v-if="!authStore().user?.name" class="nav-item">
                         <router-link :to="{ name: 'auth.login' }" class="primary-a nav-link">Iniciar sesión</router-link>
                     </li>
-                    <li class="">
+                    <li v-if="!authStore().user?.name" class="nav-item">
                         <router-link class="" to="/register">
                             <Button label="Registro" class="btn-header-secondary" /></router-link>
                     </li>
 
-                    <li v-if="authStore().user?.name" class="nav-item dropdown">
+                    <li v-else-if="authStore().user?.name" class="nav-item dropdown">
                         <a class="primary-link dropdown-toa" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ authStore().user?.name }}
+                            <Avatar :label="authStore()
+                                    .user?.alias.charAt(0)
+                                    .toUpperCase()
+                                " class="mr-2" size="large" />
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
-                                <router-link class="dropdown-item" to="/admin">Admin</router-link>
+                        <ul class="dropdown-menu dropdown-menu-end custom-dropdown">
+                            <li v-if="
+                                authStore().user?.roles[0].name == 'admin'
+                            " class="nav-item">
+                                <router-link class="dropdown-item primary-a" to="/admin">Admin</router-link>
                             </li>
                             <li>
-                                <router-link to="/admin/posts" class="dropdown-item">Post</router-link>
+                                <router-link to="/auth/profile" class="dropdown-item primary-a">Perfil</router-link>
                             </li>
                             <li>
-                                <hr class="dropdown-divider" />
+                                <router-link to="" class="dropdown-item primary-a">Ayuda</router-link>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="javascript:void(0)" @click="logout">Logout</a>
+                                <a class="dropdown-item primary-a" href="javascript:void(0)" @click="logout">Logout</a>
                             </li>
                         </ul>
                     </li>
@@ -63,6 +68,9 @@ import { authStore } from "../store/auth";
 import SVGLogo from "../components/SVGLogo.vue";
 
 const { processing, logout } = useAuth();
+
+const { user } = authStore();
+const avatarLetter = user?.name?.charAt(0).toUpperCase();
 </script>
 
 <style scoped>
@@ -73,5 +81,9 @@ const { processing, logout } = useAuth();
 .nav-link {
     color: white;
     font-weight: 600;
+}
+
+.custom-dropdown {
+    border-radius: 0px !important;
 }
 </style>
