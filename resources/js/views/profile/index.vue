@@ -412,7 +412,6 @@ onMounted(async () => {
         surname1: user.value[0]?.surname1,
         surname2: user.value[0]?.surname2,
         email: user.value[0]?.email,
-        password: user.value[0]?.password,
     };
     tempData.value = { ...data.value };
     getVehicles();
@@ -422,44 +421,39 @@ const fullSurname = computed(() => {
     return `${data.value.surname1} ${data.value.surname2}`;
 });
 const confirm2 = (event) => {
-    try {
-        confirm.require({
-            target: event.currentTarget,
-            message: "¿Estás seguro/a que quieres eliminar este vehículo?",
-            icon: "pi pi-info-circle",
-            rejectProps: {
-                label: "Cancelar",
-                severity: "secondary",
-                outlined: true,
-            },
-            acceptProps: {
-                label: "Eliminar",
-                severity: "danger",
-            },
-            accept: () => {
-                deleteVehicle(event);
-                toast.add({
-                    severity: "info",
-                    summary: "Eliminado",
-                    detail: "Vehículo eliminado con éxito",
-                    life: 3000,
-                });
-                vehiclesList.value.splice(event);
-                visibleVehicleDialog.value = false;
-            },
-            reject: () => {
-                toast.add({
-                    severity: "error",
-                    summary: "Rejected",
-                    detail: "You have rejected",
-                    life: 3000,
-                });
-            },
-        });
-    } catch (error) {
-        console.error("Error en el elemento:", event.currentTarget);
-        console.error("Error:", error);
-    }
+    confirm.require({
+        target: event.currentTarget,
+        message: "¿Estás seguro/a que quieres eliminar este vehículo?",
+        icon: "pi pi-info-circle",
+        rejectProps: {
+            label: "Cancelar",
+            severity: "secondary",
+            outlined: true,
+        },
+        acceptProps: {
+            label: "Eliminar",
+            severity: "danger",
+        },
+        accept: () => {
+            deleteVehicle(event);
+            toast.add({
+                severity: "success",
+                summary: "Eliminado",
+                detail: "Vehículo eliminado con éxito",
+                life: 3000,
+            });
+            vehiclesList.value.splice(event);
+            visibleVehicleDialog.value = false;
+        },
+        reject: () => {
+            toast.add({
+                severity: "error",
+                summary: "Rejected",
+                detail: "You have rejected",
+                life: 3000,
+            });
+        },
+    });
 };
 
 function openDialog(id) {
@@ -485,7 +479,7 @@ async function handlePassUpdate() {
             visiblePassDialog.value = false;
         } catch (Error) {
             toast.add({
-                severity: "error",
+                severity: "info",
                 summary: "La contraseña debe tener mínimo 8 caracteres",
                 detail: Error.message,
                 life: 3000,
@@ -493,8 +487,8 @@ async function handlePassUpdate() {
         }
     } else {
         toast.add({
-            severity: "error",
-            summary: "Contraseñas inválidas",
+            severity: "info",
+            summary: "Contraseñas diferentes",
             detail: "Las contraseñas no coinciden",
             life: 3000,
         });
