@@ -37,7 +37,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
 
     //Rutas App
-    Route::get("app/vehicle/{user}", [AppController::class, "showVehicle"]);
+    Route::get("app/user-vehicle", [AppController::class, "indexVehicle"]);
 
     Route::put('vehicle/{vehicle}', [VehicleController::class, 'update']);
     Route::get('vehicle', [VehicleController::class, 'index']);

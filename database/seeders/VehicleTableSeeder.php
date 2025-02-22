@@ -17,7 +17,7 @@ class VehicleTableSeeder extends Seeder
             'id' => 1,
             'user_id' => 1,
             'brand' => 'FORD',
-            'model' => 'MOUSTANG',
+            'model' => 'MUSTANG',
             'plate' => '5678-XYZ',
             'pax_number' => 4,
             'consumption' => 10.0,

@@ -16,10 +16,11 @@ const isLoading = ref(false);
 const swal = inject("$swal");
 const validationErrors = ref({});
 
-export default function useVehicles(user) {
+export default function useVehicles() {
     async function getVehicles() {
         if (vehiclesList.value.length > 0) return;
-        axios.get("/api/vehicle/" + user.id).then((response) => {
+        axios.get("/api/app/user-vehicle").then((response) => {
+            console.log(response.data);
             for (const e of response.data.data) {
                 vehiclesList.value.push(e);
             }
