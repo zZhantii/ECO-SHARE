@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="card flex justify-center my-4 p-4">
+            <div class="card flex justify-center my-4 p-4" v-if="stepperReady">
                 <Stepper value="1">
                     <StepList class="StepList">
                         <Step value="1">Opciones de viajes</Step>
@@ -14,11 +14,9 @@
                                 <Toast />
                                 <form @submit.prevent="saveOption" class="w-100">
                                     <div class="row d-flex align-items-center">
-                                        <!-- Mapa -->
                                         <div class="col-12 col-md-6 d-flex justify-content-center">
                                             <div class="mapTrip border-1 w-100"></div>
                                         </div>
-                                        <!-- Inputs -->
                                         <div class="col-12 col-md-6 d-flex flex-column">
                                             <div class="text-center">
                                                 <h3 class="mt-2 mb-3 fs-5">¿Desde dónde sales?</h3>
@@ -67,7 +65,6 @@
                         <StepPanel v-slot="{ activateCallback }" value="3">
                             <div class="flex-auto d-flex justify-content-center">
                                 <div class="row d-flex align-items-center w-100">
-                                    <!-- Mapa -->
                                     <div class="col-12 col-md-6 d-flex justify-content-center">
                                         <div class="mapTrip border-1 w-100"></div>
                                     </div>
@@ -145,7 +142,10 @@ let user_id = ref(0);
 user_id.value = authStore().user.id;
 console.log("userId", user_id.value);
 
+const stepperReady = ref(false);
+
 onMounted(async () => {
+    stepperReady.value = true;
     const savedTrip = sessionStorage.getItem("tripData");
     if (savedTrip) {
         tripData.value = JSON.parse(savedTrip);
@@ -187,12 +187,10 @@ const nextStep = (step, condition, activateCallback) => {
     }
 };
 
-// Computed para validar el paso 1
 const isStep1Complete = computed(() => {
     return tripData.value.start_point.trim() !== "" && tripData.value.end_point.trim() !== "";
 });
 
-// Computed para validar el paso 2
 const isStep2Complete = computed(() => {
     return tripData.value.vehicle_id !== null && tripData.value.vehicle_id > 0
         && tripData.value.available_seats !== null && tripData.value.available_seats > 0;
@@ -263,6 +261,7 @@ const postTrips = async () => {
         const response = await axios.post('/api/trip', tripData.value);
         toast.add({ severity: 'success', summary: '¡Viaje registrado!', detail: 'El viaje ha sido guardado exitosamente.', life: 3000 });
         sessionStorage.removeItem("tripData");
+        await router.push({ name: "home" });
     } catch (error) {
         console.error("Error en la solicitud POST:", error);
         toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo registrar el viaje.', life: 3000 });
