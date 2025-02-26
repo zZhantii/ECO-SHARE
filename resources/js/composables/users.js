@@ -121,8 +121,10 @@ export default function useUsers() {
                 });
             })
             .catch((error) => {
+                console.log("patata");
                 if (error.response?.data) {
                     validationErrors.value = error.response.data.errors;
+                    console.log(validationErrors.value);
                 }
             })
             .finally(() => (isLoading.value = false));

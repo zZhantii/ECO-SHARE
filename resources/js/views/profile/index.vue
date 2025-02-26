@@ -207,6 +207,7 @@
                                                     v-model="pwd1"
                                                     min="8"
                                                     toggleMask
+                                                    weakLabel="Demasiado simple"
                                                 />
                                             </div>
                                             <div
@@ -222,6 +223,7 @@
                                                     v-model="pwd2"
                                                     min="8"
                                                     toggleMask
+                                                    weakLabel="Demasiado simple"
                                                 />
                                             </div>
 
@@ -252,13 +254,13 @@
                                     v-if="vehiclesList.length > 0"
                                     v-for="vehicle in vehiclesList"
                                     :key="vehicle.id"
-                                    @click="openDialog(vehicle.id)"
+                                    @click="() => openDialog(vehicle.id)"
                                     class="primary-a ms-5 w-50 mb-3 d-flex justify-content-between align-items-center gap-5"
                                 >
-                                    {{ vehicle.brand }} -
-                                    {{ vehicle.model }} ({{ vehicle.plate }})<i
-                                        class="fas fa-ellipsis-v"
-                                    />
+                                    {{ vehicle.brand.toUpperCase() }} -
+                                    {{ vehicle.model.toUpperCase() }} ({{
+                                        vehicle.plate.toUpperCase()
+                                    }})<i class="fas fa-ellipsis-v" />
                                 </li>
                                 <h2 v-else>No tienes vehículos registrados</h2>
 
@@ -271,9 +273,7 @@
                                 >
                                     <form
                                         @submit.prevent="
-                                            handleVehicleUpdate(
-                                                selectedVehicle.id
-                                            )
+                                            handleVehicleUpdate(tempVehicle.id)
                                         "
                                     >
                                         <span
@@ -290,7 +290,7 @@
                                                 >Marca</label
                                             >
                                             <InputText
-                                                v-model="selectedVehicle.brand"
+                                                v-model="tempVehicle.brand"
                                                 class="flex-auto"
                                                 autocomplete="off"
                                             />
@@ -304,7 +304,7 @@
                                                 >Modelo</label
                                             >
                                             <InputText
-                                                v-model="selectedVehicle.model"
+                                                v-model="tempVehicle.model"
                                                 class="flex-auto"
                                                 autocomplete="off"
                                             />
@@ -318,9 +318,7 @@
                                                 >Combustible</label
                                             >
                                             <SelectButton
-                                                v-model="
-                                                    selectedVehicle.fuel_type
-                                                "
+                                                v-model="tempVehicle.fuel_type"
                                                 :options="options"
                                                 aria-labelledby="basic"
                                             />
@@ -334,9 +332,7 @@
                                                 >Plazas</label
                                             >
                                             <InputNumber
-                                                v-model="
-                                                    selectedVehicle.pax_number
-                                                "
+                                                v-model="tempVehicle.pax_number"
                                                 inputId="integeronly"
                                                 :min="1"
                                                 :max="5"
@@ -355,14 +351,17 @@
 
                                             <Button
                                                 @click="
-                                                    confirm2(selectedVehicle)
+                                                    () =>
+                                                        removeVehicle(
+                                                            tempVehicle
+                                                        )
                                                 "
                                                 class="h-100"
                                                 label="Eliminar"
                                                 icon="fa fa-trash"
                                                 severity="danger"
                                                 outlined
-                                            ></Button>
+                                            />
                                         </div>
                                     </form>
                                 </Dialog>
@@ -370,9 +369,128 @@
                                 <Button
                                     label="Añadir vehículo"
                                     class="btn-primary mt-3"
-                                    @click="handleVehicleUpdate"
+                                    @click="openAddVehicleDialog"
                                 />
                             </ul>
+                            <Dialog
+                                v-if="visibleAddVehicle"
+                                v-model:visible="visibleAddVehicle"
+                                modal
+                                header="Añadir vehiculo"
+                                :style="{ width: '50rem' }"
+                            >
+                                <form @submit.prevent="handleAddVehicle()">
+                                    <span
+                                        class="text-surface-500 dark:text-surface-400 block mb-8"
+                                        >Introduce los datos para registrar tu
+                                        vehículo</span
+                                    >
+                                    <div class="flex items-center gap-4 mb-4">
+                                        <label
+                                            for="plate"
+                                            class="font-semibold w-25"
+                                            >Matrícula del vehículo</label
+                                        >
+                                        <div class="d-flex flex-column">
+                                            <InputText
+                                                v-model="tempVehicle.plate"
+                                                id="plate"
+                                                class="flex-auto"
+                                                autocomplete="off"
+                                            />
+                                            <Message
+                                                size="small"
+                                                severity="secondary"
+                                                variant="simple"
+                                                >Introduce la matrícula con
+                                                formato XXXX000 sin
+                                                guiones</Message
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-4 mb-4">
+                                        <label
+                                            for="brand"
+                                            class="font-semibold w-25"
+                                            >Marca</label
+                                        >
+                                        <InputText
+                                            v-model="tempVehicle.brand"
+                                            id="brand"
+                                            class="flex-auto"
+                                            autocomplete="off"
+                                        />
+                                    </div>
+                                    <div class="flex items-center gap-4 mb-4">
+                                        <label
+                                            for="brand"
+                                            class="font-semibold w-25"
+                                            >Modelo</label
+                                        >
+                                        <InputText
+                                            v-model="tempVehicle.model"
+                                            id="brand"
+                                            class="flex-auto"
+                                            autocomplete="off"
+                                        />
+                                    </div>
+                                    <div class="flex items-center gap-4 mb-4">
+                                        <label
+                                            for="consumption"
+                                            class="font-semibold w-25"
+                                            >Consumo de combustible</label
+                                        >
+                                        <InputNumber
+                                            v-model="tempVehicle.consumption"
+                                            inputId="minmaxfraction"
+                                            :minFractionDigits="1"
+                                            :maxFractionDigits="1"
+                                            showButtons
+                                        />
+                                    </div>
+                                    <div class="flex items-center gap-4 mb-4">
+                                        <label
+                                            for="fuel_type"
+                                            class="font-semibold w-25"
+                                            >Tipo de combustibles</label
+                                        >
+                                        <SelectButton
+                                            v-model="tempVehicle.fuel_type"
+                                            :options="options"
+                                            aria-labelledby="basic"
+                                            class=""
+                                        />
+                                    </div>
+
+                                    <div class="flex items-center gap-4 mb-8">
+                                        <label
+                                            for="pax_number"
+                                            class="font-semibold w-25"
+                                            >Número de plazas (sin contar al
+                                            conductor)</label
+                                        >
+                                        <InputNumber
+                                            v-model="tempVehicle.pax_number"
+                                            inputId="integeronly"
+                                            :min="1"
+                                            :max="1"
+                                            showButtons
+                                        />
+                                    </div>
+                                    <div class="flex justify-end gap-2">
+                                        <Button
+                                            type="button"
+                                            label="Cancelar"
+                                            severity="secondary"
+                                            @click="visibleAddVehicle = false"
+                                        ></Button>
+                                        <Button
+                                            label="Guardar"
+                                            type="submit"
+                                        ></Button>
+                                    </div>
+                                </form>
+                            </Dialog>
                         </div>
                     </TabPanel>
                 </TabPanels>
@@ -391,43 +509,81 @@ import Password from "primevue/password";
 import useVehicles from "@/composables/vehicles.js";
 import * as yup from "yup";
 import { es } from "yup-locales";
-import { find } from "lodash";
+import { find, replace } from "lodash";
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 import Toast from "primevue/toast";
 
 const confirm = useConfirm();
 const toast = useToast();
-const { updateProfile } = useProfile();
+const { updateProfile, validationErrors } = useProfile();
 const { getUser, user } = useUsers();
-const { getVehicles, vehicle, vehiclesList, updateVehicle, deleteVehicle } =
-    useVehicles();
+const {
+    getVehicles,
+    addVehicle,
+    vehicle,
+    vehiclesList,
+    updateVehicle,
+    deleteVehicle,
+} = useVehicles();
+
 const visible = ref(false);
-let selectedVehicle = ref({});
 const visibleVehicleDialog = ref(false);
 const visiblePassDialog = ref(false);
+const visibleAddVehicle = ref(false);
 const data = ref({});
 const tempData = ref({});
 const options = ["Gasolina", "Diésel"];
 const pwd1 = ref("");
 const pwd2 = ref("");
-const updateSchema = yup.object().shape({
+const tempVehicle = ref({});
+const userSchema = yup.object().shape({
     id: yup.number().required(),
     alias: yup.string().required(),
     name: yup.string().required("El campo nombre es obligatorio"),
-    surname1: yup.string().required("El campo apellido es obligatorio"),
-    surname2: yup.string().required("El campo apellido es obligatorio"),
+    surname1: yup.string().required("El primer apellido es obligatorio"),
     email: yup
         .string()
         .email()
         .required("El correo electrónico es obligatorio"),
 });
-
-const updatePassSchema = yup.object().shape({
+const passSchema = yup.object().shape({
     password: yup
         .string()
         .required("La contraseña es obligatoria")
         .min(8, "La contraseña debe tener al menos 8 carácteres"),
+});
+
+const vehicleSchema = yup.object({
+    plate: yup
+        .string()
+        .required("La matrícula es un campo obligatorio")
+        .min(7)
+        .max(8),
+    brand: yup
+        .string()
+        .required("La marca del vehículo es un campo obligatorio."),
+    model: yup
+        .string()
+        .required("La marca del vehículo es un campo obligatorio."),
+    consumption: yup
+        .number()
+        .required("El consumo del vehículo es obligatorio.")
+        .min(1)
+        .max(50),
+    fuel_type: yup.string().required("Selecciona el tipo de combustible."),
+    pax_number: yup
+        .number()
+        .required("Introduce el número de plazas disponibles de tu vehículo")
+        .min(1)
+        .max(6),
+});
+const fullSurname = computed(() => {
+    if (data.value.surname2 == null) {
+        data.value.surname2 = "";
+    }
+
+    return `${data.value.surname1} ${data.value.surname2}`;
 });
 
 onMounted(async () => {
@@ -444,10 +600,7 @@ onMounted(async () => {
     getVehicles();
 });
 
-const fullSurname = computed(() => {
-    return `${data.value.surname1} ${data.value.surname2}`;
-});
-const confirm2 = (event) => {
+const removeVehicle = (event) => {
     confirm.require({
         target: event.currentTarget,
         message: "¿Estás seguro/a que quieres eliminar este vehículo?",
@@ -463,29 +616,55 @@ const confirm2 = (event) => {
         },
         accept: () => {
             deleteVehicle(event);
-            toast.add({
-                severity: "success",
-                summary: "Eliminado",
-                detail: "Vehículo eliminado con éxito",
-                life: 3000,
-            });
-            vehiclesList.value.splice(event);
+
             visibleVehicleDialog.value = false;
         },
         reject: () => {
             toast.add({
-                severity: "error",
-                summary: "Rejected",
-                detail: "You have rejected",
+                verity: "info",
+                summary: "Eliminación cancelada",
+                detail: "El vehiculo no se ha eliminado",
                 life: 3000,
             });
+            console.log("El vehiculo no se ha eliminado.");
         },
     });
 };
 
+function openAddVehicleDialog() {
+    console.log(vehicle);
+    tempVehicle.value = { ...vehicle.value };
+    visibleAddVehicle.value = true;
+}
+
 function openDialog(id) {
     visibleVehicleDialog.value = true;
-    selectedVehicle.value = { ...vehiclesList.value.find((v) => v.id == id) };
+
+    tempVehicle.value = { ...vehiclesList.value.find((v) => v.id == id) };
+}
+
+async function handleAddVehicle() {
+    try {
+        await vehicleSchema.validate({
+            plate: tempVehicle.value.plate,
+            brand: tempVehicle.value.brand,
+            model: tempVehicle.value.model,
+            consumption: tempVehicle.value.consumption,
+            fuel_type: tempVehicle.value.fuel_type,
+            pax_number: tempVehicle.value.pax_number,
+        });
+        addVehicle(tempVehicle);
+
+        visibleAddVehicle.value = false;
+    } catch (Error) {
+        console.log(Error);
+        toast.add({
+            severity: "info",
+            summary: "Faltan datos o los formatos no son adecuados.",
+            detail: Error.message,
+            life: 3000,
+        });
+    }
 }
 
 async function handlePassUpdate() {
@@ -494,11 +673,11 @@ async function handlePassUpdate() {
             tempData.value.password = pwd1.value;
             let tempPassword = { value: tempData.value.password };
             console.log(tempPassword);
-            await updatePassSchema.validate({ password: tempPassword.value });
+            await passSchema.validate({ password: tempPassword.value });
             toast.add({
                 severity: "success",
                 summary: "Contraseña actualizada",
-                detail: "La contraseña ha sido cambiada con éxito.",
+                detail: "La contraseña ha sida cambiada con éxito.",
                 life: 3000,
             });
             updateProfile(tempData.value);
@@ -524,12 +703,11 @@ async function handlePassUpdate() {
 
 async function handleUserUpdate() {
     try {
-        await updateSchema.validate({
+        await userSchema.validate({
             id: tempData.value.id,
             alias: tempData.value.alias,
             name: tempData.value.name,
             surname1: tempData.value.surname1,
-            surname2: tempData.value.surname2,
             email: tempData.value.email,
         });
 
@@ -546,8 +724,8 @@ async function handleUserUpdate() {
         visible.value = false;
     } catch (Error) {
         toast.add({
-            severity: "error",
-            summary: "Datos incorrectos",
+            severity: "info",
+            summary: "Faltan datos o los datos son incorrectos.",
             detail: Error.message,
             life: 3000,
         });
@@ -557,20 +735,35 @@ async function handleUserUpdate() {
 function resetForm() {
     visible.value = false;
     tempData.value = { ...data.value };
+    tempVehicle.value = { ...vehicle.value };
+    pwd1.value = "";
+    pwd2.value = "";
+    visiblePassDialog.value = false;
 }
 
-function handleVehicleUpdate() {
-    updateVehicle(selectedVehicle.value);
-    vehiclesList.value.map((v) => {
-        if (v.id == selectedVehicle.value.id) {
-            v.brand = selectedVehicle.value.brand;
-            v.model = selectedVehicle.value.model;
-            v.fuel_type = selectedVehicle.value.fuel_type;
-            v.pax_number = selectedVehicle.value.pax_number;
-        }
-    });
+async function handleVehicleUpdate() {
+    try {
+        console.log(tempVehicle.value);
+        await vehicleSchema.validate({
+            plate: tempVehicle.value.plate,
+            brand: tempVehicle.value.brand,
+            model: tempVehicle.value.model,
+            consumption: tempVehicle.value.consumption,
+            fuel_type: tempVehicle.value.fuel_type,
+            pax_number: tempVehicle.value.pax_number,
+        });
 
-    visibleVehicleDialog.value = false;
+        updateVehicle(tempVehicle.value);
+
+        visibleVehicleDialog.value = false;
+    } catch (Error) {
+        toast.add({
+            severity: "info",
+            summary: "Faltan datos o los formatos no son adecuados.",
+            detail: Error.message,
+            life: 3000,
+        });
+    }
 }
 </script>
 <style scoped>
@@ -581,6 +774,10 @@ function handleVehicleUpdate() {
 .avatar {
     height: 80px;
     width: 80px;
+}
+
+Message {
+    color: rgb(146, 146, 146) !important;
 }
 
 p,

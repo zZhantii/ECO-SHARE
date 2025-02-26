@@ -41,9 +41,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::put('vehicle/{vehicle}', [VehicleController::class, 'update']);
     Route::get('vehicle', [VehicleController::class, 'index']);
+    Route::post("vehicle", [VehicleController::class, "store"]);
     Route::get('vehicle/{vehicle}', [VehicleController::class, 'show']);
     Route::delete('vehicle/{vehicle}', [VehicleController::class, 'destroy']);
-    Route::get("vehicle/{vehicle}", [VehicleController::class, 'show']);
+
 
     // Trips
     Route::get("trip", [TripController::class, 'index']);
@@ -78,6 +79,7 @@ Route::post("author", [AuthorController::class, "store"]);
 Route::delete("author/{author}", [AuthorController::class, "destroy"]);
 Route::put("author/{author}", [AuthorController::class, "update"]);
 Route::get("author/{author}", [AuthorController::class, "show"]);
+
 
 
 
