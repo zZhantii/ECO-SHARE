@@ -38,7 +38,7 @@ const submitFinder = () => {
     background-color: white;
     border-radius: 10px;
     width: 100%;
-    box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.15);
+    box-shadow: #00000011 2px 2px 2px 1px;
 }
 
 .btn-trip-finder {
