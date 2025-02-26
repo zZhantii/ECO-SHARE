@@ -26,10 +26,9 @@ export default function useProfile() {
             .put("/api/user", profile)
             .then(({ data }) => {
                 if (data.success) {
-                    auth.user.value = data.data;
                     swal({
                         icon: "success",
-                        title: "Profile updated successfully",
+                        title: "Perfil actualizado con éxito",
                     });
                 }
             })

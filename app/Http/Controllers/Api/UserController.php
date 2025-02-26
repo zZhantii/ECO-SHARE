@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\Task;
 use App\Models\User;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
@@ -107,6 +108,11 @@ class UserController extends Controller
         }
     }
 
+    public function uploadImg()
+    {
+        $user = Auth::user;
+
+    }
 
     public function updateimg(Request $request)
     {

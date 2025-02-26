@@ -72,7 +72,12 @@ class User extends Authenticatable implements HasMedia
                 ->height(env('IMAGE_HEIGHT', 300));
         }
     }
+    //Método para guardar las fotos/avatar del perfil de usuario
 
+    public function registerMediaCollection()
+    {
+        $this->addMediaCollection("avatars")->singleFile;
+    }
     // Foreign Key
 
     // Relacion usuarios-vehiculos 1:N (1 Usuarios)

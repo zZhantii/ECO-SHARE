@@ -15,7 +15,7 @@ return new class extends Migration {
             // Foreign key
             $table->unsignedBigInteger('user_id')->nullable();
 
-            $table->string('plate')->unique();
+            $table->string('plate');
             $table->string('brand');
             $table->string('model');
             $table->decimal('consumption', 5, 2)->nullable();
