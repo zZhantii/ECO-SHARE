@@ -29,6 +29,7 @@ class VehicleController extends Controller
 
     }
 
+
     public function update(Request $request, Vehicle $vehicle)
     {
 
@@ -36,6 +37,7 @@ class VehicleController extends Controller
         $vehicle->fuel_type = $request->fuel_type;
         $vehicle->model = $request->model;
         $vehicle->pax_number = $request->pax_number;
+        $vehicle->user_id = $request->user_id;
 
         $vehicle->save();
 

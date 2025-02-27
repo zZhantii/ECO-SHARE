@@ -615,7 +615,9 @@ const removeVehicle = (event) => {
             severity: "danger",
         },
         accept: () => {
-            deleteVehicle(event);
+            event.user_id = null;
+
+            updateVehicle(event);
 
             visibleVehicleDialog.value = false;
         },

@@ -22,6 +22,7 @@ class ProfileController extends Controller
         $profile->surname2 = $request->surname2;
         $profile->email = $request->email;
 
+
         if (!empty($request->password)) {
             $profile->password = Hash::make($request->password) ?? $profile->password;
         }

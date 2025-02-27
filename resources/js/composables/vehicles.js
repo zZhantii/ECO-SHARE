@@ -50,22 +50,33 @@ export default function useVehicles() {
         if (isLoading.value) return;
         console.log("patata");
         console.log(vehicle);
-        console.log("patata");
+        console.log("patata2");
         isLoading.value = true;
         validationErrors.value = {};
 
         axios
             .put("/api/vehicle/" + vehicle.id, vehicle)
             .then((response) => {
-                swal({
-                    icon: "success",
-                    title: "Vehicle actualizado con éxito",
-                });
                 const index = vehiclesList.value.findIndex(
                     (v) => v.id == vehicle.id
                 );
+                // Esta comprobación mira si la propiedad user_id es nula, lo que significaría una petición para borrar
+                // el vehículo desde el perfil, aunque estaríamos actualizando el campu user_id a null para no perder
+                // los registros del vehículo
 
-                vehiclesList.value[index] = vehicle;
+                if (vehicle.user_id) {
+                    swal({
+                        icon: "success",
+                        title: "Vehicle actualizado con éxito",
+                    });
+                    vehiclesList.value[index] = vehicle;
+                } else {
+                    swal({
+                        icon: "success",
+                        title: "Vehículo eliminado con éxito",
+                    });
+                    vehiclesList.value.splice(index, 1);
+                }
             })
             .catch((error) => {
                 if (error.response?.data) {
