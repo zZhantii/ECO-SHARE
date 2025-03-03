@@ -41,7 +41,6 @@ export default function useVehicles() {
                 if (error.response?.data) {
                     validationErrors.value = error.response.data.errors;
                 }
-                console.log("paatata");
             })
             .finally(() => (isLoading.value = false));
     };

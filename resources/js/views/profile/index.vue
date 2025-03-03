@@ -19,9 +19,18 @@
                             <div class="mt-4 col-11 d-block d-md-flex gap-3">
                                 <div class="gap-4 col-none-11 col-md-9">
                                     <Avatar
+                                        v-if="user?.avatar"
+                                        :image="user.avatar"
+                                        class="mr-2 mb-3 avatar"
+                                        size="xlarge"
+                                        shape="circle"
+                                    />
+                                    <Avatar
+                                        v-else
                                         :label="
-                                            data.alias?.charAt(0).toUpperCase()
+                                            user.alias?.charAt(0).toUpperCase()
                                         "
+                                        :image="user.avatar"
                                         class="mr-2 mb-3 avatar"
                                         size="xlarge"
                                         style="
@@ -30,13 +39,39 @@
                                         "
                                     />
                                     <p class="fs-2 mb-5">
-                                        <strong>{{ data.alias }} </strong>
+                                        <strong>{{ user.alias }} </strong>
                                     </p>
+
                                     <Button
-                                        label="Añadir fotografía"
+                                        label="Cambiar imagen de perfil"
                                         class="btn-secondary"
                                         icon="pi pi-plus"
+                                        @click="visibleAvatarDialog = true"
                                     />
+
+                                    <Dialog
+                                        v-if="visibleAvatarDialog"
+                                        v-model:visible="visibleAvatarDialog"
+                                        header="Editar imagen de perfil"
+                                        :style="{ width: '25rem' }"
+                                    >
+                                        <DropZone
+                                            class="mb-5 mt-5 d-flex"
+                                            v-model="avatarFile"
+                                        />
+                                        <div class="gap-3 w-100">
+                                            <Button
+                                                label="Subir imagen"
+                                                class="btn-primary me-5"
+                                                @click="upAvatarFile"
+                                            />
+                                            <Button
+                                                @click="removeAvatar"
+                                                label="Quitar imagen"
+                                                class="btn-secondary"
+                                            />
+                                        </div>
+                                    </Dialog>
                                 </div>
                                 <div
                                     class="container d-flex flex-column mt-5 justify-content-center col-none-11 col-md-9"
@@ -49,7 +84,7 @@
                                             >Nombre</label
                                         >
                                         <p class="w-50">
-                                            <strong> {{ data.name }}</strong>
+                                            <strong> {{ user.name }}</strong>
                                         </p>
                                     </div>
                                     <div
@@ -70,7 +105,7 @@
                                             >Correo Electrónico</label
                                         >
                                         <p class="w-50 mb-4">
-                                            <strong> {{ data.email }}</strong>
+                                            <strong> {{ user.email }}</strong>
                                         </p>
                                     </div>
                                     <div class="d-flex justify-content-between">
@@ -80,7 +115,7 @@
                                             @click="
                                                 (visible = true),
                                                     (tempData.value = {
-                                                        ...data.value,
+                                                        ...user.value,
                                                     })
                                             "
                                         />
@@ -504,7 +539,7 @@ import { authStore } from "../../store/auth.js";
 import useUsers from "@/composables/users.js";
 import { onMounted, ref } from "vue";
 import useProfile from "@/composables/profile.js";
-import { computed } from "vue";
+import { computed, watch } from "vue";
 import Password from "primevue/password";
 import useVehicles from "@/composables/vehicles.js";
 import * as yup from "yup";
@@ -513,24 +548,22 @@ import { find, replace } from "lodash";
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 import Toast from "primevue/toast";
+import DropZone from "@/components/DropZone.vue";
 
 const confirm = useConfirm();
 const toast = useToast();
-const { updateProfile, validationErrors } = useProfile();
+const { updateProfile, validationErrors, deleteImage, uploadAvatar } =
+    useProfile();
 const { getUser, user } = useUsers();
-const {
-    getVehicles,
-    addVehicle,
-    vehicle,
-    vehiclesList,
-    updateVehicle,
-    deleteVehicle,
-} = useVehicles();
+const { getVehicles, addVehicle, vehicle, vehiclesList, updateVehicle } =
+    useVehicles();
 
+const avatarFile = ref(null);
 const visible = ref(false);
 const visibleVehicleDialog = ref(false);
 const visiblePassDialog = ref(false);
 const visibleAddVehicle = ref(false);
+const visibleAvatarDialog = ref(false);
 const data = ref({});
 const tempData = ref({});
 const options = ["Gasolina", "Diésel"];
@@ -578,26 +611,29 @@ const vehicleSchema = yup.object({
         .min(1)
         .max(6),
 });
-const fullSurname = computed(() => {
-    if (data.value.surname2 == null) {
-        data.value.surname2 = "";
-    }
-
-    return `${data.value.surname1} ${data.value.surname2}`;
-});
 
 onMounted(async () => {
-    user.value = await getUser(authStore().user?.id);
-    data.value = {
-        id: user.value[0]?.id,
-        alias: user.value[0]?.alias,
-        name: user.value[0]?.name,
-        surname1: user.value[0]?.surname1,
-        surname2: user.value[0]?.surname2,
-        email: user.value[0]?.email,
-    };
     tempData.value = { ...data.value };
-    getVehicles();
+
+    if (sessionStorage.getItem("sessionVehicles")) {
+        vehiclesList.value = JSON.parse(
+            sessionStorage.getItem("sessionVehicles")
+        );
+        console.log("con sesión");
+        console.log(vehiclesList.value);
+        console.log("fin");
+    } else {
+        getVehicles();
+        console.log("sin sesión");
+        console.log(vehiclesList.value);
+        sessionStorage.setItem(
+            "sessionVehicles",
+            JSON.stringify(vehiclesList.value)
+        );
+
+        console.log(vehiclesList.value);
+        console.log("fin");
+    }
 });
 
 const removeVehicle = (event) => {
@@ -703,6 +739,14 @@ async function handlePassUpdate() {
     }
 }
 
+function upAvatarFile() {
+    uploadAvatar(avatarFile, user);
+
+    console.log("pppp");
+
+    console.log("pppp");
+    visibleAvatarDialog.value = false;
+}
 async function handleUserUpdate() {
     try {
         await userSchema.validate({
@@ -741,6 +785,11 @@ function resetForm() {
     pwd1.value = "";
     pwd2.value = "";
     visiblePassDialog.value = false;
+}
+
+function removeAvatar() {
+    deleteImage();
+    visibleAvatarDialog.value = false;
 }
 
 async function handleVehicleUpdate() {
@@ -803,5 +852,11 @@ li:hover {
 
 Button {
     padding: 10px 15px !important;
+}
+
+.p-fileupload-basic {
+    width: 80%;
+    justify-content: space-between;
+    margin-bottom: 35px;
 }
 </style>

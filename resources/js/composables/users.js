@@ -1,17 +1,9 @@
 import { ref, inject } from "vue";
 import { useRouter } from "vue-router";
+const user = ref({});
 
 export default function useUsers() {
     const users = ref([]);
-    const user = ref({
-        user_id: "",
-        alias: "",
-        name: "",
-        surname1: "",
-        surname2: "",
-        email: "",
-        password: "",
-    });
 
     const router = useRouter();
     const validationErrors = ref({});
