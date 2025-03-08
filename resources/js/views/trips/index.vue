@@ -11,12 +11,15 @@
                     <p>Borrar Todo</p>
                 </div>
                 <div class="flex align-items-center gap-2 justify-content-between inputFilter">
-                    <Checkbox type="checkbox" v-model="filters.earlyDeparture" />
-                    <label for="earlyDeparture" class="w-75"> Salida más temprano </label>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#334155" viewBox="0 0 256 256">
+                    <Checkbox v-model="filters.earlyDeparture" inputId="earlyDeparture" binary />
+                    <label for="earlyDeparture" class="w-75 cursor-pointer">Salida más temprano</label>
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#334155" viewBox="0 0 256 256" aria-label="Icono de filtro">
                         <path d="M128,26A102,102,0,1,0,230,128,102.12,102.12,0,0,0,128,26Zm0,192a90,90,0,1,1,90-90A90.1,90.1,0,0,1,128,218Zm62-90a6,6,0,0,1-6,6H128a6,6,0,0,1-6-6V72a6,6,0,0,1,12,0v50h50A6,6,0,0,1,190,128Z"></path>
                     </svg>
                 </div>
+
+
                 <div class="flex align-items-center gap-2 justify-content-between inputFilter">
                     <Checkbox type="checkbox" v-model="filters.lateDeparture" />
                     <label for="lateDeparture" class="w-75">Salida más tarde</label>
@@ -24,7 +27,7 @@
                         <path d="M128,26A102,102,0,1,0,230,128,102.12,102.12,0,0,0,128,26Zm0,192a90,90,0,1,1,90-90A90.1,90.1,0,0,1,128,218Zm62-90a6,6,0,0,1-6,6H128a6,6,0,0,1-6-6V72a6,6,0,0,1,12,0v50h50A6,6,0,0,1,190,128Z"></path>
                     </svg>
                 </div>
-                <div class="flex align-items-center gap-2 justify-content-between inputFilter">
+                <!--<div class="flex align-items-center gap-2 justify-content-between inputFilter">
                     <Checkbox type="checkbox" v-model="filters.pickupPoint" />
                     <label for="pickupPoint" class="w-75"> Punt de recogida </label>
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#334155" viewBox="0 0 256 256">
@@ -37,7 +40,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#334155" viewBox="0 0 256 256">
                         <path d="M152,86a30,30,0,1,0-30-30A30,30,0,0,0,152,86Zm0-48a18,18,0,1,1-18,18A18,18,0,0,1,152,38Zm66.49,100.86c-.59.27-7.17,3.13-18.88,3.13-13.86,0-34.9-4-61.73-21a165.89,165.89,0,0,1-17.43,36.51c9.43,2.78,22,7.72,33.19,16.26C172.46,188.05,182,207.65,182,232a6,6,0,0,1-12,0c0-44-37.23-59.18-56.91-64.11q-1.2,1.55-2.46,3.09c-19.25,23.31-43.34,35.45-70.11,35.45A90.72,90.72,0,0,1,31.4,206,6,6,0,0,1,32.6,194c26.63,2.66,49.77-7.66,68.77-30.69,13.16-15.94,21.94-35.51,26.08-49.15-40.51-24.52-66.59-4.78-67.72-3.89a6,6,0,0,1-7.48-9.38c.37-.3,9.39-7.43,24.76-10,13.86-2.31,35.92-1.3,62.36,16.67,47.14,32,73.88,20.47,74.14,20.35a6,6,0,1,1,5,10.92Z"></path>
                     </svg>
-                </div>
+                </div>  -->
                 <div class="flex align-items-center gap-2 justify-content-between inputFilter">
                     <Checkbox type="checkbox" v-model="filters.lowestPrice" @change="filters.highestPrice = false" />
                     <label for="lowestPrice" class="w-75"> Precio más bajo </label>
@@ -59,49 +62,7 @@
                 Fecha, Inicio -> Destino
             </div>
             <div class="col-12">
-                <DataView :value="filteredTrips" paginator :rows="5">
-                    <template #list="slotProps">
-                        <div class="flex flex-col flex-column gap-4">
-                            <div class="container-trips" v-for="(trip, index) in slotProps.items" :key="index">
-                                <div class="d-flex container-info" :class="{ 'border-t border-surface-200 dark:border-surface-700': index !== 0 }">
-                                    <div>
-                                        <img class="block xl:block mx-auto rounded-img" src="../../../../public/images/image.png" alt="Trip Image" height="188px" />
-                                    </div>
-                                    <div class="d-flex w-100 justify-content-center">
-                                        <div class="d-flex p-3 container-trip">
-                                            <div class="d-flex flex-column justify-content-around gap-4">
-                                                <div class="d-flex gap-2">
-                                                    <h4>{{ trip.start_point }}:</h4>
-                                                    <p>{{ trip.departure_time }}</p>
-                                                </div>
-                                                <div class="d-flex gap-2">
-                                                    <h4>{{ trip.end_point }}:</h4>
-                                                    <p>{{ trip.departure_time }}</p>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex flex-column justify-content-around">
-                                                <div class="d-flex align-items-center gap-5 price">
-                                                    <div class="d-flex align-items-center gap-2">
-                                                        <div class="p-2 border-1 rounded me-2">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256">
-                                                                <path d="M224,232a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16H216A8,8,0,0,1,224,232Zm0-72v32a16,16,0,0,1-16,16H114.11a15.93,15.93,0,0,1-14.32-8.85l-58.11-116a16.1,16.1,0,0,1,0-14.32l22.12-44A16,16,0,0,1,85,17.56l33.69,14.22.47.22a16,16,0,0,1,7.15,21.46,1.51,1.51,0,0,1-.11.22L112,80l31.78,64L208,144A16,16,0,0,1,224,160Zm-16,0H143.77a15.91,15.91,0,0,1-14.31-8.85l-31.79-64a16.07,16.07,0,0,1,0-14.29l.12-.22L112,46.32,78.57,32.21A4.84,4.84,0,0,1,78.1,32L56,76,114.1,192H208Z"></path>
-                                                            </svg>
-                                                        </div>
-                                                        <p class="m-0 w-75"> {{ trip.available_seats }}</p>
-                                                    </div>
-                                                    <span class="text-xl font-semibold">${{ trip.price }}</span>
-                                                </div>
-                                                <div class="d-flex justify-content-center">
-                                                    <Button icon="pi pi-shopping-cart" label="Reservar" class="flex-auto md:flex-initial whitespace-nowrap btn-secondary"></Button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </template>
-                </DataView>
+                <TripsList :trips="trips" />
             </div>
         </div>
     </div>
@@ -109,22 +70,14 @@
 
 <script setup>
 import TripFinder from "../../components/TripFinder.vue";
+import TripsList from "../../components/TripList.vue"
 import axios from "axios";
 import DataView from "primevue/dataview";
-import { ref, onMounted, computed, reactive } from "vue";
+import { ref, onMounted, computed, reactive, watch } from "vue";
 import Checkbox from "primevue/checkbox";
 
-// API
+// Api
 const trips = ref([]);
-const filters = reactive({
-    earlyDeparture: false,
-    lateDeparture: false,
-    lowestPrice: false,
-    highestPrice: false,
-    startPoint: "",
-    endPoint: ""
-});
-
 
 onMounted(async () => {
     try {
@@ -136,31 +89,34 @@ onMounted(async () => {
     }
 });
 
-const filteredTrips = computed(() => {
-    console.log("Filtros actuales:", filters.value);
-    let results = trips.value;
-
-    if (filters.value.earlyDeparture) {
-        results = results.filter(trip => new Date(trip.departure_time).getHours() < 12);
-    }
-    if (filters.value.lateDeparture) {
-        results = results.filter(trip => new Date(trip.departure_time).getHours() >= 12);
-    }
-    if (filters.value.lowestPrice) {
-        results = [...results].sort((a, b) => a.price - b.price);
-    }
-    if (filters.value.highestPrice) {
-        results = [...results].sort((a, b) => b.price - a.price);
-    }
-    if (filters.value.startPoint) {
-        results = results.filter(trip => trip.start_point.toLowerCase().includes(filters.value.startPoint.toLowerCase()));
-    }
-    if (filters.value.endPoint) {
-        results = results.filter(trip => trip.end_point.toLowerCase().includes(filters.value.endPoint.toLowerCase()));
-    }
-
-    return results;
+const filters = reactive({
+    earlyDeparture: false,
+    lateDeparture: false,
+    lowestPrice: false,
+    highestPrice: false
 });
+
+const filteredTrips = computed(() => {
+    return trips.value.filter((trip) => {
+        return (
+            (!filters.value.departureDate || trip.departureDate === filters.value.departureDate) &&
+            (!filters.value.seats || trip.seats >= filters.value.seats)
+        );
+    });
+});
+
+watch(() => filteredTrips, (newValue) => {
+    aplicarFiltro();
+})
+
+const aplicarFiltro = () => {
+    if (filters.earlyDeparture) {
+        filteredTrips.value = allTrips.value.filter(trip => trip.earlyDeparture);
+    } else {
+        filteredTrips.value = allTrips.value.slice(); // Copia sin modificar el original
+    }
+};
+
 
 
 </script>
