@@ -1,7 +1,9 @@
 <template>
     <main>
         <section id="home-finder-section" class="container-fluid p-2 w-100">
-            <div class="container col-12 col-md-6 m-none-2 m-md-5 mt-8 h-25 h-md-25 d-block d-md-flex flex-row justify-content-around align-items-center gap-2">
+            <div
+                class="container col-12 col-md-6 m-none-2 m-md-5 mt-8 h-25 h-md-25 d-block d-md-flex flex-row justify-content-around align-items-center gap-2"
+            >
                 <h1 class="text-dark">
                     <span class="green-item">ECO</span>-SHARE
                 </h1>
@@ -20,15 +22,27 @@
                     </p>
                 </div>
             </div>
-            <div class="container h-none-auto mt-5 mt-md-0 h-md-25 d-flex align-items-center">
+            <div
+                class="container h-none-auto mt-5 mt-md-0 h-md-25 d-flex align-items-center"
+            >
                 <TripFinder class="mt-8" />
             </div>
         </section>
-        <section class="container-fluid w-100 h-auto home-section d-block d-md-flex flex-row-reverse justify-content-center gap-2">
-            <div class="container col-none-12 col-md-4 mb-5 d-flex justify-content-center">
-                <img src="images/home_airport.webp" class="image-style img-fluid" alt="avión despegando de un aeropuerto" />
+        <section
+            class="container-fluid w-100 h-auto home-section d-block d-md-flex flex-row-reverse justify-content-center gap-2"
+        >
+            <div
+                class="container col-none-12 col-md-4 mb-5 d-flex justify-content-center"
+            >
+                <img
+                    src="images/home_airport.webp"
+                    class="image-style img-fluid"
+                    alt="avión despegando de un aeropuerto"
+                />
             </div>
-            <div class="container col-none-12 col-md-4 mb-5 d-flex flex-column justify-content-between">
+            <div
+                class="container col-none-12 col-md-4 mb-5 d-flex flex-column justify-content-between"
+            >
                 <h2>
                     Olvida Uber y BlaBlaCar, Comparte tu viaje, ahorra más y
                     cuida el planeta.¡Viaja inteligente!
@@ -40,14 +54,26 @@
                     que cada kilómetro cuente!
                 </p>
 
-                <router-link to="/login" class="btn-primary">Inicia sesión</router-link>
+                <router-link to="/login" class="btn-primary"
+                    >Inicia sesión</router-link
+                >
             </div>
         </section>
-        <section class="container-fluid w-100 h-auto home-section d-block d-md-flex flex-row justify-content-center gap-2">
-            <div class="container col-none-12 col-md-4 mb-5 d-flex justify-content-center">
-                <img src="images/inside_car.webp" class="image-style img-fluid" alt="avión despegando de un aeropuerto" />
+        <section
+            class="container-fluid w-100 h-auto home-section d-block d-md-flex flex-row justify-content-center gap-2"
+        >
+            <div
+                class="container col-none-12 col-md-4 mb-5 d-flex justify-content-center"
+            >
+                <img
+                    src="images/inside_car.webp"
+                    class="image-style img-fluid"
+                    alt="avión despegando de un aeropuerto"
+                />
             </div>
-            <div class="container col-none-12 col-md-4 mb-5 d-flex flex-column justify-content-between">
+            <div
+                class="container col-none-12 col-md-4 mb-5 d-flex flex-column justify-content-between"
+            >
                 <h2>
                     Un viaje compartido, un planeta agradecido. Registra tu
                     coche y publica tu recorrido.
@@ -57,14 +83,26 @@
                     mundo más sostenible. Viajar acompañado es más económico,
                     ecológico y social. ¡Únete y haz la diferencia!
                 </p>
-                <router-link :to="{ name: 'PostTrips' }" class="btn-primary">Publica tu viaje</router-link>
+                <router-link :to="{ name: 'PostTrips' }" class="btn-primary"
+                    >Publica tu viaje</router-link
+                >
             </div>
         </section>
-        <section class="container-fluid w-100 h-auto mb-4 home-section last-section d-block d-md-flex flex-row-reverse justify-content-center gap-2">
-            <div class="container col-none-12 col-md-4 mb-5 d-flex justify-content-center">
-                <img src="images/green_world.webp" class="image-style img-fluid" alt="avión despegando de un aeropuerto" />
+        <section
+            class="container-fluid w-100 h-auto mb-4 home-section last-section d-block d-md-flex flex-row-reverse justify-content-center gap-2"
+        >
+            <div
+                class="container col-none-12 col-md-4 mb-5 d-flex justify-content-center"
+            >
+                <img
+                    src="images/green_world.webp"
+                    class="image-style img-fluid"
+                    alt="avión despegando de un aeropuerto"
+                />
             </div>
-            <div class="container col-none-12 col-md-4 mb-5 d-flex flex-column justify-content-between">
+            <div
+                class="container col-none-12 col-md-4 mb-5 d-flex flex-column justify-content-between"
+            >
                 <h2>¡Haz la diferencia, viaja y comparte!</h2>
                 <p class="d-none d-md-block">
                     Cada vez que compartes tu viaje, ayudas a limpiar el aire,
@@ -74,7 +112,9 @@
                     agradecerá!
                 </p>
 
-                <router-link to="/register" class="btn-primary">Regístrate ahora</router-link>
+                <router-link to="/register" class="btn-primary"
+                    >Regístrate ahora</router-link
+                >
             </div>
         </section>
     </main>
@@ -83,12 +123,15 @@
 <script setup>
 import { RouterLink } from "vue-router";
 import TripFinder from "../../components/TripFinder.vue";
+import { document } from "postcss";
 </script>
 <style scoped>
 #home-finder-section {
-    background-image: linear-gradient(to top,
+    background-image: linear-gradient(
+            to top,
             rgba(255, 255, 255, 5),
-            rgba(255, 255, 255, 0.7)),
+            rgba(255, 255, 255, 0.7)
+        ),
         url("images/main_banner.webp");
     height: 620px;
     background-repeat: no-repeat;

@@ -63,10 +63,7 @@ export default function useProfile() {
                     icon: "success",
                     title: "Avatar cambiado satisfactoriamente",
                 });
-                // console.log("response");
-                // user.
-                console.log(response.data.data.media[0].original_url);
-                // console.log("response");
+
                 user.value.avatar = response.data.data.media[0].original_url;
             })
             .catch((error) => {

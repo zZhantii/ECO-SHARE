@@ -564,7 +564,6 @@ const visibleVehicleDialog = ref(false);
 const visiblePassDialog = ref(false);
 const visibleAddVehicle = ref(false);
 const visibleAvatarDialog = ref(false);
-const data = ref({});
 const tempData = ref({});
 const options = ["Gasolina", "Diésel"];
 const pwd1 = ref("");
@@ -613,27 +612,28 @@ const vehicleSchema = yup.object({
 });
 
 onMounted(async () => {
-    tempData.value = { ...data.value };
+    tempData.value = { ...user.value };
+    getVehicles();
 
-    if (sessionStorage.getItem("sessionVehicles")) {
-        vehiclesList.value = JSON.parse(
-            sessionStorage.getItem("sessionVehicles")
-        );
-        console.log("con sesión");
-        console.log(vehiclesList.value);
-        console.log("fin");
-    } else {
-        getVehicles();
-        console.log("sin sesión");
-        console.log(vehiclesList.value);
-        sessionStorage.setItem(
-            "sessionVehicles",
-            JSON.stringify(vehiclesList.value)
-        );
+    // if (sessionStorage.getItem("sessionVehicles")) {
+    //     vehiclesList.value = JSON.parse(
+    //         sessionStorage.getItem("sessionVehicles")
+    //     );
+    //     console.log("con sesión");
+    //     console.log(vehiclesList.value);
+    //     console.log("fin");
+    // } else {
+    //     getVehicles();
+    //     console.log("sin sesión");
+    //     console.log(vehiclesList.value);
+    //     sessionStorage.setItem(
+    //         "sessionVehicles",
+    //         JSON.stringify(vehiclesList.value)
+    //     );
 
-        console.log(vehiclesList.value);
-        console.log("fin");
-    }
+    //     console.log(vehiclesList.value);
+    //     console.log("fin");
+    // }
 });
 
 const removeVehicle = (event) => {
@@ -670,14 +670,12 @@ const removeVehicle = (event) => {
 };
 
 function openAddVehicleDialog() {
-    console.log(vehicle);
     tempVehicle.value = { ...vehicle.value };
     visibleAddVehicle.value = true;
 }
 
 function openDialog(id) {
     visibleVehicleDialog.value = true;
-
     tempVehicle.value = { ...vehiclesList.value.find((v) => v.id == id) };
 }
 
@@ -719,7 +717,7 @@ async function handlePassUpdate() {
                 life: 3000,
             });
             updateProfile(tempData.value);
-            data.value = { ...tempData.value };
+            user.value = { ...tempData.value };
             visiblePassDialog.value = false;
         } catch (Error) {
             toast.add({
@@ -740,12 +738,18 @@ async function handlePassUpdate() {
 }
 
 function upAvatarFile() {
-    uploadAvatar(avatarFile, user);
-
-    console.log("pppp");
-
-    console.log("pppp");
-    visibleAvatarDialog.value = false;
+    if (!avatarFile.value) {
+        toast.add({
+            severity: "info",
+            summary: "No se ha cambiado la imagen.",
+            detail: "No se ha podido cambiar la imagen de perfil porque no hay ninguna seleccionada.",
+            life: 3000,
+        });
+    } else {
+        uploadAvatar(avatarFile, user);
+        visibleAvatarDialog.value = false;
+        avatarFile.value = null;
+    }
 }
 async function handleUserUpdate() {
     try {
@@ -766,7 +770,7 @@ async function handleUserUpdate() {
 
         updateProfile(tempData.value);
 
-        data.value = { ...tempData.value };
+        user.value = { ...tempData.value };
         visible.value = false;
     } catch (Error) {
         toast.add({
@@ -780,7 +784,7 @@ async function handleUserUpdate() {
 
 function resetForm() {
     visible.value = false;
-    tempData.value = { ...data.value };
+    tempData.value = { ...user.value };
     tempVehicle.value = { ...vehicle.value };
     pwd1.value = "";
     pwd2.value = "";
@@ -789,6 +793,7 @@ function resetForm() {
 
 function removeAvatar() {
     deleteImage();
+    user.value.avatar = null;
     visibleAvatarDialog.value = false;
 }
 

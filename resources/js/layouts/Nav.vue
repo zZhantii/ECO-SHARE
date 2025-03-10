@@ -67,7 +67,7 @@
                             <Avatar
                                 v-if="user?.avatar"
                                 :image="user.avatar"
-                                class="avatar"
+                                class="avatar mt-1"
                                 size="xlarge"
                                 shape="circle"
                             />
@@ -135,9 +135,7 @@ import { onMounted, ref } from "vue";
 
 const { processing, logout } = useAuth();
 const { user: userFromComposables } = useUsers();
-
 const { user } = authStore();
-const avatarLetter = user?.name?.charAt(0).toUpperCase();
 
 onMounted(() => {
     userFromComposables.value = user;
