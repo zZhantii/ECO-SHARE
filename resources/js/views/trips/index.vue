@@ -72,7 +72,6 @@
             </div>
             <div class="col-12">
                 <TripsList :trips="trips" />
-                <router-link :to="{ name: 'ConfirmationTrips' }" class="btn-primary">Reserva</router-link>
             </div>
         </div>
     </div>
@@ -80,14 +79,19 @@
 
 <script setup>
 import TripFinder from "../../components/TripFinder.vue";
-// import TripsList from "../../components/TripList.vue";
+import TripsList from "../../components/TripList.vue";
 import axios from "axios";
-import DataView from "primevue/dataview";
-import { ref, onMounted, computed, reactive, watch } from "vue";
+import { ref, onMounted, reactive, watch } from "vue";
 import Checkbox from "primevue/checkbox";
 
-// Api
 const trips = ref([]);
+
+const filters = reactive({
+    earlyDeparture: false,
+    lateDeparture: false,
+    lowestPrice: false,
+    highestPrice: false,
+});
 
 onMounted(async () => {
     try {
@@ -99,36 +103,22 @@ onMounted(async () => {
     }
 });
 
-const filters = reactive({
-    earlyDeparture: false,
-    lateDeparture: false,
-    lowestPrice: false,
-    highestPrice: false
-});
+// Deshabilitado por falta de configurar
 
-const filteredTrips = computed(() => {
-    return trips.value.filter((trip) => {
-        return (
-            (!filters.value.departureDate || trip.departureDate === filters.value.departureDate) &&
-            (!filters.value.seats || trip.seats >= filters.value.seats)
-        );
-    });
-});
+// const filteredTrips = computed(() => {
+//     return trips.value.filter((trip) => {
+//         return (
+//             (!filters.earlyDeparture || trip.earlyDeparture) &&
+//             (!filters.lateDeparture || trip.lateDeparture) &&
+//             (!filters.lowestPrice || trip.lowestPrice) &&
+//             (!filters.highestPrice || trip.highestPrice)
+//         );
+//     });
+// });
 
-watch(() => filteredTrips, (newValue) => {
-    aplicarFiltro();
-})
-
-const aplicarFiltro = () => {
-    if (filters.earlyDeparture) {
-        filteredTrips.value = allTrips.value.filter(trip => trip.earlyDeparture);
-    } else {
-        filteredTrips.value = allTrips.value.slice(); // Copia sin modificar el original
-    }
-};
-
-
-
+// watch(filters, () => {
+//     console.log("Filtros actualizados:", filters);
+// });
 </script>
 
 

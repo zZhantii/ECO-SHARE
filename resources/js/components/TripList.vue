@@ -1,5 +1,74 @@
 <template>
-    <DataView :value="trips" paginator :rows="5">
+    <div class="container">
+        <DataView :value="trips" paginator :rows="10">
+            <template #list="slotProps">
+                <div v-for="trip in slotProps.items" :key="trip.id" class="border p-5 mb-3 rounded">
+                    <div class="row">
+                        <div class="col">
+                            <div class="w-50 d-flex justify-content-between">
+                                <p class="m-0">{{ trip.start_point }}</p>
+                                <p class="m-0">-</p>
+                                <p class="m-0">{{ trip.end_point }}</p>
+                            </div>
+                            <div class="w-50 d-flex justify-content-between">
+                                <p class="m-0">{{ formatTime(trip.departure_time) }}</p>
+                                <p class="m-0">{{ formatTime(trip.departure_time) }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2 d-flex gap-3 align-items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000"
+                                viewBox="0 0 256 256">
+                                <path
+                                    d="M224,232a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16H216A8,8,0,0,1,224,232Zm0-72v32a16,16,0,0,1-16,16H114.11a15.93,15.93,0,0,1-14.32-8.85l-58.11-116a16.1,16.1,0,0,1,0-14.32l22.12-44A16,16,0,0,1,85,17.56l33.69,14.22.47.22a16,16,0,0,1,7.15,21.46,1.51,1.51,0,0,1-.11.22L112,80l31.78,64L208,144A16,16,0,0,1,224,160Zm-16,0H143.77a15.91,15.91,0,0,1-14.31-8.85l-31.79-64a16.07,16.07,0,0,1,0-14.29l.12-.22L112,46.32,78.57,32.21A4.84,4.84,0,0,1,78.1,32L56,76,114.1,192H208Z">
+                                </path>
+                            </svg>
+                            <p class="m-0">{{ trip.available_seats }}</p>
+                        </div>
+                        <div class="col-3 d-flex gap-3 align-items-center">
+                            <span class="text-xl font-semibold">${{ trip.price }}</span>
+                            <router-link :to="{ name: 'ConfirmationTrips' }" class="btn-primary">Reserva</router-link>
+                        </div>
+                        <div class="col bg-warning">
+                            <p>labels</p>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </DataView>
+    </div>
+</template>
+
+<script setup>
+import { DataView, Row } from 'primevue';
+
+defineProps({
+    trips: {
+        type: Array,
+        required: true,
+    },
+});
+
+function formatTime(dateTime) {
+    const date = new Date(dateTime)
+    return new Intl.DateTimeFormat("es-ES", {
+        hour: "numeric",
+        minute: "numeric",
+    }).format(date);
+}
+</script>
+
+<style scoped>
+/* .container-trips {
+    border: solid 1px #d0d1d3;
+    border-radius: 10px;
+} */
+</style>
+
+
+
+<!-- <DataView :value="trips" paginator :rows="5">
         <template #list="slotProps">
             <div class="flex flex-col flex-column gap-4">
                 <div class="container-trips" v-for="(trip, index) in slotProps.items" :key="index">
@@ -47,23 +116,4 @@
                 </div>
             </div>
         </template>
-    </DataView>
-</template>
-
-<script>
-export default {
-    props: {
-        trips: {
-            type: Array,
-            required: True
-        }
-    }
-}
-</script>
-
-<style scoped>
-.container-trips {
-    border: solid 1px #d0d1d3;
-    border-radius: 10px;
-}
-</style>
+    </DataView> -->

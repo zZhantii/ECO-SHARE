@@ -1,32 +1,32 @@
 import axios from "axios";
-import { toast } from "primevue";
+import { useToast } from "primevue/usetoast";
 import { ref, inject } from "vue";
-import { tr } from "yup-locales";
-
-const trips = ref({
-    id: 0,
-    start_point: "",
-    end_point: "",
-    departure_time: "",
-    available_seats: "",
-    price: "",
-    user_id: 0,
-    vehicle_id: 0
-})
-
-const tripsList = ref([]);
-const isLoading = ref(false);
-const swal = inject("$swal");
-const validationErrors = ref([]);
 
 export default function useTrips(user) {
+    const tripsList = ref([]);
+    const isLoading = ref(false);
+    const validationErrors = ref([]);
+
     async function getTrips() {
-        if (tripsList.value.length > 0) return;
-        axios.get("/api/trip" + user.id).then((response) => {
-            for (const e of response.data.data) {
-                tripsList.value.push(e);
-            }
-        });
+        if (isLoading.value || tripsList.value.length > 0) return;
+        isLoading.value = true;
+
+        try {
+            const response = await axios.get("/api/trip/");
+            console.log("API Response:", response.data);
+            tripsList.value = response.data.data; 
+            console.log("Trips cargados:", tripsList.value);
+        } catch (error) {
+            console.error("Error fetching trips:", error);
+            useToast().add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'No se pudieron cargar los viajes',
+                life: 3000,
+            });
+        } finally {
+            isLoading.value = false;
+        }
     }
 
     const updateTrip = async (trip) => {
@@ -34,34 +34,63 @@ export default function useTrips(user) {
 
         isLoading.value = true;
         validationErrors.value = {};
-        console.log(trip.id);
-        axios
-            .put("/api/trip/" + trip.id, trip)
-            .then((response) => {
-                swal({
-                    icon: "success",
-                    title: "Vehicle updated successfully",
-                });
-            })
-            .catch((error) => {
-                if (error.response?.data) {
-                    validationErrors.value = error.response.data.errors;
-                }
-            })
-            .finally(() => (isLoading.value = false));
-    }
+
+        try {
+            const response = await axios.put("/api/trip/" + trip.id, trip);
+            const index = tripsList.value.findIndex(t => t.id === trip.id);
+            if (index !== -1) {
+                tripsList.value[index] = trip;
+            }
+            useToast().add({
+                severity: 'success',
+                summary: 'Éxito',
+                detail: 'Viaje actualizado correctamente',
+                life: 3000,
+            });
+        } catch (error) {
+            if (error.response?.data) {
+                validationErrors.value = error.response.data.errors;
+            }
+            useToast().add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'No se pudo actualizar el viaje',
+                life: 3000,
+            });
+        } finally {
+            isLoading.value = false;
+        }
+    };
 
     const deleteTrip = async (trip) => {
-        console.log("Comienza a borrar");
-        console.log(trip.id);
-        axios
-            .delete("http://localhost:8000/api/trip/" + trip.id)
-            .then((response) => { })
-        console.log("Se ha eliminado");
-    }
+        if (isLoading.value) return;
+
+        isLoading.value = true;
+
+        try {
+            await axios.delete("/api/trip/" + trip.id);
+            // Eliminar el viaje de la lista
+            tripsList.value = tripsList.value.filter(t => t.id !== trip.id);
+            useToast().add({
+                severity: 'success',
+                summary: 'Éxito',
+                detail: 'Viaje eliminado correctamente',
+                life: 3000,
+            });
+        } catch (error) {
+            console.error("Error deleting trip:", error);
+            useToast().add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'No se pudo eliminar el viaje',
+                life: 3000,
+            });
+        } finally {
+            isLoading.value = false;
+        }
+    };
 
     return {
-        trip,
         tripsList,
         getTrips,
         updateTrip,
