@@ -1,119 +1,92 @@
 <template>
-    <div class="container">
-        <DataView :value="trips" paginator :rows="10">
-            <template #list="slotProps">
-                <div v-for="trip in slotProps.items" :key="trip.id" class="border p-5 mb-3 rounded">
-                    <div class="row">
-                        <div class="col">
-                            <div class="w-50 d-flex justify-content-between">
-                                <p class="m-0">{{ trip.start_point }}</p>
-                                <p class="m-0">-</p>
-                                <p class="m-0">{{ trip.end_point }}</p>
-                            </div>
-                            <div class="w-50 d-flex justify-content-between">
-                                <p class="m-0">{{ formatTime(trip.departure_time) }}</p>
-                                <p class="m-0">{{ formatTime(trip.departure_time) }}</p>
-                            </div>
-                        </div>
+    <div v-if="trip" class="row w-75">
+        <div class="col">
+            <Timeline :value="getTimelineEvents(trip)" layout="horizontal" align="top" class="w-75">
+                <template #marker="slotProps">
+                    <i class="pi pi-map-marker px-2" style="font-size: 1.5rem"></i>
+                    <p class="m-0 px-2">{{ formatTime(slotProps.item.time) }}</p>
+                </template>
+                <template #content="slotProps">
+                    <div class="timeline-event">
+                        <p class="m-0">{{ slotProps.item.location }}</p>
                     </div>
-                    <div class="row">
-                        <div class="col-2 d-flex gap-3 align-items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000"
-                                viewBox="0 0 256 256">
-                                <path
-                                    d="M224,232a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16H216A8,8,0,0,1,224,232Zm0-72v32a16,16,0,0,1-16,16H114.11a15.93,15.93,0,0,1-14.32-8.85l-58.11-116a16.1,16.1,0,0,1,0-14.32l22.12-44A16,16,0,0,1,85,17.56l33.69,14.22.47.22a16,16,0,0,1,7.15,21.46,1.51,1.51,0,0,1-.11.22L112,80l31.78,64L208,144A16,16,0,0,1,224,160Zm-16,0H143.77a15.91,15.91,0,0,1-14.31-8.85l-31.79-64a16.07,16.07,0,0,1,0-14.29l.12-.22L112,46.32,78.57,32.21A4.84,4.84,0,0,1,78.1,32L56,76,114.1,192H208Z">
-                                </path>
-                            </svg>
-                            <p class="m-0">{{ trip.available_seats }}</p>
-                        </div>
-                        <div class="col-3 d-flex gap-3 align-items-center">
-                            <span class="text-xl font-semibold">${{ trip.price }}</span>
-                            <router-link :to="{ name: 'ConfirmationTrips' }" class="btn-primary">Reserva</router-link>
-                        </div>
-                        <div class="col bg-warning">
-                            <p>labels</p>
-                        </div>
-                    </div>
+                </template>
+            </Timeline>
+            <div class="col mt-3 pt-4 border-top d-flex">
+                <div class="w-25 d-flex align-itemns-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256">
+                        <path
+                            d="M224,232a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16H216A8,8,0,0,1,224,232Zm0-72v32a16,16,0,0,1-16,16H114.11a15.93,15.93,0,0,1-14.32-8.85l-58.11-116a16.1,16.1,0,0,1,0-14.32l22.12-44A16,16,0,0,1,85,17.56l33.69,14.22.47.22a16,16,0,0,1,7.15,21.46,1.51,1.51,0,0,1-.11.22L112,80l31.78,64L208,144A16,16,0,0,1,224,160Zm-16,0H143.77a15.91,15.91,0,0,1-14.31-8.85l-31.79-64a16.07,16.07,0,0,1,0-14.29l.12-.22L112,46.32,78.57,32.21A4.84,4.84,0,0,1,78.1,32L56,76,114.1,192H208Z">
+                        </path>
+                    </svg>
+                    <p class="m-0">{{ trip.available_seats }}</p>
                 </div>
-            </template>
-        </DataView>
+                <div class="w-75 border-start ps-2">
+                    <p>labels</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div v-if="trip" class="row w-25 border-start">
+        <div class="col d-flex flex-column justify-content-center align-items-center gap-3">
+            <span class="text-xl font-semibold">${{ trip.price }}</span>
+            <router-link :to="{ name: 'ConfirmationTrips', params: { id: trip.id } }"
+                class="btn-primary">Reserva</router-link>
+        </div>
+    </div>
+    <div v-else>
+        <p>Loading...</p>
     </div>
 </template>
 
 <script setup>
-import { DataView, Row } from 'primevue';
+import Timeline from "primevue/timeline";
+import axios from "axios";
+import { ref, onMounted } from "vue";
 
-defineProps({
-    trips: {
-        type: Array,
-        required: true,
+const props = defineProps({
+    trip: {
+        type: Object,
+        required: false,
     },
+    tripId: {
+        type: String,
+        required: false,
+    }
+});
+
+const trip = ref(props.trip || null);
+
+onMounted(async () => {
+    if (props.tripId) {
+        try {
+            const response = await axios.get(`/api/trip/${props.tripId}`);
+            trip.value = response.data.data;
+            console.log("Trip cargado:", trip.value);
+        } catch (error) {
+            console.error("Error al obtener el trip:", error);
+        }
+    }
 });
 
 function formatTime(dateTime) {
-    const date = new Date(dateTime)
+    const date = new Date(dateTime);
     return new Intl.DateTimeFormat("es-ES", {
         hour: "numeric",
         minute: "numeric",
     }).format(date);
 }
+
+function getTimelineEvents(trip) {
+    return [
+        {
+            location: trip.start_point,
+            time: trip.departure_time,
+        },
+        {
+            location: trip.end_point,
+            time: trip.arrival_time || trip.departure_time,
+        },
+    ];
+}
 </script>
-
-<style scoped>
-/* .container-trips {
-    border: solid 1px #d0d1d3;
-    border-radius: 10px;
-} */
-</style>
-
-
-
-<!-- <DataView :value="trips" paginator :rows="5">
-        <template #list="slotProps">
-            <div class="flex flex-col flex-column gap-4">
-                <div class="container-trips" v-for="(trip, index) in slotProps.items" :key="index">
-                    <div class="d-flex container-info"
-                        :class="{ 'border-t border-surface-200 dark:border-surface-700': index !== 0 }">
-                        <div>
-                            <img class="block xl:block mx-auto rounded-img" src="../../../public/images/image.png"
-                                alt="Trip Image" height="188px" />
-                        </div>
-                        <div class="d-flex w-100 justify-content-center">
-                            <div class="d-flex p-3 container-trip">
-                                <div class="d-flex flex-column justify-content-around gap-4">
-                                    <div class="d-flex gap-2">
-                                        <h4>{{ trip.start_point }}:</h4>
-                                        <p>{{ trip.departure_time }}</p>
-                                    </div>
-                                    <div class="d-flex gap-2">
-                                        <h4>{{ trip.end_point }}:</h4>
-                                        <p>{{ trip.departure_time }}</p>
-                                    </div>
-                                </div>
-                                <div class="d-flex flex-column justify-content-around">
-                                    <div class="d-flex align-items-center gap-5 price">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <div class="p-2 border-1 rounded me-2">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
-                                                    fill="#000000" viewBox="0 0 256 256">
-                                                    <path
-                                                        d="M224,232a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16H216A8,8,0,0,1,224,232Zm0-72v32a16,16,0,0,1-16,16H114.11a15.93,15.93,0,0,1-14.32-8.85l-58.11-116a16.1,16.1,0,0,1,0-14.32l22.12-44A16,16,0,0,1,85,17.56l33.69,14.22.47.22a16,16,0,0,1,7.15,21.46,1.51,1.51,0,0,1-.11.22L112,80l31.78,64L208,144A16,16,0,0,1,224,160Zm-16,0H143.77a15.91,15.91,0,0,1-14.31-8.85l-31.79-64a16.07,16.07,0,0,1,0-14.29l.12-.22L112,46.32,78.57,32.21A4.84,4.84,0,0,1,78.1,32L56,76,114.1,192H208Z">
-                                                    </path>
-                                                </svg>
-                                            </div>
-                                            <p class="m-0 w-75"> {{ trip.available_seats }}</p>
-                                        </div>
-                                        <span class="text-xl font-semibold">${{ trip.price }}</span>
-                                    </div>
-                                    <div class="d-flex justify-content-center">
-                                        <Button icon="pi pi-shopping-cart" label="Reservar"
-                                            class="flex-auto md:flex-initial whitespace-nowrap btn-secondary"></Button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </template>
-    </DataView> -->

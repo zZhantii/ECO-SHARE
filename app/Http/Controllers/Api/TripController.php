@@ -15,6 +15,11 @@ class TripController extends Controller
         return response()->json(["success" => true, "data" => $trips], 200);
     }
 
+    public function show(Trip $trip)
+    {
+        return response()->json(["success" => true, "data" => $trip], 200);
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [

@@ -155,7 +155,7 @@ export default function useAuth() {
 
     const loginUser = () => {
         //const auth = authStore(); //TODO test
-        console.log("loginUser auth Compostable " + auth.user);
+        // console.log("loginUser auth Compostable " + auth.user);
         console.log(auth.user);
         user = auth.user;
         //user = store.state.auth.user
@@ -165,12 +165,10 @@ export default function useAuth() {
 
     const getUser = async () => {
         const auth = authStore();
-        console.log("getUser");
 
         if (auth.authenticated) {
             await auth.getUser();
-            console.log(auth.user.value);
-            console.log(auth.authenticated);
+            // console.log(auth.authenticated);
             await loginUser();
         }
     };
