@@ -1,22 +1,22 @@
-import { Toast } from "primevue";
+import { useToast } from "primevue";
 import { ref, inject } from "vue";
 
-const vehicle = ref({
-    id: 0,
-    plate: "",
-    brand: "",
-    model: "",
-    consumption: 0.0,
-    fuel_type: "",
-    pax_number: 0,
-    user_id: 0,
-});
-const vehiclesList = ref([]);
-const isLoading = ref(false);
-const swal = inject("$swal");
-const validationErrors = ref({});
-
 export default function useVehicles(user) {
+    const vehicle = ref({
+        id: 0,
+        plate: "",
+        brand: "",
+        model: "",
+        consumption: 0.0,
+        fuel_type: "",
+        pax_number: 0,
+        user_id: 0,
+    });
+    const vehiclesList = ref([]);
+    const isLoading = ref(false);
+    const swal = inject("$swal");
+    const validationErrors = ref({});
+
     async function getVehicles() {
         if (vehiclesList.value.length > 0) return;
         axios.get("/api/vehicle/" + user.id).then((response) => {
@@ -24,6 +24,28 @@ export default function useVehicles(user) {
                 vehiclesList.value.push(e);
             }
         });
+    }
+
+    async function getVehicle(vehicleId) {
+        if (isLoading.value || vehicle.value.length > 0) return;
+        isLoading.value = true;
+
+        try {
+            const response = await axios.get("/api/vehicle/" + vehicleId);
+            console.log("API Response:", response.data);
+            vehicle.value = response.data;
+            console.log("Vehiculo con ID cargado:", vehicle.value);
+        } catch (error) {
+            console.error("Error fetching trips:", error);
+            useToast().add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'No se pudieron cargar los viajes',
+                life: 3000,
+            });
+        } finally {
+            isLoading.value = false;
+        }
     }
 
     const updateVehicle = async (vehicle) => {
@@ -55,7 +77,7 @@ export default function useVehicles(user) {
         console.log(vehicle.id);
         axios
             .delete("http://localhost:8000/api/vehicle/" + vehicle.id)
-            .then((response) => {});
+            .then((response) => { });
         console.log("Se acaba el borrar");
     };
 
@@ -63,6 +85,7 @@ export default function useVehicles(user) {
         vehicle,
         vehiclesList,
         getVehicles,
+        getVehicle,
         updateVehicle,
         validationErrors,
         deleteVehicle,

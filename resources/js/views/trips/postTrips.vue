@@ -20,16 +20,20 @@
                                         <div class="col-12 col-md-6 d-flex flex-column">
                                             <div class="text-center">
                                                 <h3 class="mt-2 mb-3 fs-5">¿Desde dónde sales?</h3>
-                                                <InputText v-model="tripData.start_point" type="text" class="form-control" placeholder="Punto de inicio" />
+                                                <InputText v-model="tripData.start_point" type="text"
+                                                    class="form-control" placeholder="Punto de inicio" />
                                             </div>
                                             <div class="text-center mt-3">
                                                 <h3 class="mt-2 mb-3 fs-5">¿A dónde vas?</h3>
-                                                <InputText v-model="tripData.end_point" type="text" class="form-control" placeholder="Destino" />
+                                                <InputText v-model="tripData.end_point" type="text" class="form-control"
+                                                    placeholder="Destino" />
                                             </div>
                                         </div>
                                     </div>
                                     <div class="d-flex pt-4 justify-content-end">
-                                        <Button label="Next" type="submit" class="primary-a" icon="pi pi-arrow-right" :disabled="!isStep1Complete" iconPos="right" @click="activateCallback('2')" />
+                                        <Button label="Next" type="submit" class="primary-a" icon="pi pi-arrow-right"
+                                            :disabled="!isStep1Complete" iconPos="right"
+                                            @click="activateCallback('2')" />
                                     </div>
                                 </form>
                             </div>
@@ -43,7 +47,9 @@
                                             <h3 class="mt-3 mb-5">¿Que Vehiculo utilizarás?</h3>
                                             <div class="d-flex align-items-center">
                                                 <FloatLabel class="" variant="on">
-                                                    <Select v-model="tripData.vehicle_id" inputId="on_label" :options="vehicles" optionValue="id" optionLabel="brand" class="w-full" />
+                                                    <Select v-model="tripData.vehicle_id" appendOn=".show"
+                                                        inputId="on_label" :options="vehicles" optionValue="id"
+                                                        optionLabel="brand" class="w-full" />
                                                     <label for="on_label">Selecciones su vehiculo</label>
                                                 </FloatLabel>
                                             </div>
@@ -51,13 +57,17 @@
                                         <div class="col-12 col-md-6 d-flex justify-content-center">
                                             <h3 class="mt-3 mb-5">¿Cuantos asientos hay disponibles?</h3>
                                             <div class="d-flex align-items-center">
-                                                <InputNumber v-model="tripData.available_seats" inputId="minmax-buttons" mode="decimal" showButtons :min="1" :max="6" fluid />
+                                                <InputNumber v-model="tripData.available_seats" inputId="minmax-buttons"
+                                                    mode="decimal" showButtons :min="1" :max="6" fluid />
                                             </div>
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-between pt-6">
-                                        <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('1')" />
-                                        <Button label="Next" type="submit" class="primary-a" icon="pi pi-arrow-right" :disabled="!isStep2Complete" iconPos="right" @click="activateCallback('3')" />
+                                        <Button label="Back" severity="secondary" icon="pi pi-arrow-left"
+                                            @click="activateCallback('1')" />
+                                        <Button label="Next" type="submit" class="primary-a" icon="pi pi-arrow-right"
+                                            :disabled="!isStep2Complete" iconPos="right"
+                                            @click="activateCallback('3')" />
                                     </div>
                                 </form>
                             </div>
@@ -74,12 +84,27 @@
                                             <div>
                                                 <h4 class="mb-3">Detalles del vehiculo</h4>
                                                 <ul class="d-flex flex-column gap-3">
-                                                    <li v-if="selectedVehicleDetails">{{ selectedVehicleDetails.brand ? `Marca: ${selectedVehicleDetails.brand}` : 'Marca no disponible' }}</li>
-                                                    <li v-if="selectedVehicleDetails">{{ selectedVehicleDetails.model ? `Modelo: ${selectedVehicleDetails.model}` : 'Modelo no disponible' }}</li>
-                                                    <li v-if="selectedVehicleDetails">{{ selectedVehicleDetails.plate ? `Matrícula: ${selectedVehicleDetails.plate}` : 'Matrícula no disponible' }}</li>
-                                                    <li v-if="selectedVehicleDetails">{{ selectedVehicleDetails.consumption ? `Consumo: ${selectedVehicleDetails.consumption}` : 'Consumo no disponible' }}</li>
-                                                    <li v-if="selectedVehicleDetails">{{ selectedVehicleDetails.pax_number ? `Número de asientos: ${selectedVehicleDetails.pax_number}` : 'Número de asientos no disponible' }}</li>
-                                                    <li v-if="selectedVehicleDetails">{{ selectedVehicleDetails.fuel_type ? `Tipo de gasolina: ${selectedVehicleDetails.fuel_type}` : 'Tipo de gasolina no disponible' }}</li>
+                                                    <li v-if="selectedVehicleDetails">{{ selectedVehicleDetails.brand ?
+                                                        `Marca: ${selectedVehicleDetails.brand}` : 'Marca no disponible'
+                                                    }}</li>
+                                                    <li v-if="selectedVehicleDetails">{{ selectedVehicleDetails.model ?
+                                                        `Modelo: ${selectedVehicleDetails.model}` : 'Modelo no
+                                                        disponible' }}</li>
+                                                    <li v-if="selectedVehicleDetails">{{ selectedVehicleDetails.plate ?
+                                                        `Matrícula: ${selectedVehicleDetails.plate}` : 'Matrícula no
+                                                        disponible' }}</li>
+                                                    <li v-if="selectedVehicleDetails">{{
+                                                        selectedVehicleDetails.consumption ? `Consumo:
+                                                        ${selectedVehicleDetails.consumption}` : 'Consumo no disponible'
+                                                    }}</li>
+                                                    <li v-if="selectedVehicleDetails">{{
+                                                        selectedVehicleDetails.pax_number ? `Número de asientos:
+                                                        ${selectedVehicleDetails.pax_number}` : 'Número de asientos no
+                                                        disponible' }}</li>
+                                                    <li v-if="selectedVehicleDetails">{{
+                                                        selectedVehicleDetails.fuel_type ? `Tipo de gasolina:
+                                                        ${selectedVehicleDetails.fuel_type}` : 'Tipo de gasolina no
+                                                        disponible' }}</li>
                                                 </ul>
                                             </div>
                                             <div>
@@ -97,8 +122,10 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between pt-6">
-                                <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('2')" />
-                                <Button label="Confirmar Viaje" @click="postTrips" class="primary-a" icon="pi pi-arrow-right" iconPos="right" />
+                                <Button label="Back" severity="secondary" icon="pi pi-arrow-left"
+                                    @click="activateCallback('2')" />
+                                <Button label="Confirmar Viaje" @click="postTrips" class="primary-a"
+                                    icon="pi pi-arrow-right" iconPos="right" />
                             </div>
                         </StepPanel>
                     </StepPanels>

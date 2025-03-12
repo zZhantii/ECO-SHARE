@@ -4,6 +4,7 @@ import { ref, inject } from "vue";
 
 export default function useTrips(user) {
     const tripsList = ref([]);
+    const tripList = ref({});
     const isLoading = ref(false);
     const validationErrors = ref([]);
 
@@ -16,6 +17,28 @@ export default function useTrips(user) {
             console.log("API Response:", response.data);
             tripsList.value = response.data.data; 
             console.log("Trips cargados:", tripsList.value);
+        } catch (error) {
+            console.error("Error fetching trips:", error);
+            useToast().add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'No se pudieron cargar los viajes',
+                life: 3000,
+            });
+        } finally {
+            isLoading.value = false;
+        }
+    }
+
+    async function getTrip(tripId) {
+        if (isLoading.value || tripList.value.length > 0) return;
+        isLoading.value = true;
+
+        try {
+            const response = await axios.get("/api/trip/" + tripId);
+            console.log("API Response:", response.data);
+            tripList.value = response.data.data; 
+            console.log("Trip con ID cargado:", tripList.value);
         } catch (error) {
             console.error("Error fetching trips:", error);
             useToast().add({
@@ -92,7 +115,9 @@ export default function useTrips(user) {
 
     return {
         tripsList,
+        tripList,
         getTrips,
+        getTrip,
         updateTrip,
         deleteTrip,
         validationErrors
