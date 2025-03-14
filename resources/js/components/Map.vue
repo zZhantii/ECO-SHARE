@@ -4,14 +4,57 @@
     </div>
 </template>
 <script setup>
-import { min } from "lodash";
-import { ref, onMounted } from "vue";
+import { ref, defineProps, onMounted, defineEmits, watch, isProxy } from "vue";
 
-onMounted(() => {
-    initMap();
-    setMarker(mapData.value.mapCenter, "A");
-    setMarker(mapData.value.destination, "B");
+const props = defineProps({
+    origin: Object,
+    destination: Object,
 });
+
+const emit = defineEmits(["updateMapsInfo"]);
+onMounted(() => {
+    if (
+        props.origin?.geometry?.location ||
+        props.destination?.geometry?.location
+    ) {
+        mapData.value.mapCenter.lat = props.origin.geometry.location.lat();
+        mapData.value.mapCenter.lng = props.origin.geometry.location.lng();
+        mapData.value.destination.lat =
+            props.destination.geometry.location.lat();
+        mapData.value.destination.lng =
+            props.destination.geometry.location.lng();
+        initMap();
+        setMarker(mapData.value.mapCenter, "D");
+        setMarker(mapData.value.destination, "O");
+    } else {
+        initMap();
+        setMarker(mapData.value.mapCenter, "O");
+    }
+});
+
+watch(
+    () => [props.origin, props.destination],
+    ([newOrigin, newDestination]) => {
+        console.log("Origen cambiado:", newOrigin);
+        console.log("Destino cambiado:", newDestination);
+        console.log(props.origin);
+        if (
+            newOrigin?.geometry?.location.lat &&
+            newDestination?.geometry?.location.lat
+        ) {
+            console.log(newOrigin.geometry.location.lat());
+            mapData.value.mapCenter.lat = newOrigin.geometry.location.lat();
+            mapData.value.mapCenter.lng = newOrigin.geometry.location.lng();
+            mapData.value.destination.lat =
+                newDestination?.geometry.location.lat();
+            mapData.value.destination.lng =
+                newDestination?.geometry.location.lng();
+            initMap();
+            setMarker(mapData.value.mapCenter, "D");
+            setMarker(mapData.value.destination, "O");
+        }
+    }
+);
 
 const mapData = ref({
     map: null,
@@ -19,13 +62,13 @@ const mapData = ref({
         lat: 41.41087625773037,
         lng: 2.0270428374359217,
     },
-    destination: { lat: 41.380833333333, lng: 2.1227777777778 },
+    destination: { lat: 0, lng: 0 },
 });
 const initMap = () => {
     mapData.value.map = new google.maps.Map(document.getElementById("map"), {
         center: mapData.value.mapCenter,
         maxZoom: 20,
-        minZoom: 10,
+        minZoom: 5,
         zoom: 12,
         streetViewControl: false,
         mapTypeControl: false,
@@ -34,23 +77,13 @@ const initMap = () => {
         disableDefaultUI: true,
     });
 
-    const request = {
-        origin: {
-            address: `${mapData.value.mapCenter.lat},${mapData.value.mapCenter.lng}`,
-        },
-        destination: {
-            address: `${mapData.value.destination.lat},${mapData.value.destination.lng}`,
-        },
-        key: "API_KEY", // Asegúrate de usar tu clave de API aquí
-    };
-
     fetch("https://routes.googleapis.com/directions/v2:computeRoutes", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "X-Goog-Api-Key": "API_KEY",
+            "X-Goog-Api-Key": import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
             "X-Goog-FieldMask":
-                "routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline", // Coloca tu clave API aquí
+                "routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline",
         },
         body: JSON.stringify({
             origin: {
@@ -93,19 +126,35 @@ const initMap = () => {
                 polyline.setMap(mapData.value.map);
 
                 const bounds = new google.maps.LatLngBounds();
-                decodedPath.forEach((point) => {
-                    bounds.extend(point);
-                });
-                mapData.value.map.fitBounds(bounds);
+                for (const element of decodedPath) {
+                    bounds.extend(element);
+                }
 
-                new google.maps.Marker({
-                    position: mapData.value.destination,
-                    map: mapData.value.map,
-                    label: "B",
-                });
+                mapData.value.map.fitBounds(bounds);
+                const mapsInfo = {
+                    origin: {
+                        address: props.origin.name,
+                        location: {
+                            latitude: props.origin.geometry.location.lat(),
+                            longitude: props.origin.geometry.location.lng(),
+                        },
+                    },
+                    destination: {
+                        address: props.destination.name,
+                        location: {
+                            latitude: props.destination.geometry.location.lat(),
+                            longitude:
+                                props.destination.geometry.location.lng(),
+                        },
+                    },
+                    distance: route.distanceMeters,
+                    duration: route.duration,
+                };
+
+                emit("updateMapsInfo", mapsInfo);
             }
         })
-        .catch((error) => console.error("Error al obtener la ruta:", error));
+        .catch((error) => console.error("Error al obtener la ruta: ", error));
 };
 
 function setMarker(Points, Label) {
@@ -125,5 +174,6 @@ function setMarker(Points, Label) {
     width: 100% !important;
     min-height: 300px !important;
     max-height: 700px !important;
+    border-radius: 5px;
 }
 </style>

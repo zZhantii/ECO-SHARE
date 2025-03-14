@@ -1,4 +1,5 @@
 <template>
+    <div class="show"></div>
     <div class="container">
         <div class="row justify-content-center">
             <div class="card flex justify-center m-4 p-4">
@@ -23,8 +24,19 @@
                                         <div
                                             class="col-12 col-md-6 d-flex justify-content-center"
                                         >
-                                            <div class="mapTrip border-1 w-100">
-                                                <Map />
+                                            <div class="mapTrip w-100">
+                                                <Map
+                                                    v-if="showFirstMap"
+                                                    :origin="
+                                                        tripData.start_point
+                                                    "
+                                                    :destination="
+                                                        tripData.end_point
+                                                    "
+                                                    @updateMapsInfo="
+                                                        handleMapsInfo
+                                                    "
+                                                />
                                             </div>
                                         </div>
                                         <!-- Inputs -->
@@ -48,7 +60,6 @@
                                                 </h3>
                                                 <InputText
                                                     id="destination"
-                                                    v-model="tripData.end_point"
                                                     type="text"
                                                     class="form-control"
                                                     placeholder="Destino"
@@ -104,6 +115,7 @@
                                                         optionValue="id"
                                                         optionLabel="brand"
                                                         class="w-full"
+                                                        appendOn=".show"
                                                     />
                                                     <label for="on_label"
                                                         >Selecciones su
@@ -111,6 +123,21 @@
                                                     >
                                                 </FloatLabel>
                                             </div>
+                                            <h3 class="mt-3 mb-5">
+                                                ¿Cuándo viajarás?
+                                            </h3>
+                                            <div
+                                                class="d-flex align-items-center"
+                                            ></div>
+                                            <DatePicker
+                                                id="datepicker-24"
+                                                v-model="
+                                                    tripData.departure_time
+                                                "
+                                                showTime
+                                                hourFormat="24"
+                                                fluid
+                                            />
                                         </div>
                                         <div
                                             class="col-12 col-md-6 d-flex justify-content-center"
@@ -143,7 +170,10 @@
                                             label="Back"
                                             severity="secondary"
                                             icon="pi pi-arrow-left"
-                                            @click="activateCallback('1')"
+                                            @click="
+                                                activateCallback('1'),
+                                                    (showFirstMap = true)
+                                            "
                                         />
                                         <Button
                                             label="Next"
@@ -152,7 +182,10 @@
                                             icon="pi pi-arrow-right"
                                             :disabled="!isStep2Complete"
                                             iconPos="right"
-                                            @click="activateCallback('3')"
+                                            @click="
+                                                activateCallback('3'),
+                                                    (showFirstMap = false)
+                                            "
                                         />
                                     </div>
                                 </form>
@@ -165,13 +198,17 @@
                                 <div
                                     class="row d-flex align-items-center w-100"
                                 >
-                                    <!-- Mapa -->
                                     <div
                                         class="col-12 col-md-6 d-flex justify-content-center"
                                     >
-                                        <div
-                                            class="mapTrip border-1 w-100"
-                                        ></div>
+                                        <div class="mapTrip w-100">
+                                            <Map
+                                                v-if="!showFirstMap"
+                                                :origin="tempStartPoint"
+                                                :destination="tempEndPoint"
+                                                @updateMapsInfo="handleMapsInfo"
+                                            />
+                                        </div>
                                     </div>
                                     <div
                                         class="col-12 col-md-6 d-flex flex-column"
@@ -268,17 +305,34 @@
                                                         Origen:
                                                         {{
                                                             tripData.start_point
+                                                                .address
                                                         }}
                                                     </li>
                                                     <li>
                                                         Destino:
-                                                        {{ tripData.end_point }}
+                                                        {{
+                                                            tripData.end_point
+                                                                .address
+                                                        }}
                                                     </li>
                                                     <li>
-                                                        Fecha de inicio: {{}}
+                                                        Fecha de inicio:
+                                                        {{
+                                                            tripData.departure_date
+                                                        }}
                                                     </li>
                                                     <li>
-                                                        Horas de viaje: {{}}
+                                                        Horas de salida:
+                                                        {{
+                                                            tripData.departure_time
+                                                        }}
+                                                    </li>
+                                                    <li>
+                                                        Horas estimada de
+                                                        llegada:
+                                                        {{
+                                                            tripData.arrival_time
+                                                        }}
                                                     </li>
                                                     <li>Distancia: {{}}</li>
                                                 </ul>
@@ -292,7 +346,10 @@
                                     label="Back"
                                     severity="secondary"
                                     icon="pi pi-arrow-left"
-                                    @click="activateCallback('2')"
+                                    @click="
+                                        activateCallback('2'),
+                                            (isStep2Complete = false)
+                                    "
                                 />
                                 <Button
                                     label="Confirmar Viaje"
@@ -320,7 +377,7 @@ import StepPanel from "primevue/steppanel";
 
 // Form
 import * as yup from "yup";
-import { es, tr } from "yup-locales";
+import { ar, es, tr } from "yup-locales";
 import { useToast } from "primevue/usetoast";
 import { Toast } from "primevue";
 import { onMounted, ref, watch, computed } from "vue";
@@ -333,10 +390,9 @@ import axios from "axios";
 import { useRouter, useRoute } from "vue-router";
 
 const router = useRouter();
-const route = useRoute();
-
-const Show = true;
-
+const tempStartPoint = ref({});
+const tempEndPoint = ref({});
+const showFirstMap = ref(true);
 const toast = useToast();
 
 let user_id = ref(0);
@@ -344,11 +400,6 @@ user_id.value = authStore().user.id;
 console.log("userId", user_id.value);
 
 onMounted(async () => {
-    const savedTrip = sessionStorage.getItem("tripData");
-    if (savedTrip) {
-        tripData.value = JSON.parse(savedTrip);
-    }
-
     try {
         const responseVehicles = await axios.get("/api/vehicle");
         vehicles.value = responseVehicles.data.data;
@@ -363,8 +414,8 @@ onMounted(async () => {
         }
     );
     autocompleteStart.addListener("place_changed", () => {
-        const place = autocompleteStart.getPlace();
-        tripData.value.start_point = place.name;
+        tripData.value.start_point = autocompleteStart.getPlace();
+        tempStartPoint.value = autocompleteStart.getPlace();
     });
 
     const autocompleteEnd = new google.maps.places.Autocomplete(
@@ -375,8 +426,8 @@ onMounted(async () => {
         }
     );
     autocompleteEnd.addListener("place_changed", () => {
-        const place = autocompleteEnd.getPlace();
-        tripData.value.start_point = place.name;
+        tripData.value.end_point = autocompleteEnd.getPlace();
+        tempEndPoint.value = autocompleteEnd.getPlace();
     });
 });
 
@@ -384,6 +435,8 @@ const tripData = ref({
     user_id: user_id.value,
     start_point: "",
     end_point: "",
+    departure_time: "",
+    arrival_time: "",
     vehicle_id: null,
     available_seats: null,
     price: 50.0,
@@ -411,10 +464,7 @@ const nextStep = (step, condition, activateCallback) => {
 
 // Computed para validar el paso 1
 const isStep1Complete = computed(() => {
-    return (
-        tripData.value.start_point.trim() !== "" &&
-        tripData.value.end_point.trim() !== ""
-    );
+    return tripData.value.start_point !== "" && tripData.value.end_point !== "";
 });
 
 // Computed para validar el paso 2
@@ -423,7 +473,8 @@ const isStep2Complete = computed(() => {
         tripData.value.vehicle_id !== null &&
         tripData.value.vehicle_id > 0 &&
         tripData.value.available_seats !== null &&
-        tripData.value.available_seats > 0
+        tripData.value.available_seats > 0 &&
+        tripData.value.departure_time != ""
     );
 });
 
@@ -437,14 +488,47 @@ const findVehicleById = async (id) => {
     }
 };
 
-const saveTripData = () => {
-    sessionStorage.setItem("tripData", JSON.stringify(tripData.value));
+const useGeocoder = (place) => {
+    const geocoder = new google.maps.Geocoder();
+    geocoder.geocode(
+        { location: place.geometry.location },
+        (results, status) => {
+            if (status === google.maps.GeocoderStatus.OK) {
+                const addressComponents = results[0].address_components;
+                console.log("Componente 0 desde Geocoding:", addressComponents);
+            } else {
+                console.error("Geocoding failed:", status);
+            }
+        }
+    );
+};
+
+const formatDeparture = () => {
+    let departureTime = new Date(tripData.value.departure_time);
+    let arrivalTime = new Date(departureTime);
+    let duration = tripData.value.duration;
+    let durationInSeconds = parseInt(duration.replace("s", ""));
+
+    arrivalTime.setSeconds(departureTime.getSeconds() + durationInSeconds);
+
+    tripData.value.departure_time = departureTime.toTimeString().split(" ")[0];
+    tripData.value.arrival_time = arrivalTime.toTimeString().split(" ")[0];
+
+    console.log("Hora de salida:", tripData.value.departureTime);
+    console.log("Hora de llegada:", tripData.value.arrivalTime);
 };
 
 const pointSchema = yup.object().shape({
-    start_point: yup.string().required("El punto de inicio es obligatorio"),
-    end_point: yup.string().required("El destino es obligatorio"),
+    start_point: yup.object().required("El punto de inicio es obligatorio"),
+    end_point: yup.object().required("El destino es obligatorio"),
 });
+
+const handleMapsInfo = (mapsInfo) => {
+    console.log("Información del mapa recibida:", mapsInfo);
+    tripData.value.start_point = mapsInfo.origin;
+    tripData.value.end_point = mapsInfo.destination;
+    tripData.value.duration = mapsInfo.duration;
+};
 
 const saveOption = async () => {
     try {
@@ -452,11 +536,11 @@ const saveOption = async () => {
             start_point: tripData.value.start_point,
             end_point: tripData.value.end_point,
         });
-        saveTripData();
+
         toast.add({
             severity: "success",
             summary: "Guardado con éxito",
-            detail: `Origen: ${tripData.value.start_point} | Destino: ${tripData.value.end_point}`,
+            detail: `Origen: ${tripData.value.start_point.address} | Destino: ${tripData.value.end_point.address}`,
             life: 3000,
         });
     } catch (error) {
@@ -479,20 +563,27 @@ const CarSchema = yup.object().shape({
         .number()
         .required("Debe indicar los asientos disponibles")
         .min(1, "Debe haber al menos un asiento disponible"),
+    departure_time: yup.string().required("Debes indicar la hora de salida"),
+    departure_date: yup.date().required("Debes indicar la fecha de salida"),
+    arrival_time: yup.string().required("Debes indicar la hora de llegada"),
 });
 
 const saveOptionCar = async () => {
+    formatDeparture();
+
     try {
         await CarSchema.validate({
             vehicle_id: tripData.value.vehicle_id,
             available_seats: tripData.value.available_seats,
+            departure_time: tripData.value.departure_time,
+            arrival_time: tripData.value.arrival_time,
+            departure_date: tripData.value.departure_date,
         });
 
-        saveTripData();
         toast.add({
             severity: "success",
             summary: "Guardado con éxito",
-            detail: `Vehículo: ${tripData.value.vehicle_id} | Asientos: ${tripData.value.available_seats}`,
+            detail: `Vehículo: ${tripData.value.vehicle_id} | Asientos: ${tripData.value.available_seats} | Hora de salida: ${tripData.value.departure_time}`,
             life: 3000,
         });
     } catch (error) {
@@ -517,7 +608,6 @@ const postTrips = async () => {
             detail: "El viaje ha sido guardado exitosamente.",
             life: 3000,
         });
-        sessionStorage.removeItem("tripData");
     } catch (error) {
         console.error("Error en la solicitud POST:", error);
         toast.add({

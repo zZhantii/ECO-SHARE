@@ -23,7 +23,7 @@
         window.config = @json($config);
     </script>
      <script async defer
-     src="https://maps.googleapis.com/maps/api/js?key=API_KEY&loading=async&libraries=places,geometry">
+     src="https://maps.googleapis.com/maps/api/js?key={{ config('app.google_maps_api_key') }}&loading=async&libraries=places,geometry">
  </script>
     <!-- Scripts -->
 {{--    @vite(['resources/sass/app.scss', 'resources/js/app.js'])--}}
