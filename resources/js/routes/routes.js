@@ -134,6 +134,12 @@ export default [
                 name: 'PostTrips',
                 component: () => import("../views/trips/postTrips.vue"),
                 beforeEnter: requireLogin,
+            },
+            {
+                path: '/trips/confirmation/:id',
+                name: 'ConfirmationTrips',
+                component: () => import("../views/trips/confirmationTrip.vue"),
+                beforeEnter: requireLogin,
             }
         ],
     },

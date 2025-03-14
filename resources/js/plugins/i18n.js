@@ -3,7 +3,7 @@ import { langStore } from "@/store/lang";
 
 let i18n;
 export async function installI18n(app) {
-    console.log(langStore().locale)
+    // console.log(langStore().locale)
     const i18na = createI18n({
         legacy: false,
         globalInjection: true,

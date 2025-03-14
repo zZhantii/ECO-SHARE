@@ -1,4 +1,4 @@
-import { Toast } from "primevue";
+import { useToast } from "primevue";
 import { ref, inject } from "vue";
 
 export default function useVehicles() {
@@ -44,6 +44,28 @@ export default function useVehicles() {
             })
             .finally(() => (isLoading.value = false));
     };
+
+    async function getVehicle(vehicleId) {
+        if (isLoading.value || vehicle.value.length > 0) return;
+        isLoading.value = true;
+
+        try {
+            const response = await axios.get("/api/vehicle/" + vehicleId);
+            console.log("API Response:", response.data);
+            vehicle.value = response.data;
+            console.log("Vehiculo con ID cargado:", vehicle.value);
+        } catch (error) {
+            console.error("Error fetching trips:", error);
+            useToast().add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'No se pudieron cargar los viajes',
+                life: 3000,
+            });
+        } finally {
+            isLoading.value = false;
+        }
+    }
 
     const updateVehicle = async (vehicle) => {
         if (isLoading.value) return;
@@ -110,6 +132,7 @@ export default function useVehicles() {
         vehicle,
         vehiclesList,
         getVehicles,
+        getVehicle,
         updateVehicle,
         validationErrors,
         deleteVehicle,
