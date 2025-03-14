@@ -76,7 +76,7 @@ class UserController extends Controller
     // }
     public function show(User $user)
     {
-        $user = User::find($user);
+        $user = User::with("media")->find($user);
         return response()->json(["success" => true, "data" => $user], 200);
     }
 
@@ -108,11 +108,6 @@ class UserController extends Controller
         }
     }
 
-    public function uploadImg()
-    {
-        $user = Auth::user;
-
-    }
 
     public function updateimg(Request $request)
     {

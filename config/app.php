@@ -202,6 +202,8 @@ return [
         App\Providers\RouteServiceProvider::class,
 
     ],
+    //CLAVE DE GOOGLE MAPS
+    'google_maps_api_key' => env('VITE_GOOGLE_MAPS_API_KEY'),
 
     /*
     |--------------------------------------------------------------------------

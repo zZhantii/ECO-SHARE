@@ -23,8 +23,7 @@ class User extends Authenticatable implements HasMedia
         'email',
         'password',
         'surname1',
-        'surname2',
-        'profile_photo'
+        'surname2'
     ];
 
     /**
@@ -74,11 +73,8 @@ class User extends Authenticatable implements HasMedia
     }
     //Método para guardar las fotos/avatar del perfil de usuario
 
-    public function registerMediaCollection()
-    {
-        $this->addMediaCollection("avatars")->singleFile;
-    }
-    // Foreign Key
+
+
 
     // Relacion usuarios-vehiculos 1:N (1 Usuarios)
     public function vehicles()

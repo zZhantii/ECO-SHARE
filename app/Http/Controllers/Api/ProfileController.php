@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateProfileRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 use Illuminate\Validation\ValidationException;
 
 class ProfileController extends Controller
@@ -46,4 +47,36 @@ class ProfileController extends Controller
 
         return $this->successResponse($user, 'User found');
     }
+
+    public function uploadAvatar(Request $request)
+    {
+        $user = Auth::user();
+
+        if ($request->hasFile("avatar")) {
+
+            $user->media()->delete();
+            $media = $user->addMediaFromRequest("avatar")->preservingOriginal()->toMediaCollection("images/users");
+        }
+        $user = User::with("media")->find($user->id);
+
+
+
+
+        return response()->json(["success" => true, "data" => $user], 200);
+    }
+    public function unlinkAvatar()
+    {
+        $user = Auth::user();
+
+        $media = $user->getFirstMedia('images/users');
+
+        if ($media) {
+            $media->delete();
+
+        }
+
+        return response()->json(["success" => true, "message" => "Avatar eliminado"], 200);
+    }
+
+
 }

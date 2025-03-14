@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -20,7 +19,8 @@ return new class extends Migration
 
             $table->json('start_point');
             $table->json('end_point');
-            $table->timestamp('departure_time')->useCurrent();
+            $table->timestamp('departure_time');
+            $table->timestamp('arrival_time');
             $table->integer('available_seats');
             $table->decimal('price', 10, 2);
             $table->timestamps();

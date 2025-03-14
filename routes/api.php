@@ -24,7 +24,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::apiResource('users', UserController::class);
 
-    Route::post('users/updateimg', [UserController::class, 'updateimg']); //Listar
+    // Route::post('users/updateimg', [UserController::class, 'updateimg']); //Listar
 
     Route::apiResource('posts', PostControllerAdvance::class);
     Route::apiResource('categories', CategoryController::class);
@@ -37,7 +37,14 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
 
     //Rutas App
+
+    //Conseguir todos los vehículos del usuario autenticado
     Route::get("app/user-vehicle", [AppController::class, "indexVehicle"]);
+
+    //Subir img/avatar del usuario
+    Route::post("user-avatar", [ProfileController::class, "uploadAvatar"]);
+    //Eliminar imagen/avatar de usuario
+    Route::delete("delete-avatar", [ProfileController::class, "unlinkAvatar"]);
 
     Route::put('vehicle/{vehicle}', [VehicleController::class, 'update']);
     Route::get('vehicle', [VehicleController::class, 'index']);
@@ -79,6 +86,7 @@ Route::post("author", [AuthorController::class, "store"]);
 Route::delete("author/{author}", [AuthorController::class, "destroy"]);
 Route::put("author/{author}", [AuthorController::class, "update"]);
 Route::get("author/{author}", [AuthorController::class, "show"]);
+
 
 
 

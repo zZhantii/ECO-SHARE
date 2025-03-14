@@ -1,7 +1,8 @@
 <template>
+    <div class="show"></div>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="card flex justify-center my-4 p-4">
+            <div class="card flex justify-center m-4 p-4">
                 <Stepper value="1">
                     <StepList class="StepList">
                         <Step value="1">Opciones de viajes</Step>
@@ -10,89 +11,330 @@
                     </StepList>
                     <StepPanels>
                         <StepPanel v-slot="{ activateCallback }" value="1">
-                            <div class="flex-auto d-flex justify-content-center">
+                            <div
+                                class="flex-auto d-flex justify-content-center"
+                            >
                                 <Toast />
-                                <form @submit.prevent="saveOption" class="w-100">
+                                <form
+                                    @submit.prevent="saveOption"
+                                    class="w-100"
+                                >
                                     <div class="row d-flex align-items-center">
                                         <!-- Mapa -->
-                                        <div class="col-12 col-md-6 d-flex justify-content-center">
-                                            <div class="mapTrip border-1 w-100"></div>
+                                        <div
+                                            class="col-12 col-md-6 d-flex justify-content-center"
+                                        >
+                                            <div class="mapTrip w-100">
+                                                <Map
+                                                    v-if="showFirstMap"
+                                                    :origin="
+                                                        tripData.start_point
+                                                    "
+                                                    :destination="
+                                                        tripData.end_point
+                                                    "
+                                                    @updateMapsInfo="
+                                                        handleMapsInfo
+                                                    "
+                                                />
+                                            </div>
                                         </div>
                                         <!-- Inputs -->
-                                        <div class="col-12 col-md-6 d-flex flex-column">
+                                        <div
+                                            class="col-12 col-md-6 d-flex flex-column"
+                                        >
                                             <div class="text-center">
-                                                <h3 class="mt-2 mb-3 fs-5">¿Desde dónde sales?</h3>
-                                                <InputText v-model="tripData.start_point" type="text" class="form-control" placeholder="Punto de inicio" />
+                                                <h3 class="mt-2 mb-3 fs-5">
+                                                    ¿Desde dónde sales?
+                                                </h3>
+                                                <InputText
+                                                    id="origin"
+                                                    type="text"
+                                                    class="form-control"
+                                                    placeholder="Punto de inicio"
+                                                />
                                             </div>
                                             <div class="text-center mt-3">
-                                                <h3 class="mt-2 mb-3 fs-5">¿A dónde vas?</h3>
-                                                <InputText v-model="tripData.end_point" type="text" class="form-control" placeholder="Destino" />
+                                                <h3 class="mt-2 mb-3 fs-5">
+                                                    ¿A dónde vas?
+                                                </h3>
+                                                <InputText
+                                                    id="destination"
+                                                    type="text"
+                                                    class="form-control"
+                                                    placeholder="Destino"
+                                                />
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="d-flex pt-4 justify-content-end">
-                                        <Button label="Next" type="submit" class="primary-a" icon="pi pi-arrow-right" :disabled="!isStep1Complete" iconPos="right" @click="activateCallback('2')" />
+                                    <div
+                                        class="d-flex pt-4 justify-content-end"
+                                    >
+                                        <Button
+                                            label="Next"
+                                            type="submit"
+                                            class="primary-a"
+                                            icon="pi pi-arrow-right"
+                                            :disabled="!isStep1Complete"
+                                            iconPos="right"
+                                            @click="activateCallback('2')"
+                                        />
                                     </div>
                                 </form>
                             </div>
                         </StepPanel>
                         <StepPanel v-slot="{ activateCallback }" value="2">
-                            <div class="flex-auto d-flex justify-content-center">
+                            <div
+                                class="flex-auto d-flex justify-content-center"
+                            >
                                 <Toast />
-                                <form @submit.prevent="saveOptionCar" class="w-100">
+                                <form
+                                    @submit.prevent="saveOptionCar"
+                                    class="w-100"
+                                >
                                     <div class="row d-flex align-items-center">
-                                        <div class="col-12 col-md-6 d-flex justify-content-center">
-                                            <h3 class="mt-3 mb-5">¿Que Vehiculo utilizarás?</h3>
-                                            <div class="d-flex align-items-center">
-                                                <FloatLabel class="" variant="on">
-                                                    <Select v-model="tripData.vehicle_id" inputId="on_label" :options="vehicles" optionValue="id" optionLabel="brand" class="w-full" />
-                                                    <label for="on_label">Selecciones su vehiculo</label>
+                                        <div
+                                            class="col-12 col-md-6 d-flex justify-content-center"
+                                        >
+                                            <h3 class="mt-3 mb-5">
+                                                ¿Que Vehiculo utilizarás?
+                                            </h3>
+                                            <div
+                                                class="d-flex align-items-center"
+                                            >
+                                                <FloatLabel
+                                                    class=""
+                                                    variant="on"
+                                                >
+                                                    <Select
+                                                        v-model="
+                                                            tripData.vehicle_id
+                                                        "
+                                                        inputId="on_label"
+                                                        :options="vehicles"
+                                                        optionValue="id"
+                                                        optionLabel="brand"
+                                                        class="w-full"
+                                                        appendOn=".show"
+                                                    />
+                                                    <label for="on_label"
+                                                        >Selecciones su
+                                                        vehiculo</label
+                                                    >
                                                 </FloatLabel>
                                             </div>
+                                            <h3 class="mt-3 mb-5">
+                                                ¿Cuándo viajarás?
+                                            </h3>
+                                            <div
+                                                class="d-flex align-items-center"
+                                            ></div>
+                                            <DatePicker
+                                                id="datepicker-24"
+                                                v-model="
+                                                    tripData.departure_time
+                                                "
+                                                showTime
+                                                hourFormat="24"
+                                                fluid
+                                            />
                                         </div>
-                                        <div class="col-12 col-md-6 d-flex justify-content-center">
-                                            <h3 class="mt-3 mb-5">¿Cuantos asientos hay disponibles?</h3>
-                                            <div class="d-flex align-items-center">
-                                                <InputNumber v-model="tripData.available_seats" inputId="minmax-buttons" mode="decimal" showButtons :min="1" :max="6" fluid />
+                                        <div
+                                            class="col-12 col-md-6 d-flex justify-content-center"
+                                        >
+                                            <h3 class="mt-3 mb-5">
+                                                ¿Cuantos asientos hay
+                                                disponibles?
+                                            </h3>
+                                            <div
+                                                class="d-flex align-items-center"
+                                            >
+                                                <InputNumber
+                                                    v-model="
+                                                        tripData.available_seats
+                                                    "
+                                                    inputId="minmax-buttons"
+                                                    mode="decimal"
+                                                    showButtons
+                                                    :min="1"
+                                                    :max="6"
+                                                    fluid
+                                                />
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="d-flex justify-content-between pt-6">
-                                        <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('1')" />
-                                        <Button label="Next" type="submit" class="primary-a" icon="pi pi-arrow-right" :disabled="!isStep2Complete" iconPos="right" @click="activateCallback('3')" />
+                                    <div
+                                        class="d-flex justify-content-between pt-6"
+                                    >
+                                        <Button
+                                            label="Back"
+                                            severity="secondary"
+                                            icon="pi pi-arrow-left"
+                                            @click="
+                                                activateCallback('1'),
+                                                    (showFirstMap = true)
+                                            "
+                                        />
+                                        <Button
+                                            label="Next"
+                                            type="submit"
+                                            class="primary-a"
+                                            icon="pi pi-arrow-right"
+                                            :disabled="!isStep2Complete"
+                                            iconPos="right"
+                                            @click="
+                                                activateCallback('3'),
+                                                    (showFirstMap = false)
+                                            "
+                                        />
                                     </div>
                                 </form>
                             </div>
                         </StepPanel>
                         <StepPanel v-slot="{ activateCallback }" value="3">
-                            <div class="flex-auto d-flex justify-content-center">
-                                <div class="row d-flex align-items-center w-100">
-                                    <!-- Mapa -->
-                                    <div class="col-12 col-md-6 d-flex justify-content-center">
-                                        <div class="mapTrip border-1 w-100"></div>
+                            <div
+                                class="flex-auto d-flex justify-content-center"
+                            >
+                                <div
+                                    class="row d-flex align-items-center w-100"
+                                >
+                                    <div
+                                        class="col-12 col-md-6 d-flex justify-content-center"
+                                    >
+                                        <div class="mapTrip w-100">
+                                            <Map
+                                                v-if="!showFirstMap"
+                                                :origin="tempStartPoint"
+                                                :destination="tempEndPoint"
+                                                @updateMapsInfo="handleMapsInfo"
+                                            />
+                                        </div>
                                     </div>
-                                    <div class="col-12 col-md-6 d-flex flex-column">
-                                        <h2 class="font-bold">¡Resumen del viaje!</h2>
-                                        <div class="col d-flex justify-content-between gap-5">
+                                    <div
+                                        class="col-12 col-md-6 d-flex flex-column"
+                                    >
+                                        <h2 class="font-bold">
+                                            ¡Resumen del viaje!
+                                        </h2>
+                                        <div
+                                            class="col d-flex justify-content-between gap-5"
+                                        >
                                             <div>
-                                                <h4 class="mb-3">Detalles del vehiculo</h4>
-                                                <ul class="d-flex flex-column gap-3">
-                                                    <li v-if="selectedVehicleDetails">{{ selectedVehicleDetails.brand ? `Marca: ${selectedVehicleDetails.brand}` : 'Marca no disponible' }}</li>
-                                                    <li v-if="selectedVehicleDetails">{{ selectedVehicleDetails.model ? `Modelo: ${selectedVehicleDetails.model}` : 'Modelo no disponible' }}</li>
-                                                    <li v-if="selectedVehicleDetails">{{ selectedVehicleDetails.plate ? `Matrícula: ${selectedVehicleDetails.plate}` : 'Matrícula no disponible' }}</li>
-                                                    <li v-if="selectedVehicleDetails">{{ selectedVehicleDetails.consumption ? `Consumo: ${selectedVehicleDetails.consumption}` : 'Consumo no disponible' }}</li>
-                                                    <li v-if="selectedVehicleDetails">{{ selectedVehicleDetails.pax_number ? `Número de asientos: ${selectedVehicleDetails.pax_number}` : 'Número de asientos no disponible' }}</li>
-                                                    <li v-if="selectedVehicleDetails">{{ selectedVehicleDetails.fuel_type ? `Tipo de gasolina: ${selectedVehicleDetails.fuel_type}` : 'Tipo de gasolina no disponible' }}</li>
+                                                <h4 class="mb-3">
+                                                    Detalles del vehiculo
+                                                </h4>
+                                                <ul
+                                                    class="d-flex flex-column gap-3"
+                                                >
+                                                    <li
+                                                        v-if="
+                                                            selectedVehicleDetails
+                                                        "
+                                                    >
+                                                        {{
+                                                            selectedVehicleDetails.brand
+                                                                ? `Marca: ${selectedVehicleDetails.brand}`
+                                                                : "Marca no disponible"
+                                                        }}
+                                                    </li>
+                                                    <li
+                                                        v-if="
+                                                            selectedVehicleDetails
+                                                        "
+                                                    >
+                                                        {{
+                                                            selectedVehicleDetails.model
+                                                                ? `Modelo: ${selectedVehicleDetails.model}`
+                                                                : "Modelo no disponible"
+                                                        }}
+                                                    </li>
+                                                    <li
+                                                        v-if="
+                                                            selectedVehicleDetails
+                                                        "
+                                                    >
+                                                        {{
+                                                            selectedVehicleDetails.plate
+                                                                ? `Matrícula: ${selectedVehicleDetails.plate}`
+                                                                : "Matrícula no disponible"
+                                                        }}
+                                                    </li>
+                                                    <li
+                                                        v-if="
+                                                            selectedVehicleDetails
+                                                        "
+                                                    >
+                                                        {{
+                                                            selectedVehicleDetails.consumption
+                                                                ? `Consumo: ${selectedVehicleDetails.consumption}`
+                                                                : "Consumo no disponible"
+                                                        }}
+                                                    </li>
+                                                    <li
+                                                        v-if="
+                                                            selectedVehicleDetails
+                                                        "
+                                                    >
+                                                        {{
+                                                            selectedVehicleDetails.pax_number
+                                                                ? `Número de asientos: ${selectedVehicleDetails.pax_number}`
+                                                                : "Número de asientos no disponible"
+                                                        }}
+                                                    </li>
+                                                    <li
+                                                        v-if="
+                                                            selectedVehicleDetails
+                                                        "
+                                                    >
+                                                        {{
+                                                            selectedVehicleDetails.fuel_type
+                                                                ? `Tipo de gasolina: ${selectedVehicleDetails.fuel_type}`
+                                                                : "Tipo de gasolina no disponible"
+                                                        }}
+                                                    </li>
                                                 </ul>
                                             </div>
                                             <div>
-                                                <h4 class="mb-3">Detalles del viaje</h4>
-                                                <ul class="d-flex flex-column gap-3">
-                                                    <li>Origen: {{ tripData.start_point }}</li>
-                                                    <li>Destino: {{ tripData.end_point }}</li>
-                                                    <li>Fecha de inicio: {{ }}</li>
-                                                    <li>Horas de viaje: {{ }}</li>
-                                                    <li>Distancia: {{ }}</li>
+                                                <h4 class="mb-3">
+                                                    Detalles del viaje
+                                                </h4>
+                                                <ul
+                                                    class="d-flex flex-column gap-3"
+                                                >
+                                                    <li>
+                                                        Origen:
+                                                        {{
+                                                            tripData.start_point
+                                                                .address
+                                                        }}
+                                                    </li>
+                                                    <li>
+                                                        Destino:
+                                                        {{
+                                                            tripData.end_point
+                                                                .address
+                                                        }}
+                                                    </li>
+                                                    <li>
+                                                        Fecha de inicio:
+                                                        {{
+                                                            tripData.departure_date
+                                                        }}
+                                                    </li>
+                                                    <li>
+                                                        Horas de salida:
+                                                        {{
+                                                            tripData.departure_time
+                                                        }}
+                                                    </li>
+                                                    <li>
+                                                        Horas estimada de
+                                                        llegada:
+                                                        {{
+                                                            tripData.arrival_time
+                                                        }}
+                                                    </li>
+                                                    <li>Distancia: {{}}</li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -100,8 +342,22 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between pt-6">
-                                <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('2')" />
-                                <Button label="Confirmar Viaje" @click="postTrips" class="primary-a" icon="pi pi-arrow-right" iconPos="right" />
+                                <Button
+                                    label="Back"
+                                    severity="secondary"
+                                    icon="pi pi-arrow-left"
+                                    @click="
+                                        activateCallback('2'),
+                                            (isStep2Complete = false)
+                                    "
+                                />
+                                <Button
+                                    label="Confirmar Viaje"
+                                    @click="postTrips"
+                                    class="primary-a"
+                                    icon="pi pi-arrow-right"
+                                    iconPos="right"
+                                />
                             </div>
                         </StepPanel>
                     </StepPanels>
@@ -111,34 +367,32 @@
     </div>
 </template>
 
-
-
 <script setup>
-import Stepper from 'primevue/stepper';
-import StepList from 'primevue/steplist';
-import StepPanels from 'primevue/steppanels';
-import StepItem from 'primevue/stepitem';
-import Step from 'primevue/step';
-import StepPanel from 'primevue/steppanel';
+import Stepper from "primevue/stepper";
+import StepList from "primevue/steplist";
+import StepPanels from "primevue/steppanels";
+import StepItem from "primevue/stepitem";
+import Step from "primevue/step";
+import StepPanel from "primevue/steppanel";
 
 // Form
 import * as yup from "yup";
-import { es, tr } from "yup-locales";
+import { ar, es, tr } from "yup-locales";
 import { useToast } from "primevue/usetoast";
 import { Toast } from "primevue";
-import { onMounted, ref, watch, computed } from 'vue';
-import { start } from '@popperjs/core';
+import { onMounted, ref, watch, computed } from "vue";
+import { start } from "@popperjs/core";
 import { authStore } from "../../store/auth";
+import Map from "@/components/Map.vue";
 
 // DataBase
-import axios from 'axios';
-import { useRouter, useRoute } from 'vue-router';
+import axios from "axios";
+import { useRouter, useRoute } from "vue-router";
 
 const router = useRouter();
-const route = useRoute();
-
-const Show = true;
-
+const tempStartPoint = ref({});
+const tempEndPoint = ref({});
+const showFirstMap = ref(true);
 const toast = useToast();
 
 let user_id = ref(0);
@@ -146,40 +400,61 @@ user_id.value = authStore().user.id;
 console.log("userId", user_id.value);
 
 onMounted(async () => {
-    const savedTrip = sessionStorage.getItem("tripData");
-    if (savedTrip) {
-        tripData.value = JSON.parse(savedTrip);
-    }
-
     try {
-        const responseVehicles = await axios.get('/api/vehicle');
+        const responseVehicles = await axios.get("/api/vehicle");
         vehicles.value = responseVehicles.data.data;
     } catch (error) {
-        console.error('Error al cargar vehículos:', error);
+        console.error("Error al cargar vehículos:", error);
     }
+    const autocompleteStart = new google.maps.places.Autocomplete(
+        document.getElementById("origin"),
+        {
+            componentRestrictions: { country: "es" },
+            fields: ["address_components", "geometry", "icon", "name"],
+        }
+    );
+    autocompleteStart.addListener("place_changed", () => {
+        tripData.value.start_point = autocompleteStart.getPlace();
+        tempStartPoint.value = autocompleteStart.getPlace();
+    });
+
+    const autocompleteEnd = new google.maps.places.Autocomplete(
+        document.getElementById("destination"),
+        {
+            componentRestrictions: { country: "es" },
+            fields: ["address_components", "geometry", "icon", "name"],
+        }
+    );
+    autocompleteEnd.addListener("place_changed", () => {
+        tripData.value.end_point = autocompleteEnd.getPlace();
+        tempEndPoint.value = autocompleteEnd.getPlace();
+    });
 });
 
 const tripData = ref({
     user_id: user_id.value,
     start_point: "",
     end_point: "",
+    departure_time: "",
+    arrival_time: "",
     vehicle_id: null,
     available_seats: null,
-    price: 50.00,
+    price: 50.0,
 });
-
 
 const selectedVehicleDetails = ref(null);
 
-watch(() => tripData.value.vehicle_id, async (id) => {
-    if (id) {
-        router.push({ query: { vehicle: id } });
-        await findVehicleById(id);
-    } else {
-        selectedVehicleDetails.value = null;
+watch(
+    () => tripData.value.vehicle_id,
+    async (id) => {
+        if (id) {
+            router.push({ query: { vehicle: id } });
+            await findVehicleById(id);
+        } else {
+            selectedVehicleDetails.value = null;
+        }
     }
-});
-
+);
 
 const nextStep = (step, condition, activateCallback) => {
     if (condition) {
@@ -189,13 +464,18 @@ const nextStep = (step, condition, activateCallback) => {
 
 // Computed para validar el paso 1
 const isStep1Complete = computed(() => {
-    return tripData.value.start_point.trim() !== "" && tripData.value.end_point.trim() !== "";
+    return tripData.value.start_point !== "" && tripData.value.end_point !== "";
 });
 
 // Computed para validar el paso 2
 const isStep2Complete = computed(() => {
-    return tripData.value.vehicle_id !== null && tripData.value.vehicle_id > 0
-        && tripData.value.available_seats !== null && tripData.value.available_seats > 0;
+    return (
+        tripData.value.vehicle_id !== null &&
+        tripData.value.vehicle_id > 0 &&
+        tripData.value.available_seats !== null &&
+        tripData.value.available_seats > 0 &&
+        tripData.value.departure_time != ""
+    );
 });
 
 const findVehicleById = async (id) => {
@@ -208,50 +488,111 @@ const findVehicleById = async (id) => {
     }
 };
 
-const saveTripData = () => {
-    sessionStorage.setItem("tripData", JSON.stringify(tripData.value));
+const useGeocoder = (place) => {
+    const geocoder = new google.maps.Geocoder();
+    geocoder.geocode(
+        { location: place.geometry.location },
+        (results, status) => {
+            if (status === google.maps.GeocoderStatus.OK) {
+                const addressComponents = results[0].address_components;
+                console.log("Componente 0 desde Geocoding:", addressComponents);
+            } else {
+                console.error("Geocoding failed:", status);
+            }
+        }
+    );
+};
+
+const formatDeparture = () => {
+    let departureTime = new Date(tripData.value.departure_time);
+    let arrivalTime = new Date(departureTime);
+    let duration = tripData.value.duration;
+    let durationInSeconds = parseInt(duration.replace("s", ""));
+
+    arrivalTime.setSeconds(departureTime.getSeconds() + durationInSeconds);
+
+    tripData.value.departure_time = departureTime.toTimeString().split(" ")[0];
+    tripData.value.arrival_time = arrivalTime.toTimeString().split(" ")[0];
+
+    console.log("Hora de salida:", tripData.value.departureTime);
+    console.log("Hora de llegada:", tripData.value.arrivalTime);
 };
 
 const pointSchema = yup.object().shape({
-    start_point: yup.string().required('El punto de inicio es obligatorio'),
-    end_point: yup.string().required('El destino es obligatorio'),
+    start_point: yup.object().required("El punto de inicio es obligatorio"),
+    end_point: yup.object().required("El destino es obligatorio"),
 });
+
+const handleMapsInfo = (mapsInfo) => {
+    console.log("Información del mapa recibida:", mapsInfo);
+    tripData.value.start_point = mapsInfo.origin;
+    tripData.value.end_point = mapsInfo.destination;
+    tripData.value.duration = mapsInfo.duration;
+};
 
 const saveOption = async () => {
     try {
-        await pointSchema.validate({ start_point: tripData.value.start_point, end_point: tripData.value.end_point });
-        saveTripData();
+        await pointSchema.validate({
+            start_point: tripData.value.start_point,
+            end_point: tripData.value.end_point,
+        });
+
         toast.add({
-            severity: 'success',
-            summary: 'Guardado con éxito',
-            detail: `Origen: ${tripData.value.start_point} | Destino: ${tripData.value.end_point}`,
+            severity: "success",
+            summary: "Guardado con éxito",
+            detail: `Origen: ${tripData.value.start_point.address} | Destino: ${tripData.value.end_point.address}`,
             life: 3000,
         });
     } catch (error) {
-
-        toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+        toast.add({
+            severity: "error",
+            summary: "Error",
+            detail: error.message,
+            life: 3000,
+        });
     }
 };
 
 const vehicles = ref([]);
 const CarSchema = yup.object().shape({
-    vehicle_id: yup.number().required('El vehículo es obligatorio').min(1, 'Debe seleccionar un vehículo válido'),
-    available_seats: yup.number().required('Debe indicar los asientos disponibles').min(1, 'Debe haber al menos un asiento disponible'),
+    vehicle_id: yup
+        .number()
+        .required("El vehículo es obligatorio")
+        .min(1, "Debe seleccionar un vehículo válido"),
+    available_seats: yup
+        .number()
+        .required("Debe indicar los asientos disponibles")
+        .min(1, "Debe haber al menos un asiento disponible"),
+    departure_time: yup.string().required("Debes indicar la hora de salida"),
+    departure_date: yup.date().required("Debes indicar la fecha de salida"),
+    arrival_time: yup.string().required("Debes indicar la hora de llegada"),
 });
 
 const saveOptionCar = async () => {
-    try {
-        await CarSchema.validate({ vehicle_id: tripData.value.vehicle_id, available_seats: tripData.value.available_seats });
+    formatDeparture();
 
-        saveTripData();
+    try {
+        await CarSchema.validate({
+            vehicle_id: tripData.value.vehicle_id,
+            available_seats: tripData.value.available_seats,
+            departure_time: tripData.value.departure_time,
+            arrival_time: tripData.value.arrival_time,
+            departure_date: tripData.value.departure_date,
+        });
+
         toast.add({
-            severity: 'success',
-            summary: 'Guardado con éxito',
-            detail: `Vehículo: ${tripData.value.vehicle_id} | Asientos: ${tripData.value.available_seats}`,
+            severity: "success",
+            summary: "Guardado con éxito",
+            detail: `Vehículo: ${tripData.value.vehicle_id} | Asientos: ${tripData.value.available_seats} | Hora de salida: ${tripData.value.departure_time}`,
             life: 3000,
         });
     } catch (error) {
-        toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+        toast.add({
+            severity: "error",
+            summary: "Error",
+            detail: error.message,
+            life: 3000,
+        });
     }
 };
 
@@ -260,15 +601,23 @@ const postTrips = async () => {
 
     try {
         console.log("Enviando datos del viaje: ", tripData.value);
-        const response = await axios.post('/api/trip', tripData.value);
-        toast.add({ severity: 'success', summary: '¡Viaje registrado!', detail: 'El viaje ha sido guardado exitosamente.', life: 3000 });
-        sessionStorage.removeItem("tripData");
+        const response = await axios.post("/api/trip", tripData.value);
+        toast.add({
+            severity: "success",
+            summary: "¡Viaje registrado!",
+            detail: "El viaje ha sido guardado exitosamente.",
+            life: 3000,
+        });
     } catch (error) {
         console.error("Error en la solicitud POST:", error);
-        toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo registrar el viaje.', life: 3000 });
+        toast.add({
+            severity: "error",
+            summary: "Error",
+            detail: "No se pudo registrar el viaje.",
+            life: 3000,
+        });
     }
 };
-
 </script>
 
 <style scoped>
