@@ -7,22 +7,36 @@ export default function useTrips(user) {
     const tripList = ref({});
     const isLoading = ref(false);
     const validationErrors = ref([]);
+    const toast = useToast();
 
-    async function getTrips() {
-        if (isLoading.value || tripsList.value.length > 0) return;
+    async function getTrips(params) {
+        if (isLoading.value) return;
         isLoading.value = true;
 
         try {
-            const response = await axios.get("/api/trip/");
-            console.log("API Response:", response.data);
-            tripsList.value = response.data.data; 
-            console.log("Trips cargados:", tripsList.value);
+            const response = await axios.get("/api/trip", {
+                params: {
+                    start_point: params.origin,
+                    end_point: params.destination,
+                    departure_time: params.date,
+                    aviailable_seats: params.passengers
+                }
+            });
+
+            if (response.data && response.data.data) {
+                tripsList.value = response.data.data;
+                console.log("Trips loaded successfully:", tripsList.value);
+            } else {
+                console.warn("No trips data in response");
+                tripsList.value = [];
+            }
         } catch (error) {
-            console.error("Error fetching trips:", error);
-            useToast().add({
+            console.error("Error fetching trips:", error.response?.data || error.message);
+            tripsList.value = [];
+            toast.add({
                 severity: 'error',
                 summary: 'Error',
-                detail: 'No se pudieron cargar los viajes',
+                detail: error.response?.data?.message || 'No se pudieron cargar los viajes',
                 life: 3000,
             });
         } finally {
@@ -37,7 +51,7 @@ export default function useTrips(user) {
         try {
             const response = await axios.get("/api/trip/" + tripId);
             console.log("API Response:", response.data);
-            tripList.value = response.data.data; 
+            tripList.value = response.data.data;
             console.log("Trip con ID cargado:", tripList.value);
         } catch (error) {
             console.error("Error fetching trips:", error);

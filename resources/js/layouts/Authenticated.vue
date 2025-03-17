@@ -1,7 +1,6 @@
 <template>
     <div class="layout-wrapper" :class="containerClass">
-        <Nav />
-        <!-- <app-topbar></app-topbar>
+        <app-topbar></app-topbar>
         <div class="layout-sidebar">
             <app-sidebar></app-sidebar>
         </div>
@@ -10,10 +9,10 @@
 
             <div class="card mb-2 bread">
 
-                <Breadcrumb :home="home" :model="crumbs" >
+                <Breadcrumb :home="home" :model="crumbs">
                     <template #item="{ item, props }">
                         <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
-                            <a :href="href" v-bind="props.action" class="btn btn-link"   @click="navigate">
+                            <a :href="href" v-bind="props.action" class="btn btn-link" @click="navigate">
                                 <span :class="[item.icon, 'text-color']" />
                                 <span class="text-primary font-semibold">{{ item.label }}</span>
                             </a>
@@ -38,7 +37,7 @@
             <app-footer></app-footer>
         </div>
 
-        <div class="layout-mask"></div> -->
+        <div class="layout-mask"></div>
     </div>
 </template>
 

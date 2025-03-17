@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <TripFinder class="my-5" />
+        <TripFinder class="my-5" @jjj="handleUpdateMapsInfo" />
     </div>
 
     <div class="container container-responsive d-flex justify-content-between my-5">
@@ -129,11 +129,24 @@ const route = useRoute();
 import Timeline from "primevue/timeline";
 
 // Vue
-import { onMounted } from "vue";
+import { onMounted, defineEmits } from "vue";
 
-onMounted(async () => {
-    getTrips();
-});
+const handleUpdateMapsInfo = async (mapsInfo) => {
+    console.log("Enviando parámetros de búsqueda:", {
+        origin: mapsInfo.origin,
+        destination: mapsInfo.destination,
+        date: mapsInfo.date,
+        passengers: mapsInfo.passengers
+    });
+
+    await getTrips({
+        origin: mapsInfo.origin,
+        destination: mapsInfo.destination,
+        date: mapsInfo.date,
+        passengers: mapsInfo.passengers
+    });
+};
+
 
 function formatTime(dateTime) {
     const date = new Date(dateTime);

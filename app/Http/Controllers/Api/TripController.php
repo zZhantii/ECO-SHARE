@@ -9,15 +9,43 @@ use Illuminate\Support\Facades\Validator;
 
 class TripController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $trips = Trip::All();
-        return response()->json(["success" => true, "data" => $trips], 200);
+        $query = Trip::query();
+
+        if ($request->has("start_point")) {
+            $query->where("start_point", "like", "%".$request->start_point . "%");
+        }
+
+        if ($request->filled('end_point')) {
+            $query->where('end_point', 'like', '%' . $request->end_point . '%');
+        }
+
+        if ($request->has("date")) {
+            $query->whereDate("departure_time", $request->date);
+        }
+
+        if ($request->has('passengers')) {
+            $query->where('available_seats', '>=', $request->passengers);
+        }
+
+        $trips = $query->get();
+
+        return response()->json([
+            'data' => $trips
+        ]);
     }
 
     public function show(Trip $trip)
     {
-        return response()->json(["success" => true, "data" => $trip], 200);
+         $tripDetails = Vehicle::find($trip->id);
+
+        if (!$tripDetails) {
+            return response()->json(['message' => 'Trip no encontrado'], 404);
+        }
+
+        return response()->json($tripDetails);
+
     }
 
     public function store(Request $request)
