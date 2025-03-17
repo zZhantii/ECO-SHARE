@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <TripFinder class="my-5" @jjj="handleUpdateMapsInfo" />
+        <TripFinder class="my-5" @mapsInfo="handleUpdateMapsInfo" />
     </div>
 
     <div class="container container-responsive d-flex justify-content-between my-5">

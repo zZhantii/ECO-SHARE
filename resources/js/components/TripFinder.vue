@@ -29,18 +29,18 @@
 import { ref, onMounted, defineEmits } from "vue";
 import { useRouter } from "vue-router";
 
-const date = ref("");
-const passengers = ref();
 const router = useRouter();
-let origin = "";
-let destination = "";
 
-const emit = defineEmits(["jjj"]);
+
+const emit = defineEmits(["mapsInfo"]);
+
+const handleMapsInfo = (mapsInfo) => {
+    console.log("Datos recibidos del mapa:", mapsInfo);
+};
 
 function formatDate(date) {
     return new Date(date).toISOString().split('T')[0];
 }
-
 
 const submitFinder = () => {
     const originPlace = origin.getPlace();
@@ -51,18 +51,15 @@ const submitFinder = () => {
         date: formatDate(date.value),
         passengers: passengers.value
     };
+
     console.log("Datos recogidos:", mapsInfo);
-    emit("jjj", mapsInfo);
+    emit("mapsInfo", mapsInfo);
     router.push({
         path: "/trips",
-        query: { date: formatDate(date.value), value: passengers.value },
+        query: { date: formatDate(date.value), passengers: passengers.value },
     });
 };
 
-const handleMapsInfo = (mapsInfo) => {
-    console.log("Datos recibidos del mapa:", mapsInfo);
-    emit("updateMapsInfo", mapsInfo);
-};
 
 onMounted(() => {
     origin = new google.maps.places.Autocomplete(
