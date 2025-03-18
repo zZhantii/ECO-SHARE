@@ -24,9 +24,11 @@ class TripController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'user_id' => ["required", "integer"],
-            'start_point' => ["required", "string", "max:255"],
-            "end_point" => ["required", "string", "max:255"],
+            'start_point' => ["required"],
+            "end_point" => ["required"],
             'vehicle_id' => ["required", "integer"],
+            'departure_time' => ["required"],
+            'arrival_time' => ["required"],
             'price' => ["required", "numeric"],
             'available_seats' => ["required", "integer"],
         ]);

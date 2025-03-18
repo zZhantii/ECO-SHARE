@@ -11,164 +11,281 @@
                     </StepList>
                     <StepPanels>
                         <StepPanel v-slot="{ activateCallback }" value="1">
-                            <div class="flex-auto d-flex justify-content-center">
+                            <div
+                                class="flex-auto d-flex justify-content-center"
+                            >
                                 <Toast />
-                                <form @submit.prevent="saveOption" class="w-100">
+                                <form
+                                    @submit.prevent="saveOption"
+                                    class="w-100"
+                                >
                                     <div class="row d-flex align-items-center">
                                         <!-- Mapa -->
-                                        <div class="col-12 col-md-6 d-flex justify-content-center">
+                                        <div
+                                            class="col-12 col-md-6 d-flex justify-content-center"
+                                        >
                                             <div class="mapTrip w-100">
-                                                <Map v-if="showFirstMap" :origin="tripData.start_point
-                                                    " :destination="tripData.end_point
-                                                        " @updateMapsInfo="
+                                                <Map
+                                                    v-if="showFirstMap"
+                                                    :origin="
+                                                        tripData.start_point
+                                                    "
+                                                    :destination="
+                                                        tripData.end_point
+                                                    "
+                                                    @updateMapsInfo="
                                                         handleMapsInfo
-                                                    " />
+                                                    "
+                                                />
                                             </div>
                                         </div>
                                         <!-- Inputs -->
-                                        <div class="col-12 col-md-6 d-flex flex-column">
+                                        <div
+                                            class="col-12 col-md-6 d-flex flex-column"
+                                        >
                                             <div class="text-center">
                                                 <h3 class="mt-2 mb-3 fs-5">
                                                     ¿Desde dónde sales?
                                                 </h3>
-                                                <InputText id="origin" type="text" class="form-control"
-                                                    placeholder="Punto de inicio" />
+                                                <InputText
+                                                    id="origin"
+                                                    type="text"
+                                                    class="form-control"
+                                                    placeholder="Punto de inicio"
+                                                />
                                             </div>
                                             <div class="text-center mt-3">
                                                 <h3 class="mt-2 mb-3 fs-5">
                                                     ¿A dónde vas?
                                                 </h3>
-                                                <InputText id="destination" type="text" class="form-control"
-                                                    placeholder="Destino" />
+                                                <InputText
+                                                    id="destination"
+                                                    type="text"
+                                                    class="form-control"
+                                                    placeholder="Destino"
+                                                />
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="d-flex pt-4 justify-content-end">
-                                        <Button label="Next" type="submit" class="primary-a" icon="pi pi-arrow-right"
-                                            :disabled="!isStep1Complete" iconPos="right"
-                                            @click="activateCallback('2')" />
+                                    <div
+                                        class="d-flex pt-4 justify-content-end"
+                                    >
+                                        <Button
+                                            label="Next"
+                                            type="submit"
+                                            class="primary-a"
+                                            icon="pi pi-arrow-right"
+                                            :disabled="!isStep1Complete"
+                                            iconPos="right"
+                                            @click="activateCallback('2')"
+                                        />
                                     </div>
                                 </form>
                             </div>
                         </StepPanel>
                         <StepPanel v-slot="{ activateCallback }" value="2">
-                            <div class="flex-auto d-flex justify-content-center">
+                            <div
+                                class="flex-auto d-flex justify-content-center"
+                            >
                                 <Toast />
-                                <form @submit.prevent="saveOptionCar" class="w-100">
+                                <form
+                                    @submit.prevent="saveOptionCar"
+                                    class="w-100"
+                                >
                                     <div class="row d-flex align-items-center">
-                                        <div class="col-12 col-md-6 d-flex justify-content-center">
+                                        <div
+                                            class="col-12 col-md-6 d-flex justify-content-center"
+                                        >
                                             <h3 class="mt-3 mb-5">
                                                 ¿Que Vehiculo utilizarás?
                                             </h3>
-                                            <div class="d-flex align-items-center">
-                                                <FloatLabel class="" variant="on">
-                                                    <Select v-model="tripData.vehicle_id
-                                                        " inputId="on_label" :options="vehicles" optionValue="id"
-                                                        optionLabel="brand" class="w-full" appendOn=".show" />
-                                                    <label for="on_label">Selecciones su
-                                                        vehiculo</label>
+                                            <div
+                                                class="d-flex align-items-center"
+                                            >
+                                                <FloatLabel
+                                                    class=""
+                                                    variant="on"
+                                                >
+                                                    <Select
+                                                        v-model="
+                                                            tripData.vehicle_id
+                                                        "
+                                                        inputId="on_label"
+                                                        :options="vehicles"
+                                                        optionValue="id"
+                                                        optionLabel="brand"
+                                                        class="w-full"
+                                                        appendOn=".show"
+                                                    />
+                                                    <label for="on_label"
+                                                        >Selecciones su
+                                                        vehiculo</label
+                                                    >
                                                 </FloatLabel>
                                             </div>
                                             <h3 class="mt-3 mb-5">
                                                 ¿Cuándo viajarás?
                                             </h3>
-                                            <div class="d-flex align-items-center"></div>
-                                            <DatePicker id="datepicker-24" v-model="tripData.departure_time
-                                                " showTime hourFormat="24" fluid />
+                                            <div
+                                                class="d-flex align-items-center"
+                                            ></div>
+                                            <DatePicker
+                                                id="datepicker-24"
+                                                v-model="
+                                                    tripData.departure_time
+                                                "
+                                                showTime
+                                                hourFormat="24"
+                                                fluid
+                                            />
                                         </div>
-                                        <div class="col-12 col-md-6 d-flex justify-content-center">
+                                        <div
+                                            class="col-12 col-md-6 d-flex justify-content-center"
+                                        >
                                             <h3 class="mt-3 mb-5">
                                                 ¿Cuantos asientos hay
                                                 disponibles?
                                             </h3>
-                                            <div class="d-flex align-items-center">
-                                                <InputNumber v-model="tripData.available_seats
-                                                    " inputId="minmax-buttons" mode="decimal" showButtons :min="1"
-                                                    :max="6" fluid />
+                                            <div
+                                                class="d-flex align-items-center"
+                                            >
+                                                <InputNumber
+                                                    v-model="
+                                                        tripData.available_seats
+                                                    "
+                                                    inputId="minmax-buttons"
+                                                    mode="decimal"
+                                                    showButtons
+                                                    :min="1"
+                                                    :max="seats"
+                                                    fluid
+                                                />
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="d-flex justify-content-between pt-6">
-                                        <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="
-                                            activateCallback('1'),
-                                            (showFirstMap = true)
-                                            " />
-                                        <Button label="Next" type="submit" class="primary-a" icon="pi pi-arrow-right"
-                                            :disabled="!isStep2Complete" iconPos="right" @click="
+                                    <div
+                                        class="d-flex justify-content-between pt-6"
+                                    >
+                                        <Button
+                                            label="Back"
+                                            severity="secondary"
+                                            icon="pi pi-arrow-left"
+                                            @click="
+                                                activateCallback('1'),
+                                                    (showFirstMap = true)
+                                            "
+                                        />
+                                        <Button
+                                            label="Next"
+                                            type="submit"
+                                            class="primary-a"
+                                            icon="pi pi-arrow-right"
+                                            :disabled="!isStep2Complete"
+                                            iconPos="right"
+                                            @click="
                                                 activateCallback('3'),
-                                                (showFirstMap = false)
-                                                " />
+                                                    (showFirstMap = false)
+                                            "
+                                        />
                                     </div>
                                 </form>
                             </div>
                         </StepPanel>
                         <StepPanel v-slot="{ activateCallback }" value="3">
-                            <div class="flex-auto d-flex justify-content-center">
-                                <div class="row d-flex align-items-center w-100">
-                                    <div class="col-12 col-md-6 d-flex justify-content-center">
+                            <div
+                                class="flex-auto d-flex justify-content-center"
+                            >
+                                <div
+                                    class="row d-flex align-items-center w-100"
+                                >
+                                    <div
+                                        class="col-12 col-md-6 d-flex justify-content-center"
+                                    >
                                         <div class="mapTrip w-100">
-                                            <Map v-if="!showFirstMap" :origin="tempStartPoint"
-                                                :destination="tempEndPoint" @updateMapsInfo="handleMapsInfo" />
+                                            <Map
+                                                v-if="!showFirstMap"
+                                                :origin="tempStartPoint"
+                                                :destination="tempEndPoint"
+                                                @updateMapsInfo="handleMapsInfo"
+                                            />
                                         </div>
                                     </div>
-                                    <div class="col-12 col-md-6 d-flex flex-column">
+                                    <div
+                                        class="col-12 col-md-6 d-flex flex-column"
+                                    >
                                         <h2 class="font-bold">
                                             ¡Resumen del viaje!
                                         </h2>
-                                        <div class="col d-flex justify-content-between gap-5">
+                                        <div
+                                            class="col d-flex justify-content-between gap-5"
+                                        >
                                             <div>
                                                 <h4 class="mb-3">
                                                     Detalles del vehiculo
                                                 </h4>
-                                                <ul class="d-flex flex-column gap-3">
-                                                    <li v-if="
-                                                        selectedVehicleDetails
-                                                    ">
+                                                <ul
+                                                    class="d-flex flex-column gap-3"
+                                                >
+                                                    <li
+                                                        v-if="
+                                                            selectedVehicleDetails
+                                                        "
+                                                    >
                                                         {{
                                                             selectedVehicleDetails.brand
                                                                 ? `Marca: ${selectedVehicleDetails.brand}`
                                                                 : "Marca no disponible"
                                                         }}
                                                     </li>
-                                                    <li v-if="
-                                                        selectedVehicleDetails
-                                                    ">
+                                                    <li
+                                                        v-if="
+                                                            selectedVehicleDetails
+                                                        "
+                                                    >
                                                         {{
                                                             selectedVehicleDetails.model
                                                                 ? `Modelo: ${selectedVehicleDetails.model}`
                                                                 : "Modelo no disponible"
                                                         }}
                                                     </li>
-                                                    <li v-if="
-                                                        selectedVehicleDetails
-                                                    ">
+                                                    <li
+                                                        v-if="
+                                                            selectedVehicleDetails
+                                                        "
+                                                    >
                                                         {{
                                                             selectedVehicleDetails.plate
                                                                 ? `Matrícula: ${selectedVehicleDetails.plate}`
                                                                 : "Matrícula no disponible"
                                                         }}
                                                     </li>
-                                                    <li v-if="
-                                                        selectedVehicleDetails
-                                                    ">
+                                                    <li
+                                                        v-if="
+                                                            selectedVehicleDetails
+                                                        "
+                                                    >
                                                         {{
                                                             selectedVehicleDetails.consumption
-                                                                ? `Consumo: ${selectedVehicleDetails.consumption}`
+                                                                ? `Consumo: ${selectedVehicleDetails.consumption} L / 100 Km`
                                                                 : "Consumo no disponible"
                                                         }}
                                                     </li>
-                                                    <li v-if="
-                                                        selectedVehicleDetails
-                                                    ">
+                                                    <li
+                                                        v-if="
+                                                            selectedVehicleDetails
+                                                        "
+                                                    >
                                                         {{
-                                                            selectedVehicleDetails.pax_number
-                                                                ? `Número de asientos: ${selectedVehicleDetails.pax_number}`
+                                                            tripData.available_seats
+                                                                ? `Número de asientos: ${tripData.available_seats}`
                                                                 : "Número de asientos no disponible"
                                                         }}
                                                     </li>
-                                                    <li v-if="
-                                                        selectedVehicleDetails
-                                                    ">
+                                                    <li
+                                                        v-if="
+                                                            selectedVehicleDetails
+                                                        "
+                                                    >
                                                         {{
                                                             selectedVehicleDetails.fuel_type
                                                                 ? `Tipo de gasolina: ${selectedVehicleDetails.fuel_type}`
@@ -177,16 +294,22 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                            <div>
+                                            <div class="ms-5">
                                                 <h4 class="mb-3">
                                                     Detalles del viaje
                                                 </h4>
-                                                <ul class="d-flex flex-column gap-3">
+                                                <ul
+                                                    class="d-flex flex-column gap-3"
+                                                >
                                                     <li>
                                                         Origen:
                                                         {{
                                                             tripData.start_point
                                                                 .address
+                                                        }},
+                                                        {{
+                                                            tripData.start_point
+                                                                .locality
                                                         }}
                                                     </li>
                                                     <li>
@@ -194,13 +317,15 @@
                                                         {{
                                                             tripData.end_point
                                                                 .address
+                                                        }},
+                                                        {{
+                                                            tripData.end_point
+                                                                .locality
                                                         }}
                                                     </li>
                                                     <li>
                                                         Fecha de inicio:
-                                                        {{
-                                                            tripData.departure_date
-                                                        }}
+                                                        {{ formattedDate }}
                                                     </li>
                                                     <li>
                                                         Horas de salida:
@@ -215,7 +340,17 @@
                                                             tripData.arrival_time
                                                         }}
                                                     </li>
-                                                    <li>Distancia: {{}}</li>
+                                                    <li>
+                                                        Distancia:
+                                                        {{ distance }} Km/s
+                                                    </li>
+                                                    <li>
+                                                        <strong>
+                                                            Precio:
+                                                            {{ tripData.price }}
+                                                            €</strong
+                                                        >
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -223,12 +358,22 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between pt-6">
-                                <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="
-                                    activateCallback('2'),
-                                    (isStep2Complete = false)
-                                    " />
-                                <Button label="Confirmar Viaje" @click="postTrips" class="primary-a"
-                                    icon="pi pi-arrow-right" iconPos="right" />
+                                <Button
+                                    label="Back"
+                                    severity="secondary"
+                                    icon="pi pi-arrow-left"
+                                    @click="
+                                        activateCallback('2'),
+                                            (isStep2Complete = false)
+                                    "
+                                />
+                                <Button
+                                    label="Confirmar Viaje"
+                                    @click="postTrips"
+                                    class="primary-a"
+                                    icon="pi pi-arrow-right"
+                                    iconPos="right"
+                                />
                             </div>
                         </StepPanel>
                     </StepPanels>
@@ -248,7 +393,7 @@ import StepPanel from "primevue/steppanel";
 
 // Form
 import * as yup from "yup";
-import { ar, es, tr } from "yup-locales";
+import { ar, de, es, tr } from "yup-locales";
 import { useToast } from "primevue/usetoast";
 import { Toast } from "primevue";
 import { onMounted, ref, watch, computed } from "vue";
@@ -265,6 +410,13 @@ const tempStartPoint = ref({});
 const tempEndPoint = ref({});
 const showFirstMap = ref(true);
 const toast = useToast();
+const seats = ref(0);
+const formattedDate = ref("");
+const distance = ref(0);
+const dieselRate = ref(0);
+const gasolineRate = ref(0);
+const start_locality = ref("");
+const end_locality = ref("");
 
 let user_id = ref(0);
 user_id.value = authStore().user.id;
@@ -289,6 +441,8 @@ onMounted(async () => {
     autocompleteStart.addListener("place_changed", () => {
         tripData.value.start_point = autocompleteStart.getPlace();
         tempStartPoint.value = autocompleteStart.getPlace();
+
+        useGeocoder(tempStartPoint.value.geometry.location, "start");
     });
 
     const autocompleteEnd = new google.maps.places.Autocomplete(
@@ -301,7 +455,10 @@ onMounted(async () => {
     autocompleteEnd.addListener("place_changed", () => {
         tripData.value.end_point = autocompleteEnd.getPlace();
         tempEndPoint.value = autocompleteEnd.getPlace();
+        useGeocoder(tempEndPoint.value.geometry.location, "end");
     });
+    getFuelRates();
+    //useGeocoder(tripData.value.end_point);
 });
 
 const tripData = ref({
@@ -312,7 +469,7 @@ const tripData = ref({
     arrival_time: "",
     vehicle_id: null,
     available_seats: null,
-    price: 50.0,
+    price: null,
 });
 
 const selectedVehicleDetails = ref(null);
@@ -353,28 +510,55 @@ const findVehicleById = async (id) => {
     try {
         const response = await axios.get(`/api/vehicle/${id}`);
         selectedVehicleDetails.value = response.data;
+        seats.value = response.data.pax_number;
     } catch (error) {
         console.error("Error al obtener los detalles del vehículo:", error);
         selectedVehicleDetails.value = null;
     }
 };
 
-const useGeocoder = (place) => {
+const useGeocoder = (place, point) => {
+    console.log("Geocoding:", place);
+
     const geocoder = new google.maps.Geocoder();
-    geocoder.geocode(
-        { location: place.geometry.location },
-        (results, status) => {
-            if (status === google.maps.GeocoderStatus.OK) {
-                const addressComponents = results[0].address_components;
-                console.log("Componente 0 desde Geocoding:", addressComponents);
-            } else {
-                console.error("Geocoding failed:", status);
+    geocoder.geocode({ location: place }, (results, status) => {
+        if (status === google.maps.GeocoderStatus.OK) {
+            const addressComponents = results[0].address_components;
+            console.log("Componente 0 desde Geocoding:", addressComponents);
+            for (const element of addressComponents) {
+                if (element.types.includes("locality")) {
+                    switch (point) {
+                        case "start":
+                            start_locality.value = element.long_name;
+                            console.log(
+                                "Localidad de inicio:",
+                                start_locality.value
+                            );
+                            start_locality.value = element.long_name;
+                            break;
+                        case "end":
+                            end_locality.value = element.long_name;
+                            console.log(
+                                "Localidad de destino:",
+                                end_locality.value
+                            );
+                            end_locality.value = element.long_name;
+                            break;
+                        default:
+                            console.log("No se ha encontrado la localidad");
+                    }
+                }
             }
+        } else {
+            console.error("Geocoding failed:", status);
         }
-    );
+    });
 };
 
 const formatDeparture = () => {
+    const date = new Date(tripData.value.departure_time);
+    formattedDate.value = date.toLocaleDateString("es-ES");
+    console.log("Día de salida: ", formattedDate.value);
     let departureTime = new Date(tripData.value.departure_time);
     let arrivalTime = new Date(departureTime);
     let duration = tripData.value.duration;
@@ -382,11 +566,20 @@ const formatDeparture = () => {
 
     arrivalTime.setSeconds(departureTime.getSeconds() + durationInSeconds);
 
-    tripData.value.departure_time = departureTime.toTimeString().split(" ")[0];
-    tripData.value.arrival_time = arrivalTime.toTimeString().split(" ")[0];
+    tripData.value.departure_time = new Date(departureTime)
+        .toISOString()
+        .slice(0, 19)
+        .replace("T", " ");
+    tripData.value.arrival_time = new Date(arrivalTime)
+        .toISOString()
+        .slice(0, 19)
+        .replace("T", " ");
+};
 
-    console.log("Hora de salida:", tripData.value.departureTime);
-    console.log("Hora de llegada:", tripData.value.arrivalTime);
+const handleDistance = () => {
+    const metersDistance = tripData.value.Distance;
+    distance.value = Math.round(metersDistance / 1000);
+    console.log("Distancia en km:", distance.value);
 };
 
 const pointSchema = yup.object().shape({
@@ -395,10 +588,12 @@ const pointSchema = yup.object().shape({
 });
 
 const handleMapsInfo = (mapsInfo) => {
-    console.log("Información del mapa recibida:", mapsInfo);
     tripData.value.start_point = mapsInfo.origin;
+    tripData.value.start_point.locality = start_locality.value;
     tripData.value.end_point = mapsInfo.destination;
+    tripData.value.end_point.locality = end_locality.value;
     tripData.value.duration = mapsInfo.duration;
+    tripData.value.Distance = mapsInfo.distance;
 };
 
 const saveOption = async () => {
@@ -435,12 +630,59 @@ const CarSchema = yup.object().shape({
         .required("Debe indicar los asientos disponibles")
         .min(1, "Debe haber al menos un asiento disponible"),
     departure_time: yup.string().required("Debes indicar la hora de salida"),
-    departure_date: yup.date().required("Debes indicar la fecha de salida"),
     arrival_time: yup.string().required("Debes indicar la hora de llegada"),
 });
 
+const getFuelRates = async () => {
+    //Gasóleo A = id 6
+    //Gasolina = id 10
+    await fetch(
+        "https://api.precioil.es/precios/medios/provincia/2?idFuelType=10"
+    )
+        .then((response) => response.json())
+        .then((data) => (gasolineRate.value = data[0].averagePrice));
+    await fetch(
+        "https://api.precioil.es/precios/medios/provincia/2?idFuelType=6"
+    )
+        .then((response) => response.json())
+        .then((data) => (dieselRate.value = data[0].averagePrice));
+};
+
+const getPrice = () => {
+    switch (selectedVehicleDetails.value.fuel_type) {
+        case "Gasolina":
+            tripData.value.price =
+                Math.round(
+                    (selectedVehicleDetails.value.consumption / 100.0) *
+                        gasolineRate.value *
+                        distance.value *
+                        100
+                ) / 100;
+
+            break;
+        case "Diésel":
+            tripData.value.price =
+                Math.round(
+                    (selectedVehicleDetails.value.consumption / 100.0) *
+                        gasoilRate.value *
+                        distance.value *
+                        100
+                ) / 100;
+            break;
+        default:
+            console.log(
+                "El tipo de combustible no está definido y se aplica el de gasolina por defecto"
+            );
+            tripData.value.price = distance.value * gasolineRate;
+            break;
+    }
+};
+
 const saveOptionCar = async () => {
     formatDeparture();
+    handleDistance();
+    getPrice();
+    console.log("tripData antes de guardar:", tripData.value);
 
     try {
         await CarSchema.validate({
