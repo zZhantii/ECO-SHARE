@@ -18,10 +18,10 @@ class VehicleTableSeeder extends Seeder
             'user_id' => 1,
             'brand' => 'FORD',
             'model' => 'MUSTANG',
-            'plate' => '5678-XYZ',
+            'plate' => '5678XYZ',
             'pax_number' => 4,
             'consumption' => 10.0,
-            'fuel_type' => "GASOLINE",
+            'fuel_type' => "Gasolina",
         ]);
 
         $vehicle2 = Vehicle::create([
@@ -29,20 +29,32 @@ class VehicleTableSeeder extends Seeder
             'user_id' => 1,
             'brand' => 'SEAT',
             'model' => 'PANDA',
-            'plate' => '1234-BCD',
+            'plate' => '1234BCD',
             'pax_number' => 4,
             'consumption' => 6.2,
-            'fuel_type' => "GASOLINE",
+            'fuel_type' => "Gasolina",
         ]);
-        $vehicle2 = Vehicle::create([
+
+        $vehicle3 = Vehicle::create([
             'id' => 3,
             'user_id' => 1,
             'brand' => 'MERCEDES',
             'model' => 'CLASE A',
-            'plate' => '9012-MNP',
+            'plate' => '9012MNP',
             'pax_number' => 4,
             'consumption' => 8.2,
-            'fuel_type' => "DIESEL",
+            'fuel_type' => "Diésel",
+        ]);
+
+        $vehicle4 = Vehicle::create([
+            'id' => 4,
+            'user_id' => 1,
+            'brand' => 'CUPRA',
+            'model' => 'Leon',
+            'plate' => '7677MRP',
+            'pax_number' => 4,
+            'consumption' => 6.0,
+            'fuel_type' => "Gasolina",
         ]);
     }
 }
