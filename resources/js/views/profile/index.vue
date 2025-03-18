@@ -501,16 +501,25 @@
                                         <label
                                             for="pax_number"
                                             class="font-semibold w-25"
-                                            >Número de plazas (sin contar al
-                                            conductor)</label
+                                            >Número de plazas</label
                                         >
-                                        <InputNumber
-                                            v-model="tempVehicle.pax_number"
-                                            inputId="integeronly"
-                                            :min="1"
-                                            :max="1"
-                                            showButtons
-                                        />
+                                        <div class="d-flex flex-column">
+                                            <InputNumber
+                                                v-model="tempVehicle.pax_number"
+                                                inputId="integeronly"
+                                                :min="1"
+                                                :max="1"
+                                                showButtons
+                                            />
+                                            <Message
+                                                size="small"
+                                                severity="secondary"
+                                                variant="simple"
+                                                >Sólo las disponibles para
+                                                pasajeros, sin contar al
+                                                conductor</Message
+                                            >
+                                        </div>
                                     </div>
                                     <div class="flex justify-end gap-2">
                                         <Button
@@ -614,26 +623,6 @@ const vehicleSchema = yup.object({
 onMounted(async () => {
     tempData.value = { ...user.value };
     getVehicles();
-
-    // if (sessionStorage.getItem("sessionVehicles")) {
-    //     vehiclesList.value = JSON.parse(
-    //         sessionStorage.getItem("sessionVehicles")
-    //     );
-    //     console.log("con sesión");
-    //     console.log(vehiclesList.value);
-    //     console.log("fin");
-    // } else {
-    //     getVehicles();
-    //     console.log("sin sesión");
-    //     console.log(vehiclesList.value);
-    //     sessionStorage.setItem(
-    //         "sessionVehicles",
-    //         JSON.stringify(vehiclesList.value)
-    //     );
-
-    //     console.log(vehiclesList.value);
-    //     console.log("fin");
-    // }
 });
 
 const removeVehicle = (event) => {
