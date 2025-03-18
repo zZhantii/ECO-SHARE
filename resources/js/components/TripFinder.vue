@@ -54,10 +54,10 @@ const submitFinder = () => {
 
     console.log("Datos recogidos:", mapsInfo);
     emit("mapsInfo", mapsInfo);
-    router.push({
-        path: "/trips",
-        query: { date: formatDate(date.value), passengers: passengers.value },
-    });
+    // router.push({
+    //     path: "/trips",
+    //     query: { date: formatDate(date.value), passengers: passengers.value },
+    // })
 };
 
 

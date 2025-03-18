@@ -11,29 +11,8 @@ class TripController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Trip::query();
-
-        if ($request->has("start_point")) {
-            $query->where("start_point", "like", "%".$request->start_point . "%");
-        }
-
-        if ($request->filled('end_point')) {
-            $query->where('end_point', 'like', '%' . $request->end_point . '%');
-        }
-
-        if ($request->has("date")) {
-            $query->whereDate("departure_time", $request->date);
-        }
-
-        if ($request->has('passengers')) {
-            $query->where('available_seats', '>=', $request->passengers);
-        }
-
-        $trips = $query->get();
-
-        return response()->json([
-            'data' => $trips
-        ]);
+        $trips = Trips::All();
+        return response()->json(["success" => true, "data" => $trips], 200);
     }
 
     public function show(Trip $trip)
