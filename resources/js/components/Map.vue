@@ -35,14 +35,10 @@ onMounted(() => {
 watch(
     () => [props.origin, props.destination],
     ([newOrigin, newDestination]) => {
-        console.log("Origen cambiado:", newOrigin);
-        console.log("Destino cambiado:", newDestination);
-        console.log(props.origin);
         if (
             newOrigin?.geometry?.location.lat &&
             newDestination?.geometry?.location.lat
         ) {
-            console.log(newOrigin.geometry.location.lat());
             mapData.value.mapCenter.lat = newOrigin.geometry.location.lat();
             mapData.value.mapCenter.lng = newOrigin.geometry.location.lng();
             mapData.value.destination.lat =
@@ -50,8 +46,8 @@ watch(
             mapData.value.destination.lng =
                 newDestination?.geometry.location.lng();
             initMap();
-            setMarker(mapData.value.mapCenter, "D");
-            setMarker(mapData.value.destination, "O");
+            setMarker(mapData.value.mapCenter, "O");
+            setMarker(mapData.value.destination, "D");
         }
     }
 );
@@ -174,6 +170,6 @@ function setMarker(Points, Label) {
     width: 100% !important;
     min-height: 300px !important;
     max-height: 700px !important;
-    border-radius: 5px;
+    border-radius: 0px !important;
 }
 </style>
