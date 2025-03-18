@@ -1,5 +1,5 @@
 <template>
-    <form id="trip-finder" class="d-block d-md-flex justify-content-between" @submit.prevent="submitFinder">
+    <form id="trip-finder" class="d-block d-md-flex justify-content-between">
         <div
             class="col-none-12 col-md-9 d-block d-md-flex flex-row justify-content-around align-items-center gap-4 p-none-4 p-1 m-1">
             <IconField class="col-none-11 col-md-3 ms-none-0 m-1 p-0">
@@ -19,9 +19,9 @@
                     placeholder="Pasajeros" :min="0" :max="4" fluid />
             </IconField>
         </div>
-        <Button label="Buscar" type="submit" @click="handleMapsInfo"
+        <Button label="Buscar" type="submit" @click="submitFinder"
             class="col-md-2 d-none d-md-block btn-trip-finder w-none-100 w-md-auto h-100 p-4" />
-        <Button label="Buscar" type="submit" @click="handleMapsInfo"
+        <Button label="Buscar" type="submit" @click="submitFinder"
             class="col-none-2 d-block d-md-none btn-trip-finder-phone w-100 p-3" />
     </form>
 </template>
@@ -29,47 +29,46 @@
 import { ref, onMounted, defineEmits } from "vue";
 import { useRouter } from "vue-router";
 
+const destination = ref(null);
+const origin = ref(null);
+const date = ref(null);
+const passengers = ref(null);
+
 const router = useRouter();
 
+const data = ref({});
 
-const emit = defineEmits(["mapsInfo"]);
-
-const handleMapsInfo = (mapsInfo) => {
-    console.log("Datos recibidos del mapa:", mapsInfo);
-};
+const emit = defineEmits(["dataFinder"]);
 
 function formatDate(date) {
     return new Date(date).toISOString().split('T')[0];
 }
 
-const submitFinder = () => {
-    const originPlace = origin.getPlace();
-    const destinationPlace = destination.getPlace();
-    const mapsInfo = {
-        origin: originPlace.name,
-        destination: destinationPlace.name,
-        date: formatDate(date.value),
-        passengers: passengers.value
-    };
-
-    console.log("Datos recogidos:", mapsInfo);
-    emit("mapsInfo", mapsInfo);
-    // router.push({
-    //     path: "/trips",
-    //     query: { date: formatDate(date.value), passengers: passengers.value },
-    // })
+const submitFinder = (event) => {
+    event.preventDefault();
+    data.value = {
+        "origin": origin.value.getPlace(),
+        "destination": destination.value.getPlace(),
+        "date": date.value,
+        "passengers": passengers.value
+    }
+    emit("dataFinder", data.value);
+    router.push({
+        path: "/"
+    })
 };
 
 
+
 onMounted(() => {
-    origin = new google.maps.places.Autocomplete(
+    origin.value = new google.maps.places.Autocomplete(
         document.getElementById("origin"),
         {
             componentRestrictions: { country: "es" },
             fields: ["address_components", "geometry", "icon", "name"],
         }
     );
-    destination = new google.maps.places.Autocomplete(
+    destination.value = new google.maps.places.Autocomplete(
         document.getElementById("destination"),
         {
             componentRestrictions: { country: "es" },

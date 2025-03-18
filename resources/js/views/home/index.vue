@@ -22,8 +22,16 @@
                 </div>
             </div>
             <div class="container h-none-auto mt-5 mt-md-0 h-md-25 d-flex align-items-center">
-                <TripFinder class="mt-8" />
+                <TripFinder class="mt-8" @dataFinder="handleDataMap" />
             </div>
+
+            <!-- Prueba Emit -->
+
+
+
+
+            <!-- Fin Prueba Emit -->
+
         </section>
         <section
             class="container-fluid w-100 h-auto home-section d-block d-md-flex flex-row-reverse justify-content-center gap-2">
@@ -88,6 +96,19 @@
 </template>
 
 <script setup>
+// Prueba emit
+const handleDataMap = (data) => {
+    console.log(data);
+}
+
+// Fin Prueba emit
+
+
+
+
+
+
+
 import { RouterLink } from "vue-router";
 import TripFinder from "../../components/TripFinder.vue";
 import { document } from "postcss";
