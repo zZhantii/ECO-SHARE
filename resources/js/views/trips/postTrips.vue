@@ -305,22 +305,38 @@
                                                         Origen:
                                                         {{
                                                             tripData.start_point
-                                                                .address
-                                                        }},
-                                                        {{
+                                                                .address ===
                                                             tripData.start_point
                                                                 .locality
+                                                                ? tripData
+                                                                      .start_point
+                                                                      .locality
+                                                                : tripData
+                                                                      .start_point
+                                                                      .address +
+                                                                  ", " +
+                                                                  tripData
+                                                                      .start_point
+                                                                      .locality
                                                         }}
                                                     </li>
                                                     <li>
                                                         Destino:
                                                         {{
                                                             tripData.end_point
-                                                                .address
-                                                        }},
-                                                        {{
+                                                                .address ===
                                                             tripData.end_point
                                                                 .locality
+                                                                ? tripData
+                                                                      .end_point
+                                                                      .locality
+                                                                : tripData
+                                                                      .end_point
+                                                                      .address +
+                                                                  ", " +
+                                                                  tripData
+                                                                      .end_point
+                                                                      .locality
                                                         }}
                                                     </li>
                                                     <li>
@@ -441,8 +457,11 @@ onMounted(async () => {
     autocompleteStart.addListener("place_changed", () => {
         tripData.value.start_point = autocompleteStart.getPlace();
         tempStartPoint.value = autocompleteStart.getPlace();
-
-        useGeocoder(tempStartPoint.value.geometry.location, "start");
+        for (const element of tempStartPoint.value.address_components) {
+            if (element.types.includes("locality")) {
+                start_locality.value = element.long_name;
+            }
+        }
     });
 
     const autocompleteEnd = new google.maps.places.Autocomplete(
@@ -455,10 +474,13 @@ onMounted(async () => {
     autocompleteEnd.addListener("place_changed", () => {
         tripData.value.end_point = autocompleteEnd.getPlace();
         tempEndPoint.value = autocompleteEnd.getPlace();
-        useGeocoder(tempEndPoint.value.geometry.location, "end");
+        for (const element of tempEndPoint.value.address_components) {
+            if (element.types.includes("locality")) {
+                end_locality.value = element.long_name;
+            }
+        }
     });
     getFuelRates();
-    //useGeocoder(tripData.value.end_point);
 });
 
 const tripData = ref({
@@ -517,43 +539,43 @@ const findVehicleById = async (id) => {
     }
 };
 
-const useGeocoder = (place, point) => {
-    console.log("Geocoding:", place);
+// const useGeocoder = (place, point) => {
+//     console.log("Geocoding:", place);
 
-    const geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ location: place }, (results, status) => {
-        if (status === google.maps.GeocoderStatus.OK) {
-            const addressComponents = results[0].address_components;
-            console.log("Componente 0 desde Geocoding:", addressComponents);
-            for (const element of addressComponents) {
-                if (element.types.includes("locality")) {
-                    switch (point) {
-                        case "start":
-                            start_locality.value = element.long_name;
-                            console.log(
-                                "Localidad de inicio:",
-                                start_locality.value
-                            );
-                            start_locality.value = element.long_name;
-                            break;
-                        case "end":
-                            end_locality.value = element.long_name;
-                            console.log(
-                                "Localidad de destino:",
-                                end_locality.value
-                            );
-                            end_locality.value = element.long_name;
-                            break;
-                        default:
-                            console.log("No se ha encontrado la localidad");
-                    }
-                }
-            }
-        } else {
-            console.error("Geocoding failed:", status);
-        }
-    });
-};
+//     const geocoder = new google.maps.Geocoder();
+//     geocoder.geocode({ location: place }, (results, status) => {
+//         if (status === google.maps.GeocoderStatus.OK) {
+//             const addressComponents = results[0].address_components;
+//             console.log("Componente 0 desde Geocoding:", addressComponents);
+//             for (const element of addressComponents) {
+//                 if (element.types.includes("locality")) {
+//                     switch (point) {
+//                         case "start":
+//                             start_locality.value = element.long_name;
+//                             console.log(
+//                                 "Localidad de inicio:",
+//                                 start_locality.value
+//                             );
+//                             start_locality.value = element.long_name;
+//                             break;
+//                         case "end":
+//                             end_locality.value = element.long_name;
+//                             console.log(
+//                                 "Localidad de destino:",
+//                                 end_locality.value
+//                             );
+//                             end_locality.value = element.long_name;
+//                             break;
+//                         default:
+//                             console.log("No se ha encontrado la localidad");
+//                     }
+//                 }
+//             }
+//         } else {
+//             console.error("Geocoding failed:", status);
+//         }
+//     });
+// };
 
 const formatDeparture = () => {
     const date = new Date(tripData.value.departure_time);
