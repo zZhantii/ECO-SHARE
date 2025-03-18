@@ -29,23 +29,16 @@
 import { ref, onMounted, defineEmits } from "vue";
 import { useRouter } from "vue-router";
 
+const router = useRouter();
+const emit = defineEmits(["dataFinder"]);
+
 const destination = ref(null);
 const origin = ref(null);
 const date = ref(null);
 const passengers = ref(null);
-
-const router = useRouter();
-
 const data = ref({});
 
-const emit = defineEmits(["dataFinder"]);
-
-function formatDate(date) {
-    return new Date(date).toISOString().split('T')[0];
-}
-
-const submitFinder = (event) => {
-    event.preventDefault();
+const submitFinder = () => {
     data.value = {
         "origin": origin.value.getPlace(),
         "destination": destination.value.getPlace(),
@@ -54,11 +47,9 @@ const submitFinder = (event) => {
     }
     emit("dataFinder", data.value);
     router.push({
-        path: "/"
+        path: "/trips"
     })
 };
-
-
 
 onMounted(() => {
     origin.value = new google.maps.places.Autocomplete(

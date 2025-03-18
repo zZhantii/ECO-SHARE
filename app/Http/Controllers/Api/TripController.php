@@ -45,6 +45,9 @@ class TripController extends Controller
         }
 
         $data = $validator->validated();
+        // Depuración: Verificar los datos antes de la inserción
+        \Log::info('Datos validados:', $data);
+
         $trip = Trip::create($data);
 
         return response()->json(["success" => true, "data" => $trip], 200);
