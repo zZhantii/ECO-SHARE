@@ -71,7 +71,7 @@
                                         class="d-flex pt-4 justify-content-end"
                                     >
                                         <Button
-                                            label="Next"
+                                            label="Siguiente"
                                             type="submit"
                                             class="primary-a"
                                             icon="pi pi-arrow-right"
@@ -135,6 +135,7 @@
                                                     tripData.departure_time
                                                 "
                                                 showTime
+                                                :min-date="today"
                                                 hourFormat="24"
                                                 fluid
                                             />
@@ -167,7 +168,7 @@
                                         class="d-flex justify-content-between pt-6"
                                     >
                                         <Button
-                                            label="Back"
+                                            label="Atrás"
                                             severity="secondary"
                                             icon="pi pi-arrow-left"
                                             @click="
@@ -176,7 +177,7 @@
                                             "
                                         />
                                         <Button
-                                            label="Next"
+                                            label="Siguiente"
                                             type="submit"
                                             class="primary-a"
                                             icon="pi pi-arrow-right"
@@ -358,12 +359,16 @@
                                                     </li>
                                                     <li>
                                                         Distancia:
-                                                        {{ distance }} Km/s
+                                                        {{ distance }} Km
                                                     </li>
                                                     <li>
                                                         <strong>
-                                                            Precio:
-                                                            {{ tripData.price }}
+                                                            {{
+                                                                tripData.price >
+                                                                7
+                                                                    ? `Precio: ${tripData.price}`
+                                                                    : `Tarifa mínima aplicada: ${tripData.price}`
+                                                            }}
                                                             €</strong
                                                         >
                                                     </li>
@@ -375,7 +380,7 @@
                             </div>
                             <div class="d-flex justify-content-between pt-6">
                                 <Button
-                                    label="Back"
+                                    label="Atrás"
                                     severity="secondary"
                                     icon="pi pi-arrow-left"
                                     @click="
@@ -433,6 +438,7 @@ const dieselRate = ref(0);
 const gasolineRate = ref(0);
 const start_locality = ref("");
 const end_locality = ref("");
+const today = ref(new Date());
 
 let user_id = ref(0);
 user_id.value = authStore().user.id;
@@ -697,6 +703,9 @@ const getPrice = () => {
             );
             tripData.value.price = distance.value * gasolineRate;
             break;
+    }
+    if (tripData.value.price < 7) {
+        tripData.value.price = 7.0;
     }
 };
 
