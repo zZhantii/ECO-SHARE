@@ -151,7 +151,6 @@ function getTimelineEvents(trip) {
 }
 
 const trip = ref({});
-const searchTrip = ref({});
 
 onMounted(async () => {
     const queryParams = route.query;
@@ -166,78 +165,93 @@ onMounted(async () => {
     }
 });
 
+const parseLocationData = (locationData) => {
+    try {
+        const data = typeof locationData === 'string' ?
+            JSON.parse(locationData) : locationData;
+
+        return {
+            address: data?.address || '',
+            locality: data?.address_components?.find(
+                comp => comp?.types?.includes('locality')
+            )?.long_name || ''
+        };
+    } catch {
+        return { address: '', locality: '' };
+    }
+};
+
+
+// Debería ser inicializado con una estructura clara
+const searchTrip = ref({
+    start_point: '',
+    end_point: '',
+    locality_start: '',
+    locality_end: '',
+    date: '',
+    available_seats: null
+});
+
 const handleSearch = async (searchData) => {
     try {
         await getTrips();
 
-        tripsList.value.find(trip => {
-            if (trip.id === searchData.id) {
-                trip.value = trip;
-            }
+        // Formatear los viajes primero
+        tripsList.value = tripsList.value.map(trip => {
+            const startPoint = parseLocationData(trip.start_point);
+            const endPoint = parseLocationData(trip.end_point);
 
+            return {
+                id: trip.id,
+                start_point: startPoint.address || '',
+                locality_start: startPoint.locality || '',
+                end_point: endPoint.address || '',
+                locality_end: endPoint.locality || '',
+                departure_time: trip.departure_time || '',
+                available_seats: trip.available_seats || 0,
+                price: trip.price || 0,
+                departure_time: trip.departure_time || '',
+                arrival_time: trip.arrival_time || ''
+            };
         });
 
-        for (const key of tripsList.value) {
-            data = {
-                start_point: key.start_point.address,
-                end_point: key.end_point.address,
-                locality_start: key.start_point.locality,
-                locality_end: key.end_point.locality,
-                date: key.departure_time,
-                available_seats: key.available_seats,
+        // Formatear los datos de búsqueda
+        if (searchData) {
+            searchTrip.value = {
+                start_point: searchData.origin?.name || '',
+                locality_start: searchData.origin?.address_components?.find(
+                    comp => comp.types.includes('locality')
+                )?.long_name || '',
+                end_point: searchData.destination?.name || '',
+                locality_end: searchData.destination?.address_components?.find(
+                    comp => comp.types.includes('locality')
+                )?.long_name || '',
+                date: searchData.date ? new Date(searchData.date).toISOString().slice(0, 19).replace('T', ' ') : '',
+                available_seats: searchData.passengers || 0
             };
-            trip.value = data;
         }
 
-        console.log('Viajes de la API principal:', tripsList.value);
-        console.log('Viajes de la API:', trip.value);
+        console.log('Viajes formateados:', tripsList.value);
+        console.log('Criterios de búsqueda:', searchTrip.value);
 
-        for (const key in searchData) {
-            if (key === 'origin') {
-                searchTrip.value.start_point = searchData[key].name;
-                if (searchData[key].address_components) {
-                    searchTrip.value.locality_start = searchData[key].address_components.find(
-                        component => component.types.includes('locality')
-                    ).long_name;
-                }
-            }
-
-            if (key === 'destination') {
-                searchTrip.value.end_point = searchData[key].name;
-                if (searchData[key].address_components) {
-                    searchTrip.value.locality_end = searchData[key].address_components.find(
-                        component => component.types.includes('locality')
-                    ).long_name;
-                }
-            }
-
-            if (key === 'date') {
-                searchTrip.value.date = searchData[key];
-            }
-
-            if (key === 'passengers') {
-                searchTrip.value.available_seats = searchData[key];
-            }
-        }
-
-        console.log('Viaje Buscado:', searchTrip.value);
-
-        // applyFilters();
+        applyFilters();
     } catch (error) {
         console.error('Error searching trips:', error);
     }
 };
 
 const applyFilters = () => {
-    console.log('Aplicando filtros...');
-    filteredTripsList.value = filteredTrips(tripsList, filters);
-    console.log('Lista filtrada final:', filteredTripsList.value);
+    console.log('Estado antes de filtrar:', {
+        tripsList: tripsList.value,
+        searchCriteria: searchTrip.value
+    });
+
+    filteredTripsList.value = filteredTrips(tripsList, searchTrip);
+
+    console.log('Resultado del filtrado:', filteredTripsList.value);
 };
 
 const filteredTripsList = ref({});
-
-
-
 
 const filters = ref({
     start_point: null,
@@ -248,53 +262,37 @@ const filters = ref({
     available_seats: null
 });
 
-function filteredTrips(tripsList, filters) {
-    console.log('Iniciando filtrado con:', { tripsList: tripsList.value, filters: filters.value });
-
+const filteredTrips = (tripsList, searchTrip) => {
     if (!tripsList.value?.length) return [];
 
-    const filtered = tripsList.value.filter(trip => {
-        // Filtro por punto de inicio
-        if (filters.value.start_point &&
-            !trip.start_point?.toLowerCase().includes(filters.value.start_point.toLowerCase())) {
-            return false;
-        }
+    return tripsList.value.filter(trip => {
+        // Verificar coincidencia exacta de dirección y localidad
+        const matchesStart =
+            (trip.start_point === searchTrip.value.start_point ||
+                trip.locality_start === searchTrip.value.locality_start);
 
-        // Filtro por punto final
-        if (filters.value.end_point &&
-            !trip.end_point?.toLowerCase().includes(filters.value.end_point.toLowerCase())) {
-            return false;
-        }
+        const matchesEnd =
+            (trip.end_point === searchTrip.value.end_point ||
+                trip.locality_end === searchTrip.value.locality_end);
 
-        // Filtro por localidad de inicio
-        if (filters.value.locality_start &&
-            !trip.locality_start?.toLowerCase().includes(filters.value.locality_start.toLowerCase())) {
-            return false;
-        }
+        // Verificar coincidencia parcial de dirección y localidad
+        const partialMatchesStart =
+            (trip.start_point?.toLowerCase().includes(searchTrip.value.start_point?.toLowerCase()) ||
+                trip.locality_start?.toLowerCase().includes(searchTrip.value.locality_start?.toLowerCase()));
 
-        // Filtro por localidad de destino
-        if (filters.value.locality_end &&
-            !trip.locality_end?.toLowerCase().includes(filters.value.locality_end.toLowerCase())) {
-            return false;
-        }
+        const partialMatchesEnd =
+            (trip.end_point?.toLowerCase().includes(searchTrip.value.end_point?.toLowerCase()) ||
+                trip.locality_end?.toLowerCase().includes(searchTrip.value.locality_end?.toLowerCase()));
 
-        // Filtro por asientos disponibles
-        if (filters.value.available_seats &&
-            trip.available_seats < filters.value.available_seats) {
-            return false;
-        }
+        // Verificar fecha y asientos disponibles
+        const matchesDate = !searchTrip.value.date || trip.date === searchTrip.value.date;
+        const matchesSeats = !searchTrip.value.available_seats ||
+            trip.available_seats >= searchTrip.value.available_seats;
 
-        // Filtro por fecha
-        if (filters.value.date && trip.date !== filters.value.date) {
-            return false;
-        }
-
-        return true;
+        // Debe coincidir tanto el origen como el destino, la fecha y los asientos
+        return (matchesStart || partialMatchesStart) && (matchesEnd || partialMatchesEnd) && matchesDate && matchesSeats;
     });
-
-    console.log('Viajes filtrados:', filtered);
-    return filtered;
-}
+};
 </script>
 
 

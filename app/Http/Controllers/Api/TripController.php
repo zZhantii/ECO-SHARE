@@ -44,6 +44,7 @@ class TripController extends Controller
         }
 
         $data = $validator->validated();
+        $trip = Trip::create($data);
 
         return response()->json(["success" => true, "data" => $trip], 200);
     }

@@ -45,16 +45,5 @@ class VehicleTableSeeder extends Seeder
             'consumption' => 8.2,
             'fuel_type' => "Diésel",
         ]);
-
-        $vehicle4 = Vehicle::create([
-            'id' => 4,
-            'user_id' => 1,
-            'brand' => 'CUPRA',
-            'model' => 'Leon',
-            'plate' => '7677MRP',
-            'pax_number' => 4,
-            'consumption' => 6.0,
-            'fuel_type' => "Gasolina",
-        ]);
     }
 }
