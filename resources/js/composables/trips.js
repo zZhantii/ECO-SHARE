@@ -9,27 +9,15 @@ export default function useTrips(user) {
     const validationErrors = ref([]);
     const toast = useToast();
 
-    async function getTrips(params) {
-        if (isLoading.value) return;
+    async function getTrips() {
+        if (isLoading.value || tripsList.value.length > 0) return;
         isLoading.value = true;
 
         try {
-            const response = await axios.get("/api/trip", {
-                params: {
-                    start_point: params.origin,
-                    end_point: params.destination,
-                    departure_time: params.date,
-                    aviailable_seats: params.passengers
-                }
-            });
-
-            if (response.data && response.data.data) {
-                tripsList.value = response.data.data;
-                console.log("Trips loaded successfully:", tripsList.value);
-            } else {
-                console.warn("No trips data in response");
-                tripsList.value = [];
-            }
+            const response = await axios.get("/api/trip");
+            console.log("API Response:", response.data);
+            tripsList.value = response.data.data;
+            console.log("Trips cargado:", tripsList.value);
         } catch (error) {
             console.error("Error fetching trips:", error.response?.data || error.message);
             tripsList.value = [];

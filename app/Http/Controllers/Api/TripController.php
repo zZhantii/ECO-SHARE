@@ -9,22 +9,21 @@ use Illuminate\Support\Facades\Validator;
 
 class TripController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $trips = Trips::All();
+        $trips = Trip::All();
         return response()->json(["success" => true, "data" => $trips], 200);
     }
 
     public function show(Trip $trip)
     {
-         $tripDetails = Vehicle::find($trip->id);
+        $tripDetails = Vehicle::find($trip->id);
 
         if (!$tripDetails) {
             return response()->json(['message' => 'Trip no encontrado'], 404);
         }
 
         return response()->json($tripDetails);
-
     }
 
     public function store(Request $request)
@@ -45,10 +44,6 @@ class TripController extends Controller
         }
 
         $data = $validator->validated();
-        // Depuración: Verificar los datos antes de la inserción
-        \Log::info('Datos validados:', $data);
-
-        $trip = Trip::create($data);
 
         return response()->json(["success" => true, "data" => $trip], 200);
     }

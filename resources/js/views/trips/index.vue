@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <TripFinder class="my-5" @dataFinder="handleDataInfo" />
+        <TripFinder class="my-5" />
     </div>
 
     <div class="container container-responsive d-flex justify-content-between my-5">
@@ -8,7 +8,7 @@
             <div class="col-12 col-md-4">
                 <div class="d-flex justify-content-between">
                     <h4>Ordenar Por</h4>
-                    <p>Borrar Todo</p>
+                    <p @click="clearFilters">Borrar Todo</p>
                 </div>
                 <!-- <div class="flex align-items-center gap-2 justify-content-between inputFilter">
                     <Checkbox v-model="filters.earlyDeparture" inputId="earlyDeparture" binary />
@@ -73,7 +73,7 @@
                 Fecha, Inicio -> Destino
             </div>
             <div class="col-12">
-                <div v-for="(trip, index) in tripsList" :key="index" class="border p-5 rounded">
+                <!-- <div v-for="(trip, index) in tripsList" :key="index" class="border p-5 rounded">
                     <div class="d-flex pb-4">
                         <Timeline :value="getTimelineEvents(trip)" layout="horizontal" align="top"
                             class="border-end w-75 pe-5">
@@ -81,33 +81,31 @@
                                 <i class="pi pi-map-marker px-2" style="font-size: 1.5rem"></i>
                                 <p class="m-0 px-2">{{ formatTime(slotProps.item.time) }}</p>
                             </template>
-                            <template #content="slotProps">
+<template #content="slotProps">
                                 <div class="timeline-event">
                                     <p class="m-0">{{ slotProps.item.location }}</p>
                                 </div>
                             </template>
-                        </Timeline>
-                        <div class="d-flex flex-column justify-content-center align-items-center gap-3 w-25">
-                            <span class="text-xl font-semibold">${{ trip.price }}</span>
-                            <router-link :to="{ name: 'ConfirmationTrips', params: { id: trip.id } }"
-                                class="btn-primary">Reserva</router-link>
-                        </div>
-                    </div>
-                    <div class=" d-flex border-top pt-5 px-5 ">
-                        <div class="d-flex gap-3 align-items-center pe-5">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000"
-                                viewBox="0 0 256 256">
-                                <path
-                                    d="M224,232a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16H216A8,8,0,0,1,224,232Zm0-72v32a16,16,0,0,1-16,16H114.11a15.93,15.93,0,0,1-14.32-8.85l-58.11-116a16.1,16.1,0,0,1,0-14.32l22.12-44A16,16,0,0,1,85,17.56l33.69,14.22.47.22a16,16,0,0,1,7.15,21.46,1.51,1.51,0,0,1-.11.22L112,80l31.78,64L208,144A16,16,0,0,1,224,160Zm-16,0H143.77a15.91,15.91,0,0,1-14.31-8.85l-31.79-64a16.07,16.07,0,0,1,0-14.29l.12-.22L112,46.32,78.57,32.21A4.84,4.84,0,0,1,78.1,32L56,76,114.1,192H208Z">
-                                </path>
-                            </svg>
-                            <p class="m-0">{{ trip.available_seats }}</p>
-                        </div>
-                        <div class="border-start ps-5">
-                            <p>Tags</p>
-                        </div>
-                    </div>
-                </div>
+</Timeline>
+<div class="d-flex flex-column justify-content-center align-items-center gap-3 w-25">
+    <span class="text-xl font-semibold">${{ trip.price }}</span>
+    <router-link :to="{ name: 'ConfirmationTrips', params: { id: trip.id } }" class="btn-primary">Reserva</router-link>
+</div>
+</div>
+<div class=" d-flex border-top pt-5 px-5 ">
+    <div class="d-flex gap-3 align-items-center pe-5">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256">
+            <path
+                d="M224,232a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16H216A8,8,0,0,1,224,232Zm0-72v32a16,16,0,0,1-16,16H114.11a15.93,15.93,0,0,1-14.32-8.85l-58.11-116a16.1,16.1,0,0,1,0-14.32l22.12-44A16,16,0,0,1,85,17.56l33.69,14.22.47.22a16,16,0,0,1,7.15,21.46,1.51,1.51,0,0,1-.11.22L112,80l31.78,64L208,144A16,16,0,0,1,224,160Zm-16,0H143.77a15.91,15.91,0,0,1-14.31-8.85l-31.79-64a16.07,16.07,0,0,1,0-14.29l.12-.22L112,46.32,78.57,32.21A4.84,4.84,0,0,1,78.1,32L56,76,114.1,192H208Z">
+            </path>
+        </svg>
+        <p class="m-0">{{ trip.available_seats }}</p>
+    </div>
+    <div class="border-start ps-5">
+        <p>Tags</p>
+    </div>
+</div>
+</div> -->
             </div>
         </div>
     </div>
@@ -152,14 +150,151 @@ function getTimelineEvents(trip) {
     ];
 }
 
-// Emit
-const mapaData = ref({});
+const trip = ref({});
+const searchTrip = ref({});
 
-const handleDataInfo = (data) => {
-    console.log("Datos recibidos de tripFinder", data);
-    mapaData.value = data;
+onMounted(async () => {
+    const queryParams = route.query;
+    if (queryParams.data) {
+        try {
+            const searchData = JSON.parse(queryParams.data);
+            await handleSearch(searchData);
+            // applyFilters();
+        } catch (error) {
+            console.error('Error parsing search data:', error);
+        }
+    }
+});
+
+const handleSearch = async (searchData) => {
+    try {
+        await getTrips();
+
+        tripsList.value.find(trip => {
+            if (trip.id === searchData.id) {
+                trip.value = trip;
+            }
+
+        });
+
+        for (const key of tripsList.value) {
+            data = {
+                start_point: key.start_point.address,
+                end_point: key.end_point.address,
+                locality_start: key.start_point.locality,
+                locality_end: key.end_point.locality,
+                date: key.departure_time,
+                available_seats: key.available_seats,
+            };
+            trip.value = data;
+        }
+
+        console.log('Viajes de la API principal:', tripsList.value);
+        console.log('Viajes de la API:', trip.value);
+
+        for (const key in searchData) {
+            if (key === 'origin') {
+                searchTrip.value.start_point = searchData[key].name;
+                if (searchData[key].address_components) {
+                    searchTrip.value.locality_start = searchData[key].address_components.find(
+                        component => component.types.includes('locality')
+                    ).long_name;
+                }
+            }
+
+            if (key === 'destination') {
+                searchTrip.value.end_point = searchData[key].name;
+                if (searchData[key].address_components) {
+                    searchTrip.value.locality_end = searchData[key].address_components.find(
+                        component => component.types.includes('locality')
+                    ).long_name;
+                }
+            }
+
+            if (key === 'date') {
+                searchTrip.value.date = searchData[key];
+            }
+
+            if (key === 'passengers') {
+                searchTrip.value.available_seats = searchData[key];
+            }
+        }
+
+        console.log('Viaje Buscado:', searchTrip.value);
+
+        // applyFilters();
+    } catch (error) {
+        console.error('Error searching trips:', error);
+    }
+};
+
+const applyFilters = () => {
+    console.log('Aplicando filtros...');
+    filteredTripsList.value = filteredTrips(tripsList, filters);
+    console.log('Lista filtrada final:', filteredTripsList.value);
+};
+
+const filteredTripsList = ref({});
+
+
+
+
+const filters = ref({
+    start_point: null,
+    end_point: null,
+    locality_start: null,
+    locality_end: null,
+    date: null,
+    available_seats: null
+});
+
+function filteredTrips(tripsList, filters) {
+    console.log('Iniciando filtrado con:', { tripsList: tripsList.value, filters: filters.value });
+
+    if (!tripsList.value?.length) return [];
+
+    const filtered = tripsList.value.filter(trip => {
+        // Filtro por punto de inicio
+        if (filters.value.start_point &&
+            !trip.start_point?.toLowerCase().includes(filters.value.start_point.toLowerCase())) {
+            return false;
+        }
+
+        // Filtro por punto final
+        if (filters.value.end_point &&
+            !trip.end_point?.toLowerCase().includes(filters.value.end_point.toLowerCase())) {
+            return false;
+        }
+
+        // Filtro por localidad de inicio
+        if (filters.value.locality_start &&
+            !trip.locality_start?.toLowerCase().includes(filters.value.locality_start.toLowerCase())) {
+            return false;
+        }
+
+        // Filtro por localidad de destino
+        if (filters.value.locality_end &&
+            !trip.locality_end?.toLowerCase().includes(filters.value.locality_end.toLowerCase())) {
+            return false;
+        }
+
+        // Filtro por asientos disponibles
+        if (filters.value.available_seats &&
+            trip.available_seats < filters.value.available_seats) {
+            return false;
+        }
+
+        // Filtro por fecha
+        if (filters.value.date && trip.date !== filters.value.date) {
+            return false;
+        }
+
+        return true;
+    });
+
+    console.log('Viajes filtrados:', filtered);
+    return filtered;
 }
-
 </script>
 
 

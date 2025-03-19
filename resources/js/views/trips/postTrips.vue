@@ -603,8 +603,6 @@ const saveOptionCar = async () => {
 
 const postTrips = async () => {
     tripData.value.user_id = user_id.value;
-    console.log("patatatatata", tripData.value.arrival_time)
-    tripData.value.arrival_time = "2025-03 - 19 18: 15:06";
     try {
         console.log("Enviando datos del viaje: ", tripData.value);
         const response = await axios.post("/api/trip", tripData.value);
