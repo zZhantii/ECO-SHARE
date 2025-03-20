@@ -10,10 +10,10 @@
                     <h4>Ordenar Por</h4>
                     <p @click="clearFilters">Borrar Todo</p>
                 </div>
-                <!-- <div class="flex align-items-center gap-2 justify-content-between inputFilter">
-                    <Checkbox v-model="filters.earlyDeparture" inputId="earlyDeparture" binary />
+                <div class="flex align-items-center gap-2 justify-content-between inputFilter">
+                    <!-- <Checkbox v-model="filters.earlyDeparture" inputId="earlyDeparture" /> -->
+                    <input type="checkbox" v-model="filters.earlyDeparture" />
                     <label for="earlyDeparture" class="w-75 cursor-pointer">Salida más temprano</label>
-
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#334155" viewBox="0 0 256 256"
                         aria-label="Icono de filtro">
                         <path
@@ -21,7 +21,7 @@
                         </path>
                     </svg>
                 </div>
-                <div class="flex align-items-center gap-2 justify-content-between inputFilter">
+                <!-- <div class="flex align-items-center gap-2 justify-content-between inputFilter">
                     <Checkbox type="checkbox" v-model="filters.lateDeparture" />
                     <label for="lateDeparture" class="w-75">Salida más tarde</label>
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#334155" viewBox="0 0 256 256">
@@ -73,7 +73,7 @@
                 Fecha, Inicio -> Destino
             </div>
             <div class="col-12">
-                <!-- <div v-for="(trip, index) in tripsList" :key="index" class="border p-5 rounded">
+                <div v-for="(trip, index) in searchResults" :key="index" class="border p-5 rounded">
                     <div class="d-flex pb-4">
                         <Timeline :value="getTimelineEvents(trip)" layout="horizontal" align="top"
                             class="border-end w-75 pe-5">
@@ -81,31 +81,33 @@
                                 <i class="pi pi-map-marker px-2" style="font-size: 1.5rem"></i>
                                 <p class="m-0 px-2">{{ formatTime(slotProps.item.time) }}</p>
                             </template>
-<template #content="slotProps">
+                            <template #content="slotProps">
                                 <div class="timeline-event">
                                     <p class="m-0">{{ slotProps.item.location }}</p>
                                 </div>
                             </template>
-</Timeline>
-<div class="d-flex flex-column justify-content-center align-items-center gap-3 w-25">
-    <span class="text-xl font-semibold">${{ trip.price }}</span>
-    <router-link :to="{ name: 'ConfirmationTrips', params: { id: trip.id } }" class="btn-primary">Reserva</router-link>
-</div>
-</div>
-<div class=" d-flex border-top pt-5 px-5 ">
-    <div class="d-flex gap-3 align-items-center pe-5">
-        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256">
-            <path
-                d="M224,232a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16H216A8,8,0,0,1,224,232Zm0-72v32a16,16,0,0,1-16,16H114.11a15.93,15.93,0,0,1-14.32-8.85l-58.11-116a16.1,16.1,0,0,1,0-14.32l22.12-44A16,16,0,0,1,85,17.56l33.69,14.22.47.22a16,16,0,0,1,7.15,21.46,1.51,1.51,0,0,1-.11.22L112,80l31.78,64L208,144A16,16,0,0,1,224,160Zm-16,0H143.77a15.91,15.91,0,0,1-14.31-8.85l-31.79-64a16.07,16.07,0,0,1,0-14.29l.12-.22L112,46.32,78.57,32.21A4.84,4.84,0,0,1,78.1,32L56,76,114.1,192H208Z">
-            </path>
-        </svg>
-        <p class="m-0">{{ trip.available_seats }}</p>
-    </div>
-    <div class="border-start ps-5">
-        <p>Tags</p>
-    </div>
-</div>
-</div> -->
+                        </Timeline>
+                        <div class="d-flex flex-column justify-content-center align-items-center gap-3 w-25">
+                            <span class="text-xl font-semibold">${{ trip.price }}</span>
+                            <router-link :to="{ name: 'ConfirmationTrips', params: { id: trip.id } }"
+                                class="btn-primary">Reserva</router-link>
+                        </div>
+                    </div>
+                    <div class=" d-flex border-top pt-5 px-5 ">
+                        <div class="d-flex gap-3 align-items-center pe-5">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000"
+                                viewBox="0 0 256 256">
+                                <path
+                                    d="M224,232a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16H216A8,8,0,0,1,224,232Zm0-72v32a16,16,0,0,1-16,16H114.11a15.93,15.93,0,0,1-14.32-8.85l-58.11-116a16.1,16.1,0,0,1,0-14.32l22.12-44A16,16,0,0,1,85,17.56l33.69,14.22.47.22a16,16,0,0,1,7.15,21.46,1.51,1.51,0,0,1-.11.22L112,80l31.78,64L208,144A16,16,0,0,1,224,160Zm-16,0H143.77a15.91,15.91,0,0,1-14.31-8.85l-31.79-64a16.07,16.07,0,0,1,0-14.29l.12-.22L112,46.32,78.57,32.21A4.84,4.84,0,0,1,78.1,32L56,76,114.1,192H208Z">
+                                </path>
+                            </svg>
+                            <p class="m-0">{{ trip.available_seats }}</p>
+                        </div>
+                        <div class="border-start ps-5">
+                            <p>Tags</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -127,7 +129,8 @@ const route = useRoute();
 import Timeline from "primevue/timeline";
 
 // Vue
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
+import { filter } from "lodash";
 
 function formatTime(dateTime) {
     const date = new Date(dateTime);
@@ -145,12 +148,10 @@ function getTimelineEvents(trip) {
         },
         {
             location: trip.end_point,
-            time: trip.arrival_time || trip.departure_time,
+            time: trip.arrival_time,
         },
     ];
 }
-
-const trip = ref({});
 
 onMounted(async () => {
     const queryParams = route.query;
@@ -158,141 +159,86 @@ onMounted(async () => {
         try {
             const searchData = JSON.parse(queryParams.data);
             await handleSearch(searchData);
-            // applyFilters();
         } catch (error) {
             console.error('Error parsing search data:', error);
         }
     }
 });
 
-const parseLocationData = (locationData) => {
-    try {
-        const data = typeof locationData === 'string' ?
-            JSON.parse(locationData) : locationData;
-
-        return {
-            address: data?.address || '',
-            locality: data?.address_components?.find(
-                comp => comp?.types?.includes('locality')
-            )?.long_name || ''
-        };
-    } catch {
-        return { address: '', locality: '' };
-    }
-};
-
-
-// Debería ser inicializado con una estructura clara
-const searchTrip = ref({
-    start_point: '',
-    end_point: '',
-    locality_start: '',
-    locality_end: '',
-    date: '',
-    available_seats: null
-});
+const searchTrip = ref({});
+const searchResults = ref({});
 
 const handleSearch = async (searchData) => {
     try {
         await getTrips();
 
-        // Formatear los viajes primero
-        tripsList.value = tripsList.value.map(trip => {
-            const startPoint = parseLocationData(trip.start_point);
-            const endPoint = parseLocationData(trip.end_point);
+        const trips = tripsList.value.map(trip => ({
+            ...trip,
+            start_point: trip.start_point.address,
+            end_point: trip.end_point.address,
+            locality_start: trip.start_point.locality,
+            locality_end: trip.end_point.locality,
+            departure_time: trip.departure_time,
+        }));
 
-            return {
-                id: trip.id,
-                start_point: startPoint.address || '',
-                locality_start: startPoint.locality || '',
-                end_point: endPoint.address || '',
-                locality_end: endPoint.locality || '',
-                departure_time: trip.departure_time || '',
-                available_seats: trip.available_seats || 0,
-                price: trip.price || 0,
-                departure_time: trip.departure_time || '',
-                arrival_time: trip.arrival_time || ''
-            };
+        console.log("Trips formatted:", trips);
+
+        searchTrip.value = {
+            start_point: searchData.origin.name,
+            locality_start: searchData.origin.address_components.find(
+                comp => comp.types.includes('locality')
+            ).long_name,
+            end_point: searchData.destination.name,
+            locality_end: searchData.destination.address_components.find(
+                comp => comp.types.includes('locality')
+            ).long_name,
+            date: searchData.date,
+            available_seats: searchData.passengers || 0
+        };
+
+        console.log('Trip de busqueda:', searchTrip.value);
+
+        searchResults.value = trips.filter(trip => {
+            const tripDate = new Date(trip.departure_time).toISOString().slice(0, 10);
+            const searchDate = new Date(searchTrip.value.date).toISOString().slice(0, 10);
+
+            return (
+                trip.start_point === searchTrip.value.start_point &&
+                trip.end_point === searchTrip.value.end_point &&
+                trip.locality_start === searchTrip.value.locality_start &&
+                trip.locality_end === searchTrip.value.locality_end &&
+                tripDate === searchDate &&
+                trip.available_seats >= searchTrip.value.available_seats
+            );
         });
 
-        // Formatear los datos de búsqueda
-        if (searchData) {
-            searchTrip.value = {
-                start_point: searchData.origin?.name || '',
-                locality_start: searchData.origin?.address_components?.find(
-                    comp => comp.types.includes('locality')
-                )?.long_name || '',
-                end_point: searchData.destination?.name || '',
-                locality_end: searchData.destination?.address_components?.find(
-                    comp => comp.types.includes('locality')
-                )?.long_name || '',
-                date: searchData.date ? new Date(searchData.date).toISOString().slice(0, 19).replace('T', ' ') : '',
-                available_seats: searchData.passengers || 0
-            };
-        }
+        console.log('Resultados de búsqueda:', searchResults.value);
 
-        console.log('Viajes formateados:', tripsList.value);
-        console.log('Criterios de búsqueda:', searchTrip.value);
-
-        applyFilters();
     } catch (error) {
         console.error('Error searching trips:', error);
     }
 };
 
-const applyFilters = () => {
-    console.log('Estado antes de filtrar:', {
-        tripsList: tripsList.value,
-        searchCriteria: searchTrip.value
-    });
-
-    filteredTripsList.value = filteredTrips(tripsList, searchTrip);
-
-    console.log('Resultado del filtrado:', filteredTripsList.value);
-};
-
-const filteredTripsList = ref({});
-
 const filters = ref({
-    start_point: null,
-    end_point: null,
-    locality_start: null,
-    locality_end: null,
-    date: null,
-    available_seats: null
+    earlyDeparture: false,
 });
 
-const filteredTrips = (tripsList, searchTrip) => {
-    if (!tripsList.value?.length) return [];
+const filteredResults = ref({});
 
-    return tripsList.value.filter(trip => {
-        // Verificar coincidencia exacta de dirección y localidad
-        const matchesStart =
-            (trip.start_point === searchTrip.value.start_point ||
-                trip.locality_start === searchTrip.value.locality_start);
+const applyFilters = () => {
+    filteredResults.value = searchResults.value.filter(trip => {
+        if (filters.value.earlyDeparture) {
+            const departureHour = new Date(trip.departure_time).getHours();
+            if (departureHour >= 12) return false;
+        }
+    })
 
-        const matchesEnd =
-            (trip.end_point === searchTrip.value.end_point ||
-                trip.locality_end === searchTrip.value.locality_end);
+    return true;
+}
 
-        // Verificar coincidencia parcial de dirección y localidad
-        const partialMatchesStart =
-            (trip.start_point?.toLowerCase().includes(searchTrip.value.start_point?.toLowerCase()) ||
-                trip.locality_start?.toLowerCase().includes(searchTrip.value.locality_start?.toLowerCase()));
-
-        const partialMatchesEnd =
-            (trip.end_point?.toLowerCase().includes(searchTrip.value.end_point?.toLowerCase()) ||
-                trip.locality_end?.toLowerCase().includes(searchTrip.value.locality_end?.toLowerCase()));
-
-        // Verificar fecha y asientos disponibles
-        const matchesDate = !searchTrip.value.date || trip.date === searchTrip.value.date;
-        const matchesSeats = !searchTrip.value.available_seats ||
-            trip.available_seats >= searchTrip.value.available_seats;
-
-        // Debe coincidir tanto el origen como el destino, la fecha y los asientos
-        return (matchesStart || partialMatchesStart) && (matchesEnd || partialMatchesEnd) && matchesDate && matchesSeats;
-    });
-};
+watch(() => filters.value.earlyDeparture, () => {
+    applyFilters();
+})
 </script>
 
 
