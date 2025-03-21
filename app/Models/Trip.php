@@ -15,6 +15,7 @@ class Trip extends Model
         'start_point',
         'end_point',
         'departure_time',
+        'arrival_time',
         'available_seats',
         'price',
     ];
@@ -34,7 +35,7 @@ class Trip extends Model
     // Relacion trips-tags N:M (N Trips)
     public function tags()
     {
-        return $this->belongsToMany(Tag::class, 'trip_taps', 'tag_id');
+        return $this->belongsToMany(Tag::class, 'tags_trips', 'trip_id', 'tag_id');
     }
 
     // Relacion user_trips_rates N:M (M Trips)

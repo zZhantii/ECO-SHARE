@@ -104,6 +104,13 @@
                             </li>
                             <li>
                                 <router-link
+                                    to="/trips/manage"
+                                    class="dropdown-item primary-a"
+                                    >Tus viajes</router-link
+                                >
+                            </li>
+                            <li>
+                                <router-link
                                     to=""
                                     class="dropdown-item primary-a"
                                     >Ayuda</router-link

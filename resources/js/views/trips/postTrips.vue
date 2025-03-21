@@ -20,7 +20,6 @@
                                     class="w-100"
                                 >
                                     <div class="row d-flex align-items-center">
-                                        <!-- Mapa -->
                                         <div
                                             class="col-12 col-md-6 d-flex justify-content-center"
                                         >
@@ -39,7 +38,7 @@
                                                 />
                                             </div>
                                         </div>
-                                        <!-- Inputs -->
+
                                         <div
                                             class="col-12 col-md-6 d-flex flex-column"
                                         >
@@ -71,7 +70,7 @@
                                         class="d-flex pt-4 justify-content-end"
                                     >
                                         <Button
-                                            label="Next"
+                                            label="Siguiente"
                                             type="submit"
                                             class="primary-a"
                                             icon="pi pi-arrow-right"
@@ -135,6 +134,7 @@
                                                     tripData.departure_time
                                                 "
                                                 showTime
+                                                :min-date="today"
                                                 hourFormat="24"
                                                 fluid
                                             />
@@ -161,13 +161,30 @@
                                                     fluid
                                                 />
                                             </div>
+                                            <h3 class="mt-3 mb-5">
+                                                ¿Tienes alguna restricción para
+                                                este viaje?
+                                            </h3>
+                                            <div
+                                                class="d-flex align-items-center"
+                                            ></div>
+                                            <MultiSelect
+                                                v-model="selectedTags"
+                                                inputId="tags"
+                                                :options="tagList"
+                                                optionLabel="tag_name"
+                                                filter
+                                                :maxSelectedLabels="3"
+                                                class="w-50"
+                                                variant="filled"
+                                            />
                                         </div>
                                     </div>
                                     <div
                                         class="d-flex justify-content-between pt-6"
                                     >
                                         <Button
-                                            label="Back"
+                                            label="Atrás"
                                             severity="secondary"
                                             icon="pi pi-arrow-left"
                                             @click="
@@ -176,7 +193,7 @@
                                             "
                                         />
                                         <Button
-                                            label="Next"
+                                            label="Siguiente"
                                             type="submit"
                                             class="primary-a"
                                             icon="pi pi-arrow-right"
@@ -358,12 +375,37 @@
                                                     </li>
                                                     <li>
                                                         Distancia:
-                                                        {{ distance }} Km/s
+                                                        {{ distance }} Km
                                                     </li>
-                                                    <li>
+                                                    <li
+                                                        v-if="
+                                                            tripData.tags
+                                                                .length > 0
+                                                        "
+                                                    >
+                                                        Reglas de viaje:
+                                                        <ul
+                                                            class="d-flex flex-column mb-1"
+                                                        >
+                                                            <li
+                                                                v-for="tag in selectedTags"
+                                                                class="ms-1 m-1 fs-55"
+                                                            >
+                                                                -
+                                                                {{
+                                                                    tag.tag_name
+                                                                }}
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                    <li class="mt-1 fs-4">
                                                         <strong>
-                                                            Precio:
-                                                            {{ tripData.price }}
+                                                            {{
+                                                                tripData.price >
+                                                                7
+                                                                    ? `Precio: ${tripData.price}`
+                                                                    : `Tarifa mínima aplicada: ${tripData.price}`
+                                                            }}
                                                             €</strong
                                                         >
                                                     </li>
@@ -375,7 +417,7 @@
                             </div>
                             <div class="d-flex justify-content-between pt-6">
                                 <Button
-                                    label="Back"
+                                    label="Atrás"
                                     severity="secondary"
                                     icon="pi pi-arrow-left"
                                     @click="
@@ -416,11 +458,13 @@ import { onMounted, ref, watch, computed } from "vue";
 import { start } from "@popperjs/core";
 import { authStore } from "../../store/auth";
 import Map from "@/components/Map.vue";
+import useTags from "@/composables/tags";
 
 // DataBase
 import axios from "axios";
 import { useRouter, useRoute } from "vue-router";
 
+const { getTags, tag, tagList } = useTags();
 const router = useRouter();
 const tempStartPoint = ref({});
 const tempEndPoint = ref({});
@@ -433,12 +477,11 @@ const dieselRate = ref(0);
 const gasolineRate = ref(0);
 const start_locality = ref("");
 const end_locality = ref("");
+const today = ref(new Date());
+const selectedTags = ref([]);
 
 let user_id = ref(0);
 user_id.value = authStore().user.id;
-console.log("userId", user_id.value);
-
-const stepperReady = ref(false);
 
 onMounted(async () => {
     try {
@@ -481,6 +524,7 @@ onMounted(async () => {
         }
     });
     getFuelRates();
+    getTags();
 });
 
 const tripData = ref({
@@ -492,6 +536,7 @@ const tripData = ref({
     vehicle_id: null,
     available_seats: null,
     price: null,
+    tags: [],
 });
 
 const selectedVehicleDetails = ref(null);
@@ -653,6 +698,7 @@ const CarSchema = yup.object().shape({
         .min(1, "Debe haber al menos un asiento disponible"),
     departure_time: yup.string().required("Debes indicar la hora de salida"),
     arrival_time: yup.string().required("Debes indicar la hora de llegada"),
+    tags: yup.array().of(yup.number()),
 });
 
 const getFuelRates = async () => {
@@ -686,7 +732,7 @@ const getPrice = () => {
             tripData.value.price =
                 Math.round(
                     (selectedVehicleDetails.value.consumption / 100.0) *
-                        gasoilRate.value *
+                        dieselRate.value *
                         distance.value *
                         100
                 ) / 100;
@@ -698,12 +744,19 @@ const getPrice = () => {
             tripData.value.price = distance.value * gasolineRate;
             break;
     }
+    if (tripData.value.price < 7) {
+        tripData.value.price = 7.0;
+    }
 };
 
 const saveOptionCar = async () => {
     formatDeparture();
     handleDistance();
     getPrice();
+
+    for (const element of selectedTags.value) {
+        tripData.value.tags.push(element.id);
+    }
     console.log("tripData antes de guardar:", tripData.value);
 
     try {

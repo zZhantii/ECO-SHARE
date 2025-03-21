@@ -31,6 +31,7 @@ class TripController extends Controller
             'arrival_time' => ["required"],
             'price' => ["required", "numeric"],
             'available_seats' => ["required", "integer"],
+            'tags' => ["array"],
         ]);
 
         if ($validator->fails()) {
@@ -39,6 +40,7 @@ class TripController extends Controller
 
         $data = $validator->validated();
         $trip = Trip::create($data);
+        $trip->tags()->sync($data['tags']);
 
         return response()->json(["success" => true, "data" => $trip], 200);
     }

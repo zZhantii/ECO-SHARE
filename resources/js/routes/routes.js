@@ -119,28 +119,30 @@ export default [
         // meta: { breadCrumb: "Dashboard" },
         children: [
             {
-                name: "auth.profile",
+                name: "/profile",
                 path: "profile",
                 component: () => import("../views/profile/index.vue"),
             },
             {
-                path: '/trips',
-                name: 'TripsIndex',
+                path: "/trips",
+                name: "TripsIndex",
                 component: () => import("../views/trips/index.vue"),
-                beforeEnter: requireLogin,
             },
             {
-                path: '/trips/post',
-                name: 'PostTrips',
+                path: "/trips/post",
+                name: "PostTrips",
                 component: () => import("../views/trips/postTrips.vue"),
-                beforeEnter: requireLogin,
             },
             {
-                path: '/trips/confirmation/:id',
-                name: 'ConfirmationTrips',
+                path: "/trips/confirmation/:id",
+                name: "ConfirmationTrips",
                 component: () => import("../views/trips/confirmationTrip.vue"),
-                beforeEnter: requireLogin,
-            }
+            },
+            {
+                path: "/trips/manage",
+                name: "ManageTrips",
+                component: () => import("../views/trips/ManageTrips.vue"),
+            },
         ],
     },
 

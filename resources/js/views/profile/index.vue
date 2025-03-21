@@ -841,7 +841,7 @@ li:hover {
 }
 
 #tab-pannel {
-    min-height: 70vh;
+    min-height: 74vh;
 }
 
 Button {

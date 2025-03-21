@@ -4,7 +4,7 @@
     </div>
 </template>
 <script setup>
-import { ref, defineProps, onMounted, defineEmits, watch, isProxy } from "vue";
+import { ref, onMounted, watch } from "vue";
 
 const props = defineProps({
     origin: Object,
