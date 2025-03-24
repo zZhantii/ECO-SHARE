@@ -37,22 +37,24 @@
             <div>
                 <h3>Detalles del Viaje</h3>
                 <ul>
-                    <li>Fecha: {{ tripList.departure_time }}</li>
-                    <li>Origen: {{ tripList.start_point }}</li>
-                    <li>Destino: {{ tripList.end_point }}</li>
-                    <li>Distancia: {{ tripList.distance }}</li>
-                    <li>Duración: {{ tripList.duration }}</li>
+                    <li>Origen: {{ tripList.start_point?.address }}</li>
+                    <li>Destino: {{ tripList.end_point?.address }}</li>
+                    <li>Fecha Salida: {{ tripList.departure_time }}</li>
+                    <li>Fecha Llegada: {{ tripList.arrival_time }}</li>
                 </ul>
             </div>
             <div class="row_separation"></div>
             <div>
                 <h3>Conductor</h3>
-                <p>{{ user.surname1 }}</p>
-                <p>{{ user.surname2 }}</p>
-                <p>{{ user.alias }}</p>
-                <p>{{ user.email }}</p>
-                <p>{{ user.profile_photo }}</p>
+                <div v-for="(user, index) in user" :key="index">
+                    <p>{{ user.surname1 }}</p>
+                    <p>{{ user.surname2 }}</p>
+                    <p>{{ user.alias }}</p>
+                    <p>{{ user.email }}</p>
+                    <p>{{ user.media }}</p>
+                </div>
             </div>
+            <div class="row_separation"></div>
             <div>
                 <h3>Vehículo</h3>
                 <p>{{ vehicle.brand }}</p>
@@ -61,6 +63,7 @@
                 <p>{{ vehicle.color }}</p>
                 <p>{{ vehicle.photo }}</p>
             </div>
+            <div class="row_separation"></div>
             <div>
                 <h3>Coste</h3>
                 <p>{{ tripList.price }}</p>
@@ -94,9 +97,9 @@ import { onMounted } from "vue";
 
 onMounted(async () => {
     await getTrip(tripId);
-    console.log(tripList.value.vehicle_id);
+    // console.log("tripList", tripList.value);
     await getVehicle(tripList.value.vehicle_id);
-    await getUser(tripList.user_id);
+    await getUser(tripList.value.user_id);
 });
 
 // Funciones de formateo de Time para el TimeLine
@@ -112,7 +115,7 @@ function formatTime(dateTime) {
 }
 
 function getTimelineEvents(tripList) {
-
+    console.log("lista de viaje", tripList.value);
     return [
         {
             location: tripList.start_point,
@@ -120,7 +123,7 @@ function getTimelineEvents(tripList) {
         },
         {
             location: tripList.end_point,
-            time: tripList.arrival_time || tripList.departure_time,
+            time: tripList.arrival_time,
         },
     ];
 }
