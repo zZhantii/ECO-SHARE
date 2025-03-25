@@ -3,7 +3,7 @@ import { useRouter } from "vue-router";
 
 export default function useUsers() {
     const users = ref([]);
-    const user = ref({});
+    const user = ref([]);
     const router = useRouter();
     const validationErrors = ref({});
     const isLoading = ref(false);

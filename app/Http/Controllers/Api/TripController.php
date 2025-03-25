@@ -50,4 +50,13 @@ class TripController extends Controller
 
         return response()->json(["success" => true, "data" => $trip], 200);
     }
+
+    public function updateSeats(Request $request, Trip $trip)
+    {
+        $trip->available_seats = $request->available_seats;
+        
+        $trip->save();
+
+        return response()->json(["success" => true, "data" => $trip], 200);
+    }
 }
