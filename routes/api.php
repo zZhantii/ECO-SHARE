@@ -41,6 +41,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     //Conseguir todos los vehículos del usuario autenticado
     Route::get("app/user-vehicle", [AppController::class, "indexVehicle"]);
+    //Conseguir todos los viajes activos del usuario como conductor
+
+    //Conseguir todos los viajes activos del usuario como pasejero
 
     //Subir img/avatar del usuario
     Route::post("user-avatar", [ProfileController::class, "uploadAvatar"]);
@@ -63,6 +66,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('user', [ProfileController::class, 'user']);
     Route::put('user', [ProfileController::class, 'update']);
     Route::get('user/{user}', [UserController::class, 'show']);
+
+    //Tags
+    Route::get("tag", [TagController::class, "index"]);
 
 
     Route::get('abilities', function (Request $request) {
@@ -89,10 +95,10 @@ Route::delete("author/{author}", [AuthorController::class, "destroy"]);
 Route::put("author/{author}", [AuthorController::class, "update"]);
 Route::get("author/{author}", [AuthorController::class, "show"]);
 
-Route::get("tag", [TagController::class, "index"]);
 
 
 
 
 
 
+Route::get("app/driver-trip-active", [AppController::class, "indexDriverTrips"]);
