@@ -2,11 +2,51 @@
     <main class="container">
         <div class="container mt-5 d-flex flex-column align-items-center">
             <div class="gradient-img"></div>
-            <h1 class="fs-2">Revisa aquí tus próximos viajes</h1>
+            <h1 class="fs-3">Revisa aquí tus próximos viajes</h1>
+            <div class="container w-75">
+                <!-- <ul v-if="activeDriverTripsList.length > 0">
+                    <div class="d-flex gap-4 align-items-center">
+                        <i class="fa-solid fa-car"></i>
+                        <p>Como conductor</p>
+                    </div>
+
+                    <DataTable
+                        :value="activeDriverTripsList"
+                        paginator
+                        :rows="5"
+                        :rowsPerPageOptions="[5, 10, 20, 50]"
+                        tableStyle="min-width: 50rem"
+                    >
+                        <Column
+                            class="m-4"
+                            v-for="trip in activeDriverTripsList"
+                            field="departure_time"
+                            header="Name"
+                            style="width: 25%"
+                        ></Column>
+                    </DataTable>
+                </ul> -->
+            </div>
+
+            <Accordion :activeIndex="-1" class="w-50">
+                <AccordionTab class="w-100 mt-2" header="Historial de viajes">
+                </AccordionTab>
+            </Accordion>
         </div>
     </main>
 </template>
-<script setup></script>
+<script setup>
+import Accordion from "primevue/accordion";
+import AccordionTab from "primevue/accordiontab";
+import useTrips from "@/composables/trips.js";
+import { ref, onMounted } from "vue";
+
+const { getActiveTrips, activeDriverTripsList } = useTrips();
+
+onMounted(() => {
+    getActiveTrips();
+});
+</script>
 <style scoped>
 .gradient-img {
     height: 17rem;
@@ -23,5 +63,9 @@
 }
 main {
     min-height: 74vh;
+}
+.fa-solid.fa-car {
+    font-size: 25px;
+    color: #054851;
 }
 </style>
