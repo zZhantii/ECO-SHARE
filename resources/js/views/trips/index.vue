@@ -208,6 +208,8 @@ onMounted(async () => {
         try {
             const searchData = JSON.parse(queryParams.data);
             await handleSearch(searchData);
+
+            
         } catch (error) {
             console.error('Error parsing search data:', error);
         }

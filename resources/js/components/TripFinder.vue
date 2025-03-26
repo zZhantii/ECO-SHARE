@@ -37,10 +37,18 @@ const passengers = ref(null);
 const data = ref({});
 
 const submitFinder = () => {
+    const selectedDate = new Date(date.value);
+
+    // Zona horaria local
+    selectedDate.setMinutes(selectedDate.getMinutes() - selectedDate.getTimezoneOffset());
+
+    // fecha en 'YYYY-MM-DD'
+    const formattedDate = selectedDate.toISOString().split("T")[0];
+
     data.value = {
         origin: origin.value.getPlace(),
         destination: destination.value.getPlace(),
-        date: date.value,
+        date: formattedDate,  
         passengers: passengers.value
     }
 
@@ -49,6 +57,7 @@ const submitFinder = () => {
         query: { data: JSON.stringify(data.value) }
     });
 };
+
 
 onMounted(() => {
     origin.value = new google.maps.places.Autocomplete(

@@ -59,4 +59,26 @@ class TripController extends Controller
 
         return response()->json(["success" => true, "data" => $trip], 200);
     }
+
+    public function reserve(Trip $trip, Request $request)
+    {
+        
+        // $request->validate([
+        //     'user_id' => 'required|exists:users,id',
+        //     'trip_id' => 'required|exists:trips,id',
+        //     'seats_reserved' => 'required|integer|min:1',
+        //     'reservation_date' => 'required|date',
+        //     'check_in' => 'required|boolean'
+        // ]);
+        
+        $user_id = auth()->user()->id;
+      
+        $trip->reserves()->attach($user_id, [
+            'seats_reserved' => $request->available_seats,
+            'reservation_date' => $request->reservation_date,
+            'check_in' => $request->check_in
+        ]);
+
+        return response()->json(['message' => 'Reserva realizada con éxito'], 200);
+    }
 }

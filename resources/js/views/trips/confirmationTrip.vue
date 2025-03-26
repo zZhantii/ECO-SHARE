@@ -33,7 +33,7 @@
                 Mapa
             </div>
             <div class="col-12">
-                <button @click="reservedSeats" class="btn btn-primary">Reservar</button>
+                <button @click="reservedTrip" class="btn btn-primary">Reservar</button>
             </div>
         </div>
         <div class="row row_2 border rounded justify-content-center p-5">
@@ -200,15 +200,14 @@ function getTimelineEvents(tripList) {
     ];
 }
 
-const reservedSeats = async () => {
+const reservedTrip = async () => {
     try {
         const available_seats = tripList.value.available_seats -= seats;
         const reservedTrip = await tripList.value;
         console.log("reservando viaje", reservedTrip);
 
-        const response = await axios.put("/api/trip/" + tripList.value.id, {
-            available_seats: available_seats,
-        });
+        const response = await axios.post("/api/trip/reserve/" + tripId, reservedTrip);
+        console.log("Reserva efectuada: " + response.data.data)
 
         toast.add({
             severity: "success",
