@@ -23,7 +23,7 @@ class TripController extends Controller
             return response()->json(['message' => 'Trip no encontrado'], 404);
         }
 
-        return response()->json($tripDetails);
+        return response()->json(["success" => true, "data" => $tripDetails], 200);
     }
 
     public function store(Request $request)

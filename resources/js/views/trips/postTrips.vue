@@ -17,56 +17,46 @@
                                     <div class="row d-flex align-items-center">
                                         <!-- Mapa -->
                                         <div class="col-12 col-md-6 d-flex justify-content-center">
-                                        <div
-                                            class="col-12 col-md-6 d-flex justify-content-center"
-                                        >
-                                            <div class="mapTrip w-100">
-                                                <Map v-if="showFirstMap" :origin="tripData.start_point
-                                                    " :destination="tripData.end_point
-                                                        " @updateMapsInfo="
-                                                            handleMapsInfo
-                                                        " />
+                                            <div class="col-12 col-md-6 d-flex justify-content-center">
+                                                <div class="mapTrip w-100">
+                                                    <Map v-if="showFirstMap" :origin="tripData.start_point
+                                                        " :destination="tripData.end_point
+                                                            " @updateMapsInfo="
+                                                                handleMapsInfo
+                                                            " />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <!-- Inputs -->
-                                        <div class="col-12 col-md-6 d-flex flex-column">
+                                            <!-- Inputs -->
+                                            <div class="col-12 col-md-6 d-flex flex-column">
 
-                                        <div
-                                            class="col-12 col-md-6 d-flex flex-column"
-                                        >
-                                            <div class="text-center">
-                                                <h3 class="mt-2 mb-3 fs-5">
-                                                    ¿Desde dónde sales?
-                                                </h3>
-                                                <InputText id="origin" type="text" class="form-control"
-                                                    placeholder="Punto de inicio" />
+                                                <div class="col-12 col-md-6 d-flex flex-column">
+                                                    <div class="text-center">
+                                                        <h3 class="mt-2 mb-3 fs-5">
+                                                            ¿Desde dónde sales?
+                                                        </h3>
+                                                        <InputText id="origin" type="text" class="form-control"
+                                                            placeholder="Punto de inicio" />
+                                                    </div>
+                                                    <div class="text-center mt-3">
+                                                        <h3 class="mt-2 mb-3 fs-5">
+                                                            ¿A dónde vas?
+                                                        </h3>
+                                                        <InputText id="destination" type="text" class="form-control"
+                                                            placeholder="Destino" />
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="text-center mt-3">
-                                                <h3 class="mt-2 mb-3 fs-5">
-                                                    ¿A dónde vas?
-                                                </h3>
-                                                <InputText id="destination" type="text" class="form-control"
-                                                    placeholder="Destino" />
+                                            <div class="d-flex pt-4 justify-content-end">
+                                                <Button label="Next" type="submit" class="primary-a"
+                                                    icon="pi pi-arrow-right" :disabled="!isStep1Complete"
+                                                    iconPos="right" @click="activateCallback('2')" />
+                                            </div>
+                                            <div class="d-flex pt-4 justify-content-end">
+                                                <Button label="Siguiente" type="submit" class="primary-a"
+                                                    icon="pi pi-arrow-right" :disabled="!isStep1Complete"
+                                                    iconPos="right" @click="activateCallback('2')" />
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="d-flex pt-4 justify-content-end">
-                                        <Button label="Next" type="submit" class="primary-a" icon="pi pi-arrow-right"
-                                            :disabled="!isStep1Complete" iconPos="right"
-                                            @click="activateCallback('2')" />
-                                    <div
-                                        class="d-flex pt-4 justify-content-end"
-                                    >
-                                        <Button
-                                            label="Siguiente"
-                                            type="submit"
-                                            class="primary-a"
-                                            icon="pi pi-arrow-right"
-                                            :disabled="!isStep1Complete"
-                                            iconPos="right"
-                                            @click="activateCallback('2')"
-                                        />
-                                    </div>
                                 </form>
                             </div>
                         </StepPanel>
@@ -91,78 +81,37 @@
                                             <h3 class="mt-3 mb-5">
                                                 ¿Cuándo viajarás?
                                             </h3>
-                                            <div
-                                                class="d-flex align-items-center"
-                                            ></div>
-                                            <DatePicker
-                                                id="datepicker-24"
-                                                v-model="
-                                                    tripData.departure_time
-                                                "
-                                                showTime
-                                                :min-date="today"
-                                                hourFormat="24"
-                                                fluid
-                                            />
+                                            <div class="d-flex align-items-center"></div>
+                                            <DatePicker id="datepicker-24" v-model="tripData.departure_time
+                                                " showTime :min-date="today" hourFormat="24" fluid />
                                         </div>
                                         <div class="col-12 col-md-6 d-flex justify-content-center">
                                             <h3 class="mt-3 mb-5">
                                                 ¿Cuantos asientos hay
                                                 disponibles?
                                             </h3>
-                                            <div
-                                                class="d-flex align-items-center"
-                                            >
-                                                <InputNumber
-                                                    v-model="
-                                                        tripData.available_seats
-                                                    "
-                                                    inputId="minmax-buttons"
-                                                    mode="decimal"
-                                                    showButtons
-                                                    :min="1"
-                                                    :max="seats"
-                                                    fluid
-                                                />
+                                            <div class="d-flex align-items-center">
+                                                <InputNumber v-model="tripData.available_seats
+                                                    " inputId="minmax-buttons" mode="decimal" showButtons :min="1"
+                                                    :max="seats" fluid />
                                             </div>
                                             <h3 class="mt-3 mb-5">
                                                 ¿Tienes alguna restricción para
                                                 este viaje?
                                             </h3>
-                                            <div
-                                                class="d-flex align-items-center"
-                                            ></div>
-                                            <MultiSelect
-                                                v-model="selectedTags"
-                                                inputId="tags"
-                                                :options="tagList"
-                                                optionLabel="tag_name"
-                                                filter
-                                                :maxSelectedLabels="3"
-                                                class="w-50"
-                                                variant="filled"
-                                            />
+                                            <div class="d-flex align-items-center"></div>
+                                            <MultiSelect v-model="selectedTags" inputId="tags" :options="tagList"
+                                                optionLabel="tag_name" filter :maxSelectedLabels="3" class="w-50"
+                                                variant="filled" />
                                         </div>
                                     </div>
-                                    <div
-                                        class="d-flex justify-content-between pt-6"
-                                    >
-                                        <Button
-                                            label="Atrás"
-                                            severity="secondary"
-                                            icon="pi pi-arrow-left"
-                                            @click="
-                                                activateCallback('1'),
-                                                    (showFirstMap = true)
-                                            "
-                                        />
-                                        <Button
-                                            label="Siguiente"
-                                            type="submit"
-                                            class="primary-a"
-                                            icon="pi pi-arrow-right"
-                                            :disabled="!isStep2Complete"
-                                            iconPos="right"
+                                    <div class="d-flex justify-content-between pt-6">
+                                        <Button label="Atrás" severity="secondary" icon="pi pi-arrow-left" @click="
+                                            activateCallback('1'),
+                                            (showFirstMap = true)
+                                            " />
+                                        <Button label="Siguiente" type="submit" class="primary-a"
+                                            icon="pi pi-arrow-right" :disabled="!isStep2Complete" iconPos="right"
                                             @click="
                                                 activateCallback('3'),
                                                 (showFirstMap = false)
@@ -310,20 +259,13 @@
                                                         Distancia:
                                                         {{ distance }} Km
                                                     </li>
-                                                    <li
-                                                        v-if="
-                                                            tripData.tags
-                                                                .length > 0
-                                                        "
-                                                    >
+                                                    <li v-if="
+                                                        tripData.tags
+                                                            .length > 0
+                                                    ">
                                                         Reglas de viaje:
-                                                        <ul
-                                                            class="d-flex flex-column mb-1"
-                                                        >
-                                                            <li
-                                                                v-for="tag in selectedTags"
-                                                                class="ms-1 m-1 fs-55"
-                                                            >
+                                                        <ul class="d-flex flex-column mb-1">
+                                                            <li v-for="tag in selectedTags" class="ms-1 m-1 fs-55">
                                                                 -
                                                                 {{
                                                                     tag.tag_name
@@ -335,12 +277,11 @@
                                                         <strong>
                                                             {{
                                                                 tripData.price >
-                                                                7
+                                                                    7
                                                                     ? `Precio: ${tripData.price}`
                                                                     : `Tarifa mínima aplicada: ${tripData.price}`
                                                             }}
-                                                            €</strong
-                                                        >
+                                                            €</strong>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -349,22 +290,12 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between pt-6">
-                                <Button
-                                    label="Atrás"
-                                    severity="secondary"
-                                    icon="pi pi-arrow-left"
-                                    @click="
-                                        activateCallback('2'),
-                                            (isStep2Complete = false)
-                                    "
-                                />
-                                <Button
-                                    label="Confirmar Viaje"
-                                    @click="postTrips"
-                                    class="primary-a"
-                                    icon="pi pi-arrow-right"
-                                    iconPos="right"
-                                />
+                                <Button label="Atrás" severity="secondary" icon="pi pi-arrow-left" @click="
+                                    activateCallback('2'),
+                                    (isStep2Complete = false)
+                                    " />
+                                <Button label="Confirmar Viaje" @click="postTrips" class="primary-a"
+                                    icon="pi pi-arrow-right" iconPos="right" />
                             </div>
                         </StepPanel>
                     </StepPanels>
@@ -665,9 +596,9 @@ const getPrice = () => {
             tripData.value.price =
                 Math.round(
                     (selectedVehicleDetails.value.consumption / 100.0) *
-                        dieselRate.value *
-                        distance.value *
-                        100
+                    dieselRate.value *
+                    distance.value *
+                    100
                 ) / 100;
             break;
         default:

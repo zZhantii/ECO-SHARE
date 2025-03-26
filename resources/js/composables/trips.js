@@ -39,8 +39,7 @@ export default function useTrips(user) {
         try {
             console.log("Cargando trip con ID:", tripId);
             const response = await axios.get("/api/trip/" + tripId);
-            console.log("API Response:", response.data);
-            tripList.value = response.data;
+            tripList.value = response.data.data;
             console.log("Trip con ID cargado:", tripList.value);
         } catch (error) {
             console.error("Error fetching trips:", error);

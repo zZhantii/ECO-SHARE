@@ -133,7 +133,9 @@ const { getVehicle, vehicle } = useVehicles();
 // Routes
 import { useRoute } from "vue-router";
 const route = useRoute();
+
 const tripId = route.params.id;
+const seats = route.params.seats;
 
 // PrimeVue
 import Timeline from "primevue/timeline";
@@ -150,7 +152,7 @@ import { onMounted, ref } from "vue";
 
 onMounted(async () => {
     await getTrip(tripId);
-    // console.log("tripList", tripList.value);
+    console.log("tripList", tripList.value);
     await getUser(tripList.value.user_id);
     // console.log("User por ID", user.value);
     for (const key of user.value) {
@@ -158,7 +160,7 @@ onMounted(async () => {
         rating.value = key.rating;
     }
     await getVehicle(tripList.value.vehicle_id);
-    console.log("Vehicle por ID", vehicle.value);
+    // console.log("Vehicle por ID", vehicle.value);
 });
 
 // Funciones de formateo de Time para el TimeLine
@@ -200,7 +202,7 @@ function getTimelineEvents(tripList) {
 
 const reservedSeats = async () => {
     try {
-        const available_seats = tripList.value.available_seats -= 1;
+        const available_seats = tripList.value.available_seats -= seats;
         const reservedTrip = await tripList.value;
         console.log("reservando viaje", reservedTrip);
 

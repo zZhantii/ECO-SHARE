@@ -108,7 +108,7 @@
                 <h4>Resultados de búsqueda</h4>
                 {{ departure_time }}, {{ start_point }} -> {{ end_point }}
             </div>
-            <div v-for="(trip, index) in displayResults" :key="index" class="border p-5 rounded mb-5">
+            <div v-for="(trip, index) in displayResults" :key="index" class="border rounded mb-5">
                 <div class="col-12">
                     <div class="d-flex pb-4">
                         <Timeline :value="getTimelineEvents(trip)" layout="horizontal" align="top"
@@ -125,11 +125,12 @@
                         </Timeline>
                         <div class="d-flex flex-column justify-content-center align-items-center gap-3 w-25">
                             <span class="text-xl font-semibold">${{ trip.price }}</span>
-                            <router-link :to="{ name: 'ConfirmationTrips', params: { id: trip.id } }"
+                            <router-link
+                                :to="{ name: 'ConfirmationTrips', params: { id: trip.id, seats: searchTrip.available_seats } }"
                                 class="btn-primary">Reserva</router-link>
                         </div>
                     </div>
-                    <div class="d-flex border-top pt-5 px-5 ">
+                    <div class="d-flex border-top pt-3 px-5 ">
                         <div class="d-flex gap-3 align-items-center pe-5">
                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000"
                                 viewBox="0 0 256 256">
@@ -142,11 +143,11 @@
                         <div class="border-start border-end ps-5 w-75">
                             <p>Tags</p>
                         </div>
-                        <div class="d-flex align-items-center flex-column ps-5 gap-3">
-                            <div class="circle border">
+                        <div class="d-flex align-items-center ps-5 gap-5">
+                            <!-- <div class="circle border">
                                 <p>fotoperfil</p>
-                                <!-- <img :src="user.value[0].profile_picture" alt="profile picture" class="rounded-img" /> -->
-                            </div>
+                                <img :src="user.value[0].profile_picture" alt="profile picture" class="rounded-img" />
+                            </div> -->
                             <Rating v-model="rating" disabled />
                         </div>
                     </div>
