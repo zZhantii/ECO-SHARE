@@ -17,13 +17,13 @@ class TripController extends Controller
 
     public function show(Trip $trip)
     {
-        $tripDetails = Vehicle::find($trip->id);
+        $tripDetails = Trip::find($trip->id);
 
         if (!$tripDetails) {
             return response()->json(['message' => 'Trip no encontrado'], 404);
         }
 
-        return response()->json($tripDetails);
+        return response()->json(["success" => true, "data" => $tripDetails], 200);
     }
 
     public function store(Request $request)
@@ -47,6 +47,15 @@ class TripController extends Controller
         $data = $validator->validated();
         $trip = Trip::create($data);
         $trip->tags()->sync($data['tags']);
+
+        return response()->json(["success" => true, "data" => $trip], 200);
+    }
+
+    public function updateSeats(Request $request, Trip $trip)
+    {
+        $trip->available_seats = $request->available_seats;
+        
+        $trip->save();
 
         return response()->json(["success" => true, "data" => $trip], 200);
     }
