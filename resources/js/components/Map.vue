@@ -103,6 +103,7 @@ const initMap = () => {
     })
         .then((response) => response.json())
         .then((data) => {
+            console.log("Direccion enviada desde la API: ", data);
             if (data.routes && data.routes.length > 0) {
                 const route = data.routes[0];
 

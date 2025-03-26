@@ -101,4 +101,6 @@ Route::get("author/{author}", [AuthorController::class, "show"]);
 
 
 
+
 Route::get("app/driver-trip-active", [AppController::class, "indexDriverTrips"]);
+

@@ -8,12 +8,12 @@
             <div class="col-12 col-md-4">
                 <div class="d-flex justify-content-between">
                     <h4>Ordenar Por</h4>
-                    <p>Borrar Todo</p>
+                    <p @click="clearFilters">Borrar Todo</p>
                 </div>
-                <!-- <div class="flex align-items-center gap-2 justify-content-between inputFilter">
-                    <Checkbox v-model="filters.earlyDeparture" inputId="earlyDeparture" binary />
+                <div class="flex align-items-center gap-2 justify-content-between inputFilter">
+                    <!-- <Checkbox v-model="filters.earlyDeparture" inputId="earlyDeparture" /> -->
+                    <input type="checkbox" v-model="filters.earlyDeparture" />
                     <label for="earlyDeparture" class="w-75 cursor-pointer">Salida más temprano</label>
-
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#334155" viewBox="0 0 256 256"
                         aria-label="Icono de filtro">
                         <path
@@ -22,7 +22,8 @@
                     </svg>
                 </div>
                 <div class="flex align-items-center gap-2 justify-content-between inputFilter">
-                    <Checkbox type="checkbox" v-model="filters.lateDeparture" />
+                    <input type="checkbox" v-model="filters.lateDeparture" />
+                    <!-- <Checkbox type="checkbox" v-model="filters.lateDeparture" /> -->
                     <label for="lateDeparture" class="w-75">Salida más tarde</label>
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#334155" viewBox="0 0 256 256">
                         <path
@@ -31,7 +32,8 @@
                     </svg>
                 </div>
                 <div class="flex align-items-center gap-2 justify-content-between inputFilter">
-                    <Checkbox type="checkbox" v-model="filters.pickupPoint" />
+                    <!-- <Checkbox type="checkbox" v-model="filters.pickupPoint" /> -->
+                    <input type="checkbox" v-model="filters.pickupPoint" />
                     <label for="pickupPoint" class="w-75"> Punt de recogida </label>
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#334155" viewBox="0 0 256 256">
                         <path
@@ -40,7 +42,8 @@
                     </svg>
                 </div>
                 <div class="flex align-items-center gap-2 justify-content-between inputFilter">
-                    <Checkbox type="checkbox" v-model="filters.destinationPoint" />
+                    <!-- <Checkbox type="checkbox" v-model="filters.destinationPoint" /> -->
+                    <input type="checkbox" v-model="filters.destinationPoint" />
                     <label for="destinationPoint" class="w-75"> Punt de destino </label>
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#334155" viewBox="0 0 256 256">
                         <path
@@ -49,7 +52,8 @@
                     </svg>
                 </div>
                 <div class="flex align-items-center gap-2 justify-content-between inputFilter">
-                    <Checkbox type="checkbox" v-model="filters.lowestPrice" @change="filters.highestPrice = false" />
+                    <input type="checkbox" v-model="filters.lowestPrice" />
+                    <!-- <Checkbox type="checkbox" v-model="filters.lowestPrice" /> -->
                     <label for="lowestPrice" class="w-75"> Precio más bajo </label>
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#334155" viewBox="0 0 256 256">
                         <path
@@ -58,22 +62,44 @@
                     </svg>
                 </div>
                 <div class="flex align-items-center gap-2 justify-content-between inputFilter">
-                    <Checkbox type="checkbox" v-model="filters.highestPrice" @change="filters.lowestPrice = false" />
+                    <input type="checkbox" v-model="filters.highestPrice" />
+                    <!-- <Checkbox type="checkbox" v-model="filters.highestPrice" /> -->
                     <label for="highestPrice" class="w-75"> Precio más alto </label>
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#334155" viewBox="0 0 256 256">
                         <path
                             d="M224.56,103.81C213.43,97.75,198.47,93.39,182,91.34V84c0-12.12-9.58-23.1-27-30.93C139.16,45.93,118.2,42,96,42S52.84,45.93,37,53.07C19.58,60.9,10,71.88,10,84v40c0,12.12,9.58,23.1,27,30.93,10.49,4.72,23.21,8,37,9.73V172c0,12.12,9.58,23.1,27,30.93C116.84,210.07,137.8,214,160,214s43.16-3.93,59-11.07c17.39-7.83,27-18.81,27-30.93V132C246,121.35,238.39,111.34,224.56,103.81Zm-5.74,10.54C228.61,119.68,234,126,234,132c0,14.19-30.39,30-74,30a166.9,166.9,0,0,1-21.21-1.34A110.79,110.79,0,0,0,155,154.93c17.39-7.83,27-18.81,27-30.93V103.43C196.4,105.36,209.3,109.16,218.82,114.35ZM108.16,153.58c-3.92.27-8,.42-12.16.42-5.3,0-10.4-.24-15.28-.67a2.22,2.22,0,0,0-.37,0c-3.58-.33-7-.77-10.35-1.3V124.12A178,178,0,0,0,96,126a178,178,0,0,0,26-1.88V152c-4.34.69-8.91,1.22-13.69,1.56ZM170,105.89V124c0,9.54-13.75,19.8-36,25.51V121.85a115,115,0,0,0,21-6.92A66.2,66.2,0,0,0,170,105.89ZM96,54c43.61,0,74,15.81,74,30s-30.39,30-74,30S22,98.19,22,84,52.39,54,96,54ZM22,124V105.89a66.2,66.2,0,0,0,15,9,115,115,0,0,0,21,6.92v27.66C35.75,143.8,22,133.54,22,124Zm64,48v-6.28c3.3.18,6.63.28,10,.28q5.91,0,11.66-.37A123.17,123.17,0,0,0,122,169.84v27.67C99.75,191.8,86,181.54,86,172Zm48,28V172.1a177.84,177.84,0,0,0,26,1.9,178,178,0,0,0,26-1.88V200a170,170,0,0,1-52,0Zm64-2.49V169.85a115,115,0,0,0,21-6.92,66.2,66.2,0,0,0,15-9V172C234,181.54,220.25,191.8,198,197.51Z">
                         </path>
                     </svg>
-                </div>-->
+                </div>
+                <div class="flex align-items-center gap-2 justify-content-between inputFilter">
+                    <input type="checkbox" v-model="filters.highestRating" />
+                    <!-- <Checkbox type="checkbox" v-model="filters.highestRating" /> -->
+                    <label for="highestRating" class="w-75"> Valoracion más alto </label>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#334155" viewBox="0 0 256 256">
+                        <path
+                            d="M239.18,97.26A16.38,16.38,0,0,0,224.92,86l-59-4.76L143.14,26.15a16.36,16.36,0,0,0-30.27,0L90.11,81.23,31.08,86a16.46,16.46,0,0,0-9.37,28.86l45,38.83L53,211.75a16.38,16.38,0,0,0,24.5,17.82L128,198.49l50.53,31.08A16.4,16.4,0,0,0,203,211.75l-13.76-58.07,45-38.83A16.43,16.43,0,0,0,239.18,97.26Zm-15.34,5.47-48.7,42a8,8,0,0,0-2.56,7.91l14.88,62.8a.37.37,0,0,1-.17.48c-.18.14-.23.11-.38,0l-54.72-33.65a8,8,0,0,0-8.38,0L69.09,215.94c-.15.09-.19.12-.38,0a.37.37,0,0,1-.17-.48l14.88-62.8a8,8,0,0,0-2.56-7.91l-48.7-42c-.12-.1-.23-.19-.13-.5s.18-.27.33-.29l63.92-5.16A8,8,0,0,0,103,91.86l24.62-59.61c.08-.17.11-.25.35-.25s.27.08.35.25L153,91.86a8,8,0,0,0,6.75,4.92l63.92,5.16c.15,0,.24,0,.33.29S224,102.63,223.84,102.73Z">
+                        </path>
+                    </svg>
+                </div>
+                <div class="flex align-items-center gap-2 justify-content-between inputFilter">
+                    <input type="checkbox" v-model="filters.lowestRating" />
+                    <!-- <Checkbox type="checkbox" v-model="filters.lowestRating" /> -->
+                    <label for="lowestRating" class="w-75"> Valoracion más bajo </label>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#334155" viewBox="0 0 256 256">
+                        <path
+                            d="M239.18,97.26A16.38,16.38,0,0,0,224.92,86l-59-4.76L143.14,26.15a16.36,16.36,0,0,0-30.27,0L90.11,81.23,31.08,86a16.46,16.46,0,0,0-9.37,28.86l45,38.83L53,211.75a16.38,16.38,0,0,0,24.5,17.82L128,198.49l50.53,31.08A16.4,16.4,0,0,0,203,211.75l-13.76-58.07,45-38.83A16.43,16.43,0,0,0,239.18,97.26Zm-15.34,5.47-48.7,42a8,8,0,0,0-2.56,7.91l14.88,62.8a.37.37,0,0,1-.17.48c-.18.14-.23.11-.38,0l-54.72-33.65a8,8,0,0,0-8.38,0L69.09,215.94c-.15.09-.19.12-.38,0a.37.37,0,0,1-.17-.48l14.88-62.8a8,8,0,0,0-2.56-7.91l-48.7-42c-.12-.1-.23-.19-.13-.5s.18-.27.33-.29l63.92-5.16A8,8,0,0,0,103,91.86l24.62-59.61c.08-.17.11-.25.35-.25s.27.08.35.25L153,91.86a8,8,0,0,0,6.75,4.92l63.92,5.16c.15,0,.24,0,.33.29S224,102.63,223.84,102.73Z">
+                        </path>
+                    </svg>
+                </div>
             </div>
         </div>
         <div class="row w-main">
             <div class="col-12">
-                Fecha, Inicio -> Destino
+                <h4>Resultados de búsqueda</h4>
+                {{ departure_time }}, {{ start_point }} -> {{ end_point }}
             </div>
-            <div class="col-12">
-                <div v-for="(trip, index) in tripsList" :key="index" class="border p-5 rounded">
+            <div v-for="(trip, index) in displayResults" :key="index" class="border p-5 rounded mb-5">
+                <div class="col-12">
                     <div class="d-flex pb-4">
                         <Timeline :value="getTimelineEvents(trip)" layout="horizontal" align="top"
                             class="border-end w-75 pe-5">
@@ -93,7 +119,7 @@
                                 class="btn-primary">Reserva</router-link>
                         </div>
                     </div>
-                    <div class=" d-flex border-top pt-5 px-5 ">
+                    <div class="d-flex border-top pt-5 px-5 ">
                         <div class="d-flex gap-3 align-items-center pe-5">
                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000"
                                 viewBox="0 0 256 256">
@@ -103,8 +129,15 @@
                             </svg>
                             <p class="m-0">{{ trip.available_seats }}</p>
                         </div>
-                        <div class="border-start ps-5">
+                        <div class="border-start border-end ps-5 w-75">
                             <p>Tags</p>
+                        </div>
+                        <div class="d-flex align-items-center flex-column ps-5 gap-3">
+                            <div class="circle border">
+                                <p>fotoperfil</p>
+                                <!-- <img :src="user.value[0].profile_picture" alt="profile picture" class="rounded-img" /> -->
+                            </div>
+                            <Rating v-model="rating" disabled />
                         </div>
                     </div>
                 </div>
@@ -120,6 +153,8 @@ import TripFinder from "../../components/TripFinder.vue";
 // Composables
 import useTrips from "@/composables/trips";
 const { getTrips, tripsList } = useTrips();
+import useUsers from "@/composables/users";
+const { getUser, user } = useUsers();
 
 // Routes
 import { useRoute } from "vue-router";
@@ -127,13 +162,12 @@ const route = useRoute();
 
 // PrimeVue
 import Timeline from "primevue/timeline";
+import Rating from 'primevue/rating';
+
+const rating = ref(null);
 
 // Vue
-import { onMounted } from "vue";
-
-onMounted(async () => {
-    getTrips();
-});
+import { onMounted, ref, watch, computed } from "vue";
 
 function formatTime(dateTime) {
     const date = new Date(dateTime);
@@ -151,10 +185,154 @@ function getTimelineEvents(trip) {
         },
         {
             location: trip.end_point,
-            time: trip.arrival_time || trip.departure_time,
+            time: trip.arrival_time,
         },
     ];
 }
+
+onMounted(async () => {
+    const queryParams = route.query;
+    if (queryParams.data) {
+        try {
+            const searchData = JSON.parse(queryParams.data);
+            await handleSearch(searchData);
+        } catch (error) {
+            console.error('Error parsing search data:', error);
+        }
+    }
+});
+
+const formatedtime = (date) => {
+    return new Date(date).toISOString().slice(0, 10);
+}
+
+const searchTrip = ref({});
+const searchResults = ref({});
+const searchResultsFiltered = ref({});
+const start_point = ref("");
+const end_point = ref("");
+const departure_time = ref("");
+
+const handleSearch = async (searchData) => {
+    try {
+        await getTrips();
+
+        const trips = tripsList.value.map(trip => ({
+            ...trip,
+            start_point: trip.start_point.address,
+            end_point: trip.end_point.address,
+            locality_start: trip.start_point.locality,
+            locality_end: trip.end_point.locality,
+            departure_time: trip.departure_time,
+        }));
+
+        console.log("Trips formatted:", trips);
+
+        searchTrip.value = {
+            start_point: searchData.origin.name,
+            locality_start: searchData.origin.address_components.find(
+                comp => comp.types.includes('locality')
+            ).long_name,
+            end_point: searchData.destination.name,
+            locality_end: searchData.destination.address_components.find(
+                comp => comp.types.includes('locality')
+            ).long_name,
+            date: searchData.date,
+            available_seats: searchData.passengers || 0
+        };
+
+        start_point.value = searchTrip.value.start_point;
+        end_point.value = searchTrip.value.end_point;
+        departure_time.value = formatedtime(searchTrip.value.date);
+
+        console.log('Trip de busqueda:', searchTrip.value);
+
+        searchResults.value = trips.filter(trip => {
+            const tripDate = new Date(trip.departure_time).toISOString().slice(0, 10);
+            const searchDate = new Date(searchTrip.value.date).toISOString().slice(0, 10);
+
+            return (
+                trip.start_point === searchTrip.value.start_point &&
+                trip.end_point === searchTrip.value.end_point &&
+                trip.locality_start === searchTrip.value.locality_start &&
+                trip.locality_end === searchTrip.value.locality_end &&
+                tripDate >= searchDate &&
+                trip.available_seats >= searchTrip.value.available_seats
+            );
+        });
+
+        console.log('Resultados de búsqueda:', searchResults.value);
+
+        await getUser(tripsList.value[0].user_id);
+
+        // console.log("Usuario obtenido por id", user.value);
+        // console.log("Rating del usuario", user.value[0].rating);
+
+        rating.value = user.value[0].rating;
+
+        applyFilters();
+
+    } catch (error) {
+        console.error('Error searching trips:', error);
+    }
+};
+
+const filters = ref({
+    earlyDeparture: false,
+    lateDeparture: false,
+    pickupPoint: "",
+    destinationPoint: "",
+    lowestPrice: false,
+    highestPrice: false,
+    lowestRating: false,
+    highestRating: false,
+});
+
+const applyFilters = () => {
+    if (
+        !filters.value.lowestPrice &&
+        !filters.value.highestPrice &&
+        !filters.value.lowestRating &&
+        !filters.value.highestRating &&
+        !filters.value.earlyDeparture &&
+        !filters.value.lateDeparture
+    ) {
+        searchResultsFiltered.value = [...searchResults.value];
+        console.log('Sin filtros activos, mostrando todos los resultados:', searchResultsFiltered.value);
+        return;
+    }
+
+    let orderedResults = [...searchResults.value];
+
+    if (filters.value.lowestPrice) {
+        orderedResults.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+    } else if (filters.value.highestPrice) {
+        orderedResults.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+    }
+
+    if (filters.value.lowestRating) {
+        orderedResults.sort((a, b) => parseFloat(a.rating || 0) - parseFloat(b.rating || 0));
+    } else if (filters.value.highestRating) {
+        orderedResults.sort((a, b) => parseFloat(b.rating || 0) - parseFloat(a.rating || 0));
+    }
+
+    if (filters.value.earlyDeparture) {
+        orderedResults.sort((a, b) => new Date(a.departure_time) - new Date(b.departure_time));
+    } else if (filters.value.lateDeparture) {
+        orderedResults.sort((a, b) => new Date(b.departure_time) - new Date(a.departure_time));
+    }
+
+    searchResultsFiltered.value = orderedResults;
+    console.log('Resultados ordenados:', searchResultsFiltered.value);
+};
+
+watch(filters, () => {
+    applyFilters();
+}, { deep: true });
+
+const displayResults = computed(() => {
+    return searchResultsFiltered.value;
+});
 
 </script>
 
@@ -241,5 +419,15 @@ label {
         justify-content: space-between;
         margin-bottom: 30px;
     }
+}
+
+.circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>

@@ -25,6 +25,7 @@ class CreateAdminUserSeeder extends Seeder
             'alias' => 'dherrera',
             'email' => 'admin@demo.com',
             'password' => bcrypt('12345678'),
+            'rating' => 3
         ]);
 
         $role = Role::create(['name' => 'admin']);
@@ -50,7 +51,8 @@ class CreateAdminUserSeeder extends Seeder
             'surname1' => 'User',
             'alias' => 'user',
             'email' => 'user@demo.com',
-            'password' => bcrypt('12345678')
+            'password' => bcrypt('12345678'),
+            'rating' => 0
         ]);
         $user->assignRole([$role2->id]);
 

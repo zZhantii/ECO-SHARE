@@ -17,7 +17,13 @@ class TripController extends Controller
 
     public function show(Trip $trip)
     {
-        return response()->json(["success" => true, "data" => $trip], 200);
+        $tripDetails = Vehicle::find($trip->id);
+
+        if (!$tripDetails) {
+            return response()->json(['message' => 'Trip no encontrado'], 404);
+        }
+
+        return response()->json($tripDetails);
     }
 
     public function store(Request $request)
