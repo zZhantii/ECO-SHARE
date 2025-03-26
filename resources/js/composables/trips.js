@@ -87,9 +87,7 @@ export default function useTrips(user) {
     };
 
     const getActiveTrips = async () => {
-        const responseDriver = await axios.get(
-            "http://localhost:8000/api/app/driver-trip-active"
-        );
+        const responseDriver = await axios.get("/api/app/driver-trip-active");
         for (const element of responseDriver.data.data) {
             activeDriverTripsList.value.push(element);
         }

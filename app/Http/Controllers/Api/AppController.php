@@ -25,11 +25,11 @@ class AppController extends Controller
     public function indexDriverTrips(Request $request)
     {
 
-        $user = Auth::user();
+        // $user = Auth::user();
 
 
-        $trips = Trip::where("user_id", $user->id)->where("departure_time", ">=", now())->get();
-
+        // $trips = Trip::where("user_id", $user->id)->where("departure_time", ">=", now())->get();
+        $trips = "ok";
         return response()->json(["suceess" => True, "data" => $trips], 200);
     }
 

@@ -4,16 +4,28 @@
             <div class="gradient-img"></div>
             <h1 class="fs-3">Revisa aquí tus próximos viajes</h1>
             <div class="container w-75">
-                <ul v-if="activeDriverTripsList.length > 0">
+                <!-- <ul v-if="activeDriverTripsList.length > 0">
                     <div class="d-flex gap-4 align-items-center">
                         <i class="fa-solid fa-car"></i>
                         <p>Como conductor</p>
                     </div>
 
-                    <li class="m-4" v-for="trip in activeDriverTripsList">
-                        {{ trip }}
-                    </li>
-                </ul>
+                    <DataTable
+                        :value="activeDriverTripsList"
+                        paginator
+                        :rows="5"
+                        :rowsPerPageOptions="[5, 10, 20, 50]"
+                        tableStyle="min-width: 50rem"
+                    >
+                        <Column
+                            class="m-4"
+                            v-for="trip in activeDriverTripsList"
+                            field="departure_time"
+                            header="Name"
+                            style="width: 25%"
+                        ></Column>
+                    </DataTable>
+                </ul> -->
             </div>
 
             <Accordion :activeIndex="-1" class="w-50">
