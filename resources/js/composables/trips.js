@@ -170,6 +170,30 @@ export default function useTrips(user) {
         }
     };
 
+    const addUnavailable_seat = async (unavailable_seats, tripID) => {
+        try {
+            const response = await axios.put("/api/trip/" + tripID, {
+                unavailable_seats: unavailable_seats
+            });
+            const index = tripList.findIndex((ID) => ID.id === tripID);
+            if (index !== -1) {
+                tripsList.value[index] = trip;
+            }
+            console.log("API response, Trip actualizado: " + response.data.data);
+        } catch (error) {
+            console.log("Error updating: ", error);
+        }
+    }
+
+    const reservedTrip = async (reservedTrip, tripID) => {
+        try {
+            const response = await axios.post("/api/trip/reserve/" + reserveTrip, tripID);
+            console.log("API response, Trip reservado: " + response.data.data);
+        } catch (error) {
+            console.log("Error updating: ", error);
+        }
+    }
+
     return {
         // trips,
         // trip,
@@ -179,6 +203,8 @@ export default function useTrips(user) {
         getTrip,
         updateTrip,
         deleteTrip,
+        addUnavailable_seat,
+        reservedTrip,
         validationErrors,
         getActiveTrips,
         activeDriverTripsList,

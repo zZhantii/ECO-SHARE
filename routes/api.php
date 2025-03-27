@@ -60,10 +60,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
 
     // Trips
-    Route::post("trip/reserve/{trip}", [TripController::class, 'reserve']);
     Route::get("trip", [TripController::class, 'index']);
     Route::get("trip/{trip}", [TripController::class, 'show']);
     Route::post("trip", [TripController::class, 'store']);
+    Route::post("trip/reserve/{trip}", [TripController::class, 'reserve']);
     Route::put("trip/{trip}", [TripController::class, 'updateSeats']);
 
     Route::get('category-list', [CategoryController::class, 'getList']);
