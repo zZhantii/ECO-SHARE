@@ -86,7 +86,7 @@ class AppController extends Controller
     //Método para cancelar el viajr como conductor
     public function cancelDriverTrip($id)
     {
-        if ($empty($trip->drive_start)) {
+        if (empty($trip->drive_start)) {
             $trip = Trip::find($id);
             $trip->cancelled_at = now();
             $trip->save();

@@ -22,9 +22,9 @@
                         <p>Como conductor</p>
                     </div>
 
-                    <ul class="col-sm-12 col-md-7 p-0">
+                    <ul class="col-sm-11 col-md-7 p-0">
                         <li v-for="trip in activeDriverTripsList">
-                            <div class="timeline mb-3 m-5 p-3 rounded-1">
+                            <div class="timeline mb-3 m-4 p-3 rounded-1">
                                 <Timeline
                                     :value="getTimelineEvents(trip)"
                                     layout="horizontal"
@@ -68,7 +68,9 @@
                                             "
                                             class="btn-cancel m-3"
                                             label="Cancelar viaje"
-                                            @click="cancelTripAsDriver(trip.id)"
+                                            @click="
+                                                cancellTripAsDriver(trip.id)
+                                            "
                                         />
                                         <Button
                                             v-if="
@@ -179,9 +181,9 @@
                         <p>Como pasajero</p>
                     </div>
 
-                    <ul class="col-sm-12 col-md-7 p-0">
+                    <ul class="col-sm-11 col-md-7 p-0">
                         <li v-for="trip in activePassengerTripsList">
-                            <div class="timeline mb-3 m-5 p-3 rounded-1">
+                            <div class="timeline mb-3 m-4 p-3 rounded-1">
                                 <Timeline
                                     :value="getTimelineEvents(trip)"
                                     layout="horizontal"
@@ -224,7 +226,7 @@
             </div>
 
             <h2 v-else>No tienes viajes activos</h2>
-            <Accordion :activeIndex="-1" class="col-sm-12 col-md-7 p-5">
+            <Accordion :activeIndex="-1" class="col-sm-11 col-md-7 p-5">
                 <AccordionTab class="mt-2" header="Historial de viajes">
                 </AccordionTab>
             </Accordion>

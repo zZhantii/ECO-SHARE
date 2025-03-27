@@ -186,7 +186,7 @@ export default function useTrips() {
                 );
 
                 activeDriverTripsList.value[index].cancelled_at =
-                    response.data.data.drive_end;
+                    response.data.data.cancelled_at;
             } else {
                 swal({
                     icon: "error",
