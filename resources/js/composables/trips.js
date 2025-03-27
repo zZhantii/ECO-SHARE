@@ -170,6 +170,36 @@ export default function useTrips() {
             });
         }
     };
+    const cancellTripAsDriver = async (tripId) => {
+        try {
+            const response = await axios.put(
+                `/api/app/cancel-driver-trip/${tripId}`
+            );
+
+            if (response.data.success == true) {
+                swal({
+                    icon: "success",
+                    title: "Viaje cancelado",
+                });
+                const index = activeDriverTripsList.value.findIndex(
+                    (e) => e.id == tripId
+                );
+
+                activeDriverTripsList.value[index].cancelled_at =
+                    response.data.data.drive_end;
+            } else {
+                swal({
+                    icon: "error",
+                    title: "No se ha podido cancelar el viaje",
+                });
+            }
+        } catch (e) {
+            swal({
+                icon: "error",
+                title: "Error inesperado en el servidor",
+            });
+        }
+    };
 
     const deleteTrip = async (trip) => {
         if (isLoading.value) return;
@@ -212,5 +242,6 @@ export default function useTrips() {
         startDrive,
         endDrive,
         activePassengerTripsList,
+        cancellTripAsDriver,
     };
 }

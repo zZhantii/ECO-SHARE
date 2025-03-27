@@ -57,9 +57,9 @@ export default function useVehicles() {
         } catch (error) {
             console.error("Error fetching trips:", error);
             useToast().add({
-                severity: 'error',
-                summary: 'Error',
-                detail: 'No se pudieron cargar los viajes',
+                severity: "error",
+                summary: "Error",
+                detail: "No se pudieron cargar los viajes",
                 life: 3000,
             });
         } finally {

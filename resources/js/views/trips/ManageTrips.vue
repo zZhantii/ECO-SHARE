@@ -52,7 +52,10 @@
                                 <div class="d-flex justify-content-between">
                                     <div class="d-flex align-items-center">
                                         <Button
-                                            v-if="trip.drive_start == null"
+                                            v-if="
+                                                trip.drive_start == null &&
+                                                trip.cancelled_at == null
+                                            "
                                             class="btn-secondary m-1"
                                             label="Iniciar viaje"
                                             @click="startDrive(trip.id)"
@@ -60,10 +63,12 @@
                                         <Button
                                             v-if="
                                                 trip.drive_start == null &&
-                                                trip.drive_start == null
+                                                trip.drive_start == null &&
+                                                trip.cancelled_at == null
                                             "
                                             class="btn-cancel m-3"
                                             label="Cancelar viaje"
+                                            @click="cancelTripAsDriver(trip.id)"
                                         />
                                         <Button
                                             v-if="
@@ -85,6 +90,20 @@
                                             <p style="color: #054851">
                                                 <strong>
                                                     Viaje finalizado</strong
+                                                >
+                                            </p>
+                                        </div>
+                                        <div
+                                            v-if="trip.cancelled_at != null"
+                                            class="d-flex align-items-center gap-3"
+                                        >
+                                            <i
+                                                class="fa-solid fa-ban"
+                                                style="color: red"
+                                            ></i>
+                                            <p style="color: #054851">
+                                                <strong>
+                                                    Viaje cancelado</strong
                                                 >
                                             </p>
                                         </div>
@@ -227,6 +246,7 @@ const {
     activePassengerTripsList,
     startDrive,
     endDrive,
+    cancellTripAsDriver,
 } = useTrips();
 
 onMounted(() => {

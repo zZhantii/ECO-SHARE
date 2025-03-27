@@ -27,7 +27,7 @@ class AppController extends Controller
     {
         $trip = Trip::find($id);
 
-        if (empty($trip->drive_start) && empty($trip->drive_end)) {
+        if (empty($trip->drive_start) && empty($trip->drive_end) && empty($trip->cancelled_at)) {
             $trip->drive_start = now();
             $trip->save();
             return response()->json(["success" => true, "data" => $trip], 200);
@@ -42,7 +42,7 @@ class AppController extends Controller
     {
         $trip = Trip::find($id);
 
-        if (empty($trip->drive_start)) {
+        if (empty($trip->drive_start && empty($trip->cancelled_at))) {
 
             return response()->json(["success" => false, "data" => "El viaje no ha sido iniciado"], 400);
         } else {
@@ -82,6 +82,23 @@ class AppController extends Controller
         $trips = Trip::where("user_id", $user->id)->where("departure_time", ">=", now())->with("vehicle")->get();
 
         return response()->json(["suceess" => True, "data" => $trips], 200);
+    }
+    //Método para cancelar el viajr como conductor
+    public function cancelDriverTrip($id)
+    {
+        if ($empty($trip->drive_start)) {
+            $trip = Trip::find($id);
+            $trip->cancelled_at = now();
+            $trip->save();
+
+            return response()->json(["success" => true, "data" => $trip], 200);
+        }
+
+
+        return response()->json(["success" => false, "data" => "No se ha podido cancelar el viaje"], 400);
+
+
+
     }
 
 
