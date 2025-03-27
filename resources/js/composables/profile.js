@@ -74,10 +74,8 @@ export default function useProfile() {
             .finally(() => (isLoading.value = false));
     };
     const deleteImage = async () => {
-        const response = await axios.delete(
-            "http://localhost:8000/api/delete-avatar"
-        );
-        if (data.success) {
+        const response = await axios.delete("/api/delete-avatar");
+        if (response.data.success) {
             swal({
                 icon: "success",
                 title: "Imagen de perfil eliminada con éxito.",

@@ -18,18 +18,21 @@ class Trip extends Model
         'arrival_time',
         'available_seats',
         'price',
+        'drive_start',
+        'drive_end',
+        'cancelled_at'
     ];
 
     // Relacion 1:N (N trips)
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'id');
     }
 
     // Relacion vehicles-trips 1:N (N trip)
     public function vehicle()
     {
-        return $this->belongsTo(Vehicle::class, 'vehicle_id');
+        return $this->belongsTo(Vehicle::class, 'id');
     }
 
     // Relacion trips-tags N:M (N Trips)
@@ -41,7 +44,7 @@ class Trip extends Model
     // Relacion user_trips_rates N:M (M Trips)
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_rates', 'user_id');
+        return $this->belongsToMany(User::class, 'user_rates', 'id');
     }
 
     protected $casts = [

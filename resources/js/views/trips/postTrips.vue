@@ -11,25 +11,34 @@
                     </StepList>
                     <StepPanels>
                         <StepPanel v-slot="{ activateCallback }" value="1">
-                            <div class="flex-auto d-flex justify-content-center">
+                            <div
+                                class="flex-auto d-flex justify-content-center"
+                            >
                                 <Toast />
-                                <form @submit.prevent="saveOption" class="w-100">
+                                <form
+                                    @submit.prevent="saveOption"
+                                    class="w-100"
+                                >
                                     <div class="row d-flex align-items-center">
                                         <!-- Mapa -->
-                                        <div class="col-12 col-md-6 d-flex justify-content-center">
                                         <div
                                             class="col-12 col-md-6 d-flex justify-content-center"
                                         >
                                             <div class="mapTrip w-100">
-                                                <Map v-if="showFirstMap" :origin="tripData.start_point
-                                                    " :destination="tripData.end_point
-                                                        " @updateMapsInfo="
-                                                            handleMapsInfo
-                                                        " />
+                                                <Map
+                                                    v-if="showFirstMap"
+                                                    :origin="
+                                                        tripData.start_point
+                                                    "
+                                                    :destination="
+                                                        tripData.end_point
+                                                    "
+                                                    @updateMapsInfo="
+                                                        handleMapsInfo
+                                                    "
+                                                />
                                             </div>
                                         </div>
-                                        <!-- Inputs -->
-                                        <div class="col-12 col-md-6 d-flex flex-column">
 
                                         <div
                                             class="col-12 col-md-6 d-flex flex-column"
@@ -38,22 +47,27 @@
                                                 <h3 class="mt-2 mb-3 fs-5">
                                                     ¿Desde dónde sales?
                                                 </h3>
-                                                <InputText id="origin" type="text" class="form-control"
-                                                    placeholder="Punto de inicio" />
+                                                <InputText
+                                                    id="origin"
+                                                    type="text"
+                                                    class="form-control"
+                                                    placeholder="Punto de inicio"
+                                                />
                                             </div>
                                             <div class="text-center mt-3">
                                                 <h3 class="mt-2 mb-3 fs-5">
                                                     ¿A dónde vas?
                                                 </h3>
-                                                <InputText id="destination" type="text" class="form-control"
-                                                    placeholder="Destino" />
+                                                <InputText
+                                                    id="destination"
+                                                    type="text"
+                                                    class="form-control"
+                                                    placeholder="Destino"
+                                                />
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="d-flex pt-4 justify-content-end">
-                                        <Button label="Next" type="submit" class="primary-a" icon="pi pi-arrow-right"
-                                            :disabled="!isStep1Complete" iconPos="right"
-                                            @click="activateCallback('2')" />
+
                                     <div
                                         class="d-flex pt-4 justify-content-end"
                                     >
@@ -71,21 +85,43 @@
                             </div>
                         </StepPanel>
                         <StepPanel v-slot="{ activateCallback }" value="2">
-                            <div class="flex-auto d-flex justify-content-center">
+                            <div
+                                class="flex-auto d-flex justify-content-center"
+                            >
                                 <Toast />
-                                <form @submit.prevent="saveOptionCar" class="w-100">
+                                <form
+                                    @submit.prevent="saveOptionCar"
+                                    class="w-100"
+                                >
                                     <div class="row d-flex align-items-center">
-                                        <div class="col-12 col-md-6 d-flex justify-content-center">
+                                        <div
+                                            class="col-12 col-md-6 d-flex justify-content-center"
+                                        >
                                             <h3 class="mt-3 mb-5">
                                                 ¿Que Vehiculo utilizarás?
                                             </h3>
-                                            <div class="d-flex align-items-center">
-                                                <FloatLabel class="" variant="on">
-                                                    <Select v-model="tripData.vehicle_id
-                                                        " inputId="on_label" :options="vehicles" optionValue="id"
-                                                        optionLabel="brand" class="w-full" appendOn=".show" />
-                                                    <label for="on_label">Selecciones su
-                                                        vehiculo</label>
+                                            <div
+                                                class="d-flex align-items-center"
+                                            >
+                                                <FloatLabel
+                                                    class=""
+                                                    variant="on"
+                                                >
+                                                    <Select
+                                                        v-model="
+                                                            tripData.vehicle_id
+                                                        "
+                                                        inputId="on_label"
+                                                        :options="vehicles"
+                                                        optionValue="id"
+                                                        optionLabel="brand"
+                                                        class="w-full"
+                                                        appendOn=".show"
+                                                    />
+                                                    <label for="on_label"
+                                                        >Selecciones su
+                                                        vehiculo</label
+                                                    >
                                                 </FloatLabel>
                                             </div>
                                             <h3 class="mt-3 mb-5">
@@ -105,7 +141,9 @@
                                                 fluid
                                             />
                                         </div>
-                                        <div class="col-12 col-md-6 d-flex justify-content-center">
+                                        <div
+                                            class="col-12 col-md-6 d-flex justify-content-center"
+                                        >
                                             <h3 class="mt-3 mb-5">
                                                 ¿Cuantos asientos hay
                                                 disponibles?
@@ -165,79 +203,108 @@
                                             iconPos="right"
                                             @click="
                                                 activateCallback('3'),
-                                                (showFirstMap = false)
-                                                " />
+                                                    (showFirstMap = false)
+                                            "
+                                        />
                                     </div>
                                 </form>
                             </div>
                         </StepPanel>
                         <StepPanel v-slot="{ activateCallback }" value="3">
-                            <div class="flex-auto d-flex justify-content-center">
-                                <div class="row d-flex align-items-center w-100">
-                                    <div class="col-12 col-md-6 d-flex justify-content-center">
+                            <div
+                                class="flex-auto d-flex justify-content-center"
+                            >
+                                <div
+                                    class="row d-flex align-items-center w-100"
+                                >
+                                    <div
+                                        class="col-12 col-md-6 d-flex justify-content-center"
+                                    >
                                         <div class="mapTrip w-100">
-                                            <Map v-if="!showFirstMap" :origin="tempStartPoint"
-                                                :destination="tempEndPoint" @updateMapsInfo="handleMapsInfo" />
+                                            <Map
+                                                v-if="!showFirstMap"
+                                                :origin="tempStartPoint"
+                                                :destination="tempEndPoint"
+                                                @updateMapsInfo="handleMapsInfo"
+                                            />
                                         </div>
                                     </div>
-                                    <div class="col-12 col-md-6 d-flex flex-column">
+                                    <div
+                                        class="col-12 col-md-6 d-flex flex-column"
+                                    >
                                         <h2 class="font-bold">
                                             ¡Resumen del viaje!
                                         </h2>
-                                        <div class="col d-flex justify-content-between gap-5">
+                                        <div
+                                            class="col d-flex justify-content-between gap-5"
+                                        >
                                             <div>
                                                 <h4 class="mb-3">
                                                     Detalles del vehiculo
                                                 </h4>
-                                                <ul class="d-flex flex-column gap-3">
-                                                    <li v-if="
-                                                        selectedVehicleDetails
-                                                    ">
+                                                <ul
+                                                    class="d-flex flex-column gap-3"
+                                                >
+                                                    <li
+                                                        v-if="
+                                                            selectedVehicleDetails
+                                                        "
+                                                    >
                                                         {{
                                                             selectedVehicleDetails.brand
                                                                 ? `Marca: ${selectedVehicleDetails.brand}`
                                                                 : "Marca no disponible"
                                                         }}
                                                     </li>
-                                                    <li v-if="
-                                                        selectedVehicleDetails
-                                                    ">
+                                                    <li
+                                                        v-if="
+                                                            selectedVehicleDetails
+                                                        "
+                                                    >
                                                         {{
                                                             selectedVehicleDetails.model
                                                                 ? `Modelo: ${selectedVehicleDetails.model}`
                                                                 : "Modelo no disponible"
                                                         }}
                                                     </li>
-                                                    <li v-if="
-                                                        selectedVehicleDetails
-                                                    ">
+                                                    <li
+                                                        v-if="
+                                                            selectedVehicleDetails
+                                                        "
+                                                    >
                                                         {{
                                                             selectedVehicleDetails.plate
                                                                 ? `Matrícula: ${selectedVehicleDetails.plate}`
                                                                 : "Matrícula no disponible"
                                                         }}
                                                     </li>
-                                                    <li v-if="
-                                                        selectedVehicleDetails
-                                                    ">
+                                                    <li
+                                                        v-if="
+                                                            selectedVehicleDetails
+                                                        "
+                                                    >
                                                         {{
                                                             selectedVehicleDetails.consumption
                                                                 ? `Consumo: ${selectedVehicleDetails.consumption} L / 100 Km`
                                                                 : "Consumo no disponible"
                                                         }}
                                                     </li>
-                                                    <li v-if="
-                                                        selectedVehicleDetails
-                                                    ">
+                                                    <li
+                                                        v-if="
+                                                            selectedVehicleDetails
+                                                        "
+                                                    >
                                                         {{
                                                             tripData.available_seats
                                                                 ? `Número de asientos: ${tripData.available_seats}`
                                                                 : "Número de asientos no disponible"
                                                         }}
                                                     </li>
-                                                    <li v-if="
-                                                        selectedVehicleDetails
-                                                    ">
+                                                    <li
+                                                        v-if="
+                                                            selectedVehicleDetails
+                                                        "
+                                                    >
                                                         {{
                                                             selectedVehicleDetails.fuel_type
                                                                 ? `Tipo de gasolina: ${selectedVehicleDetails.fuel_type}`
@@ -250,24 +317,26 @@
                                                 <h4 class="mb-3">
                                                     Detalles del viaje
                                                 </h4>
-                                                <ul class="d-flex flex-column gap-3">
+                                                <ul
+                                                    class="d-flex flex-column gap-3"
+                                                >
                                                     <li>
                                                         Origen:
                                                         {{
                                                             tripData.start_point
                                                                 .address ===
-                                                                tripData.start_point
-                                                                    .locality
+                                                            tripData.start_point
+                                                                .locality
                                                                 ? tripData
-                                                                    .start_point
-                                                                    .locality
+                                                                      .start_point
+                                                                      .locality
                                                                 : tripData
-                                                                    .start_point
-                                                                    .address +
-                                                                ", " +
-                                                                tripData
-                                                                    .start_point
-                                                                    .locality
+                                                                      .start_point
+                                                                      .address +
+                                                                  ", " +
+                                                                  tripData
+                                                                      .start_point
+                                                                      .locality
                                                         }}
                                                     </li>
                                                     <li>
@@ -275,18 +344,18 @@
                                                         {{
                                                             tripData.end_point
                                                                 .address ===
-                                                                tripData.end_point
-                                                                    .locality
+                                                            tripData.end_point
+                                                                .locality
                                                                 ? tripData
-                                                                    .end_point
-                                                                    .locality
+                                                                      .end_point
+                                                                      .locality
                                                                 : tripData
-                                                                    .end_point
-                                                                    .address +
-                                                                ", " +
-                                                                tripData
-                                                                    .end_point
-                                                                    .locality
+                                                                      .end_point
+                                                                      .address +
+                                                                  ", " +
+                                                                  tripData
+                                                                      .end_point
+                                                                      .locality
                                                         }}
                                                     </li>
                                                     <li>
@@ -655,9 +724,9 @@ const getPrice = () => {
             tripData.value.price =
                 Math.round(
                     (selectedVehicleDetails.value.consumption / 100.0) *
-                    gasolineRate.value *
-                    distance.value *
-                    100
+                        gasolineRate.value *
+                        distance.value *
+                        100
                 ) / 100;
 
             break;
