@@ -8,13 +8,13 @@
                     activeDriverTripsList.length > 0 ||
                     activePassengerTripsList.length
                 "
-                class="container w-75"
+                class="container"
             >
                 <h1 class="fs-3 text-center m-5">
                     Revisa aquí tus próximos viajes
                 </h1>
                 <div
-                    class="w-100 d-flex flex-column align-items-center"
+                    class="d-flex flex-column align-items-center"
                     v-if="activeDriverTripsList.length > 0"
                 >
                     <div class="d-flex gap-5 mt-5">
@@ -22,7 +22,7 @@
                         <p>Como conductor</p>
                     </div>
 
-                    <ul class="w-75">
+                    <ul class="col-sm-12 col-md-7">
                         <li v-for="trip in activeDriverTripsList">
                             <div class="timeline mb-3 m-5 p-3 rounded-1">
                                 <Timeline
@@ -152,7 +152,7 @@
                     </ul>
                 </div>
                 <div
-                    class="w-100 d-flex flex-column align-items-center mt-3 mb-3"
+                    class="d-flex flex-column align-items-center mt-3 mb-3"
                     v-if="activeDriverTripsList.length > 0"
                 >
                     <div class="d-flex gap-5 mt-5">
@@ -160,7 +160,7 @@
                         <p>Como pasajero</p>
                     </div>
 
-                    <ul class="w-75">
+                    <ul class="col-sm-12 col-md-7">
                         <li v-for="trip in activePassengerTripsList">
                             <div class="timeline mb-3 m-5 p-3 rounded-1">
                                 <Timeline
@@ -206,7 +206,7 @@
 
             <h2 v-else>No tienes viajes activos</h2>
             <Accordion :activeIndex="-1" class="w-50 mt-5">
-                <AccordionTab class="w-100 mt-2" header="Historial de viajes">
+                <AccordionTab class="mt-2" header="Historial de viajes">
                 </AccordionTab>
             </Accordion>
         </div>
