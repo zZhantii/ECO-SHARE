@@ -3,10 +3,12 @@ import { useToast } from "primevue/usetoast";
 import { ref, inject } from "vue";
 
 export default function useTrips(user) {
-    const tripsList = ref({});
+    const tripsList = ref([]);
     // const trips = ref({});
-    const tripList = ref({});
+    const tripList = ref([]);
     // const trip = ref({});
+    const searchTripList = ref([]);
+
     const isLoading = ref(false);
     const validationErrors = ref([]);
 
@@ -79,6 +81,22 @@ export default function useTrips(user) {
             isLoading.value = false;
         }
     }
+
+    const searchTrip = async (searchParams) => {
+        try {
+            console.log("searchparams", searchParams);
+            const response = await axios.get('/api/trips/search', {
+                params: searchParams
+            });
+
+            console.log("API response: ", response.data.data);
+            searchTripList.value = response.data.data;
+        } catch (error) {
+            console.error('Search error:', error);
+        } 
+    };
+
+
 
     // const updateTrip = async (tripID, trip) => {
     //     try {
@@ -175,7 +193,10 @@ export default function useTrips(user) {
             const response = await axios.put("/api/trip/" + tripID, {
                 unavailable_seats: unavailable_seats
             });
-            const index = tripList.findIndex((ID) => ID.id === tripID);
+            
+            const tripArray = Object.values(tripList);
+
+            const index = tripArray.findIndex((ID) => ID.id === tripID);
             if (index !== -1) {
                 tripsList.value[index] = trip;
             }
@@ -199,12 +220,14 @@ export default function useTrips(user) {
         // trip,
         tripsList,
         tripList,
+        searchTripList,
         getTrips,
         getTrip,
         updateTrip,
         deleteTrip,
         addUnavailable_seat,
         reservedTrip,
+        searchTrip,
         validationErrors,
         getActiveTrips,
         activeDriverTripsList,

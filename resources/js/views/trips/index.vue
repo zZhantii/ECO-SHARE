@@ -115,7 +115,7 @@
                             class="border-end w-75 pe-5">
                             <template #marker="slotProps">
                                 <i class="pi pi-map-marker px-2" style="font-size: 1.5rem"></i>
-                                <p class="m-0 px-2">{{ formatTime(slotProps.item.time) }}</p>
+                                <p class="m-0 px-2">{{ slotProps.item.time }}</p>
                             </template>
                             <template #content="slotProps">
                                 <div class="timeline-event">
@@ -172,7 +172,7 @@ import TripFinder from "../../components/TripFinder.vue";
 
 // Composables
 import useTrips from "@/composables/trips";
-const { getTrips, tripsList } = useTrips();
+const { getTrips, tripsList, searchTrip, searchTripList } = useTrips();
 import useUsers from "@/composables/users";
 const { getUser, user } = useUsers();
 
@@ -190,13 +190,13 @@ const rating = ref(null);
 // Vue
 import { onMounted, ref, watch, computed } from "vue";
 
-function formatTime(dateTime) {
-    const date = new Date(dateTime);
-    return new Intl.DateTimeFormat("es-ES", {
-        hour: "numeric",
-        minute: "numeric",
-    }).format(date);
-}
+// function formatTime(dateTime) {
+//     const date = new Date(dateTime);
+//     return new Intl.DateTimeFormat("es-ES", {
+//         hour: "numeric",
+//         minute: "numeric",
+//     }).format(date);
+// }
 
 function getTimelineEvents(trip) {
     return [
@@ -216,9 +216,7 @@ onMounted(async () => {
     if (queryParams.data) {
         try {
             const searchData = JSON.parse(queryParams.data);
-            await handleSearch(searchData);
-
-            
+            await handleSearch(searchData);            
         } catch (error) {
             console.error('Error parsing search data:', error);
         }
@@ -229,7 +227,7 @@ const formatedtime = (date) => {
     return new Date(date).toISOString().slice(0, 10);
 }
 
-const searchTrip = ref({});
+const searchTrip2 = ref({});
 const searchResults = ref({});
 const searchResultsFiltered = ref({});
 const start_point = ref("");
@@ -238,65 +236,23 @@ const departure_time = ref("");
 
 const handleSearch = async (searchData) => {
     try {
-        await getTrips();
-
-        const trips = tripsList.value.map(trip => ({
-            ...trip,
-            start_point: trip.start_point.address,
-            end_point: trip.end_point.address,
-            locality_start: trip.start_point.locality,
-            locality_end: trip.end_point.locality,
-            departure_time: trip.departure_time,
-        }));
-
-        console.log("Trips formatted:", trips);
-
-        searchTrip.value = {
+        searchTrip2.value = {
             start_point: searchData.origin.name,
-            locality_start: searchData.origin.address_components.find(
-                comp => comp.types.includes('locality')
-            ).long_name,
+            locality_start: searchData.origin.address_components.find(comp => comp.types.includes('locality'))?.long_name || '',
             end_point: searchData.destination.name,
-            locality_end: searchData.destination.address_components.find(
-                comp => comp.types.includes('locality')
-            ).long_name,
+            locality_end: searchData.destination.address_components.find(comp => comp.types.includes('locality'))?.long_name || '',
             date: searchData.date,
-            available_seats: searchData.passengers || 0
+            available_seats: searchData.passengers 
         };
 
-        start_point.value = searchTrip.value.start_point;
-        end_point.value = searchTrip.value.end_point;
-        departure_time.value = formatedtime(searchTrip.value.date);
+        start_point.value = searchTrip2.value.start_point;
+        end_point.value = searchTrip2.value.end_point;
+        departure_time.value = formatedtime(searchTrip2.value.date);
 
-        console.log('Trip de busqueda:', searchTrip.value);
-
-        searchResults.value = trips.filter(trip => {
-            const tripDate = new Date(trip.departure_time).toISOString().slice(0, 10);
-            const searchDate = new Date(searchTrip.value.date).toISOString().slice(0, 10);
-
-            return (
-                trip.start_point === searchTrip.value.start_point &&
-                trip.end_point === searchTrip.value.end_point &&
-                trip.locality_start === searchTrip.value.locality_start &&
-                trip.locality_end === searchTrip.value.locality_end &&
-                tripDate >= searchDate &&
-                trip.available_seats >= searchTrip.value.available_seats
-            );
-        });
-
-        console.log('Resultados de búsqueda:', searchResults.value);
-
-        await getUser(tripsList.value[0].user_id);
-
-        // console.log("Usuario obtenido por id", user.value);
-        // console.log("Rating del usuario", user.value[0].rating);
-
-        rating.value = user.value[0].rating;
-
+        await searchTrip(searchTrip2.value);
         applyFilters();
-
-    } catch (error) {
-        console.error('Error searching trips:', error);
+    } catch (err) {
+        console.error('Error in search:', err);
     }
 };
 
@@ -324,12 +280,12 @@ const applyFilters = () => {
         !filters.value.availableSeats &&
         !filters.value.lessSeats
     ) {
-        searchResultsFiltered.value = [...searchResults.value];
+        searchResultsFiltered.value = [...searchTripList.value];
         console.log('Sin filtros activos, mostrando todos los resultados:', searchResultsFiltered.value);
         return;
     }
 
-    let orderedResults = [...searchResults.value];
+    let orderedResults = [...searchTripList.value];
 
     if (filters.value.lowestPrice) {
         orderedResults.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));

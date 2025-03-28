@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Trip;
 use Illuminate\Support\Facades\Validator;
 
@@ -51,6 +52,65 @@ class TripController extends Controller
         return response()->json(["success" => true, "data" => $trip], 200);
     }
 
+    public function searchTrip(Request $request)
+{
+    $startPoint = $request->input('start_point');
+    $localityStart = $request->input('locality_start');
+    $endPoint = $request->input('end_point');
+    $localityEnd = $request->input('locality_end');
+    $departureTime = $request->input('departure_time');
+    $requestedSeats = $request->input('available_seats', 1); 
+
+    $query = Trip::select([
+            'trips.id',
+            'trips.user_id',
+            'trips.vehicle_id',
+            DB::raw('JSON_UNQUOTE(JSON_EXTRACT(trips.start_point, "$.address")) as start_address'),
+            DB::raw('JSON_UNQUOTE(JSON_EXTRACT(trips.start_point, "$.locality")) as start_locality'),
+            DB::raw('JSON_UNQUOTE(JSON_EXTRACT(trips.end_point, "$.address")) as end_address'),
+            DB::raw('JSON_UNQUOTE(JSON_EXTRACT(trips.end_point, "$.locality")) as end_locality'),
+            'trips.departure_time',
+            'trips.available_seats',
+            'trips.price',
+            'trips.created_at',
+            'trips.updated_at',
+            DB::raw('(trips.available_seats - IFNULL((
+                SELECT SUM(utr.seats_reserved) 
+                FROM user_trips_reserves utr 
+                WHERE utr.trip_id = trips.id
+            ), 0)) as remaining_seats')
+        ])
+        ->having('remaining_seats', '>=', $requestedSeats)
+        ->where('trips.available_seats', '>=', $requestedSeats); 
+
+    if ($startPoint) {
+        $query->where(DB::raw('JSON_UNQUOTE(JSON_EXTRACT(trips.start_point, "$.address"))'), 'like', "%$startPoint%");
+    }
+
+    if ($localityStart) {
+        $query->where(DB::raw('JSON_UNQUOTE(JSON_EXTRACT(trips.start_point, "$.locality"))'), 'like', "%$localityStart%");
+    }
+
+    if ($endPoint) {
+        $query->where(DB::raw('JSON_UNQUOTE(JSON_EXTRACT(trips.end_point, "$.address"))'), 'like', "%$endPoint%");
+    }
+
+    if ($localityEnd) {
+        $query->where(DB::raw('JSON_UNQUOTE(JSON_EXTRACT(trips.end_point, "$.locality"))'), 'like', "%$localityEnd%");
+    }
+
+    if ($departureTime) {
+        $query->where('departure_time', '>=', $departureTime);
+    }
+
+    $results = $query->get();
+
+    return response()->json([
+        "success" => true, 
+        "data" => $results,
+        "requested_seats" => $requestedSeats
+    ], 200);
+}
     public function updateSeats(Request $request, Trip $trip)
     {
         $trip->unavailable_seats = $request->unavailable_seats;
