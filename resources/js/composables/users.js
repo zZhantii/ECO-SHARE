@@ -1,10 +1,9 @@
 import { ref, inject } from "vue";
 import { useRouter } from "vue-router";
-const user = ref({});
 
 export default function useUsers() {
     const users = ref([]);
-
+    const user = ref([]);
     const router = useRouter();
     const validationErrors = ref({});
     const isLoading = ref(false);
@@ -21,17 +20,17 @@ export default function useUsers() {
         axios
             .get(
                 "/api/users?page=" +
-                    page +
-                    "&search_id=" +
-                    search_id +
-                    "&search_title=" +
-                    search_title +
-                    "&search_global=" +
-                    search_global +
-                    "&order_column=" +
-                    order_column +
-                    "&order_direction=" +
-                    order_direction
+                page +
+                "&search_id=" +
+                search_id +
+                "&search_title=" +
+                search_title +
+                "&search_global=" +
+                search_global +
+                "&order_column=" +
+                order_column +
+                "&order_direction=" +
+                order_direction
             )
             .then((response) => {
                 users.value = response.data;
@@ -47,6 +46,7 @@ export default function useUsers() {
     const getUser = async (id) => {
         const response = await axios.get("/api/user/" + id);
         user.value = response.data.data;
+        console.log("User con id: ", user.value);
 
         return user.value;
     };

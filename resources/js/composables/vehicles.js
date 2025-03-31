@@ -17,6 +17,16 @@ export default function useVehicles() {
     const swal = inject("$swal");
     const validationErrors = ref({});
 
+    // const getVehicles = async () => {
+    //     try {
+    //         const response = await axios.get("/api/app/user-vehicles");
+    //         vehiclesList.value = response.data.data;
+    //         console.log("API response, vehiculos cargados: " + vehiclesList.value);
+    //     } catch (error) {
+    //         validationErrors.value = error.response.data.errors;
+    //     }
+    // }
+
     async function getVehicles() {
         if (vehiclesList.value.length > 0) return;
         axios.get("/api/app/user-vehicle").then((response) => {
@@ -45,6 +55,16 @@ export default function useVehicles() {
             .finally(() => (isLoading.value = false));
     };
 
+    // const getVehicle = async (vehicleID) => {
+    //     try {
+    //         const response = await axios.get("/api/vehicle/" + vehicleID);
+    //         vehicle.value = response.data.data;
+    //         console.log("API response, vehiculo cargado: " + vehicle.value + " con ID: " + vehicleID);
+    //     } catch (error) {
+    //         validationErrors.value = error.response.data.errors;
+    //     }        
+    // }
+
     async function getVehicle(vehicleId) {
         if (isLoading.value || vehicle.value.length > 0) return;
         isLoading.value = true;
@@ -66,6 +86,7 @@ export default function useVehicles() {
             isLoading.value = false;
         }
     }
+
 
     const updateVehicle = async (vehicle) => {
         if (isLoading.value) return;

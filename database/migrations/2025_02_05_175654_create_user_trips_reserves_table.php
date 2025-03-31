@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('trip_id');
             $table->integer('seats_reserved');
             $table->timestamp('reservation_date');
-            $table->timestamp('check_in')->current()->nullable();
+            $table->timestamp('check_in')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

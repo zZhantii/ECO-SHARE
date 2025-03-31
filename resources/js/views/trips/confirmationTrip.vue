@@ -1,7 +1,7 @@
 <template>
-    <div class="container d-flex justify-content-between my-4">
+    <div class="container d-flex justify-content-between y-4">
         <div class="row row_1 gap-4 flex-column">
-            <div class="col border rounded">
+            <div class="col-12 border rounded">
                 <div class="d-flex">
                     <Timeline :value="getTimelineEvents(tripList)" layout="horizontal" align="top"
                         class="border-end w-75 p-5">
@@ -32,38 +32,89 @@
             <div class="col border rounded">
                 Mapa
             </div>
+            <div class="col-12">
+                <button @click="PostTrip" class="btn btn-primary">Reservar</button>
+            </div>
         </div>
         <div class="row row_2 border rounded justify-content-center p-5">
-            <div>
+            <div class="col d-flex align-items-center flex-column">
                 <h3>Detalles del Viaje</h3>
-                <ul>
-                    <li>Fecha: {{ tripList.departure_time }}</li>
-                    <li>Origen: {{ tripList.start_point }}</li>
-                    <li>Destino: {{ tripList.end_point }}</li>
-                    <li>Distancia: {{ tripList.distance }}</li>
-                    <li>Duración: {{ tripList.duration }}</li>
-                </ul>
+                <div class="d-flex gap-5">
+                    <div>
+                        <ul class="d-flex align-items-center flex-column p-0">
+                            <b class="mb-3">Origen</b>
+                            <li class="d-flex ">{{ tripList.start_point?.address }}</li>
+                            <b class="my-3">Fecha Salida</b>
+                            <li class="d-flex">{{ (tripList.departure_time) }}</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul class="d-flex align-items-center flex-column p-0">
+                            <b class="mb-3">Destino</b>
+                            <li class="d-flex ">{{ tripList.end_point?.address }}</li>
+                            <b class="my-3">Fecha Llegada</b>
+                            <li class="d-flex">{{ (tripList.arrival_time) }}</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
             <div class="row_separation"></div>
-            <div>
+            <div class="col d-flex align-items-center flex-column">
                 <h3>Conductor</h3>
-                <p>{{ user.surname1 }}</p>
-                <p>{{ user.surname2 }}</p>
-                <p>{{ user.alias }}</p>
-                <p>{{ user.email }}</p>
-                <p>{{ user.profile_photo }}</p>
+                <div class="circle my-2">
+                    <img :src="user.photo" alt="user photo" />
+                </div>
+                <div class="d-flex gap-5" v-for="(user, index) in user" :key="index">
+                    <div>
+                        <ul class="d-flex align-items-center flex-column p-0">
+                            <b class="mb-3">Usuario</b>
+                            <li class="d-flex ">{{ user.alias }}</li>
+                            <b class="my-3">Apellido 1</b>
+                            <li class="d-flex">{{ user.surname1 }}</li>
+                            <b class="my-3">Correo</b>
+                            <li class="d-flex">{{ user.email }}</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul class="d-flex align-items-center flex-column p-0">
+                            <b class="mb-3">Nombre</b>
+                            <li class="d-flex ">{{ user.name }}</li>
+                            <b class="my-3">Apellido 2</b>
+                            <li class="d-flex">{{ user.surname2 }}</li>
+                            <b class="my-3">Rating</b>
+                            <li class="d-flex">
+                                <Rating v-model="rating" disabled />
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div>
-                <h3>Vehículo</h3>
-                <p>{{ vehicle.brand }}</p>
-                <p>{{ vehicle.model }}</p>
-                <p>{{ vehicle.license_plate }}</p>
-                <p>{{ vehicle.color }}</p>
-                <p>{{ vehicle.photo }}</p>
-            </div>
-            <div>
-                <h3>Coste</h3>
-                <p>{{ tripList.price }}</p>
+            <div class="row_separation"></div>
+            <div class="col d-flex align-items-center flex-column">
+                <h3>Vehiculo</h3>
+                <div class="d-flex gap-5">
+                    <div>
+                        <ul class="d-flex align-items-center flex-column p-0">
+                            <b class="mb-3">Marca</b>
+                            <li class="d-flex ">{{ vehicle.brand }}</li>
+                            <b class="my-3">Placa</b>
+                            <li class="d-flex">{{ vehicle.plate }}</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul class="d-flex align-items-center flex-column p-0">
+                            <b class="mb-3">Modelo</b>
+                            <li class="d-flex ">{{ vehicle.model }}</li>
+                            <b class="my-3">Tipo</b>
+                            <li class="d-flex">{{ vehicle.fuel_type }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row_separation"></div>
+                <div class="col d-flex flex-column align-items-center">
+                    <h3>Coste</h3>
+                    <h4>{{ tripList.price }} €</h4>
+                </div>
             </div>
         </div>
     </div>
@@ -75,28 +126,41 @@ import useTrips from "@/composables/trips";
 import useVehicles from "@/composables/vehicles";
 import useUsers from "@/composables/users";
 
-const { getTrip, tripList } = useTrips();
-const { getVehicle, vehicle } = useVehicles();
+const { getTrip, tripList, reservedTrip } = useTrips();
 const { getUser, user } = useUsers();
+const { getVehicle, vehicle } = useVehicles();
 
 // Routes
 import { useRoute } from "vue-router";
 const route = useRoute();
+
 const tripId = route.params.id;
+const seats = route.params.seats;
 
 // PrimeVue
 import Timeline from "primevue/timeline";
+import { useToast } from "primevue";
+import Rating from "primevue/rating";
+
+const toast = useToast();
+const rating = ref(null);
 
 // Vue
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 
 
 
 onMounted(async () => {
     await getTrip(tripId);
-    console.log(tripList.value.vehicle_id);
+    console.log("tripList", tripList.value);
+    await getUser(tripList.value.user_id);
+    // console.log("User por ID", user.value);
+    for (const key of user.value) {
+        // console.log(key.rating);
+        rating.value = key.rating;
+    }
     await getVehicle(tripList.value.vehicle_id);
-    await getUser(tripList.user_id);
+    // console.log("Vehicle por ID", vehicle.value);
 });
 
 // Funciones de formateo de Time para el TimeLine
@@ -111,34 +175,84 @@ function formatTime(dateTime) {
     }).format(date);
 }
 
-function getTimelineEvents(tripList) {
+function formatDate(dateTime) {
+    const date = new Date(dateTime);
+    if (isNaN(date.getTime())) {
+        return "Invalid time";
+    }
+    return new Intl.DateTimeFormat("es-ES", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    }).format(date);
+}
 
+function getTimelineEvents(tripList) {
     return [
         {
-            location: tripList.start_point,
+            location: tripList.start_point?.address,
             time: tripList.departure_time,
         },
         {
-            location: tripList.end_point,
-            time: tripList.arrival_time || tripList.departure_time,
+            location: tripList.end_point?.address,
+            time: tripList.arrival_time,
         },
     ];
+}
+
+const PostTrip = async () => {
+    try {
+        await reservedTrip(tripList, tripId, seats);
+
+        toast.add({
+            severity: "success",
+            summary: "¡Asiento Reservado!",
+            detail: "El asiento ha sido reservado exitosamente.",
+            life: 3000,
+        });
+
+    } catch (error) {
+        console.error("Error Reservando el asiento:", error);
+        toast.add({
+            severity: "error",
+            summary: "Error",
+            detail: "No se pudo guardar el asiento.",
+            life: 3000,
+        });
+    }
 }
 </script>
 
 <style scoped>
 .row_1 {
     width: 65%;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
 
 .row_2 {
-
     width: 35%;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
 
 .row_separation {
     border: 0.5px solid black;
     width: 75%;
     height: 0%;
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+ul {
+    list-style-type: none;
+}
+
+.circle {
+    border: 1px solid black;
+    border-radius: 50%;
+    width: 75px;
+    height: 75px;
+    overflow: hidden;
 }
 </style>

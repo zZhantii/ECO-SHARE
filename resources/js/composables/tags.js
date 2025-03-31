@@ -6,7 +6,7 @@ export default function useTags() {
     const tagList = ref([]);
 
     const getTags = async () => {
-        axios.get("http://localhost:8000/api/tag").then((response) => {
+        axios.get("/api/tag").then((response) => {
             for (const element of response.data.data) {
                 tagList.value.push({
                     id: element.id,

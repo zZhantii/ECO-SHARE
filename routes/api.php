@@ -14,6 +14,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 
 use App\Http\Controllers\Api\TripController;
 use App\Http\Controllers\Api\VehicleController;
+use App\Http\Controllers\Api\TripReserveController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,7 @@ Route::post('forget-password', [ForgotPasswordController::class, 'sendResetLinkE
 Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.reset');
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
+
 
     Route::apiResource('users', UserController::class);
 
@@ -63,7 +65,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // Trips
     Route::get("trip", [TripController::class, 'index']);
     Route::get("trip/{trip}", [TripController::class, 'show']);
+    Route::get('/trips/search', [TripController::class, 'searchTrip']);
     Route::post("trip", [TripController::class, 'store']);
+    Route::post("trip/reserve/{trip}", [TripController::class, 'reserve']);
+    Route::put("trip/{trip}", [TripController::class, 'updateSeats']);
 
     Route::get('category-list', [CategoryController::class, 'getList']);
     Route::get('user', [ProfileController::class, 'user']);
@@ -102,6 +107,8 @@ Route::get("author/{author}", [AuthorController::class, "show"]);
 Route::put("app/start-drive/{trip}", [AppController::class, "startDrive"]);
 Route::put("app/end-drive/{trip}", [AppController::class, "endDrive"]);
 Route::put("app/cancel-driver-trip/{trip}", [AppController::class, "cancelDriverTrip"]);
+
+
 
 
 
