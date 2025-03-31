@@ -17,13 +17,13 @@ class TripController extends Controller
 
     public function show(Trip $trip)
     {
-        $tripDetails = Vehicle::find($trip->id);
+        $tripDetails = Trip::find($trip->id);
 
         if (!$tripDetails) {
             return response()->json(['message' => 'Trip no encontrado'], 404);
         }
 
-        return response()->json($tripDetails);
+        return response()->json(["success" => true, "data" => $tripDetails], 200);
     }
 
     public function store(Request $request)
@@ -49,5 +49,27 @@ class TripController extends Controller
         $trip->tags()->sync($data['tags']);
 
         return response()->json(["success" => true, "data" => $trip], 200);
+    }
+
+    public function updateSeats(Request $request, Trip $trip)
+    {
+        $trip->unavailable_seats = $request->unavailable_seats;
+        
+        $trip->save();
+
+        return response()->json(["success" => true, "data" => $trip], 200);
+    }
+
+    public function reserve(Trip $trip, Request $request)
+    {           
+        $user_id = auth()->user()->id;
+      
+        $trip->reserves()->attach($user_id, [
+            'seats_reserved' => $request->available_seats,
+            'reservation_date' => $request->reservation_date,
+            'check_in' => $request->check_in
+        ]);
+
+        return response()->json(['message' => 'Reserva realizada con éxito'], 200);
     }
 }

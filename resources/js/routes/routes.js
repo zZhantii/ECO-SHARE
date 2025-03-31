@@ -134,7 +134,7 @@ export default [
                 component: () => import("../views/trips/postTrips.vue"),
             },
             {
-                path: "/trips/confirmation/:id",
+                path: "/trips/confirmation/:id/:seats",
                 name: "ConfirmationTrips",
                 component: () => import("../views/trips/confirmationTrip.vue"),
             },

@@ -2,9 +2,12 @@ import axios from "axios";
 import { useToast } from "primevue/usetoast";
 import { ref, inject } from "vue";
 
+
 export default function useTrips() {
     const tripsList = ref([]);
+
     const tripList = ref({});
+    // const trip = ref({});
     const isLoading = ref(false);
     const validationErrors = ref([]);
     const swal = inject("$swal");
@@ -13,6 +16,17 @@ export default function useTrips() {
     const activePassengerTripsList = ref([]);
 
     const toast = useToast();
+
+
+    // const getTrips = async () => {
+    //     try {
+    //         const response = await axios.get("api/trip");
+    //         trips.value = response.data.data;
+    //         console.log("API response, viajes cargados: " + trips.value);
+    //     } catch (error) {
+    //         console.log("Error fetching: ", error);
+    //     }
+    // }
 
     async function getTrips() {
         if (isLoading.value || tripsList.value.length > 0) return;
@@ -38,13 +52,23 @@ export default function useTrips() {
         }
     }
 
+    // const getTrip = async (tripID) => {
+    //     try {
+    //         const response = await axios.get("/api/trip" + tripID);
+    //         trip.value = response.data.data;
+    //         console.log("API response, trip cargado: " + trip.value + "Con ID: " + tripID);
+    //     } catch (error) {
+    //         console.log("Error fetching: ", error);
+    //     }
+    // }
+    
     async function getTrip(tripId) {
         if (isLoading.value || tripList.value.length > 0) return;
         isLoading.value = true;
 
         try {
+            console.log("Cargando trip con ID:", tripId);
             const response = await axios.get("/api/trip/" + tripId);
-            console.log("API Response:", response.data);
             tripList.value = response.data.data;
             console.log("Trip con ID cargado:", tripList.value);
         } catch (error) {
@@ -59,6 +83,18 @@ export default function useTrips() {
             isLoading.value = false;
         }
     }
+
+    // const updateTrip = async (tripID, trip) => {
+    //     try {
+    //         const response = await axios.put("/api/trip" + tripID, trip);
+    //         const index = trips.value.findIndex((ID) => ID.id === trip.id);
+    //         if (index !== -1) {
+    //             trips.value[index] = trip;
+    //         }
+    //     } catch (error) {
+    //         console.log("Error updating: ", error);
+    //     }
+    // }
 
     const updateTrip = async (trip) => {
         if (isLoading.value) return;
@@ -201,6 +237,16 @@ export default function useTrips() {
         }
     };
 
+    // const deleteTrip = async (tripID) => {
+    //     try {
+    //         const response = await axios.delete("/api/trip" + tripID);
+    //         tripsList.value = tripsList.value.findIndex((ID) => ID.id === tripID)
+    //         console.log("API response, trip con ID: " + tripID + " eliminado.")
+    //     } catch (error) {
+    //         console.log("Error updating: ", error);
+    //     }
+    // }
+
     const deleteTrip = async (trip) => {
         if (isLoading.value) return;
 
@@ -209,7 +255,7 @@ export default function useTrips() {
         try {
             await axios.delete("/api/trip/" + trip.id);
             // Eliminar el viaje de la lista
-            tripsList.value = tripsList.value.filter((t) => t.id !== trip.id);
+            tripsList.value = tripsList.value.find((t) => t.id !== trip.id);
             useToast().add({
                 severity: "success",
                 summary: "Éxito",
@@ -229,13 +275,41 @@ export default function useTrips() {
         }
     };
 
+    const addUnavailable_seat = async (unavailable_seats, tripID) => {
+        try {
+            const response = await axios.put("/api/trip/" + tripID, {
+                unavailable_seats: unavailable_seats
+            });
+            const index = tripList.findIndex((ID) => ID.id === tripID);
+            if (index !== -1) {
+                tripsList.value[index] = trip;
+            }
+            console.log("API response, Trip actualizado: " + response.data.data);
+        } catch (error) {
+            console.log("Error updating: ", error);
+        }
+    }
+
+    const reservedTrip = async (reservedTrip, tripID) => {
+        try {
+            const response = await axios.post("/api/trip/reserve/" + reserveTrip, tripID);
+            console.log("API response, Trip reservado: " + response.data.data);
+        } catch (error) {
+            console.log("Error updating: ", error);
+        }
+    }
+
     return {
+        // trips,
+        // trip,
         tripsList,
         tripList,
         getTrips,
         getTrip,
         updateTrip,
         deleteTrip,
+        addUnavailable_seat,
+        reservedTrip,
         validationErrors,
         getActiveTrips,
         activeDriverTripsList,
