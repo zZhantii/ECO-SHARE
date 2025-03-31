@@ -221,6 +221,7 @@ export default function useTrips() {
             });
         }
     };
+    
     const cancellTripAsDriver = async (tripId) => {
         try {
             const response = await axios.put(

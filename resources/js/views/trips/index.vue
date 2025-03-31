@@ -220,20 +220,18 @@ const handleSearch = async (searchData) => {
 
         await searchTrip(searchTrip2.value);
 
-        // console.log("SearchTrip", searchTripList.value.id);
+        console.log("SearchTrip", searchTripList.value);
 
-        const user_id = ref(null);
+        const user_id = ref(null)
 
         for (const key of searchTripList.value) {
             user_id.value = key.user_id;
         }
-        
-        // console.log("user_id, ", user_id.value);
 
         await getUser(user_id.value);
 
         for (const key of user.value) {
-            rating.value = key.rating;   
+            rating.value = key.rating
         }
 
         applyFilters();
@@ -245,8 +243,6 @@ const handleSearch = async (searchData) => {
 const filters = ref({
     earlyDeparture: false,
     lateDeparture: false,
-    pickupPoint: "",
-    destinationPoint: "",
     lowestPrice: false,
     highestPrice: false,
     lowestRating: false,

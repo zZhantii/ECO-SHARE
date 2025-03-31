@@ -1,9 +1,10 @@
 import { ref, inject } from "vue";
 import { useRouter } from "vue-router";
+const user = ref({});
 
 export default function useUsers() {
     const users = ref([]);
-    const user = ref([]);
+
     const router = useRouter();
     const validationErrors = ref({});
     const isLoading = ref(false);
@@ -46,7 +47,6 @@ export default function useUsers() {
     const getUser = async (id) => {
         const response = await axios.get("/api/user/" + id);
         user.value = response.data.data;
-        console.log("User con id: ", user.value);
 
         return user.value;
     };
