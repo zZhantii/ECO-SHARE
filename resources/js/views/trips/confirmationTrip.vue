@@ -126,7 +126,7 @@ import useTrips from "@/composables/trips";
 import useVehicles from "@/composables/vehicles";
 import useUsers from "@/composables/users";
 
-const { getTrip, tripList, addUnavailable_seat, reservedTrip } = useTrips();
+const { getTrip, tripList, reservedTrip } = useTrips();
 const { getUser, user } = useUsers();
 const { getVehicle, vehicle } = useVehicles();
 
@@ -202,11 +202,7 @@ function getTimelineEvents(tripList) {
 
 const PostTrip = async () => {
     try {
-        const unavailable_seats = tripList.value.unavailable_seats += seats;
-        await addUnavailable_seat(unavailable_seats, tripId);
-
-        const reservedTrip = await tripList.value;
-        await reservedTrip(reservedTrip, tripId);
+        await reservedTrip(tripList, tripId, seats);
 
         toast.add({
             severity: "success",

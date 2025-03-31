@@ -29,24 +29,6 @@
                         </path>
                     </svg>
                 </div>
-                <!-- <div class="flex align-items-center gap-2 justify-content-between inputFilter">
-                    <input type="checkbox" v-model="filters.pickupPoint" />
-                    <label for="pickupPoint" class="w-75"> Punt de recogida </label>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#334155" viewBox="0 0 256 256">
-                        <path
-                            d="M152,86a30,30,0,1,0-30-30A30,30,0,0,0,152,86Zm0-48a18,18,0,1,1-18,18A18,18,0,0,1,152,38Zm66.49,100.86c-.59.27-7.17,3.13-18.88,3.13-13.86,0-34.9-4-61.73-21a165.89,165.89,0,0,1-17.43,36.51c9.43,2.78,22,7.72,33.19,16.26C172.46,188.05,182,207.65,182,232a6,6,0,0,1-12,0c0-44-37.23-59.18-56.91-64.11q-1.2,1.55-2.46,3.09c-19.25,23.31-43.34,35.45-70.11,35.45A90.72,90.72,0,0,1,31.4,206A6,6,0,0,1,32.6,194c26.63,2.66,49.77-7.66,68.77-30.69,13.16-15.94,21.94-35.51,26.08-49.15-40.51-24.52-66.59-4.78-67.72-3.89a6,6,0,0,1-7.48-9.38c.37-.3,9.39-7.43,24.76-10,13.86-2.31,35.92-1.3,62.36,16.67,47.14,32,73.88,20.47,74.14,20.35a6,6,0,1,1,5,10.92Z">
-                        </path>
-                    </svg>
-                </div>
-                <div class="flex align-items-center gap-2 justify-content-between inputFilter">
-                    <input type="checkbox" v-model="filters.destinationPoint" />
-                    <label for="destinationPoint" class="w-75"> Punt de destino </label>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#334155" viewBox="0 0 256 256">
-                        <path
-                            d="M152,86a30,30,0,1,0-30-30A30,30,0,0,0,152,86Zm0-48a18,18,0,1,1-18,18A18,18,0,0,1,152,38Zm66.49,100.86c-.59.27-7.17,3.13-18.88,3.13-13.86,0-34.9-4-61.73-21a165.89,165.89,0,0,1-17.43,36.51c9.43,2.78,22,7.72,33.19,16.26C172.46,188.05,182,207.65,182,232a6,6,0,0,1-12,0c0-44-37.23-59.18-56.91-64.11q-1.2,1.55-2.46,3.09c-19.25,23.31-43.34,35.45-70.11,35.45A90.72,90.72,0,0,1,31.4,206A6,6,0,0,1,32.6,194c26.63,2.66,49.77-7.66,68.77-30.69,13.16-15.94,21.94-35.51,26.08-49.15-40.51-24.52-66.59-4.78-67.72-3.89a6,6,0,0,1-7.48-9.38c.37-.3,9.39-7.43,24.76-10,13.86-2.31,35.92-1.3,62.36,16.67,47.14,32,73.88,20.47,74.14,20.35a6,6,0,1,1,5,10.92Z">
-                        </path>
-                    </svg>
-                </div> -->
                 <div class="flex align-items-center gap-2 justify-content-between inputFilter">
                     <Checkbox v-model="filters.lowestPrice" binary />
                     <label for="lowestPrice" class="w-75"> Precio más bajo </label>
@@ -126,7 +108,7 @@
                         <div class="d-flex flex-column justify-content-center align-items-center gap-3 w-25">
                             <span class="text-xl font-semibold">${{ trip.price }}</span>
                             <router-link
-                                :to="{ name: 'ConfirmationTrips', params: { id: trip.id, seats: searchTrip.available_seats } }"
+                                :to="{ name: 'ConfirmationTrips', params: { id: trip.id, seats: searchTrip2.available_seats } }"
                                 class="btn-primary">Reserva</router-link>
                         </div>
                     </div>
@@ -140,23 +122,10 @@
                             </svg>
                             <p class="m-0">{{ trip.available_seats }}</p>
                         </div>
-                        <div class="d-flex gap-3 align-items-center pe-5">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000"
-                                viewBox="0 0 256 256">
-                                <path
-                                    d="M224,232a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16H216A8,8,0,0,1,224,232Zm0-72v32a16,16,0,0,1-16,16H114.11a15.93,15.93,0,0,1-14.32-8.85l-58.11-116a16.1,16.1,0,0,1,0-14.32l22.12-44A16,16,0,0,1,85,17.56l33.69,14.22.47.22a16,16,0,0,1,7.15,21.46,1.51,1.51,0,0,1-.11.22L112,80l31.78,64L208,144A16,16,0,0,1,224,160Zm-16,0H143.77a15.91,15.91,0,0,1-14.31-8.85l-31.79-64a16.07,16.07,0,0,1,0-14.29l.12-.22L112,46.32,78.57,32.21A4.84,4.84,0,0,1,78.1,32L56,76,114.1,192H208Z">
-                                </path>
-                            </svg>
-                            <p class="m-0">{{ trip.unavailable_seats }}</p>
-                        </div>
                         <div class="border-start border-end ps-5 w-75">
                             <p>Tags</p>
                         </div>
                         <div class="d-flex align-items-center ps-5 gap-5">
-                            <!-- <div class="circle border">
-                                <p>fotoperfil</p>
-                                <img :src="user.value[0].profile_picture" alt="profile picture" class="rounded-img" />
-                            </div> -->
                             <Rating v-model="rating" disabled />
                         </div>
                     </div>
@@ -190,23 +159,23 @@ const rating = ref(null);
 // Vue
 import { onMounted, ref, watch, computed } from "vue";
 
-// function formatTime(dateTime) {
-//     const date = new Date(dateTime);
-//     return new Intl.DateTimeFormat("es-ES", {
-//         hour: "numeric",
-//         minute: "numeric",
-//     }).format(date);
-// }
+function formatTime(dateTime) {
+    const date = new Date(dateTime);
+    return new Intl.DateTimeFormat("es-ES", {
+        hour: "numeric",
+        minute: "numeric",
+    }).format(date);
+}
 
 function getTimelineEvents(trip) {
     return [
         {
-            location: trip.start_point,
-            time: trip.departure_time,
+            location: trip.start_address,
+            time: formatTime(trip.departure_time),
         },
         {
-            location: trip.end_point,
-            time: trip.arrival_time,
+            location: trip.end_address,
+            time: formatTime(trip.arrival_time),
         },
     ];
 }
@@ -238,9 +207,9 @@ const handleSearch = async (searchData) => {
     try {
         searchTrip2.value = {
             start_point: searchData.origin.name,
-            locality_start: searchData.origin.address_components.find(comp => comp.types.includes('locality'))?.long_name || '',
+            locality_start: searchData.origin.address_components.find(comp => comp.types.includes('locality')).long_name,
             end_point: searchData.destination.name,
-            locality_end: searchData.destination.address_components.find(comp => comp.types.includes('locality'))?.long_name || '',
+            locality_end: searchData.destination.address_components.find(comp => comp.types.includes('locality')).long_name,
             date: searchData.date,
             available_seats: searchData.passengers 
         };
@@ -250,6 +219,23 @@ const handleSearch = async (searchData) => {
         departure_time.value = formatedtime(searchTrip2.value.date);
 
         await searchTrip(searchTrip2.value);
+
+        // console.log("SearchTrip", searchTripList.value.id);
+
+        const user_id = ref(null);
+
+        for (const key of searchTripList.value) {
+            user_id.value = key.user_id;
+        }
+        
+        // console.log("user_id, ", user_id.value);
+
+        await getUser(user_id.value);
+
+        for (const key of user.value) {
+            rating.value = key.rating;   
+        }
+
         applyFilters();
     } catch (err) {
         console.error('Error in search:', err);

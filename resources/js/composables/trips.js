@@ -188,27 +188,36 @@ export default function useTrips(user) {
         }
     };
 
-    const addUnavailable_seat = async (unavailable_seats, tripID) => {
-        try {
-            const response = await axios.put("/api/trip/" + tripID, {
-                unavailable_seats: unavailable_seats
-            });
+    // const addUnavailable_seat = async (unavailable_seats, tripID) => {
+    //     try {
+    //         const response = await axios.put("/api/trip/" + tripID, {
+    //             unavailable_seats: unavailable_seats
+    //         });
             
-            const tripArray = Object.values(tripList);
+    //         const tripArray = Object.values(tripList);
 
-            const index = tripArray.findIndex((ID) => ID.id === tripID);
-            if (index !== -1) {
-                tripsList.value[index] = trip;
-            }
-            console.log("API response, Trip actualizado: " + response.data.data);
-        } catch (error) {
-            console.log("Error updating: ", error);
-        }
-    }
+    //         const index = tripArray.findIndex((ID) => ID.id === tripID);
+    //         if (index !== -1) {
+    //             tripsList.value[index] = trip;
+    //         }
+    //         console.log("API response, Trip actualizado: " + response.data.data);
+    //     } catch (error) {
+    //         console.log("Error updating: ", error);
+    //     }
+    // }
 
-    const reservedTrip = async (reservedTrip, tripID) => {
+    const reservedTrip = async (trip, tripID, seats) => {
         try {
-            const response = await axios.post("/api/trip/reserve/" + reserveTrip, tripID);
+            const dataTrip = {
+                available_seats: trip.value.available_seats,
+                seats_reserved: seats,
+                reservation_date: new Date().toISOString().slice(0, 19).replace("T", " "),
+                checkIn: null
+            }
+
+            console.log(dataTrip);
+
+            const response = await axios.post("/api/trip/reserve/" + tripID, dataTrip);
             console.log("API response, Trip reservado: " + response.data.data);
         } catch (error) {
             console.log("Error updating: ", error);
@@ -225,7 +234,7 @@ export default function useTrips(user) {
         getTrip,
         updateTrip,
         deleteTrip,
-        addUnavailable_seat,
+        // addUnavailable_seat,
         reservedTrip,
         searchTrip,
         validationErrors,

@@ -35,7 +35,6 @@ class TripSeeder extends Seeder
             'departure_time' => '2030-03-29 18:04:53',
             'arrival_time' => '2030-03-29 18:22:44',
             'available_seats' => 4,
-            'unavailable_seats' => 0,
             'price' => 7.0,
         ]);
 
@@ -61,7 +60,6 @@ class TripSeeder extends Seeder
             'departure_time' => '2029-03-29 18:04:53',
             'arrival_time' => '2029-03-29 18:22:44',
             'available_seats' => 4,
-            'unavailable_seats' => 2,
             'price' => 7.0,
         ]);
 
@@ -87,7 +85,6 @@ class TripSeeder extends Seeder
             'departure_time' => '2028-03-29 18:04:53',
             'arrival_time' => '2028-03-29 18:22:44',
             'available_seats' => 4,
-            'unavailable_seats' => 0,
             'price' => 7.0,
         ]);
 
@@ -113,7 +110,6 @@ class TripSeeder extends Seeder
             'departure_time' => '2027-03-29 18:04:53',
             'arrival_time' => '2027-03-29 18:22:44',
             'available_seats' => 4,
-            'unavailable_seats' => 0,
             'price' => 7.0,
         ]);
     }
