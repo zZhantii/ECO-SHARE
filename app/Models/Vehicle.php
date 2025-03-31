@@ -27,6 +27,7 @@ class Vehicle extends Model
         return $this->belongsTo(User::class);
     }
 
+
     // Relacion vehicles-trips 1:N (1 vehicle)
     public function trips()
     {

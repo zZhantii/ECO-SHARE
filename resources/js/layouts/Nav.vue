@@ -97,18 +97,19 @@
                             </li>
                             <li>
                                 <router-link
-                                    to="/auth/profile"
-                                    class="dropdown-item primary-a"
-                                    >Perfil</router-link
-                                >
-                            </li>
-                            <li>
-                                <router-link
                                     to="/trips/manage"
                                     class="dropdown-item primary-a"
                                     >Tus viajes</router-link
                                 >
                             </li>
+                            <li>
+                                <router-link
+                                    to="/auth/profile"
+                                    class="dropdown-item primary-a"
+                                    >Perfil</router-link
+                                >
+                            </li>
+
                             <li>
                                 <router-link
                                     to=""
@@ -121,7 +122,7 @@
                                     class="dropdown-item primary-a"
                                     href="javascript:void(0)"
                                     @click="logout"
-                                    >Logout</a
+                                    >Cerrar sesión</a
                                 >
                             </li>
                         </ul>

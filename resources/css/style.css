@@ -173,6 +173,24 @@ p {
     background-color: black !important;
 }
 
+.btn-cancel {
+    font-family: inherit !important;
+    font-weight: 500 !important;
+    font-size: 1rem !important;
+    color: #f80223 !important;
+    text-decoration: none !important;
+    padding: 10px 15px !important;
+    border: #f80223 1px solid !important;
+    border-radius: 10px !important;
+    background-color: #fff4f4 !important;
+    width: fit-content !important;
+}
+
+.btn-cancel:hover {
+    background-color: #fa3852 !important;
+    color: #ffffff !important;
+}
+
 .btn-header-primary:hover {
     background-color: white !important;
     color: #054851 !important;

@@ -2,17 +2,21 @@ import axios from "axios";
 import { useToast } from "primevue/usetoast";
 import { ref, inject } from "vue";
 
-export default function useTrips(user) {
-    const tripsList = ref({});
-    // const trips = ref({});
+
+export default function useTrips() {
+    const tripsList = ref([]);
+
     const tripList = ref({});
     // const trip = ref({});
     const isLoading = ref(false);
     const validationErrors = ref([]);
+    const swal = inject("$swal");
 
     const activeDriverTripsList = ref([]);
+    const activePassengerTripsList = ref([]);
 
     const toast = useToast();
+
 
     // const getTrips = async () => {
     //     try {
@@ -126,9 +130,110 @@ export default function useTrips(user) {
     };
 
     const getActiveTrips = async () => {
-        const responseDriver = await axios.get("/api/app/driver-trip-active");
-        for (const element of responseDriver.data.data) {
-            activeDriverTripsList.value.push(element);
+        const responseDriver = await axios.get("/api/app/driver-active-trip");
+
+        if (responseDriver.data.data) {
+            for (const element of responseDriver.data.data) {
+                activeDriverTripsList.value.push(element);
+            }
+        }
+        const responsePassenger = await axios.get(
+            "/api/app/passenger-active-trip"
+        );
+        if (responsePassenger.data.data) {
+            for (const element of responsePassenger.data.data) {
+                activePassengerTripsList.value.push(element);
+            }
+        }
+        console.log("patata", activeDriverTripsList.value);
+    };
+
+    const startDrive = async (tripId) => {
+        try {
+            const response = await axios.put(`/api/app/start-drive/${tripId}`);
+
+            if (response.data.success == true) {
+                swal({
+                    icon: "success",
+                    title: "Viaje iniciado",
+                });
+                const index = activeDriverTripsList.value.findIndex(
+                    (e) => e.id == tripId
+                );
+
+                activeDriverTripsList.value[index].drive_start =
+                    response.data.data.drive_start;
+            } else {
+                swal({
+                    icon: "error",
+                    title: "No se ha podido iniciar el viaje",
+                });
+            }
+        } catch (e) {
+            swal({
+                icon: "error",
+                title: "Error inesperado en el servidor",
+            });
+            console.log("error", e);
+        }
+    };
+
+    const endDrive = async (tripId) => {
+        try {
+            const response = await axios.put(`/api/app/end-drive/${tripId}`);
+
+            if (response.data.success == true) {
+                swal({
+                    icon: "success",
+                    title: "Viaje finalizado",
+                });
+                const index = activeDriverTripsList.value.findIndex(
+                    (e) => e.id == tripId
+                );
+
+                activeDriverTripsList.value[index].drive_end =
+                    response.data.data.drive_end;
+            } else {
+                swal({
+                    icon: "error",
+                    title: "No se ha podido finalizar el viaje",
+                });
+            }
+        } catch (e) {
+            swal({
+                icon: "error",
+                title: "Error inesperado en el servidor",
+            });
+        }
+    };
+    const cancellTripAsDriver = async (tripId) => {
+        try {
+            const response = await axios.put(
+                `/api/app/cancel-driver-trip/${tripId}`
+            );
+
+            if (response.data.success == true) {
+                swal({
+                    icon: "success",
+                    title: "Viaje cancelado",
+                });
+                const index = activeDriverTripsList.value.findIndex(
+                    (e) => e.id == tripId
+                );
+
+                activeDriverTripsList.value[index].cancelled_at =
+                    response.data.data.cancelled_at;
+            } else {
+                swal({
+                    icon: "error",
+                    title: "No se ha podido cancelar el viaje",
+                });
+            }
+        } catch (e) {
+            swal({
+                icon: "error",
+                title: "Error inesperado en el servidor",
+            });
         }
     };
 
@@ -208,5 +313,9 @@ export default function useTrips(user) {
         validationErrors,
         getActiveTrips,
         activeDriverTripsList,
+        startDrive,
+        endDrive,
+        activePassengerTripsList,
+        cancellTripAsDriver,
     };
 }

@@ -130,7 +130,7 @@ const logoUrl = computed(() => {
                 <div class="">
                     <div class="d-flex align-items-center me-2">
                         <SVGLogo class="logo" />
-                        <p>ECO-SHARE, 2025 ©</p>
+                        <p class="fs-6">ECO-SHARE, 2025 ©</p>
                     </div>
                 </div>
             </div>

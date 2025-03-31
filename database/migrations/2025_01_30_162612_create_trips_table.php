@@ -24,8 +24,10 @@ return new class extends Migration {
             $table->integer('available_seats');
            $table->integer('unavailable_seats')->default(0);
             $table->decimal('price', 10, 2);
+            $table->timestamp("cancelled_at")->nullable();
             $table->timestamps();
-
+            $table->timestamp('drive_start')->nullable();
+            $table->timestamp('drive_end')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('vehicle_id')->references('id')->on('vehicles');
         });
