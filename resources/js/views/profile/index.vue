@@ -553,7 +553,6 @@ import Password from "primevue/password";
 import useVehicles from "@/composables/vehicles.js";
 import * as yup from "yup";
 import { es } from "yup-locales";
-import { find, replace } from "lodash";
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 import Toast from "primevue/toast";
@@ -561,9 +560,8 @@ import DropZone from "@/components/DropZone.vue";
 
 const confirm = useConfirm();
 const toast = useToast();
-const { updateProfile, validationErrors, deleteImage, uploadAvatar } =
-    useProfile();
-const { getUser, user } = useUsers();
+const { updateProfile, deleteImage, uploadAvatar } = useProfile();
+const { user } = useUsers();
 const { getVehicles, addVehicle, vehicle, vehiclesList, updateVehicle } =
     useVehicles();
 
@@ -594,6 +592,12 @@ const passSchema = yup.object().shape({
         .required("La contraseña es obligatoria")
         .min(8, "La contraseña debe tener al menos 8 carácteres"),
 });
+
+const fullSurname = computed(() =>
+    tempData.value.surname2 == null
+        ? `${tempData.value.surname1}`
+        : `${tempData.value.surname1} ${tempData.value.surname2}`
+);
 
 const vehicleSchema = yup.object({
     plate: yup
