@@ -56,6 +56,12 @@ const model = ref([
         items: [
             { label: 'Vehicles  ', icon: 'pi pi-fw pi-id-card', to: '/admin/vehicles', permision: 'user-list' }
         ]
+    }, 
+    {
+        label: 'Viajes',
+        items: [
+            { label: 'Viajes  ', icon: 'pi pi-fw pi-id-card', to: '/admin/trips', permision: 'user-list' }
+        ]
     },
 ]);
 </script>
