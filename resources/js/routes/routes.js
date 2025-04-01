@@ -308,7 +308,40 @@ export default [
                     },
                 ],
             },
-
+            {
+                name: "vehicles",
+                path: "vehicles",
+                meta: { breadCrumb: "Vehiculos" },
+                children: [
+                    {
+                        name: "vehicle.index",
+                        path: "",
+                        component: () =>
+                            import("../views/admin/vehicles/Index.vue"),
+                        meta: { breadCrumb: "Vehiculos" },
+                    },
+                    {
+                        name: "vehicles.create",
+                        path: "create",
+                        component: () =>
+                            import("../views/admin/vehicles/Create.vue"),
+                        meta: {
+                            breadCrumb: "Crear Usuario",
+                            linked: false,
+                        },
+                    },
+                    {
+                        name: "vehicles.edit",
+                        path: "edit/:id",
+                        component: () =>
+                            import("../views/admin/vehicles/Edit.vue"),
+                        meta: {
+                            breadCrumb: "Editar Vehiculo",
+                            linked: false,
+                        },
+                    },
+                ],
+            },
             {
                 name: "authors",
                 path: "authors",

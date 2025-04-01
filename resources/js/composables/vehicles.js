@@ -87,6 +87,9 @@ export default function useVehicles() {
         }
     }
 
+    const createVehicleDB = async (id) => {
+        return axios.put("/api/vehicles/db/create/" + id);
+    }
 
     const updateVehicle = async (vehicle) => {
         if (isLoading.value) return;
@@ -156,6 +159,7 @@ export default function useVehicles() {
         getVehicle,
         updateVehicle,
         validationErrors,
+        createVehicleDB,
         deleteVehicle,
         addVehicle,
     };
