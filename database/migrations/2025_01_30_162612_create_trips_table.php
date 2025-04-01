@@ -22,7 +22,6 @@ return new class extends Migration {
             $table->timestamp('departure_time');
             $table->timestamp('arrival_time');
             $table->integer('available_seats');
-           $table->integer('unavailable_seats')->default(0);
             $table->decimal('price', 10, 2);
             $table->timestamp("cancelled_at")->nullable();
             $table->timestamps();

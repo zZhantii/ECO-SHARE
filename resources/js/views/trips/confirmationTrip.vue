@@ -4,14 +4,14 @@
             <div class="col-12 border rounded">
                 <div class="d-flex">
                     <Timeline :value="getTimelineEvents(tripList)" layout="horizontal" align="top"
-                        class="border-end w-75 p-5">
+                        class="border-end w-75 px-2">
                         <template #marker="slotProps">
                             <i class="pi pi-map-marker px-2" style="font-size: 1.5rem"></i>
                             <p class="m-0 px-2">{{ formatTime(slotProps.item.time) }}</p>
                         </template>
                         <template #content="slotProps">
                             <div class="timeline-event">
-                                <p class="m-0">{{ slotProps.item.location }}</p>
+                                <p class="m-0 px-3">{{ slotProps.item.location }}</p>
                             </div>
                         </template>
                     </Timeline>
@@ -25,16 +25,15 @@
                         <p class="m-0">{{ tripList.available_seats }}</p>
                     </div>
                 </div>
-                <div class="border-top p-5 mt-2">
+                <div class="border-top p-3 mt-2">
                     <p>Labels</p>
                 </div>
             </div>
-            <div class="col border rounded">
-                Mapa
+            <div class="col-12 border rounded">
+                <Map v-if="!showFirstMap" :origin="tempStartPoint" :destination="tempEndPoint"
+                    @updateMapsInfo="handleMapsInfo" class="border" />
             </div>
-            <div class="col-12">
-                <button @click="PostTrip" class="btn btn-primary">Reservar</button>
-            </div>
+
         </div>
         <div class="row row_2 border rounded justify-content-center p-5">
             <div class="col d-flex align-items-center flex-column">
@@ -115,18 +114,24 @@
                     <h3>Coste</h3>
                     <h4>{{ tripList.price }} €</h4>
                 </div>
+                <div class="col">
+                    <button @click="PostTrip" class="btn btn-primary">Reservar</button>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
+// Components
+import Map from "@/components/Map.vue";
+
 // Composables
 import useTrips from "@/composables/trips";
 import useVehicles from "@/composables/vehicles";
 import useUsers from "@/composables/users";
 
-const { getTrip, tripList, addUnavailable_seat, reservedTrip } = useTrips();
+const { getTrip, tripList, reservedTrip } = useTrips();
 const { getUser, user } = useUsers();
 const { getVehicle, vehicle } = useVehicles();
 
@@ -202,11 +207,7 @@ function getTimelineEvents(tripList) {
 
 const PostTrip = async () => {
     try {
-        const unavailable_seats = tripList.value.unavailable_seats += seats;
-        await addUnavailable_seat(unavailable_seats, tripId);
-
-        const reservedTrip = await tripList.value;
-        await reservedTrip(reservedTrip, tripId);
+        await reservedTrip(tripList, tripId, seats);
 
         toast.add({
             severity: "success",

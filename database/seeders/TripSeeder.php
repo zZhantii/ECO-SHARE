@@ -32,16 +32,15 @@ class TripSeeder extends Seeder
                     "longitude" => 1.9177343
                 ]
             ],
-            'departure_time' => '2030-03-29 18:04:53',
-            'arrival_time' => '2030-03-29 18:22:44',
-            'available_seats' => 4,
-            'unavailable_seats' => 0,
+            'departure_time' => '2030-03-22 18:04:53',
+            'arrival_time' => '2030-03-22 18:22:44',
+            'available_seats' => 1,
             'price' => 7.0,
         ]);
 
         $trip2 = Trip::create([
             'user_id' => 1,
-            'vehicle_id' => 1,
+            'vehicle_id' => 2,
             'start_point' => [
                 "address" => "Molins de Rei",
                 "locality" => "Molins de Rei",
@@ -58,10 +57,9 @@ class TripSeeder extends Seeder
                     "longitude" => 1.9177343
                 ]
             ],
-            'departure_time' => '2029-03-29 18:04:53',
-            'arrival_time' => '2029-03-29 18:22:44',
-            'available_seats' => 4,
-            'unavailable_seats' => 2,
+            'departure_time' => '2029-03-13 18:14:53',
+            'arrival_time' => '2029-03-13 18:32:44',
+            'available_seats' => 3,
             'price' => 7.0,
         ]);
 
@@ -84,16 +82,15 @@ class TripSeeder extends Seeder
                     "longitude" => 1.9177343
                 ]
             ],
-            'departure_time' => '2028-03-29 18:04:53',
-            'arrival_time' => '2028-03-29 18:22:44',
+            'departure_time' => '2028-03-09 18:20:53',
+            'arrival_time' => '2028-03-09 18:42:44',
             'available_seats' => 4,
-            'unavailable_seats' => 0,
             'price' => 7.0,
         ]);
 
         $trip3 = Trip::create([
             'user_id' => 1,
-            'vehicle_id' => 1,
+            'vehicle_id' => 2,
             'start_point' => [
                 "address" => "Molins de Rei",
                 "locality" => "Molins de Rei",
@@ -110,10 +107,9 @@ class TripSeeder extends Seeder
                     "longitude" => 1.9177343
                 ]
             ],
-            'departure_time' => '2027-03-29 18:04:53',
-            'arrival_time' => '2027-03-29 18:22:44',
-            'available_seats' => 4,
-            'unavailable_seats' => 0,
+            'departure_time' => '2027-03-30 18:34:53',
+            'arrival_time' => '2027-03-30 18:52:44',
+            'available_seats' => 2,
             'price' => 7.0,
         ]);
     }

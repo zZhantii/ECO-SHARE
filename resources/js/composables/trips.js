@@ -5,9 +5,11 @@ import { ref, inject } from "vue";
 
 export default function useTrips() {
     const tripsList = ref([]);
-
-    const tripList = ref({});
+    // const trips = ref({});
+    const tripList = ref([]);
     // const trip = ref({});
+    const searchTripList = ref([]);
+
     const isLoading = ref(false);
     const validationErrors = ref([]);
     const swal = inject("$swal");
@@ -83,6 +85,22 @@ export default function useTrips() {
             isLoading.value = false;
         }
     }
+
+    const searchTrip = async (searchParams) => {
+        try {
+            console.log("searchparams", searchParams);
+            const response = await axios.get('/api/trips/search', {
+                params: searchParams
+            });
+
+            console.log("API response: ", response.data.data);
+            searchTripList.value = response.data.data;
+        } catch (error) {
+            console.error('Search error:', error);
+        } 
+    };
+
+
 
     // const updateTrip = async (tripID, trip) => {
     //     try {
@@ -206,6 +224,7 @@ export default function useTrips() {
             });
         }
     };
+    
     const cancellTripAsDriver = async (tripId) => {
         try {
             const response = await axios.put(
@@ -275,24 +294,36 @@ export default function useTrips() {
         }
     };
 
-    const addUnavailable_seat = async (unavailable_seats, tripID) => {
-        try {
-            const response = await axios.put("/api/trip/" + tripID, {
-                unavailable_seats: unavailable_seats
-            });
-            const index = tripList.findIndex((ID) => ID.id === tripID);
-            if (index !== -1) {
-                tripsList.value[index] = trip;
-            }
-            console.log("API response, Trip actualizado: " + response.data.data);
-        } catch (error) {
-            console.log("Error updating: ", error);
-        }
-    }
+    // const addUnavailable_seat = async (unavailable_seats, tripID) => {
+    //     try {
+    //         const response = await axios.put("/api/trip/" + tripID, {
+    //             unavailable_seats: unavailable_seats
+    //         });
+            
+    //         const tripArray = Object.values(tripList);
 
-    const reservedTrip = async (reservedTrip, tripID) => {
+    //         const index = tripArray.findIndex((ID) => ID.id === tripID);
+    //         if (index !== -1) {
+    //             tripsList.value[index] = trip;
+    //         }
+    //         console.log("API response, Trip actualizado: " + response.data.data);
+    //     } catch (error) {
+    //         console.log("Error updating: ", error);
+    //     }
+    // }
+
+    const reservedTrip = async (trip, tripID, seats) => {
         try {
-            const response = await axios.post("/api/trip/reserve/" + reserveTrip, tripID);
+            const dataTrip = {
+                available_seats: trip.value.available_seats,
+                seats_reserved: seats,
+                reservation_date: new Date().toISOString().slice(0, 19).replace("T", " "),
+                checkIn: null
+            }
+
+            console.log(dataTrip);
+
+            const response = await axios.post("/api/trip/reserve/" + tripID, dataTrip);
             console.log("API response, Trip reservado: " + response.data.data);
         } catch (error) {
             console.log("Error updating: ", error);
@@ -304,12 +335,14 @@ export default function useTrips() {
         // trip,
         tripsList,
         tripList,
+        searchTripList,
         getTrips,
         getTrip,
         updateTrip,
         deleteTrip,
-        addUnavailable_seat,
+        // addUnavailable_seat,
         reservedTrip,
+        searchTrip,
         validationErrors,
         getActiveTrips,
         activeDriverTripsList,
