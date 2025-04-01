@@ -73,6 +73,7 @@ const date = ref(null);
 const passengers = ref(null);
 const data = ref({});
 const today = ref(new Date());
+
 const submitFinder = () => {
     const selectedDate = new Date(date.value);
 

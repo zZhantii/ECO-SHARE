@@ -84,6 +84,7 @@ class TripController extends Controller
             ->having('remaining_seats', '>=', $requestedSeats)
             ->where('trips.available_seats', '>=', $requestedSeats); 
 
+
         if ($startPoint) {
             $query->where(DB::raw('JSON_UNQUOTE(JSON_EXTRACT(trips.start_point, "$.address"))'), 'like', "%$startPoint%");
         }

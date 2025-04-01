@@ -30,8 +30,8 @@
                 </div>
             </div>
             <div class="col-12 border rounded">
-                <Map v-if="!showFirstMap" :origin="tempStartPoint" :destination="tempEndPoint"
-                    @updateMapsInfo="handleMapsInfo" class="border" />
+                <Map v-if="!showFirstMap" :origin="start_point" :destination="end_point"
+                    @updateMapsInfo="handleMapsInfo"  />
             </div>
 
         </div>
@@ -126,6 +126,13 @@
 // Components
 import Map from "@/components/Map.vue";
 
+// Store
+import { useTripStore } from "@/store/trip.js";
+const tripStore = useTripStore();
+const start_point = ref(null);
+const end_point = ref(null);
+
+
 // Composables
 import useTrips from "@/composables/trips";
 import useVehicles from "@/composables/vehicles";
@@ -154,7 +161,6 @@ const rating = ref(null);
 import { onMounted, ref } from "vue";
 
 
-
 onMounted(async () => {
     await getTrip(tripId);
     console.log("tripList", tripList.value);
@@ -166,7 +172,13 @@ onMounted(async () => {
     }
     await getVehicle(tripList.value.vehicle_id);
     // console.log("Vehicle por ID", vehicle.value);
+
+    start_point.value = tripStore.tripData.start_point;
+    console.log(tripStore.tripData.start_point);
+    end_point.value = tripStore.tripData.end_point;
 });
+
+
 
 // Funciones de formateo de Time para el TimeLine
 function formatTime(dateTime) {
