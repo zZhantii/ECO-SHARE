@@ -22,7 +22,7 @@
                                 <Button type="button" icon="pi pi-filter-slash" label="Clear" class="ml-1" outlined
                                     @click="initFilters()" />
                                 <Button type="button" icon="pi pi-refresh" class="h-100 ml-1" outlined
-                                    @click="getVehicles()" />
+                                    @click="getTrips()" />
                             </template>
                             <template #end>
                                 <Button icon="pi pi-external-link" label="Crear Vehiculo"
@@ -45,24 +45,28 @@
                     <template #empty> No customers found. </template>
 
                     <Column field="id" header="ID" sortable></Column>
-                    <Column field="user_id" header="User_id" sortable></Column>
-                    <Column field="plate" header="Plate" sortable></Column>
-                    <Column field="brand" header="Brand" sortable></Column>
-                    <Column field="model" header="Model" sortable></Column>
-                    <Column field="consumption" header="Consumption" sortable></Column>
-                    <Column field="pax_number" header="Pax_number" sortable></Column>
-                    <Column field="validation" header="Validation" sortable></Column>
-                    <Column field="fuel_type" header="Fuel_type" sortable></Column>
-                    <Column field="created_at" header="Created_at" sortable></Column>
-                    <Column field="update_at" header="Update_at" sortable></Column>
+                    <Column field="user_id" header="User ID" sortable></Column>
+                    <Column field="vehicle_id" header="Vehicle ID" sortable></Column>
+                    <Column field="start_point" header="Start Point" sortable></Column>
+                    <Column field="end_point" header="End Point" sortable></Column>
+                    <Column field="departure_time" header="Departure Time" sortable></Column>
+                    <Column field="arrival_time" header="Arrival Time" sortable></Column>
+                    <Column field="available_seats" header="Available Seats" sortable></Column>
+                    <Column field="price" header="Price" sortable></Column>
+                    <Column field="cancelled_at" header="Cancelled At" sortable></Column>
+                    <Column field="created_at" header="Created At" sortable></Column>
+                    <Column field="update_at" header="Updated At" sortable></Column>
+                    <Column field="drive_start" header="Drive Start" sortable></Column>
+                    <Column field="drive_end" header="Drive End" sortable></Column>
+
                     <Column class="pe-0 me-0 icon-column-2">
                         <template #body="slotProps">
                             <router-link v-if="can('user-edit')"
-                                :to="{ name: 'vehicles.edit', params: { id: slotProps.data.id } }">
+                                :to="{ name: 'trips.edit', params: { id: slotProps.data.id } }">
                                 <Button icon="pi pi-pencil" severity="info" size="small" class="mr-1" />
                             </router-link>
                             <Button icon="pi pi-trash" severity="danger" v-if="can('user-delete')"
-                                @click="deleteVehicleWithID(slotProps.data.id)" size="small" />
+                                @click="deleteTrip(slotProps.data)" size="small" />
                         </template>
                     </Column>
 
@@ -79,7 +83,7 @@ import useTrips from "../../../composables/trips";
 import { useAbility } from '@casl/vue'
 import { FilterMatchMode, FilterService } from "@primevue/core/api";
 
-const { tripsList, getTrips } = useTrips()
+const { tripsList, getTrips, deleteTrip } = useTrips()
 const { can } = useAbility()
 
 const filters = ref({

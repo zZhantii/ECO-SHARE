@@ -52,6 +52,14 @@ class TripController extends Controller
         return response()->json(["success" => true, "data" => $trip], 200);
     }
 
+    
+    public function destroy(Trip $trip)
+    {
+
+        $trip->delete();
+        return response()->json(['success' => true, "data" => "Trip deleted successfully"], 200);
+    }
+
     public function searchTrip(Request $request)
     {
         $startPoint = $request->input('start_point');

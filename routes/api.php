@@ -69,6 +69,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post("trip", [TripController::class, 'store']);
     Route::post("trip/reserve/{trip}", [TripController::class, 'reserve']);
     Route::put("trip/{trip}", [TripController::class, 'updateSeats']);
+    Route::delete("trip/{trip}", [TripController::class, 'destroy']);
 
     Route::get('category-list', [CategoryController::class, 'getList']);
     Route::get('user', [ProfileController::class, 'user']);

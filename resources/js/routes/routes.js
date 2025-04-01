@@ -348,7 +348,7 @@ export default [
                 meta: { breadCrumb: "Vehiculos" },
                 children: [
                     {
-                        name: "vehicle.index",
+                        name: "trips.index",
                         path: "",
                         component: () =>
                             import("../views/admin/trips/index.vue"),
