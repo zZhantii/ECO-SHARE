@@ -7,7 +7,7 @@
                         class="border-end w-75 px-2">
                         <template #marker="slotProps">
                             <i class="pi pi-map-marker px-2" style="font-size: 1.5rem"></i>
-                            <p class="m-0 px-2">{{ formatTime(slotProps.item.time) }}</p>
+                            <p class="m-0 px-2">{{ slotProps.item.time }}</p>
                         </template>
                         <template #content="slotProps">
                             <div class="timeline-event">
@@ -36,28 +36,7 @@
 
         </div>
         <div class="row row_2 border rounded justify-content-center p-5">
-            <div class="col d-flex align-items-center flex-column">
-                <h3>Detalles del Viaje</h3>
-                <div class="d-flex gap-5">
-                    <div>
-                        <ul class="d-flex align-items-center flex-column p-0">
-                            <b class="mb-3">Origen</b>
-                            <li class="d-flex ">{{ tripList.start_point?.address }}</li>
-                            <b class="my-3">Fecha Salida</b>
-                            <li class="d-flex">{{ (tripList.departure_time) }}</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <ul class="d-flex align-items-center flex-column p-0">
-                            <b class="mb-3">Destino</b>
-                            <li class="d-flex ">{{ tripList.end_point?.address }}</li>
-                            <b class="my-3">Fecha Llegada</b>
-                            <li class="d-flex">{{ (tripList.arrival_time) }}</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="row_separation"></div>
+            
             <div class="col d-flex align-items-center flex-column">
                 <h3>Conductor</h3>
                 <div class="circle my-2">
@@ -113,6 +92,8 @@
                 <div class="col d-flex flex-column align-items-center">
                     <h3>Coste</h3>
                     <h4>{{ tripList.price }} €</h4>
+                    <p>Coste minimo</p>
+                    <h4>{{ lowPrice(tripList.price) }}</h4>
                 </div>
                 <div class="col">
                     <button @click="PostTrip" class="btn btn-primary">Reservar</button>
@@ -192,6 +173,18 @@ function formatTime(dateTime) {
     }).format(date);
 }
 
+const price = ref(null);
+const finalPrice = ref(null);
+price.value = tripList.price;
+
+const lowPrice = (price) => {
+    console.log("precio", price)
+    const available_seats = tripList.value.available_seats;
+    finalPrice.value = price / available_seats;
+
+    return finalPrice
+}
+ 
 function formatDate(dateTime) {
     const date = new Date(dateTime);
     if (isNaN(date.getTime())) {
