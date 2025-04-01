@@ -25,7 +25,7 @@
                                     @click="getVehicles()" />
                             </template>
                             <template #end>
-                                <Button v-if="can('exercise-create')" icon="pi pi-external-link" label="Crear Vehiculo"
+                                <Button icon="pi pi-external-link" label="Crear Vehiculo"
                                     @click="$router.push('vehicles/create')" class="float-end" />
                             </template>
                         </Toolbar>
@@ -61,9 +61,8 @@
                                 :to="{ name: 'vehicles.edit', params: { id: slotProps.data.id } }">
                                 <Button icon="pi pi-pencil" severity="info" size="small" class="mr-1" />
                             </router-link>
-
-                            <!-- <Button icon="pi pi-trash" severity="danger" v-if="can('user-delete')"
-                                @click.prevent="deleteUser(slotProps.data.id, slotProps.index)" size="small" /> -->
+                            <Button icon="pi pi-trash" severity="danger" v-if="can('user-delete')"
+                                @click="deleteVehicleWithID(slotProps.data.id)" size="small" />
                         </template>
                     </Column>
 
@@ -80,7 +79,7 @@ import useVehicles from "../../../composables/vehicles";
 import { useAbility } from '@casl/vue'
 import { FilterMatchMode, FilterService } from "@primevue/core/api";
 
-const { vehiclesList, getVehicles, deleteVehicle } = useVehicles()
+const { vehiclesList, getVehicles, deleteVehicleWithID } = useVehicles()
 const { can } = useAbility()
 
 const filters = ref({
@@ -97,5 +96,6 @@ onMounted(() => {
     getVehicles();
     // console.log("vehiculos", vehiclesList.value);
 })
+
 
 </script>

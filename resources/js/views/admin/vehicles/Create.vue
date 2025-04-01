@@ -1,111 +1,162 @@
 <template>
-    <div class="row justify-content-center my-5">
-        <div class="col-md-10">
-            <div class="card border-0 shadow-sm">
+    <div class="grid">
+
+        <div class="col-12 md:col-8 lg:col-8 xl:col-8">
+            <div class="card mb-3">
                 <div class="card-body">
-                    <form @submit.prevent="submitForm">
-                        <div class="mb-3">
-                            <label for="post-title" class="form-label">Name</label>
-                            <input v-model="post.name" id="post-title" type="text" class="form-control">
-                            <div class="text-danger mt-1">
-                                {{ errors.name }}
+                    <h6 class="mb-2 text-primary">Crear Vehiculo</h6>
+
+                    <div class="form-group">
+                        <label for="plate">Plate</label>
+                        <InputText v-model="tempVehicle.plate" type="text" class="d-flex w-100 w-100" id="plate" />
+                        <!-- <div class="text-danger mt-1">{{ errors.name }}</div>
+                        <div class="text-danger mt-1">
+                            <div v-for="message in validationErrors?.name">
+                                {{ message }}
                             </div>
-                            <div class="text-danger mt-1">
-                                <div v-for="message in validationErrors?.name">
-                                    {{ message }}
-                                </div>
+                        </div> -->
+                    </div>
+
+                    <div class="form-group">
+                        <label for="brand">Brand</label>
+                        <InputText v-model="tempVehicle.brand" type="text" class="d-flex w-100" id="brand" />
+                        <!-- <div class="text-danger mt-1">{{ errors.surname1 }}</div>
+                        <div class="text-danger mt-1">
+                            <div v-for="message in validationErrors?.surname1">
+                                {{ message }}
                             </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input v-model="post.email" id="email" type="email" class="form-control">
-                            <div class="text-danger mt-1">
-                                {{ errors.email }}
+                        </div> -->
+                    </div>
+
+                    <div class="form-group">
+                        <label for="model">Model</label>
+                        <InputText v-model="tempVehicle.model" type="text" class="d-flex w-100" id="model" />
+                        <!-- <div class="text-danger mt-1">{{ errors.surname2 }}</div>
+                        <div class="text-danger mt-1">
+                            <div v-for="message in validationErrors?.surname2">
+                                {{ message }}
                             </div>
-                            <div class="text-danger mt-1">
-                                <div v-for="message in validationErrors?.email">
-                                    {{ message }}
-                                </div>
+                        </div> -->
+                    </div>
+
+                    <div class="form-group">
+                        <label for="consumption">Consumption</label>
+                        <InputNumber v-model="tempVehicle.consumption" type="float" class="d-flex w-100" id="consumption"
+                            :minFractionDigits="1" :maxFractionDigits="1" showButtons />
+                        <!-- <div class="text-danger mt-1">{{ errors.email }}</div>
+                        <div class="text-danger mt-1">
+                            <div v-for="message in validationErrors?.email">
+                                {{ message }}
                             </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input v-model="post.password" id="password" type="password" class="form-control">
-                            <div class="text-danger mt-1">
-                                {{ errors.password }}
+                        </div> -->
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pax_number">Pax_number</label>
+                        <InputNumber v-model="tempVehicle.pax_number" type="text" class="d-flex w-100" id="pax_number"
+                            :min="1" :max="1" showButtons />
+                        <!-- <div class="text-danger mt-1">{{ errors.password }}</div>
+                        <div class="text-danger mt-1">
+                            <div v-for="message in validationErrors?.password">
+                                {{ message }}
                             </div>
-                            <div class="text-danger mt-1">
-                                <div v-for="message in validationErrors?.password">
-                                    {{ message }}
-                                </div>
+                        </div> -->
+                    </div>
+
+                    <div class="form-group">
+                        <label for="validation">Validation</label>
+                        <InputNumber v-model="tempVehicle.validation" class="d-flex w-100" id="validation" :min="0" :max="1"
+                            showButtons />
+                        <!-- <div class="text-danger mt-1">{{ errors.password }}</div>
+                        <div class="text-danger mt-1">
+                            <div v-for="message in validationErrors?.password">
+                                {{ message }}
                             </div>
-                        </div>
-                        <!-- Role -->
-                        <div class="mb-3">
-                            <label for="post-category" class="form-label">
-                                Role
-                            </label>
-                            <!-- <v-select multiple v-model="post.role_id" :options="roleList" :reduce="role => role.id" label="name" class="form-control" /> -->
-                            <div class="text-danger mt-1">
-                                {{ errors.role_id }}
+                        </div> -->
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fuel_type">Fuel_type</label>
+                        <SelectButton v-model="tempVehicle.fuel_type" :options="options" aria-labelledby="basic"
+                            class="d-flex w-100" id="fuel_type" />
+                        <!-- <div class="text-danger mt-1">{{ errors.password }}</div>
+                        <div class="text-danger mt-1">
+                            <div v-for="message in validationErrors?.password">
+                                {{ message }}
                             </div>
-                            <div class="text-danger mt-1">
-                                <div v-for="message in validationErrors?.role_id">
-                                    {{ message }}
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Buttons -->
-                        <div class="mt-4">
-                            <button :disabled="isLoading" class="btn btn-primary">
-                                <div v-show="isLoading" class=""></div>
-                                <span v-if="isLoading">Processing...</span>
-                                <span v-else>Save</span>
-                            </button>
-                        </div>
-                    </form>
+                        </div> -->
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
+    <button class="btn btn-primary" @click="submitAddVehicle">Guardar</button>
+    <Toast />
 </template>
 <script setup>
-import { onMounted, reactive } from "vue";
-import useRoles from "@/composables/roles";
-import useUsers from "@/composables/users";
+// VUE
+import { onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
+import * as yup from "yup";
+import { es } from "yup-locales";
 
-const { roleList, getRoleList } = useRoles();
-const { storeUser, validationErrors, isLoading } = useUsers();
+yup.setLocale(es);
+const route = useRoute();
 
-import { useForm, useField, defineRule } from "vee-validate";
-import { required, min } from "@/validation/rules";
-defineRule('required', required);
-defineRule('min', min);
+// PrimeVue
+import { useToast } from 'primevue/usetoast';
 
-// Define a validation schema
-const schema = {
-    name: 'required',
-    email: 'required',
-    password: 'required|min:8',
+const toast = useToast();
+
+// Composables
+import useVehicles from "@/composables/vehicles";
+
+const { addVehicle2 } = useVehicles();
+
+const options = ["Gasolina", "Diésel"];
+
+const tempVehicle = ref({
+    plate: "",
+    brand: "",
+    model: "",
+    consumption: null,
+    pax_number: null,
+    validation: null,
+    fuel_type: "",
+});
+
+const vehicleSchema = yup.object().shape({
+    plate: yup.string().matches(/^[A-Z0-9-]+$/, "Formato de matrícula inválido").required("La matrícula es obligatoria"),
+    brand: yup.string().required("La marca es obligatoria"),
+    model: yup.string().required("El modelo es obligatorio"),
+    consumption: yup.number().positive("El consumo debe ser un número positivo").required("El consumo es obligatorio"),
+    pax_number: yup.number().integer("Debe ser un número entero").positive("Debe ser un número positivo").required("El número de pasajeros es obligatorio"),
+    validation: yup.number().required("La validación es obligatoria"),
+    fuel_type: yup.string().oneOf(["Gasolina", "Diésel"], "Tipo de combustible inválido").required("El tipo de combustible es obligatorio"),
+});
+
+const submitAddVehicle = async () => {
+    try {
+        await vehicleSchema.validate({
+            plate: tempVehicle.value.plate,
+            brand: tempVehicle.value.brand,
+            model: tempVehicle.value.model,
+            consumption: tempVehicle.value.consumption,
+            fuel_type: tempVehicle.value.fuel_type,
+            pax_number: tempVehicle.value.pax_number,
+            validation: tempVehicle.value.validation
+        });
+
+        addVehicle2(tempVehicle.value);
+    } catch (error) {
+        console.log(error);
+        toast.add({
+            severity: "info",
+            summary: "Faltan datos o los formatos no son adecuados.",
+            detail: Error.message,
+            life: 3000,
+        });
+    }
 }
-// Create a form context with the validation schema
-const { validate, errors } = useForm({ validationSchema: schema })
-// Define actual fields for validation
-const { value: name } = useField('name', null, { initialValue: '' });
-const { value: email } = useField('email', null, { initialValue: '' });
-const { value: password } = useField('password', null, { initialValue: '' });
-const { value: role_id } = useField('role_id', null, { initialValue: '', label: 'role' });
-
-const post = reactive({
-    name,
-    email,
-    password,
-    role_id,
-})
-function submitForm() {
-    validate().then(form => { if (form.valid) storeUser(post) })
-}
-onMounted(() => {
-    getRoleList()
-})
 </script>

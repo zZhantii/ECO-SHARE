@@ -55,6 +55,24 @@ export default function useVehicles() {
             .finally(() => (isLoading.value = false));
     };
 
+    const addVehicle2 = async (vehicle) => {
+        axios
+            .post("/api/vehicle/", vehicle)
+            .then((response) => {
+                vehiclesList.value.push(vehicle);
+                swal({
+                    icon: "success",
+                    title: "Vehículo guardado satisfactoriamente",
+                });
+            })
+            .catch((error) => {
+                if (error.response?.data) {
+                    validationErrors.value = error.response.data.errors;
+                }
+            })
+            .finally(() => (isLoading.value = false));
+    };
+
     // const getVehicle = async (vehicleID) => {
     //     try {
     //         const response = await axios.get("/api/vehicle/" + vehicleID);
@@ -93,9 +111,7 @@ export default function useVehicles() {
 
     const updateVehicle = async (vehicle) => {
         if (isLoading.value) return;
-        console.log("patata");
-        console.log(vehicle);
-        console.log("patata2");
+
         isLoading.value = true;
         validationErrors.value = {};
 
@@ -152,6 +168,27 @@ export default function useVehicles() {
             });
     };
 
+    const deleteVehicleWithID = async (vehicleID) => {
+        axios
+            .delete("/api/vehicle/" + vehicleID)
+            .then((response) => {
+                const index = vehiclesList.value.findIndex(
+                    (v) => v.id == vehicle.id
+                );
+
+                vehiclesList.value.splice(index, 1);
+                swal({
+                    icon: "success",
+                    title: "Vehículo eliminado con éxito",
+                });
+            })
+            .catch((error) => {
+                if (error.response?.data) {
+                    validationErrors.value = error.response.data.errors;
+                }
+            });
+    };
+
     return {
         vehicle,
         vehiclesList,
@@ -161,6 +198,8 @@ export default function useVehicles() {
         validationErrors,
         createVehicleDB,
         deleteVehicle,
+        deleteVehicleWithID,
         addVehicle,
+        addVehicle2
     };
 }
