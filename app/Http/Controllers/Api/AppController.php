@@ -67,7 +67,7 @@ class AppController extends Controller
         $user = Auth::user();
 
 
-        $trips = Trip::where("user_id", $user->id)->where("departure_time", ">=", now())->with("vehicle")->get();
+        $trips = Trip::where("user_id", $user->id)->where("departure_time", ">=", now())->with("vehicle")->with("reserves")->get();
 
         return response()->json(["suceess" => True, "data" => $trips], 200);
     }

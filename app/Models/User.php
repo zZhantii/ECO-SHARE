@@ -99,7 +99,7 @@ class User extends Authenticatable implements HasMedia
     // Relacion user_trips_reserves N:M (N Usuarios)
     public function reserves()
     {
-        return $this->belongsToMany(Trip::class, 'user_trips_reserves', 'trip_id')
+        return $this->belongsToMany(Trip::class, 'user_trips_reserves', 'user_id', 'trip_id')
             ->withPivot('seats_reserved', 'reservation_date', 'check_in');
     }
 }

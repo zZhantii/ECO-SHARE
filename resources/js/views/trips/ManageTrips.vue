@@ -24,7 +24,9 @@
 
                     <ul class="col-sm-11 col-md-7 p-0">
                         <li v-for="trip in activeDriverTripsList">
-                            <div class="timeline mb-3 m-4 p-3 rounded-1">
+                            <div
+                                class="timeline mb-4 m-4 p-4 pt-2 pb-3 rounded-1"
+                            >
                                 <Timeline
                                     :value="getTimelineEvents(trip)"
                                     layout="horizontal"
@@ -48,9 +50,32 @@
                                         </div>
                                     </template>
                                 </Timeline>
+                                <div
+                                    v-if="trip.drive_start == null"
+                                    class="d-flex gap-2 align-items-center"
+                                >
+                                    <i class="fa-solid fa-stopwatch"></i>
+                                    <p class="mt-4 mb-4">
+                                        {{ getTimeToBoarding(trip) }}
+                                    </p>
+                                </div>
+                                <div
+                                    v-else-if="trip.drive_end == null"
+                                    class="d-flex gap-2 align-items-center"
+                                >
+                                    <i class="fa-regular fa-compass"></i>
+                                    <p class="mt-4 mb-4">En transito</p>
+                                </div>
 
                                 <div class="d-flex justify-content-between">
-                                    <div class="d-flex align-items-center">
+                                    <div
+                                        v-if="
+                                            checkBoarding(trip.departure_time)
+                                        "
+                                        class="d-flex align-items-center"
+                                    >
+                                        <Toast />
+                                        <ConfirmPopup />
                                         <Button
                                             v-if="
                                                 trip.drive_start == null &&
@@ -58,7 +83,7 @@
                                             "
                                             class="btn-secondary m-1"
                                             label="Iniciar viaje"
-                                            @click="startDrive(trip.id)"
+                                            @click="confirmStart(trip)"
                                         />
                                         <Button
                                             v-if="
@@ -68,9 +93,7 @@
                                             "
                                             class="btn-cancel m-3"
                                             label="Cancelar viaje"
-                                            @click="
-                                                cancellTripAsDriver(trip.id)
-                                            "
+                                            @click="confirmCancell(trip)"
                                         />
                                         <Button
                                             v-if="
@@ -79,7 +102,7 @@
                                             "
                                             class="btn-secondary m-1"
                                             label="Finalizar viaje"
-                                            @click="endDrive(trip.id)"
+                                            @click="confirmEnd(trip)"
                                         />
                                         <div
                                             v-if="trip.drive_end != null"
@@ -119,7 +142,7 @@
                                         v-model:visible="visibleDriver"
                                         modal
                                         header="Detalles del viaje"
-                                        :style="{ width: '25rem' }"
+                                        :style="{ width: '30rem' }"
                                     >
                                         <div class="mb-5">
                                             <div>
@@ -156,12 +179,43 @@
                                                         }}
                                                     </strong>
                                                 </p>
+                                                <h3 class="fs-5 mt-4">
+                                                    Lista de pasajeros:
+                                                </h3>
+                                                <ul class="ps-0 passenger-list">
+                                                    <li
+                                                        class="gap-5 p-1 d-flex align-items-center gap-3 ms-3"
+                                                        v-for="passenger in trip.reserves"
+                                                    >
+                                                        <i
+                                                            v-if="
+                                                                passenger.pivot
+                                                                    .check_in ==
+                                                                null
+                                                            "
+                                                            class="ms-1 fa-solid fa-hourglass-half"
+                                                        ></i>
+
+                                                        <i
+                                                            v-else
+                                                            class="fa-solid fa-circle-check"
+                                                            style="color: green"
+                                                        ></i>
+
+                                                        <p class="fs-4 m-0">
+                                                            {{
+                                                                passenger.alias
+                                                            }}
+                                                        </p>
+                                                    </li>
+                                                </ul>
                                             </div>
                                         </div>
                                         <div class="flex justify-end gap-2">
                                             <Button
                                                 type="button"
                                                 label="Cancelar"
+                                                class="btn-primary"
                                                 severity="secondary"
                                                 @click="visibleDriver = false"
                                             ></Button>
@@ -239,7 +293,47 @@ import AccordionTab from "primevue/accordiontab";
 import useTrips from "@/composables/trips.js";
 import { ref, onMounted } from "vue";
 import Timeline from "primevue/timeline";
-import axios from "axios";
+import { useToast } from "primevue/usetoast";
+import { useConfirm } from "primevue/useconfirm";
+
+const confirm = useConfirm();
+const toast = useToast();
+
+function getTimeToBoarding(trip) {
+    const start = new Date(trip.departure_time);
+    const now = new Date();
+
+    const diff = Math.abs(start - now);
+    const diffInMinutes = Math.floor(diff / 1000 / 60);
+    const hours = Math.floor(diffInMinutes / 60);
+    const minutes = diffInMinutes % 60;
+
+    if (hours >= 24) {
+        return "Aún falta un día o más para poder iniciar el viaje";
+    }
+    if (start <= now) {
+        return "Ha llegado la hora de comenzar el viaje";
+    }
+
+    if (!trip.drive_start) {
+        return hours != 0
+            ? `Falta ${hours} hora/s y ${minutes} minuto/s para iniciar el viaje`
+            : `Falta ${minutes} minuto/s para el inicio del viaje`;
+    }
+}
+
+function checkBoarding(startTime) {
+    const start = new Date(startTime);
+    const now = new Date();
+
+    const minutesDiff = Math.abs(start - now) / 1000 / 60;
+
+    if (minutesDiff <= 15 || start < now) {
+        return true;
+    }
+
+    return false;
+}
 
 const visibleDriver = ref(false);
 const {
@@ -255,6 +349,86 @@ onMounted(() => {
     getActiveTrips();
 });
 
+const confirmStart = (trip) => {
+    confirm.require({
+        message: "Seguro que quieres iniciar el viaje?",
+        header: "Confirmar",
+        icon: "pi pi-exclamation-triangle",
+        rejectProps: {
+            label: "Cancelar",
+            severity: "secondary",
+            outlined: true,
+        },
+        acceptProps: {
+            label: "Iniciar viaje",
+        },
+        accept: () => {
+            startDrive(trip.id);
+        },
+        reject: () => {
+            toast.add({
+                severity: "info",
+                summary: "Inicio cancelado",
+                detail: "No se ha iniciado el viaje",
+                life: 3000,
+            });
+        },
+    });
+};
+
+const confirmCancell = (trip) => {
+    confirm.require({
+        message: "Seguro que quieres cancelar el viaje?",
+        header: "Confirmar",
+        icon: "pi pi-exclamation-triangle",
+        rejectProps: {
+            label: "Cancelar",
+            severity: "secondary",
+            outlined: true,
+        },
+        acceptProps: {
+            label: "Cancelar viaje",
+        },
+        accept: () => {
+            cancellTripAsDriver(trip.id);
+        },
+        reject: () => {
+            toast.add({
+                severity: "info",
+                summary: "No se ha cancelado el viaje",
+
+                life: 3000,
+            });
+        },
+    });
+};
+
+const confirmEnd = (trip) => {
+    confirm.require({
+        message: "Seguro que quieres finalizar el viaje?",
+        header: "Confirmar",
+        icon: "pi pi-exclamation-triangle",
+        rejectProps: {
+            label: "Cancelar",
+            severity: "secondary",
+            outlined: true,
+        },
+        acceptProps: {
+            label: "Finalizar viaje",
+        },
+        accept: () => {
+            endDrive(trip.id);
+        },
+        reject: () => {
+            toast.add({
+                severity: "info",
+                summary: "No se ha finalizado el viaje",
+
+                life: 3000,
+            });
+        },
+    });
+};
 function getTimelineEvents(trip) {
     return [
         {
@@ -314,5 +488,11 @@ i {
 
 :deep(.p-timeline-event) {
     height: 100% !important;
+}
+.passenger-list {
+    background-color: rgb(246, 246, 246);
+    border-radius: 20px;
+    padding: 10px;
+    padding-top: 5px;
 }
 </style>
