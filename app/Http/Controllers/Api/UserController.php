@@ -44,6 +44,11 @@ class UserController extends Controller
         return UserResource::collection($users);
     }
 
+    public function index2() {
+        $users = User::All();
+        return response()->json(["success" => true, "data" => $users], 200);
+    }
+
     public function store(StoreUserRequest $request)
     {
         $role = Role::find($request->role_id);
