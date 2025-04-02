@@ -43,14 +43,26 @@ const model = ref([
             { label: 'Permisos', icon: 'pi pi-fw pi-bookmark', to: '/admin/permissions', permision:'permission-list' }
         ]
     },
-    {
-        label: 'Posts',
-        items: [
-            { label: 'Posts', icon: 'pi pi-fw pi-id-card', to: '/admin/posts', permision: 'post-list' },
-            { label: 'Categorias', icon: 'pi pi-fw pi-id-card', to: '/admin/categories', permision: 'category-list' }
+    // {
+    //     label: 'Posts',
+    //     items: [
+    //         { label: 'Posts', icon: 'pi pi-fw pi-id-card', to: '/admin/posts', permision: 'post-list' },
+    //         { label: 'Categorias', icon: 'pi pi-fw pi-id-card', to: '/admin/categories', permision: 'category-list' }
 
+    //     ]
+    // }
+    {
+        label: 'Vehiculos',
+        items: [
+            { label: 'Vehicles  ', icon: 'pi pi-fw pi-id-card', to: '/admin/vehicles', permision: 'user-list' }
         ]
-    }
+    }, 
+    {
+        label: 'Viajes',
+        items: [
+            { label: 'Viajes  ', icon: 'pi pi-fw pi-id-card', to: '/admin/trips', permision: 'user-list' }
+        ]
+    },
 ]);
 </script>
 

@@ -562,7 +562,7 @@ const confirm = useConfirm();
 const toast = useToast();
 const { updateProfile, deleteImage, uploadAvatar } = useProfile();
 const { user } = useUsers();
-const { getVehicles, addVehicle, vehicle, vehiclesList, updateVehicle } =
+const { getVehicles, addVehicle, vehicle, vehiclesList, updateVehicle, deleteVehicle } =
     useVehicles();
 
 const avatarFile = ref(null);
@@ -646,7 +646,7 @@ const removeVehicle = (event) => {
         accept: () => {
             event.user_id = null;
 
-            updateVehicle(event);
+            deleteVehicle(event);
 
             visibleVehicleDialog.value = false;
         },

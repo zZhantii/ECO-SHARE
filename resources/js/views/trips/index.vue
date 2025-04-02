@@ -107,9 +107,10 @@
                         </Timeline>
                         <div class="d-flex flex-column justify-content-center align-items-center gap-3 w-25">
                             <span class="text-xl font-semibold">${{ trip.price }}</span>
-                            <router-link
-                                :to="{ name: 'ConfirmationTrips', params: { id: trip.id, seats: searchTrip2.available_seats } }"
-                                class="btn-primary">Reserva</router-link>
+                            <button class="btn-primary"
+                                @click="handleReservation(trip.id, searchTrip2.available_seats)">
+                                Reserva
+                            </button>
                         </div>
                     </div>
                     <div class="d-flex border-top pt-3 px-5 ">
@@ -145,9 +146,16 @@ const { getTrips, tripsList, searchTrip, searchTripList } = useTrips();
 import useUsers from "@/composables/users";
 const { getUser, user } = useUsers();
 
+// Store
+import { useTripStore } from "@/store/trip.js";
+const tripStore = useTripStore  ();
+
 // Routes
 import { useRoute } from "vue-router";
 const route = useRoute();
+
+import { useRouter } from "vue-router";
+const router = useRouter();
 
 // PrimeVue
 import Timeline from "primevue/timeline";
@@ -202,9 +210,35 @@ const searchResultsFiltered = ref({});
 const start_point = ref("");
 const end_point = ref("");
 const departure_time = ref("");
+const start_origin = ref(null);
+const end_destination = ref(null);
+
+const handleReservation = (tripId, availableSeats) => {
+    const tripInfo = {
+        start_point: start_origin.value, 
+        end_point: end_destination.value
+    };
+
+    // 2. Guarda en el store
+    tripStore.setTripData(tripInfo);
+    // console.log('Datos guardados:', tripStore.tripData);
+
+    // 3. Navega a la página de confirmación
+    router.push({
+        name: 'ConfirmationTrips',
+        params: {
+            id: tripId,
+            seats: availableSeats
+        }
+    });
+};
 
 const handleSearch = async (searchData) => {
     try {
+        start_origin.value = searchData.origin;
+        end_destination.value = searchData.destination;
+        console.log("search data", searchData.origin);
+
         searchTrip2.value = {
             start_point: searchData.origin.name,
             locality_start: searchData.origin.address_components.find(comp => comp.types.includes('locality')).long_name,
@@ -220,7 +254,7 @@ const handleSearch = async (searchData) => {
 
         await searchTrip(searchTrip2.value);
 
-        console.log("SearchTrip", searchTripList.value);
+        // console.log("SearchTrip", searchTripList.value);
 
         const user_id = ref(null)
 
@@ -228,11 +262,6 @@ const handleSearch = async (searchData) => {
             user_id.value = key.user_id;
         }
 
-        await getUser(user_id.value);
-
-        for (const key of user.value) {
-            rating.value = key.rating
-        }
 
         applyFilters();
     } catch (err) {

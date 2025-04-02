@@ -308,7 +308,74 @@ export default [
                     },
                 ],
             },
-
+            {
+                name: "vehicles",
+                path: "vehicles",
+                meta: { breadCrumb: "Vehiculos" },
+                children: [
+                    {
+                        name: "vehicle.index",
+                        path: "",
+                        component: () =>
+                            import("../views/admin/vehicles/index.vue"),
+                        meta: { breadCrumb: "Vehiculos" },
+                    },
+                    {
+                        name: "vehicles.create",
+                        path: "create",
+                        component: () =>
+                            import("../views/admin/vehicles/Create.vue"),
+                        meta: {
+                            breadCrumb: "Crear Usuario",
+                            linked: false,
+                        },
+                    },
+                    {
+                        name: "vehicles.edit",
+                        path: "edit/:id",
+                        component: () =>
+                            import("../views/admin/vehicles/Edit.vue"),
+                        meta: {
+                            breadCrumb: "Editar Vehiculo",
+                            linked: false,
+                        },
+                    },
+                ],
+            },
+            {
+                name: "trips",
+                path: "trips",
+                meta: { breadCrumb: "Vehiculos" },
+                children: [
+                    {
+                        name: "trips.index",
+                        path: "",
+                        component: () =>
+                            import("../views/admin/trips/index.vue"),
+                        meta: { breadCrumb: "Vehiculos" },
+                    },
+                    {
+                        name: "trips.create",
+                        path: "create",
+                        component: () =>
+                            import("../views/admin/trips/Create.vue"),
+                        meta: {
+                            breadCrumb: "Crear Usuario",
+                            linked: false,
+                        },
+                    },
+                    {
+                        name: "trips.edit",
+                        path: "edit/:id",
+                        component: () =>
+                            import("../views/admin/trips/Edit.vue"),
+                        meta: {
+                            breadCrumb: "Editar Vehiculo",
+                            linked: false,
+                        },
+                    },
+                ],
+            },
             {
                 name: "authors",
                 path: "authors",
