@@ -8,7 +8,7 @@
                 </div>
 
                 <DataTable v-model:filters="filters" :value="vehiclesList" paginator :rows="5"
-                    :globalFilterFields="['id', 'user_id', 'plate', 'brand', 'model', 'consumption', 'pax_number', 'validation', 'fuel_type', 'created_at', 'update_at']"
+                    :globalFilterFields="['id', 'user_id', 'plate', 'brand', 'model', 'consumption', 'pax_number', 'validation', 'fuel_type']"
                     stripedRows dataKey="id" size="small">
 
                     <template #header>
@@ -29,17 +29,6 @@
                                     @click="$router.push('vehicles/create')" class="float-end" />
                             </template>
                         </Toolbar>
-                        <!--
-                            <div class="flex justify-content-between flex-column sm:flex-row">
-
-                                <Button icon="pi pi-external-link" label="Export" @click="exportCSV($event)" />
-
-                                <div class="float-end">
-
-                                </div>
-
-                            </div>
-                            -->
                     </template>
 
                     <template #empty> No customers found. </template>
@@ -53,8 +42,6 @@
                     <Column field="pax_number" header="Pax_number" sortable></Column>
                     <Column field="validation" header="Validation" sortable></Column>
                     <Column field="fuel_type" header="Fuel_type" sortable></Column>
-                    <Column field="created_at" header="Created_at" sortable></Column>
-                    <Column field="update_at" header="Update_at" sortable></Column>
                     <Column class="pe-0 me-0 icon-column-2">
                         <template #body="slotProps">
                             <router-link v-if="can('user-edit')"
@@ -62,7 +49,7 @@
                                 <Button icon="pi pi-pencil" severity="info" size="small" class="mr-1" />
                             </router-link>
                             <Button icon="pi pi-trash" severity="danger" v-if="can('user-delete')"
-                                @click="deleteVehicleWithID(slotProps.data.id)" size="small" />
+                                @click="deleteVehicleAdmin(slotProps.data)" size="small" />
                         </template>
                     </Column>
 
@@ -79,7 +66,7 @@ import useVehicles from "../../../composables/vehicles";
 import { useAbility } from '@casl/vue'
 import { FilterMatchMode, FilterService } from "@primevue/core/api";
 
-const { vehiclesList, getVehicles, deleteVehicleWithID } = useVehicles()
+const { vehiclesList, getVehicles, deleteVehicle } = useVehicles()
 const { can } = useAbility()
 
 const filters = ref({
@@ -94,8 +81,10 @@ const initFilters = () => {
 
 onMounted(() => {
     getVehicles();
-    // console.log("vehiculos", vehiclesList.value);
 })
 
+const deleteVehicleAdmin = (vehicle) => {
+    deleteVehicle(vehicle);
+}
 
 </script>

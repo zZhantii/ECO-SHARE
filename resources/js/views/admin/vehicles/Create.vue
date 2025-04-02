@@ -6,6 +6,24 @@
                 <div class="card-body">
                     <h6 class="mb-2 text-primary">Crear Vehiculo</h6>
 
+                    {{ tempVehicle.user_id }}
+
+                    <Select v-model="tempVehicle.user_id" :options="users.data" filter optionLabel="name"
+                        optionValue="id" dataKey="id" placeholder="Select a Country" class="w-full md:w-56">
+                    </Select>
+
+                    <div class="form-group">
+                        <label for="user_id">User_id</label>
+                        <SelectButton v-model="tempVehicle.user_id" :options="IDs" aria-labelledby="basic"
+                            class="d-flex w-100" id="user_id" />
+                        <!-- <div class="text-danger mt-1">{{ errors.password }}</div>
+                        <div class="text-danger mt-1">
+                            <div v-for="message in validationErrors?.password">
+                                {{ message }}
+                            </div>
+                        </div> -->
+                    </div>
+
                     <div class="form-group">
                         <label for="plate">Plate</label>
                         <InputText v-model="tempVehicle.plate" type="text" class="d-flex w-100 w-100" id="plate" />
@@ -41,8 +59,8 @@
 
                     <div class="form-group">
                         <label for="consumption">Consumption</label>
-                        <InputNumber v-model="tempVehicle.consumption" type="float" class="d-flex w-100" id="consumption"
-                            :minFractionDigits="1" :maxFractionDigits="1" showButtons />
+                        <InputNumber v-model="tempVehicle.consumption" type="float" class="d-flex w-100"
+                            id="consumption" :minFractionDigits="1" :maxFractionDigits="1" showButtons />
                         <!-- <div class="text-danger mt-1">{{ errors.email }}</div>
                         <div class="text-danger mt-1">
                             <div v-for="message in validationErrors?.email">
@@ -65,8 +83,8 @@
 
                     <div class="form-group">
                         <label for="validation">Validation</label>
-                        <InputNumber v-model="tempVehicle.validation" class="d-flex w-100" id="validation" :min="0" :max="1"
-                            showButtons />
+                        <InputNumber v-model="tempVehicle.validation" class="d-flex w-100" id="validation" :min="0"
+                            :max="1" showButtons />
                         <!-- <div class="text-danger mt-1">{{ errors.password }}</div>
                         <div class="text-danger mt-1">
                             <div v-for="message in validationErrors?.password">
@@ -110,13 +128,17 @@ import { useToast } from 'primevue/usetoast';
 const toast = useToast();
 
 // Composables
+import useUsers from "@/composables/users";
 import useVehicles from "@/composables/vehicles";
 
 const { addVehicle2 } = useVehicles();
+const { getUsers, users } = useUsers();
 
 const options = ["Gasolina", "Diésel"];
+const IDs = ref([]);
 
 const tempVehicle = ref({
+    user_id: "",
     plate: "",
     brand: "",
     model: "",
@@ -124,6 +146,11 @@ const tempVehicle = ref({
     pax_number: null,
     validation: null,
     fuel_type: "",
+});
+
+onMounted(async () => {
+    getUsers();
+
 });
 
 const vehicleSchema = yup.object().shape({

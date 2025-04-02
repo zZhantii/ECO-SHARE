@@ -29,9 +29,8 @@ class VehicleController extends Controller
     }
 
 
-    public function update(Request $request, Trip $trip)
+    public function update(Request $request, Vehicle $vehicle)
     {
-
         $vehicle->brand = $request->brand;
         $vehicle->fuel_type = $request->fuel_type;
         $vehicle->model = $request->model;

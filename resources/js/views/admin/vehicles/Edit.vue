@@ -55,7 +55,7 @@
                     <div class="form-group">
                         <label for="pax_number">Pax_number</label>
                         <InputNumber v-model="vehicle.pax_number" type="text" class="d-flex w-100" id="pax_number"
-                            :min="1" :max="1" showButtons />
+                            :min="1" showButtons />
                         <!-- <div class="text-danger mt-1">{{ errors.password }}</div>
                         <div class="text-danger mt-1">
                             <div v-for="message in validationErrors?.password">
@@ -113,18 +113,16 @@ const toast = useToast();
 
 // Composables
 import useVehicles from "@/composables/vehicles";
+import useUsers from "@/composables/users";
 
 const { updateVehicle, getVehicle, vehicle } = useVehicles();
 
-
-
-onMounted(() => {
-    getVehicle(route.params.id)
-
-})
-
 const tempVehicle = ref({});
 const options = ["Gasolina", "Diésel"];
+
+onMounted(async () => {
+    await getVehicle(route.params.id);
+})
 
 const vehicleSchema = yup.object().shape({
     plate: yup.string().matches(/^[A-Z0-9-]+$/, "Formato de matrícula inválido").required("La matrícula es obligatoria"),

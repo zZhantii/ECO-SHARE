@@ -55,6 +55,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     //Eliminar imagen/avatar de usuario
     Route::delete("delete-avatar", [ProfileController::class, "unlinkAvatar"]);
 
+    // Users
+    Route::get('user', [UserController::class, 'index2']);
+
+    // Vehicles
     Route::put('vehicle/{vehicle}', [VehicleController::class, 'update']);
     Route::get('vehicle', [VehicleController::class, 'index']);
     Route::post("vehicle", [VehicleController::class, "store"]);
