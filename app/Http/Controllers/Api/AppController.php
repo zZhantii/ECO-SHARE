@@ -27,9 +27,13 @@ class AppController extends Controller
     {
         $trip = Trip::find($id);
 
+
         if (empty($trip->drive_start) && empty($trip->drive_end) && empty($trip->cancelled_at)) {
             $trip->drive_start = now();
             $trip->save();
+
+
+
             return response()->json(["success" => true, "data" => $trip], 200);
         }
 
@@ -67,7 +71,7 @@ class AppController extends Controller
         $user = Auth::user();
 
 
-        $trips = Trip::where("user_id", $user->id)->where("departure_time", ">=", now())->with("vehicle")->get();
+        $trips = Trip::where("user_id", $user->id)->where("departure_time", ">=", now())->with("vehicle")->with("reserves")->get();
 
         return response()->json(["suceess" => True, "data" => $trips], 200);
     }

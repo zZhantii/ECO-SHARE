@@ -27,8 +27,8 @@ return new class extends Migration {
             $table->timestamps();
             $table->timestamp('drive_start')->nullable();
             $table->timestamp('drive_end')->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('vehicle_id')->references('id')->on('vehicles');
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('vehicle_id')->references('id')->on('vehicles')->cascadeOnDelete();
         });
     }
 
