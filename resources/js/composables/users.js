@@ -34,7 +34,6 @@ export default function useUsers() {
                 order_direction
             )
             .then((response) => {
-            
                 users.value = response.data;
             });
     };
@@ -55,19 +54,20 @@ export default function useUsers() {
         }
     }
 
-    const getUser = async (user) => {
-        // const response = await axios.get("/api/user/" + id);
-        // user.value = response.data.data;
+    const getUser = async (id) => {
+        console.log(user);
+        const response = await axios.get("/api/user/" + id);
+        user.value = response.data.data;
 
-        // return user.value;
+        return user.value;
 
-        try {
-            const response = await axios.get("/api/user/" + user.value.user_id);
-            console.log("API response: ", response.data.data);
-            user.value = response.data.data;
-        } catch (error) {
-            console.log(error);
-        }
+        // try {
+        //     const response = await axios.get("/api/user/" + user.value.user_id);
+        //     console.log("API response: ", response.data.data);
+        //     user.value = response.data.data;
+        // } catch (error) {
+        //     console.log(error);
+        // }
     };
 
     const createUserDB = async (id) => {

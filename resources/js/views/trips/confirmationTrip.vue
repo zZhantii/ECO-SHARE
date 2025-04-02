@@ -145,12 +145,8 @@ import { onMounted, ref } from "vue";
 onMounted(async () => {
     await getTrip(tripId);
     console.log("tripList", tripList.value);
-    await getUser(tripList.value.user_id);
+    // await getUser(tripList.value.user_id);
     // console.log("User por ID", user.value);
-    for (const key of user.value) {
-        // console.log(key.rating);
-        rating.value = key.rating;
-    }
     await getVehicle(tripList.value.vehicle_id);
     // console.log("Vehicle por ID", vehicle.value);
 

@@ -262,11 +262,6 @@ const handleSearch = async (searchData) => {
             user_id.value = key.user_id;
         }
 
-        await getUser(user_id.value);
-
-        for (const key of user.value) {
-            rating.value = key.rating
-        }
 
         applyFilters();
     } catch (err) {
