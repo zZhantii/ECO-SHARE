@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->timestamp('reservation_date');
             $table->timestamp('check_in')->nullable();
             $table->timestamps();
-
+            $table->float("total_price")->nullable();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->foreign('trip_id')->references('id')->on('trips')->cascadeOnDelete();
         });
