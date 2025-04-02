@@ -29,7 +29,7 @@ class VehicleController extends Controller
     }
 
 
-    public function update(Request $request, Vehicle $vehicle)
+    public function update(Request $request, Trip $trip)
     {
 
         $vehicle->brand = $request->brand;

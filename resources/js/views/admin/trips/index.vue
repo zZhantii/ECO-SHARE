@@ -26,7 +26,7 @@
                             </template>
                             <template #end>
                                 <Button icon="pi pi-external-link" label="Crear Vehiculo"
-                                    @click="$router.push('vehicles/create')" class="float-end" />
+                                    @click="$router.push('trips/create')" class="float-end" />
                             </template>
                         </Toolbar>
                         <!--

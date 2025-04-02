@@ -266,6 +266,24 @@ export default function useTrips() {
     //     }
     // }
 
+    const addTrip = async (trip) => {
+        axios
+            .post("/api/vehicle/", trip.value)
+            .then((response) => {
+                tripList.value.push(trip.value);
+                swal({
+                    icon: "success",
+                    title: "Vehículo guardado satisfactoriamente",
+                });
+            })
+            .catch((error) => {
+                if (error.response?.data) {
+                    validationErrors.value = error.response.data.errors;
+                }
+            })
+            .finally(() => (isLoading.value = false));
+    };
+
     const deleteTrip = async (trip) => {
         if (isLoading.value) return;
 
@@ -350,5 +368,6 @@ export default function useTrips() {
         endDrive,
         activePassengerTripsList,
         cancellTripAsDriver,
+        addTrip
     };
 }

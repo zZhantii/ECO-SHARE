@@ -52,6 +52,22 @@ class TripController extends Controller
         return response()->json(["success" => true, "data" => $trip], 200);
     }
 
+    public function update(Request $request, Trip $trip)
+    {
+        $trip->user_id = $request->user_id;
+        $trip->vehicle_id = $request->vehicle_id;
+        $trip->start_point = is_string($request->start_point) ? json_decode($request->start_point, true) : $request->start_point;
+        $trip->end_point = is_string($request->end_point) ? json_decode($request->end_point, true) : $request->end_point;
+        $trip->departure_time = $request->departure_time;
+        $trip->arrival_time = $request->arrival_time;
+        $trip->available_seats = $request->available_seats;
+        $trip->price = $request->price;
+
+        $trip->save();
+
+        return response()->json(['success' => true, "data" => $trip], 200);
+    }
+
     
     public function destroy(Trip $trip)
     {
