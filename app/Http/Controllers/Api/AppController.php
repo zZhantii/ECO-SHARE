@@ -27,9 +27,13 @@ class AppController extends Controller
     {
         $trip = Trip::find($id);
 
+
         if (empty($trip->drive_start) && empty($trip->drive_end) && empty($trip->cancelled_at)) {
             $trip->drive_start = now();
             $trip->save();
+
+
+
             return response()->json(["success" => true, "data" => $trip], 200);
         }
 

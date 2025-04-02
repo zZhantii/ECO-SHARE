@@ -24,7 +24,7 @@ return new class extends Migration {
             $table->string('fuel_type');
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
         });
     }
 
