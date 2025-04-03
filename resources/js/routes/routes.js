@@ -411,6 +411,40 @@ export default [
                 ],
             },
             {
+                name: "reserves",
+                path: "reserves",
+                meta: { breadCrumb: "Reservas" },
+                children: [
+                    {
+                        name: "reserves.index",
+                        path: "",
+                        component: () =>
+                            import("../views/admin/reserves/index.vue"),
+                        meta: { breadCrumb: "Reservas" },
+                    },
+                    {
+                        name: "reserves.create",
+                        path: "create",
+                        component: () =>
+                            import("../views/admin/reserves/Create.vue"),
+                        meta: {
+                            breadCrumb: "Crear Reserva",
+                            linked: false,
+                        },
+                    },
+                    {
+                        name: "reserves.edit",
+                        path: "edit/:id",
+                        component: () =>
+                            import("../views/admin/reserves/Edit.vue"),
+                        meta: {
+                            breadCrumb: "Editar Reserva",
+                            linked: false,
+                        },
+                    },
+                ],
+            },
+            {
                 name: "authors",
                 path: "authors",
                 meta: { breadCrumb: "Autores" },

@@ -69,6 +69,12 @@ const model = ref([
             { label: 'Tags  ', icon: 'pi pi-fw pi-id-card', to: '/admin/tags', permision: 'user-list' }
         ]
     },
+    {
+        label: 'Reserves',
+        items: [
+            { label: 'Reserves  ', icon: 'pi pi-fw pi-id-card', to: '/admin/Reserves', permision: 'user-list' }
+        ]
+    },
 ]);
 </script>
 

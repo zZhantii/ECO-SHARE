@@ -4,7 +4,7 @@
             <div class="card">
 
                 <div class="card-header bg-transparent ps-0 pe-0">
-                    <h5 class="float-start mb-0">Vehicles</h5>
+                    <h5 class="float-start mb-0">Etiquetas</h5>
                 </div>
 
                 <DataTable v-model:filters="filters" :value="tagList" paginator :rows="10"
@@ -22,7 +22,7 @@
                                 <Button type="button" icon="pi pi-filter-slash" label="Clear" class="ml-1" outlined
                                     @click="initFilters()" />
                                 <Button type="button" icon="pi pi-refresh" class="h-100 ml-1" outlined
-                                    @click="getTags()" />
+                                    @click="refreshTags()" />
                             </template>
                             <template #end>
                                 <Button icon="pi pi-external-link" label="Crear Vehiculo"
@@ -82,6 +82,12 @@ onMounted(() => {
 
 const deleteTagAdmin = (tag) => {
     deleteTag(tag);
+}
+
+const refreshTags = () => {
+    tagList.value = [];
+    getTags();
+    console.log("Tags refresh")
 }
 
 

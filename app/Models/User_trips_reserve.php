@@ -9,6 +9,8 @@ class User_trips_reserve extends Model
 {
     use HasFactory;
 
+    protected $table = 'user_trips_reserves';
+
     protected $fillable = [
         'user_id',
         'trip_id',
@@ -16,4 +18,16 @@ class User_trips_reserve extends Model
         'reservation_date',
         'check_in',
     ];
+
+    // Relación con User
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    // Relación con Trip
+    public function trip()
+    {
+        return $this->belongsTo(Trip::class);
+    }
 }

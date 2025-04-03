@@ -65,7 +65,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('vehicle/{vehicle}', [VehicleController::class, 'show']);
     Route::delete('vehicle/{vehicle}', [VehicleController::class, 'destroy']);
 
-
     // Trips
     Route::get("trip", [TripController::class, 'index']);
     Route::get("trip/{trip}", [TripController::class, 'show']);
@@ -86,6 +85,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::put("tag/{tag}", [TagController::class, "update"]);
     Route::post("tag", [TagController::class, "store"]);
     Route::delete("tag/{tag}", [TagController::class, "destroy"]);
+
+    // Tabla intermedia reservas
+    Route::get("reserva", [TripController::class, 'getAllReservations']);
 
 
     Route::get('abilities', function (Request $request) {
