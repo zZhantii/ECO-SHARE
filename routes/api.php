@@ -82,6 +82,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     //Tags
     Route::get("tag", [TagController::class, "index"]);
+    Route::get("tag/{tag}", [TagController::class, "show"]);
+    Route::put("tag/{tag}", [TagController::class, "update"]);
+    Route::post("tag", [TagController::class, "store"]);
+    Route::delete("tag/{tag}", [TagController::class, "destroy"]);
 
 
     Route::get('abilities', function (Request $request) {

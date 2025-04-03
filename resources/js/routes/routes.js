@@ -345,7 +345,7 @@ export default [
             {
                 name: "trips",
                 path: "trips",
-                meta: { breadCrumb: "Vehiculos" },
+                meta: { breadCrumb: "Viajes" },
                 children: [
                     {
                         name: "trips.index",
@@ -371,6 +371,40 @@ export default [
                             import("../views/admin/trips/Edit.vue"),
                         meta: {
                             breadCrumb: "Editar Vehiculo",
+                            linked: false,
+                        },
+                    },
+                ],
+            },
+            {
+                name: "tags",
+                path: "tags",
+                meta: { breadCrumb: "Etiquetas" },
+                children: [
+                    {
+                        name: "tags.index",
+                        path: "",
+                        component: () =>
+                            import("../views/admin/tags/index.vue"),
+                        meta: { breadCrumb: "Etiquetas" },
+                    },
+                    {
+                        name: "tags.create",
+                        path: "create",
+                        component: () =>
+                            import("../views/admin/tags/Create.vue"),
+                        meta: {
+                            breadCrumb: "Crear Etiqueta",
+                            linked: false,
+                        },
+                    },
+                    {
+                        name: "tags.edit",
+                        path: "edit/:id",
+                        component: () =>
+                            import("../views/admin/tags/Edit.vue"),
+                        meta: {
+                            breadCrumb: "Editar Etiqueta",
                             linked: false,
                         },
                     },
