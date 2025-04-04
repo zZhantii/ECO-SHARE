@@ -2,12 +2,10 @@
     <div class="grid">
         <div class="col-12">
             <div class="card">
-
                 <div class="card-header bg-transparent ps-0 pe-0">
                     <h5 class="float-start mb-0">Reservas</h5>
                 </div>
-
-                <DataTable v-model:filters="filters" :value="reservesList" paginator :rows="10"
+                <DataTable v-model:filters="filters" :value="reserves" paginator :rows="10"
                     :globalFilterFields="['user_id', 'trip_id', 'seats_reserved', 'reservation_date', 'check_in']"
                     stripedRows dataKey="id" size="small">
 
@@ -22,11 +20,11 @@
                                 <Button type="button" icon="pi pi-filter-slash" label="Clear" class="ml-1" outlined
                                     @click="initFilters()" />
                                 <Button type="button" icon="pi pi-refresh" class="h-100 ml-1" outlined
-                                    @click="refreshTags()" />
+                                    @click="refreshReserves()" />
                             </template>
                             <template #end>
                                 <Button icon="pi pi-external-link" label="Crear Vehiculo"
-                                    @click="$router.push('tags/create')" class="float-end" />
+                                    @click="$router.push('reserves/create')" class="float-end" />
                             </template>
                         </Toolbar>
                     </template>
@@ -40,10 +38,10 @@
                     <Column field="check_in" header="Check_in" sortable></Column>
                     <Column class="pe-0 me-0 icon-column-2">
                         <template #body="slotProps">
-                            <router-link v-if="can('user-edit')"
+                            <!-- <router-link v-if="can('user-edit')"
                                 :to="{ name: 'reserves.edit', params: { id: slotProps.data.id } }">
                                 <Button icon="pi pi-pencil" severity="info" size="small" class="mr-1" />
-                            </router-link>
+                            </router-link> -->
                             <Button icon="pi pi-trash" severity="danger" v-if="can('user-delete')"
                                 @click="deleteReserveAdmin(slotProps.data)" size="small" />
                         </template>
@@ -63,8 +61,8 @@ import { FilterMatchMode, FilterService } from "@primevue/core/api";
 import { useAbility } from '@casl/vue'
 const { can } = useAbility()
 
-import useTrips from "@/composables/trips.js"
-const { getReserves, reservesList } = useTrips();
+import useReserves from "@/composables/reserves.js"
+const { fetchReserves, reserves, deleteReserve } = useReserves();
 
 const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -77,17 +75,16 @@ const initFilters = () => {
 };
 
 onMounted(() => {
-    getReserves();
-    // console.log(reservesList.value);
+    fetchReserves();
 })
 
-const deleteReserveAdmin = (tag) => {
-    // deleteTag(tag);
+const deleteReserveAdmin = (reserve2) => {
+    deleteReserve(reserve2);
 }
 
-const refreshTags = () => {
-    reservesList.value = [];
-    getTags();
+const refreshReserves = () => {
+    reserves.value = [];
+    fetchReserves();
 }
 
 

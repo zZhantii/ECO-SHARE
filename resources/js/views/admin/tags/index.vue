@@ -6,7 +6,6 @@
                 <div class="card-header bg-transparent ps-0 pe-0">
                     <h5 class="float-start mb-0">Etiquetas</h5>
                 </div>
-
                 <DataTable v-model:filters="filters" :value="tagList" paginator :rows="10"
                     :globalFilterFields="['id', 'tag_name']"
                     stripedRows dataKey="id" size="small">
@@ -77,7 +76,6 @@ const initFilters = () => {
 
 onMounted(() => {
     getTags();
-    console.log(tagList.value);
 })
 
 const deleteTagAdmin = (tag) => {

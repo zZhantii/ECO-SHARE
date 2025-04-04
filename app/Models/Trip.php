@@ -44,7 +44,7 @@ class Trip extends Model
     // Relacion user_trips_rates N:M (M Trips)
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_rates', 'id');
+        return $this->belongsToMany(User::class, 'user_rates', 'user_id');
     }
 
     public function reserves()

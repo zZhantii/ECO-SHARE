@@ -14,7 +14,8 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 
 use App\Http\Controllers\Api\TripController;
 use App\Http\Controllers\Api\VehicleController;
-use App\Http\Controllers\Api\TripReserveController;
+use App\Http\Controllers\Api\TripReservesController;
+use App\Http\Controllers\Api\ReservesController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -86,8 +87,12 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post("tag", [TagController::class, "store"]);
     Route::delete("tag/{tag}", [TagController::class, "destroy"]);
 
-    // Tabla intermedia reservas
-    Route::get("reserva", [TripController::class, 'getAllReservations']);
+    // Reservas
+    Route::get('reserves', [ReservesController::class, 'index']); 
+    Route::post('reserves', [ReservesController::class, 'store']);
+    Route::get('reserves/{reserves}', [ReservesController::class, 'show']); 
+    Route::put('reserves/{reserves}', [ReservesController::class, 'update']); 
+    Route::delete('reserves/{user_id}/{trip_id}', [ReservesController::class, 'destroy']); 
 
 
     Route::get('abilities', function (Request $request) {

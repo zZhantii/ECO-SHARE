@@ -72,7 +72,7 @@ const model = ref([
     {
         label: 'Reserves',
         items: [
-            { label: 'Reserves  ', icon: 'pi pi-fw pi-id-card', to: '/admin/Reserves', permision: 'user-list' }
+            { label: 'Reserves  ', icon: 'pi pi-fw pi-id-card', to: '/admin/reserves', permision: 'user-list' }
         ]
     },
 ]);

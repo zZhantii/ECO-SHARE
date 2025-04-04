@@ -19,15 +19,13 @@ class User_trips_reserve extends Model
         'check_in',
     ];
 
-    // Relación con User
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    // Relación con Trip
     public function trip()
     {
-        return $this->belongsTo(Trip::class);
+        return $this->belongsTo(Trip::class, 'trip_id');
     }
 }
