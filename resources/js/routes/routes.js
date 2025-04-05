@@ -445,6 +445,40 @@ export default [
                 ],
             },
             {
+                name: "rates",
+                path: "rates",
+                meta: { breadCrumb: "Valoraciones" },
+                children: [
+                    {
+                        name: "rates.index",
+                        path: "",
+                        component: () =>
+                            import("../views/admin/rates/index.vue"),
+                        meta: { breadCrumb: "Valoraciones" },
+                    },
+                    {
+                        name: "rates.create",
+                        path: "create",
+                        component: () =>
+                            import("../views/admin/rates/Create.vue"),
+                        meta: {
+                            breadCrumb: "Crear Valoraciones",
+                            linked: false,
+                        },
+                    },
+                    {
+                        name: "rates.edit",
+                        path: "edit/:id",
+                        component: () =>
+                            import("../views/admin/rates/Edit.vue"),
+                        meta: {
+                            breadCrumb: "Editar Valoraciones",
+                            linked: false,
+                        },
+                    },
+                ],
+            },
+            {
                 name: "authors",
                 path: "authors",
                 meta: { breadCrumb: "Autores" },

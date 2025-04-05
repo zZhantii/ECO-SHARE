@@ -47,6 +47,12 @@ class Trip extends Model
         return $this->belongsToMany(User::class, 'user_rates', 'user_id');
     }
 
+    public function rates()
+    {
+        return $this->belongsToMany(User::class, 'user_trips_rates', 'trip_id','user_id')
+            ->withPivot('rate');
+    }
+
     public function reserves()
     {
         return $this->belongsToMany(User::class, 'user_trips_reserves', 'trip_id','user_id')

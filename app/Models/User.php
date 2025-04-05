@@ -92,8 +92,8 @@ class User extends Authenticatable implements HasMedia
     // Relacion user_trips_rates N:M (N Usuarios)
     public function rates()
     {
-        return $this->belongsToMany(Trip::class, 'user_trips_rates', 'trip_id')
-            ->withPivot('rating', 'comment');
+        return $this->belongsToMany(Trip::class, 'user_trips_rates', 'user_id', 'trip_id')
+            ->withPivot('rate');
     }
 
     // Relacion user_trips_reserves N:M (N Usuarios)

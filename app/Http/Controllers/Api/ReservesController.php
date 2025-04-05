@@ -21,7 +21,7 @@ class ReservesController extends Controller
         $reserve->trip_id = $request->trip_id;
         $reserve->seats_reserved = $request->seats_reserved;
         $reserve->reservation_date = $request->reservation_date;
-          $reserve->check_in = $request->check_in;
+        $reserve->check_in = $request->check_in;
         $reserve->save();
         return response()->json(["success" => true, "data" => $reserve], 200);
     }

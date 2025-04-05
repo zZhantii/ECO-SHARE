@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\TripController;
 use App\Http\Controllers\Api\VehicleController;
 use App\Http\Controllers\Api\TripReservesController;
 use App\Http\Controllers\Api\ReservesController;
+use App\Http\Controllers\Api\RatesController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -93,6 +94,13 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('reserves/{reserve}', [ReservesController::class, 'show']); 
     Route::put('reserves/{reserve}', [ReservesController::class, 'update']); 
     Route::delete('reserves/{user_id}/{trip_id}', [ReservesController::class, 'destroy']); 
+
+    // Valoraciones
+    Route::get('rate', [RatesController::class, 'index']); 
+    Route::post('rate', [RatesController::class, 'store']);
+    Route::get('rate/{rate}', [RatesController::class, 'show']); 
+    Route::put('rate/{rate}', [RatesController::class, 'update']); 
+    Route::delete('rate/{user_id}/{trip_id}', [RatesController::class, 'destroy']); 
 
 
     Route::get('abilities', function (Request $request) {

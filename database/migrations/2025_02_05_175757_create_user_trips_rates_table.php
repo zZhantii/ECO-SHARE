@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_trips_rates', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('trip_id');
             $table->integer('rate');
@@ -20,6 +21,8 @@ return new class extends Migration
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('trip_id')->references('id')->on('trips');
+
+            $table->unique(['user_id', 'trip_id']);
         });
     }
 
