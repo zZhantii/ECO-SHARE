@@ -6,8 +6,8 @@ import { es } from "yup-locales";
 export default function useReserves() {
     const reserves = ref([]);
     const reserve = ref({
-        user_id: null,
-        trip_id: null,
+        user_id: 0,
+        trip_id: 0,
         seats_reserved: null,
         reservation_date: null,
         check_in: null
@@ -22,7 +22,7 @@ export default function useReserves() {
         trip_id: yup.number().required("El campo es requerido"),
         seats_reserved: yup.number().required("El campo es requerido"),
         reservation_date: yup.date().required("El campo es requerido"),
-        check_in: yup.date().required("El campo es requerido"),
+        check_in: yup.date(),
     });
 
     const fetchReserves = async () => {
@@ -33,27 +33,22 @@ export default function useReserves() {
         }
     };
 
-    getReserveWithId = async (reserve2) => {
+    const getReserveWithId = async (reserve2) => {
         if (isLoading.value) return;
 
         isLoading.value = true;
         validationErrors.value = {};
 
-        console.log("composable", reserve2.value.id);
-
-        // axios.get("/api/reserves/" + reserve2.value.id)
-        //     .then((response) => {
-        //         console.log("API response delete: ", response.data.data);
-        //         swal({
-        //             icon: "success",
-        //             title: "reserves create successfully",
-        //         });
-        //     }).catch((error) => {
-        //         if (error.response?.data) {
-        //             validationErrors.value = error.response.data.errors;
-        //             console.log(validationErrors.value);
-        //         }
-        //     }).finally(() => isLoading.value = false);
+        axios.get("/api/reserves/" + reserve2)
+            .then((response) => {
+                console.log("API response get: ", response.data.data);
+                reserve.value = response.data.data[0];
+            }).catch((error) => {
+                if (error.response?.data) {
+                    validationErrors.value = error.response.data.errors;
+                    console.log(validationErrors.value);
+                }
+            }).finally(() => isLoading.value = false);
     }
 
     const createReserve = async (reserve2) => {
@@ -61,10 +56,6 @@ export default function useReserves() {
 
         isLoading.value = true;
         validationErrors.value = {};
-
-        console.log("hola2");
-
-
 
         axios.post("/api/reserves/", reserve2.value)
             .then((response) => {
@@ -81,14 +72,25 @@ export default function useReserves() {
             }).finally(() => isLoading.value = false);
     };
 
-    const updateReserve = async (id, data) => {
-        try {
-            const response = await axios.put(`/api/reserves/${id}`, data);
-            const index = reserves.value.findIndex(r => r.id === id);
-            reserves.value[index] = response.data;
-        } catch (err) {
-            error.value = err.response.data;
-        }
+    const updateReserve = async (reserve2) => {
+        if (isLoading.value) return;
+
+        isLoading.value = true;
+        validationErrors.value = {};
+
+        axios.put("/api/reserves/" + reserve2.value.id, reserve2.value)
+            .then((response) => {
+                console.log("API response update: ", response.data.message)
+                swal({
+                    icon: "success",
+                    title: "Reserve updated successfully",
+                });
+            }).catch((error) => {
+                if (error.response?.data) {
+                    validationErrors.value = error.response.data.errors;
+                    console.log(validationErrors.value);
+                }
+            }).finally(() => isLoading.value = false);
     };
 
     const deleteReserve = async (reserve2) => {

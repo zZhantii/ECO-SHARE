@@ -26,14 +26,22 @@ class ReservesController extends Controller
         return response()->json(["success" => true, "data" => $reserve], 200);
     }
 
-    public function show($id)
+    public function show(User_trips_reserve $reserve)
     {
-        
+        $reserveDetails = User_trips_reserve::find($reserve);
+        return response()->json(["success" => true, "data" => $reserveDetails], 200);
+
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, User_trips_reserve $reserve)
     {
-        
+        $reserve->user_id = $request->user_id;
+        $reserve->trip_id = $request->trip_id;
+        $reserve->seats_reserved = $request->seats_reserved;
+        $reserve->reservation_date = $request->reservation_date;
+        $reserve->check_in = $request->check_in;
+        $reserve->save();
+        return response()->json(["success" => true,"message" => 'Reserva actualizado correctamente'], 200);
     }
 
     public function destroy($user_id, $trip_id)

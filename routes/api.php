@@ -90,8 +90,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // Reservas
     Route::get('reserves', [ReservesController::class, 'index']); 
     Route::post('reserves', [ReservesController::class, 'store']);
-    Route::get('reserves/{reserves}', [ReservesController::class, 'show']); 
-    Route::put('reserves/{reserves}', [ReservesController::class, 'update']); 
+    Route::get('reserves/{reserve}', [ReservesController::class, 'show']); 
+    Route::put('reserves/{reserve}', [ReservesController::class, 'update']); 
     Route::delete('reserves/{user_id}/{trip_id}', [ReservesController::class, 'destroy']); 
 
 

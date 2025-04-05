@@ -24,7 +24,7 @@ class VehicleController extends Controller
             return response()->json(['message' => 'Vehículo no encontrado'], 404);
         }
 
-        return response()->json($vehicleDetails);
+        return response()->json(["success" => true, "data" => $vehicleDetails], 200);
     }
 
 
@@ -50,8 +50,6 @@ class VehicleController extends Controller
 
     public function store(Request $request)
     {
-
-
         $vehicle = new Vehicle();
         $vehicle->plate = $request->plate;
         $vehicle->brand = $request->brand;

@@ -45,7 +45,7 @@ export default function useTags() {
         .get("/api/tag/" + tag2)
         .then((response) => {
             console.log("API response show: ", response.data.data)
-            tag.value = response.data.data; 
+            tag.value = response.data.data[0]; 
         }).catch((error) => {
             if (error.response?.data) {
                 validationErrors.value = error.response.data.errors;

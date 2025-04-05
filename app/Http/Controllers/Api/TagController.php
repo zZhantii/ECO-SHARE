@@ -16,7 +16,7 @@ class TagController extends Controller
 
     public function show(Tag $tag) {
 
-        // $tag = Tag::find($tag);
+        $tag = Tag::find($tag);
         return response()->json(["succes" => true, "data" => $tag], 200);
     }
 
@@ -25,7 +25,7 @@ class TagController extends Controller
 
         $tag->save();
 
-        return response()->json(["succes" => true, "message" => 'Vehiculo actualizado correctamente'], 200);
+        return response()->json(["succes" => true, "message" => 'Etiqueta actualizado correctamente'], 200);
     }
 
     public function store(Request $request) {
@@ -39,6 +39,6 @@ class TagController extends Controller
 
     public function destroy(Tag $tag) {
         $tag->delete();
-        return response()->json(['success' => true, "message" => "Vehicle eliminado correctamente"], 200);
+        return response()->json(['success' => true, "message" => "Etiqueta eliminado correctamente"], 200);
     }
 }
