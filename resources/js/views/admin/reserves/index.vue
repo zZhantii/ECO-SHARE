@@ -6,7 +6,7 @@
                     <h5 class="float-start mb-0">Reservas</h5>
                 </div>
                 <DataTable v-model:filters="filters" :value="reserves" paginator :rows="10"
-                    :globalFilterFields="['user_id', 'trip_id', 'seats_reserved', 'reservation_date', 'check_in']"
+                    :globalFilterFields="['id', 'user_id', 'trip_id', 'seats_reserved', 'reservation_date', 'check_in']"
                     stripedRows dataKey="id" size="small">
 
                     <template #header>
@@ -23,14 +23,14 @@
                                     @click="refreshReserves()" />
                             </template>
                             <template #end>
-                                <Button icon="pi pi-external-link" label="Crear Vehiculo"
+                                <Button icon="pi pi-external-link" label="Crear Reserva"
                                     @click="$router.push('reserves/create')" class="float-end" />
                             </template>
                         </Toolbar>
                     </template>
 
                     <template #empty> No customers found. </template>
-
+                    <Column field="id" header="id" sortable></Column>
                     <Column field="user_id" header="User_id" sortable></Column>
                     <Column field="trip_id" header="Trip_id" sortable></Column>
                     <Column field="seats_reserved" header="Seats_reserved" sortable></Column>
@@ -38,10 +38,10 @@
                     <Column field="check_in" header="Check_in" sortable></Column>
                     <Column class="pe-0 me-0 icon-column-2">
                         <template #body="slotProps">
-                            <!-- <router-link v-if="can('user-edit')"
+                            <router-link v-if="can('user-edit')"
                                 :to="{ name: 'reserves.edit', params: { id: slotProps.data.id } }">
                                 <Button icon="pi pi-pencil" severity="info" size="small" class="mr-1" />
-                            </router-link> -->
+                            </router-link>
                             <Button icon="pi pi-trash" severity="danger" v-if="can('user-delete')"
                                 @click="deleteReserveAdmin(slotProps.data)" size="small" />
                         </template>

@@ -44,8 +44,7 @@
 
                     <div class="form-group">
                         <label for="check_in">Check In</label>
-                        <InputNumber v-model="reserve.check_in" type="text" class="d-flex w-100 w-100" id="check_in"
-                            :min="0" :max="1" showButtons />
+                        <DatePicker v-model="reserve.check_in" type="text" class="d-flex w-100 w-100" id="check_in" />
                         <!-- <div class="text-danger mt-1">{{ errors.name }}</div>
                         <div class="text-danger mt-1">
                             <div v-for="message in validationErrors?.name">
@@ -88,12 +87,13 @@ onMounted(async () => {
 });
 
 const formatToDate = (date) => {
-    if (!date) return null; // Manejar casos donde la fecha sea nula o indefinida
-    return date.toISOString().split('T')[0]; // Convierte la fecha a 'YYYY-MM-DD'
+    if (!date) return null; 
+    return date.toISOString().split('T')[0];
 };
 
 const submitAddReserve = async () => {
     reserve.value.reservation_date = formatToDate(reserve.value.reservation_date);
+    reserve.value.check_in = formatToDate(reserve.value.check_in);
     await reserveSchema.validate(reserve.value, { abortEarly: false })
         .then(() => {
             createReserve(reserve);
