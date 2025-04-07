@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Vehicle;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-
+use App\Models\Vehicle;
 
 class VehicleController extends Controller
 {
@@ -51,8 +50,6 @@ class VehicleController extends Controller
 
     public function store(Request $request)
     {
-
-
         $vehicle = new Vehicle();
         $vehicle->plate = $request->plate;
         $vehicle->brand = $request->brand;

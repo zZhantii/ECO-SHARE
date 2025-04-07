@@ -345,7 +345,7 @@ export default [
             {
                 name: "trips",
                 path: "trips",
-                meta: { breadCrumb: "Vehiculos" },
+                meta: { breadCrumb: "Viajes" },
                 children: [
                     {
                         name: "trips.index",
@@ -371,6 +371,108 @@ export default [
                             import("../views/admin/trips/Edit.vue"),
                         meta: {
                             breadCrumb: "Editar Vehiculo",
+                            linked: false,
+                        },
+                    },
+                ],
+            },
+            {
+                name: "tags",
+                path: "tags",
+                meta: { breadCrumb: "Etiquetas" },
+                children: [
+                    {
+                        name: "tags.index",
+                        path: "",
+                        component: () =>
+                            import("../views/admin/tags/index.vue"),
+                        meta: { breadCrumb: "Etiquetas" },
+                    },
+                    {
+                        name: "tags.create",
+                        path: "create",
+                        component: () =>
+                            import("../views/admin/tags/Create.vue"),
+                        meta: {
+                            breadCrumb: "Crear Etiqueta",
+                            linked: false,
+                        },
+                    },
+                    {
+                        name: "tags.edit",
+                        path: "edit/:id",
+                        component: () =>
+                            import("../views/admin/tags/Edit.vue"),
+                        meta: {
+                            breadCrumb: "Editar Etiqueta",
+                            linked: false,
+                        },
+                    },
+                ],
+            },
+            {
+                name: "reserves",
+                path: "reserves",
+                meta: { breadCrumb: "Reservas" },
+                children: [
+                    {
+                        name: "reserves.index",
+                        path: "",
+                        component: () =>
+                            import("../views/admin/reserves/index.vue"),
+                        meta: { breadCrumb: "Reservas" },
+                    },
+                    {
+                        name: "reserves.create",
+                        path: "create",
+                        component: () =>
+                            import("../views/admin/reserves/Create.vue"),
+                        meta: {
+                            breadCrumb: "Crear Reserva",
+                            linked: false,
+                        },
+                    },
+                    {
+                        name: "reserves.edit",
+                        path: "edit/:id",
+                        component: () =>
+                            import("../views/admin/reserves/Edit.vue"),
+                        meta: {
+                            breadCrumb: "Editar Reserva",
+                            linked: false,
+                        },
+                    },
+                ],
+            },
+            {
+                name: "rates",
+                path: "rates",
+                meta: { breadCrumb: "Valoraciones" },
+                children: [
+                    {
+                        name: "rates.index",
+                        path: "",
+                        component: () =>
+                            import("../views/admin/rates/index.vue"),
+                        meta: { breadCrumb: "Valoraciones" },
+                    },
+                    {
+                        name: "rates.create",
+                        path: "create",
+                        component: () =>
+                            import("../views/admin/rates/Create.vue"),
+                        meta: {
+                            breadCrumb: "Crear Valoraciones",
+                            linked: false,
+                        },
+                    },
+                    {
+                        name: "rates.edit",
+                        path: "edit/:user_id/:trip_id",
+                        component: () =>
+                            import("../views/admin/rates/Edit.vue"),
+                        meta: {
+                            breadCrumb: "Editar Valoraciones",
                             linked: false,
                         },
                     },

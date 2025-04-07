@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Trip;
+use App\Models\User_trips_reserve;
 use Illuminate\Support\Facades\Validator;
 
 class TripController extends Controller
@@ -164,5 +165,12 @@ class TripController extends Controller
         }
 
         return response()->json(["success" => false, 'message' => 'Error al reservar'], 400);
+    }
+
+    public function getAllReservations()
+    {
+        $reservations = User_trips_reserve::with(['user', 'trip']);
+
+        return response()->json(["success" => true, 'data' => $reservations], 200);
     }
 }

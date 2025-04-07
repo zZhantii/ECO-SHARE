@@ -1,7 +1,7 @@
 <template>
     <div class="layout-topbar">
         <router-link to="/" class="layout-topbar-logo">
-            <img src="/images/logo.svg" alt="logo" />
+            <img src="public/images/Logo_es.svg" alt="logo" />
             <span></span>
         </router-link>
 
@@ -36,11 +36,13 @@
                         <hr class="dropdown-divider">
                     </li>
                     <li>
-                        <a class="dropdown-item" :class="{ 'opacity-25': processing }" :disabled="processing" href="javascript:void(0)" @click="logout">Cerrar sessión</a>
+                        <a class="dropdown-item" :class="{ 'opacity-25': processing }" :disabled="processing"
+                            href="javascript:void(0)" @click="logout">Cerrar sessión</a>
                     </li>
                 </ul>
 
-                <span class="nav-link dropdown-toggle ms-3 me-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="nav-link dropdown-toggle ms-3 me-2" href="#" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
                     Hola, {{ authStore().user.name }}
                 </span>
             </button>

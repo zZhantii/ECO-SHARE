@@ -8,7 +8,7 @@
                 </div>
 
                 <DataTable v-model:filters="filters" :value="tripsList" paginator :rows="5"
-                    :globalFilterFields="['id', 'user_id', 'vehicle_id', 'start_point', 'end_point', 'departure_time', 'arrival_time', 'available_seats', 'price', 'cancelled_at', 'created_at', 'update_at', 'drive_start', 'drive_end']"
+                    :globalFilterFields="['id', 'user_id', 'vehicle_id', 'start_point', 'end_point', 'departure_time', 'arrival_time', 'available_seats', 'price']"
                     stripedRows dataKey="id" size="small">
 
                     <template #header>
@@ -22,7 +22,7 @@
                                 <Button type="button" icon="pi pi-filter-slash" label="Clear" class="ml-1" outlined
                                     @click="initFilters()" />
                                 <Button type="button" icon="pi pi-refresh" class="h-100 ml-1" outlined
-                                    @click="getTrips()" />
+                                    @click="refreshTrips()" />
                             </template>
                             <template #end>
                                 <Button icon="pi pi-external-link" label="Crear Vehiculo"
@@ -53,11 +53,6 @@
                     <Column field="arrival_time" header="Arrival Time" sortable></Column>
                     <Column field="available_seats" header="Available Seats" sortable></Column>
                     <Column field="price" header="Price" sortable></Column>
-                    <Column field="cancelled_at" header="Cancelled At" sortable></Column>
-                    <Column field="created_at" header="Created At" sortable></Column>
-                    <Column field="update_at" header="Updated At" sortable></Column>
-                    <Column field="drive_start" header="Drive Start" sortable></Column>
-                    <Column field="drive_end" header="Drive End" sortable></Column>
 
                     <Column class="pe-0 me-0 icon-column-2">
                         <template #body="slotProps">
@@ -66,7 +61,7 @@
                                 <Button icon="pi pi-pencil" severity="info" size="small" class="mr-1" />
                             </router-link>
                             <Button icon="pi pi-trash" severity="danger" v-if="can('user-delete')"
-                                @click="deleteTrip(slotProps.data)" size="small" />
+                                @click="deleteTripAdmin(slotProps.data)" size="small" />
                         </template>
                     </Column>
 
@@ -98,8 +93,16 @@ const initFilters = () => {
 
 onMounted(() => {
     getTrips();
-    // console.log("trips", tripsList.value);
 })
+
+const deleteTripAdmin = (trip2) => {
+    deleteTrip(trip2);
+}
+
+const refreshTrips = () => {
+    tripsList.value = [];
+    getTrips();
+}
 
 
 </script>

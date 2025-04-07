@@ -14,7 +14,9 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 
 use App\Http\Controllers\Api\TripController;
 use App\Http\Controllers\Api\VehicleController;
-use App\Http\Controllers\Api\TripReserveController;
+use App\Http\Controllers\Api\TripReservesController;
+use App\Http\Controllers\Api\ReservesController;
+use App\Http\Controllers\Api\RatesController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -65,7 +67,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('vehicle/{vehicle}', [VehicleController::class, 'show']);
     Route::delete('vehicle/{vehicle}', [VehicleController::class, 'destroy']);
 
-
     // Trips
     Route::get("trip", [TripController::class, 'index']);
     Route::get("trip/{trip}", [TripController::class, 'show']);
@@ -82,6 +83,24 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     //Tags
     Route::get("tag", [TagController::class, "index"]);
+    Route::get("tag/{tag}", [TagController::class, "show"]);
+    Route::put("tag/{tag}", [TagController::class, "update"]);
+    Route::post("tag", [TagController::class, "store"]);
+    Route::delete("tag/{tag}", [TagController::class, "destroy"]);
+
+    // Reservas
+    Route::get('reserves', [ReservesController::class, 'index']); 
+    Route::post('reserves', [ReservesController::class, 'store']);
+    Route::get('reserves/{reserve}', [ReservesController::class, 'show']); 
+    Route::put('reserves/{reserve}', [ReservesController::class, 'update']); 
+    Route::delete('reserves/{user_id}/{trip_id}', [ReservesController::class, 'destroy']); 
+
+    // Valoraciones
+    Route::get('rates', [RatesController::class, 'index']);
+    Route::post('rates', [RatesController::class, 'store']);
+    Route::get('rates/{user_id}/{trip_id}', [RatesController::class, 'show']);
+    Route::put('rates/{user_id}/{trip_id}', [RatesController::class, 'update']);
+    Route::delete('rates/{user_id}/{trip_id}', [RatesController::class, 'destroy']);
 
 
     Route::get('abilities', function (Request $request) {
