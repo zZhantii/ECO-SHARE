@@ -80,7 +80,7 @@ export default function useRates() {
         isLoading.value = true;
         validationErrors.value = {};
 
-        axios.put("/api/rate/" + rate2.value.id, rate2.value)
+        axios.put("/api/rates/" + rate2.value.pivot.user_id + "/" + rate2.value.pivot.trip_id)
             .then((response) => {
                 console.log("API response update: ", response.data.message)
                 swal({

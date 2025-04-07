@@ -7,6 +7,7 @@
                 <div v-if="rate && rate.pivot" class="card-body">
                     <h6 class="mb-2 text-primary">Reserve Details</h6>
 
+                    {{ rate.pivot }}
                     <div class="form-group">
                         <Select v-model="rate.pivot.user_id" :options="users.data" filter optionLabel="name"
                             optionValue="id" dataKey="id" placeholder="Select a User" class="w-full md:w-56">
@@ -64,24 +65,25 @@ onMounted(async () => {
     await getTrips();
 })
 
-// const submitUpdateRate = async () => {
-//     try {
-//         updateRate(rate);
-//         // rateSchema.validate(rate, { abortEarly: false })
-//         //     .then(() => {
-//         //         updateRates(rate);
-//         //     })
-//     } catch (error) {
-//         if (error.inner) {
-//             error.inner.forEach((e) => {
-//                 if (!validationErrors.value[e.path]) {
-//                     validationErrors.value[e.path] = [];
-//                 }
-//                 validationErrors.value[e.path].push(e.message);
-//             });
-//         }
-//     }
-// }
+const submitUpdateRate = async () => {
+    try {
+        console.log("rate", rate.pivot);
+        updateRate(rate);
+        // rateSchema.validate(rate, { abortEarly: false })
+        //     .then(() => {
+        //         updateRates(rate);
+        //     })
+    } catch (error) {
+        if (error.inner) {
+            error.inner.forEach((e) => {
+                if (!validationErrors.value[e.path]) {
+                    validationErrors.value[e.path] = [];
+                }
+                validationErrors.value[e.path].push(e.message);
+            });
+        }
+    }
+}
 </script>
 
 <style>

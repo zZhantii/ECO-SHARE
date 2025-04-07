@@ -43,13 +43,15 @@ class RatesController extends Controller
 
     public function update(Request $request, $user_id, $trip_id)
     {
-        $user = User::find($user_id);
+        // $user = User::find($user_id);
 
-        $user->rates()->sync([
-            $trip_id => ['rate' => $request->rate]
-        ]); 
+        // $user->rates()->sync([
+        //     $trip_id => ['rate' => $request->rate]
+        // ]); 
 
-        return response()->json(["success" => true,"message" => 'Valoración actualizado correctamente'], 200);
+        return $user_id . $trip_id . $request->rate;
+
+        // return response()->json(["success" => true,"message" => 'Valoración actualizado correctamente'], 200);
     }
 
     public function destroy($user_id, $trip_id)
