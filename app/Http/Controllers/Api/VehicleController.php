@@ -25,7 +25,7 @@ class VehicleController extends Controller
             return response()->json(['message' => 'Vehículo no encontrado'], 404);
         }
 
-        return response()->json($vehicleDetails);
+        return response()->json(["success" => true, "data" => $vehicleDetails], 200);
     }
 
 

@@ -80,7 +80,7 @@ export default function useVehicles() {
     //         console.log("API response, vehiculo cargado: " + vehicle.value + " con ID: " + vehicleID);
     //     } catch (error) {
     //         validationErrors.value = error.response.data.errors;
-    //     }        
+    //     }
     // }
 
     async function getVehicle(vehicleId) {
@@ -107,7 +107,7 @@ export default function useVehicles() {
 
     const createVehicleDB = async (id) => {
         return axios.put("/api/vehicles/db/create/" + id);
-    }
+    };
 
     const updateVehicle = async (vehicle) => {
         if (isLoading.value) return;
@@ -115,22 +115,26 @@ export default function useVehicles() {
         isLoading.value = true;
         validationErrors.value = {};
 
-       try {
-           const response = await axios.put("/api/vehicle/" + vehicle.id, vehicle);
-           
-           console.log("API response: ", response.data.data);
-           vehicle.value = response.data.data;
+        try {
+            const response = await axios.put(
+                "/api/vehicle/" + vehicle.id,
+                vehicle
+            );
 
-           swal({
-               icon: "success",
-               title: "Vehicle actualizado con éxito"
-           });
+            const index = vehiclesList.value.findIndex(
+                (v) => v.id == vehicle.id
+            );
+            vehiclesList.value[index] = vehicle;
 
-       } catch (error) {
-           if (error.response?.data) {
+            swal({
+                icon: "success",
+                title: "Vehicle actualizado con éxito",
+            });
+        } catch (error) {
+            if (error.response?.data) {
                 validationErrors.value = error.response.data.errors;
             }
-       }
+        }
 
         // axios
         //     .put("/api/vehicle/" + vehicle.id, vehicle)
@@ -177,8 +181,11 @@ export default function useVehicles() {
 
             swal({
                 icon: "success",
-                title: "Vehiculo con ID " + vehicle.id + " eliminado correctamente"
-            })
+                title:
+                    "Vehiculo con ID " +
+                    vehicle.id +
+                    " eliminado correctamente",
+            });
         } catch (error) {
             if (error.response?.data) {
                 validationErrors.value = error.response.data.errors;
@@ -243,6 +250,6 @@ export default function useVehicles() {
         createVehicleDB,
         deleteVehicle,
         addVehicle,
-        addVehicle2
+        addVehicle2,
     };
 }
