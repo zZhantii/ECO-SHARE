@@ -47,6 +47,7 @@ class Trip extends Model
         return $this->belongsToMany(User::class, 'user_rates', 'id');
     }
 
+
     public function reserves()
     {
 
@@ -54,6 +55,7 @@ class Trip extends Model
             ->withPivot('seats_reserved', 'reservation_date', 'check_in');
 
     }
+
 
     protected $casts = [
         'start_point' => 'array',

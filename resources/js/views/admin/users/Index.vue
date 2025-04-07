@@ -1,15 +1,15 @@
 <template>
     <div class="grid">
         <div class="col-12">
-            <div class="card">
+            <div class="card">  
 
                 <div class="card-header bg-transparent ps-0 pe-0">
-                    <h5 class="float-start mb-0">Ejercicios</h5>
+                    <h5 class="float-start mb-0">Usuarios</h5>
                 </div>
 
                     <DataTable v-model:filters="filters" :value="users.data" paginator :rows="5"
                                :globalFilterFields="['id','alias', 'name','surname1','surname2','email','created_at','type.name']" stripedRows dataKey="id" size="small">
-
+                
                         <template #header>
                             <Toolbar pt:root:class="toolbar-table">
                                 <template #start>

@@ -55,6 +55,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     //Eliminar imagen/avatar de usuario
     Route::delete("delete-avatar", [ProfileController::class, "unlinkAvatar"]);
 
+    // Users
+    Route::get('user', [UserController::class, 'index2']);
+
+    // Vehicles
     Route::put('vehicle/{vehicle}', [VehicleController::class, 'update']);
     Route::get('vehicle', [VehicleController::class, 'index']);
     Route::post("vehicle", [VehicleController::class, "store"]);
@@ -68,7 +72,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/trips/search', [TripController::class, 'searchTrip']);
     Route::post("trip", [TripController::class, 'store']);
     Route::post("trip/reserve/{trip}", [TripController::class, 'reserve']);
-    Route::put("trip/{trip}", [TripController::class, 'updateSeats']);
+    Route::put("trip/{trip}", [TripController::class, 'update']);
+    Route::delete("trip/{trip}", [TripController::class, 'destroy']);
 
     Route::get('category-list', [CategoryController::class, 'getList']);
     Route::get('user', [ProfileController::class, 'user']);

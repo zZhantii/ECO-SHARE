@@ -55,6 +55,24 @@ export default function useVehicles() {
             .finally(() => (isLoading.value = false));
     };
 
+    const addVehicle2 = async (vehicle) => {
+        axios
+            .post("/api/vehicle/", vehicle)
+            .then((response) => {
+                vehiclesList.value.push(vehicle);
+                swal({
+                    icon: "success",
+                    title: "Vehículo guardado satisfactoriamente",
+                });
+            })
+            .catch((error) => {
+                if (error.response?.data) {
+                    validationErrors.value = error.response.data.errors;
+                }
+            })
+            .finally(() => (isLoading.value = false));
+    };
+
     // const getVehicle = async (vehicleID) => {
     //     try {
     //         const response = await axios.get("/api/vehicle/" + vehicleID);
@@ -87,76 +105,144 @@ export default function useVehicles() {
         }
     }
 
+    const createVehicleDB = async (id) => {
+        return axios.put("/api/vehicles/db/create/" + id);
+    }
 
     const updateVehicle = async (vehicle) => {
         if (isLoading.value) return;
-        console.log("patata");
-        console.log(vehicle);
-        console.log("patata2");
+
         isLoading.value = true;
         validationErrors.value = {};
 
-        axios
-            .put("/api/vehicle/" + vehicle.id, vehicle)
-            .then((response) => {
-                const index = vehiclesList.value.findIndex(
-                    (v) => v.id == vehicle.id
-                );
-                // Esta comprobación mira si la propiedad user_id es nula, lo que significaría una petición para borrar
-                // el vehículo desde el perfil, aunque estaríamos actualizando el campu user_id a null para no perder
-                // los registros del vehículo
+       try {
+           const response = await axios.put("/api/vehicle/" + vehicle.id, vehicle);
+           
+           console.log("API response: ", response.data.data);
+           vehicle.value = response.data.data;
 
-                if (vehicle.user_id) {
-                    swal({
-                        icon: "success",
-                        title: "Vehicle actualizado con éxito",
-                    });
-                    vehiclesList.value[index] = vehicle;
-                } else {
-                    swal({
-                        icon: "success",
-                        title: "Vehículo eliminado con éxito",
-                    });
-                    vehiclesList.value.splice(index, 1);
-                }
-            })
-            .catch((error) => {
-                if (error.response?.data) {
-                    validationErrors.value = error.response.data.errors;
-                }
-            })
-            .finally(() => (isLoading.value = false));
+           swal({
+               icon: "success",
+               title: "Vehicle actualizado con éxito"
+           });
+
+       } catch (error) {
+           if (error.response?.data) {
+                validationErrors.value = error.response.data.errors;
+            }
+       }
+
+        // axios
+        //     .put("/api/vehicle/" + vehicle.id, vehicle)
+        //     .then((response) => {
+        //         const index = vehiclesList.value.findIndex(
+        //             (v) => v.id == vehicle.id
+        //         );
+        //         // Esta comprobación mira si la propiedad user_id es nula, lo que significaría una petición para borrar
+        //         // el vehículo desde el perfil, aunque estaríamos actualizando el campu user_id a null para no perder
+        //         // los registros del vehículo
+
+        //         if (vehicle.user_id) {
+        //             swal({
+        //                 icon: "success",
+        //                 title: "Vehicle actualizado con éxito",
+        //             });
+        //             vehiclesList.value[index] = vehicle;
+        //         } else {
+        //             swal({
+        //                 icon: "success",
+        //                 title: "Vehículo eliminado con éxito",
+        //             });
+        //             vehiclesList.value.splice(index, 1);
+        //         }
+        //     })
+        //     .catch((error) => {
+        //         if (error.response?.data) {
+        //             validationErrors.value = error.response.data.errors;
+        //         }
+        //     })
+        //     .finally(() => (isLoading.value = false));
     };
 
     const deleteVehicle = async (vehicle) => {
-        axios
-            .delete("/api/vehicle/" + vehicle.id)
-            .then((response) => {
-                const index = vehiclesList.value.findIndex(
-                    (v) => v.id == vehicle.id
-                );
+        if (isLoading.value) return;
 
-                vehiclesList.value.splice(index, 1);
-                swal({
-                    icon: "success",
-                    title: "Vehículo eliminado con éxito",
-                });
+        isLoading.value = true;
+        validationErrors.value = {};
+
+        try {
+            const response = await axios.delete("/api/vehicle/" + vehicle.id);
+
+            console.log("API response: ", response.data.data);
+
+            swal({
+                icon: "success",
+                title: "Vehiculo con ID " + vehicle.id + " eliminado correctamente"
             })
-            .catch((error) => {
-                if (error.response?.data) {
-                    validationErrors.value = error.response.data.errors;
-                }
-            });
+        } catch (error) {
+            if (error.response?.data) {
+                validationErrors.value = error.response.data.errors;
+            }
+        } finally {
+            isLoading.value = false;
+        }
+
+        // axios
+        //     .delete("/api/vehicle/" + vehicle.id)
+        //     .then((response) => {
+        //         const index = vehiclesList.value.findIndex(
+        //             (v) => v.id == vehicle.id
+        //         );
+
+        //         vehiclesList.value.splice(index, 1);
+        //         swal({
+        //             icon: "success",
+        //             title: "Vehículo eliminado con éxito",
+        //         });
+        //     })
+        //     .catch((error) => {
+        //         if (error.response?.data) {
+        //             validationErrors.value = error.response.data.errors;
+        //         }
+        //     });
     };
+
+    // const updateVehicle = async (vehicle) => {
+    //     // if (isLoading.value) return;
+
+    //     // isLoading.value = true;
+    //     validationErrors.value = {};
+
+    //     try {
+    //         const response = await axios.put("/api/vehicle/" + vehicle.id, vehicle);
+
+    //         if (response) {
+    //             console.log("API response: ", response.data.data);
+    //             vehicle.value = response.data.data;
+
+    //             swal({
+    //                 icon: "success",
+    //                 title: "Vehicle actualizado con éxito"
+    //             });
+    //         }
+
+    //     } catch (error) {
+    //         if (error.response?.data) {
+    //             validationErrors.value = error.response.data.errors;
+    //         }
+    //     }
 
     return {
         vehicle,
         vehiclesList,
+
         getVehicles,
         getVehicle,
         updateVehicle,
         validationErrors,
+        createVehicleDB,
         deleteVehicle,
         addVehicle,
+        addVehicle2
     };
 }
