@@ -20,7 +20,6 @@ return new class extends Migration {
             $table->string('alias')->unique();
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('rating')->nullable();
             $table->timestamps();
         });
     }

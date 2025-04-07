@@ -50,7 +50,7 @@ class Trip extends Model
     public function reserves()
     {
 
-        return $this->belongsToMany(User::class, 'user_trips_reserves', 'trip_id','user_id')
+        return $this->belongsToMany(User::class, 'user_trips_reserves', 'trip_id', 'user_id')
             ->withPivot('seats_reserved', 'reservation_date', 'check_in');
 
     }

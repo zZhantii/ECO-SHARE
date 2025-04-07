@@ -34,6 +34,7 @@ class AppController extends Controller
 
             $price = $trip->price;
             $totalSeatsReserved = $trip->reserves()->whereNotNull("check_in")->sum('seats_reserved');
+
             $averagePricePerSeat = round($price / $totalSeatsReserved, 2);
 
 
@@ -46,19 +47,15 @@ class AppController extends Controller
                 $trip->reserves()->updateExistingPivot($reserve->id, [
                     'total_price' => $totalPrice
                 ]);
-
-
             }
 
             $trip->drive_start = now();
             $trip->save();
 
-
-
             return response()->json(["success" => true, "data" => $trip], 200);
         }
 
-        return response()->json(["success" => false, "data" => $averagePrice], 400);
+        return response()->json(["success" => false, "data" => $trip], 400);
 
     }
 
