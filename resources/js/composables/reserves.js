@@ -78,19 +78,19 @@ export default function useReserves() {
         isLoading.value = true;
         validationErrors.value = {};
 
-        axios.put("/api/reserves/" + reserve2.value.id, reserve2.value)
-            .then((response) => {
-                console.log("API response update: ", response.data.message)
-                swal({
-                    icon: "success",
-                    title: "Reserve updated successfully",
-                });
-            }).catch((error) => {
-                if (error.response?.data) {
-                    validationErrors.value = error.response.data.errors;
-                    console.log(validationErrors.value);
-                }
-            }).finally(() => isLoading.value = false);
+        // axios.put("/api/reserves/" + reserve2.value.id, reserve2.value)
+        //     .then((response) => {
+        //         console.log("API response update: ", response.data.message)
+        //         swal({
+        //             icon: "success",
+        //             title: "Reserve updated successfully",
+        //         });
+        //     }).catch((error) => {
+        //         if (error.response?.data) {
+        //             validationErrors.value = error.response.data.errors;
+        //             console.log(validationErrors.value);
+        //         }
+        //     }).finally(() => isLoading.value = false);
     };
 
     const deleteReserve = async (reserve2) => {

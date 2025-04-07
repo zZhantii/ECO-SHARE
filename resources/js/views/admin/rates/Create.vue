@@ -19,7 +19,7 @@
 
                     <div class="form-group">
                         <label for="rates">Rate</label>
-                        <InputNumber v-model="rate.rates" type="number" class="d-flex w-100 w-100" id="rates" :min="0"
+                        <InputNumber v-model="rate.rate" type="number" class="d-flex w-100 w-100" id="rates" :min="0"
                             :max="5" showButtons />
                         <!-- <div class="text-danger mt-1">{{ errors.name }}</div>
                         <div class="text-danger mt-1">

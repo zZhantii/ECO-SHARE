@@ -24,8 +24,8 @@ export default function useRates() {
         isLoading.value = true;
         validationErrors.value = {};
 
-        axios.get("/api/rate/").then((response) => {
-            console.log("API response show: ", response.data.data)
+        axios.get("/api/rates/").then((response) => {
+            console.log("API response show rates: ", response.data.data);
             rateList.value = response.data.data; 
         }).catch((error) => {
             if (error.response?.data) {
@@ -35,16 +35,16 @@ export default function useRates() {
         }).finally(() => (isLoading.value = false));
     };
 
-    const getRateWithId = async (rate2) => {
+    const getRateWithId = async (user_id, trip_id) => {
         if (isLoading.value) return;
 
         isLoading.value = true;
         validationErrors.value = {};
 
-        axios.get("/api/rate/" + rate2)
+        axios.get("/api/rates/" + user_id + "/" + trip_id)
             .then((response) => {
-                console.log("API response get: ", response.data.data);
-                rate.value = response.data.data[0];
+                console.log("API response get rates with ID: ", response.data.data);
+                rate.value = response.data.data;
             }).catch((error) => {
                 if (error.response?.data) {
                     validationErrors.value = error.response.data.errors;
@@ -59,7 +59,7 @@ export default function useRates() {
         isLoading.value = true;
         validationErrors.value = {};
 
-        axios.post("/api/rate/", rate2.value)
+        axios.post("/api/rates/", rate2.value)
             .then((response) => {
                 console.log("API response create: ", response.data.message)
                 swal({
@@ -101,7 +101,7 @@ export default function useRates() {
         isLoading.value = true;
         validationErrors.value = {};
 
-        axios.delete("/api/rate/" + rate2.user_id + "/" + rate2.trip_id)
+        axios.delete("/api/rates/" + rate2.user_id + "/" + rate2.trip_id)
             .then((response) => {
                 console.log("API response delete: ", response.data.message);
                 swal({

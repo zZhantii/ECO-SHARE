@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->timestamps();
             $table->foreign('trip_id')->references('id')->on('trips');
             $table->foreign('tag_id')->references('id')->on('tags');
+            
             $table->primary(['trip_id', 'tag_id']);
         });
     }

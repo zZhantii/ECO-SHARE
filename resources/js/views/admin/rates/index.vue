@@ -6,8 +6,9 @@
                 <div class="card-header bg-transparent ps-0 pe-0">
                     <h5 class="float-start mb-0">Etiquetas</h5>
                 </div>
-                <DataTable v-model:filters="filters" :value="rateList" paginator :rows="10"
-                    :globalFilterFields="['id', 'user_id', 'trip_id', 'rate']" stripedRows dataKey="id" size="small">
+
+                <DataTable v-model:filters="filters" :value="dataRates" paginator :rows="10"
+                    :globalFilterFields="['user_id', 'trip_id', 'rate']" stripedRows dataKey="id" size="small">
 
                     <template #header>
                         <Toolbar pt:root:class="toolbar-table">
@@ -30,15 +31,13 @@
                     </template>
 
                     <template #empty> No customers found. </template>
-
-                    <Column field="id" header="ID" sortable></Column>
                     <Column field="user_id" header="User_id" sortable></Column>
                     <Column field="trip_id" header="Trip_id" sortable></Column>
                     <Column field="rate" header="Rate" sortable></Column>
                     <Column class="pe-0 me-0 icon-column-2">
                         <template #body="slotProps">
                             <router-link v-if="can('user-edit')"
-                                :to="{ name: 'rates.edit', params: { id: slotProps.data.id } }">
+                                :to="{ name: 'rates.edit', params: { user_id: slotProps.data.user_id, trip_id: slotProps.data.trip_id  } }">
                                 <Button icon="pi pi-pencil" severity="info" size="small" class="mr-1" />
                             </router-link>
                             <Button icon="pi pi-trash" severity="danger" v-if="can('user-delete')"
@@ -54,7 +53,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { FilterMatchMode, FilterService } from "@primevue/core/api";
 
 import { useAbility } from '@casl/vue'
@@ -78,6 +77,19 @@ const initFilters = () => {
 onMounted(() => {
     getRates();
 })
+
+const dataRates = computed(() => {
+    return rateList.value
+        .flatMap(user =>
+            user.rates.map(trip => ({
+                user_id: trip.pivot.user_id,
+                trip_id: trip.pivot.trip_id,
+                rate: trip.pivot.rate
+            }))
+        );
+});
+
+
 
 const deleteRateAdmin = (rate) => {
     deleteRate(rate);

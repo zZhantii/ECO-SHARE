@@ -29,6 +29,7 @@ class ReservesController extends Controller
     public function show(User_trips_reserve $reserve)
     {
         $reserveDetails = User_trips_reserve::find($reserve);
+        // poner doble where y el first 
         return response()->json(["success" => true, "data" => $reserveDetails], 200);
 
     }

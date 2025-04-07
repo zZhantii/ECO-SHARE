@@ -96,11 +96,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::delete('reserves/{user_id}/{trip_id}', [ReservesController::class, 'destroy']); 
 
     // Valoraciones
-    Route::get('rate', [RatesController::class, 'index']); 
-    Route::post('rate', [RatesController::class, 'store']);
-    Route::get('rate/{rate}', [RatesController::class, 'show']); 
-    Route::put('rate/{rate}', [RatesController::class, 'update']); 
-    Route::delete('rate/{user_id}/{trip_id}', [RatesController::class, 'destroy']); 
+    Route::get('rates', [RatesController::class, 'index']);
+    Route::post('rates', [RatesController::class, 'store']);
+    Route::get('rates/{user_id}/{trip_id}', [RatesController::class, 'show']);
+    Route::put('rates/{user_id}/{trip_id}', [RatesController::class, 'update']);
+    Route::delete('rates/{user_id}/{trip_id}', [RatesController::class, 'destroy']);
 
 
     Route::get('abilities', function (Request $request) {

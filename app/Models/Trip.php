@@ -41,22 +41,16 @@ class Trip extends Model
         return $this->belongsToMany(Tag::class, 'tags_trips', 'trip_id', 'tag_id');
     }
 
-    // Relacion user_trips_rates N:M (M Trips)
-    public function users()
-    {
-        return $this->belongsToMany(User::class, 'user_rates', 'user_id');
-    }
-
     public function rates()
     {
         return $this->belongsToMany(User::class, 'user_trips_rates', 'trip_id','user_id')
-            ->withPivot('rate');
+            ->withPivot('rate')->withTimestamps();
     }
 
     public function reserves()
     {
         return $this->belongsToMany(User::class, 'user_trips_reserves', 'trip_id','user_id')
-            ->withPivot('seats_reserved', 'reservation_date', 'check_in');
+            ->withPivot('seats_reserved', 'reservation_date', 'check_in')->withTimestamps();
     }
 
     protected $casts = [

@@ -2,7 +2,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\User_trips_rate;
+use App\Models\User;
+use App\Models\Trip;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -11,42 +12,51 @@ class RatesController extends Controller
 {
     public function index()
     {
-        $rates = User_trips_rate::with(['user', 'trip'])->get();
+        $rates = User::with(['rates' => function($query) {
+            $query->withPivot('rate');
+        }])->get();
+
         return response()->json(["success" => true, "data" => $rates], 200);
     }
 
-    public function store(Request $request, User_trips_rate $rate)
+    public function store(Request $request)
     {
-        $rate->user_id = $request->user_id;
-        $rate->trip_id = $request->trip_id;
-        $rate->rate = $request->rate;
-        $rate->save();
-        return response()->json(["success" => true, "data" => $rate], 200);
+        $user = User::find($request->user_id);
+
+        $user->rates()->attach($request->trip_id, [
+            'rate' => $request->rate
+        ]);
+        
+        return response()->json(["success" => true, "message" => "Valoración creada correctamente"], 200);
     }
 
-    public function show(User_trips_rate $rate)
+    public function show($user_id, $trip_id)
     {
-        $rateDetails = User_trips_rate::find($rate);
-        return response()->json(["success" => true, "data" => $rateDetails], 200);
+        $rate = User::find($user_id)->rates()
+                    ->withPivot('rate')
+                    ->where('trip_id', $trip_id)
+                    ->first();        
+        
+        return response()->json(["success"  => true, "data" => $rate], 200);
 
     }
 
-    public function update(Request $request, User_trips_rate $rate)
+    public function update(Request $request, $user_id, $trip_id)
     {
-        $rate->user_id = $request->user_id;
-        $rate->trip_id = $request->trip_id;
-        $rate->rate = $request->rate;
-        $rate->save();
-        return response()->json(["success" => true,"message" => 'Reserva actualizado correctamente'], 200);
+        $user = User::find($user_id);
+
+        $user->rates()->sync([
+            $trip_id => ['rate' => $request->rate]
+        ]); 
+
+        return response()->json(["success" => true,"message" => 'Valoración actualizado correctamente'], 200);
     }
 
     public function destroy($user_id, $trip_id)
     {
-        $rate = User_trips_rate::where('user_id', $user_id)
-            ->where('trip_id', $trip_id)
-            ->firstOrFail();
-    
-        $rate->delete();
+        $user = User::find($user_id);
+
+        $user->rates()->detach($trip_id);
     
         return response()->json(["success" => true, "message" => 'reserva eliminada correctamente'], 200);
     }

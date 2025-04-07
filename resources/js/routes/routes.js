@@ -468,7 +468,7 @@ export default [
                     },
                     {
                         name: "rates.edit",
-                        path: "edit/:id",
+                        path: "edit/:user_id/:trip_id",
                         component: () =>
                             import("../views/admin/rates/Edit.vue"),
                         meta: {

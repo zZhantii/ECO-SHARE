@@ -12,7 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_trips_reserves', function (Blueprint $table) {
-            $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('trip_id');
             $table->integer('seats_reserved');
@@ -23,7 +22,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('trip_id')->references('id')->on('trips')->onDelete('cascade');
 
-            $table->unique(['user_id', 'trip_id']);
+            $table->primary(['user_id', 'trip_id']);
         });
     }
 
