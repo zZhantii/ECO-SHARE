@@ -121,6 +121,13 @@ export default function useVehicles() {
            console.log("API response: ", response.data.data);
            vehicle.value = response.data.data;
 
+           const index = vehiclesList.value.findIndex(
+               (v) => v.id == vehicle.id
+              );
+            
+              vehiclesList.value[index] = vehicle;
+
+
            swal({
                icon: "success",
                title: "Vehicle actualizado con éxito"

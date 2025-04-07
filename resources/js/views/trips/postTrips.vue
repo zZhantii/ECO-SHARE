@@ -171,6 +171,7 @@
 
                                     </div>
                                 </form>
+                                {{ selectedVehicleDetails }}
                             </div>
                         </StepPanel>
                         <StepPanel v-slot="{ activateCallback }" value="3">
@@ -503,7 +504,7 @@ const isStep2Complete = computed(() => {
 const findVehicleById = async (id) => {
     try {
         const response = await axios.get(`/api/vehicle/${id}`);
-        selectedVehicleDetails.value = response.data;
+        selectedVehicleDetails.value = response.data.data;
         seats.value = response.data.pax_number;
     } catch (error) {
         console.error("Error al obtener los detalles del vehículo:", error);
@@ -644,6 +645,7 @@ const getFuelRates = async () => {
 };
 
 const getPrice = () => {
+    console.log("detalles del vehiculo", selectedVehicleDetails.value);
     switch (selectedVehicleDetails.value.fuel_type) {
         case "Gasolina":
             tripData.value.price =
@@ -713,6 +715,7 @@ const saveOptionCar = async () => {
 
 const postTrips = async () => {
     tripData.value.user_id = user_id.value;
+    console.log("ripdata", tripData.value);
     try {
         console.log("Enviando datos del viaje: ", tripData.value);
         const response = await axios.post("/api/trip", tripData.value);
