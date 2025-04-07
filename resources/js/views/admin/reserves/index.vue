@@ -2,13 +2,11 @@
     <div class="grid">
         <div class="col-12">
             <div class="card">
-
                 <div class="card-header bg-transparent ps-0 pe-0">
-                    <h5 class="float-start mb-0">Vehicles</h5>
+                    <h5 class="float-start mb-0">Reservas</h5>
                 </div>
-
-                <DataTable v-model:filters="filters" :value="vehiclesList" paginator :rows="5"
-                    :globalFilterFields="['id', 'user_id', 'plate', 'brand', 'model', 'consumption', 'pax_number', 'validation', 'fuel_type']"
+                <DataTable v-model:filters="filters" :value="reserves" paginator :rows="10"
+                    :globalFilterFields="['id', 'user_id', 'trip_id', 'seats_reserved', 'reservation_date', 'check_in']"
                     stripedRows dataKey="id" size="small">
 
                     <template #header>
@@ -22,34 +20,30 @@
                                 <Button type="button" icon="pi pi-filter-slash" label="Clear" class="ml-1" outlined
                                     @click="initFilters()" />
                                 <Button type="button" icon="pi pi-refresh" class="h-100 ml-1" outlined
-                                    @click="refreshVehicles()" />
+                                    @click="refreshReserves()" />
                             </template>
                             <template #end>
-                                <Button icon="pi pi-external-link" label="Crear Vehiculo"
-                                    @click="$router.push('vehicles/create')" class="float-end" />
+                                <Button icon="pi pi-external-link" label="Crear Reserva"
+                                    @click="$router.push('reserves/create')" class="float-end" />
                             </template>
                         </Toolbar>
                     </template>
 
                     <template #empty> No customers found. </template>
-
-                    <Column field="id" header="ID" sortable></Column>
+                    <Column field="id" header="id" sortable></Column>
                     <Column field="user_id" header="User_id" sortable></Column>
-                    <Column field="plate" header="Plate" sortable></Column>
-                    <Column field="brand" header="Brand" sortable></Column>
-                    <Column field="model" header="Model" sortable></Column>
-                    <Column field="consumption" header="Consumption" sortable></Column>
-                    <Column field="pax_number" header="Pax_number" sortable></Column>
-                    <Column field="validation" header="Validation" sortable></Column>
-                    <Column field="fuel_type" header="Fuel_type" sortable></Column>
+                    <Column field="trip_id" header="Trip_id" sortable></Column>
+                    <Column field="seats_reserved" header="Seats_reserved" sortable></Column>
+                    <Column field="reservation_date" header="Reservation_date" sortable></Column>
+                    <Column field="check_in" header="Check_in" sortable></Column>
                     <Column class="pe-0 me-0 icon-column-2">
                         <template #body="slotProps">
                             <router-link v-if="can('user-edit')"
-                                :to="{ name: 'vehicles.edit', params: { id: slotProps.data.id } }">
+                                :to="{ name: 'reserves.edit', params: { id: slotProps.data.id } }">
                                 <Button icon="pi pi-pencil" severity="info" size="small" class="mr-1" />
                             </router-link>
                             <Button icon="pi pi-trash" severity="danger" v-if="can('user-delete')"
-                                @click="deleteVehicleAdmin(slotProps.data)" size="small" />
+                                @click="deleteReserveAdmin(slotProps.data)" size="small" />
                         </template>
                     </Column>
 
@@ -62,12 +56,13 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import useVehicles from "../../../composables/vehicles";
-import { useAbility } from '@casl/vue'
 import { FilterMatchMode, FilterService } from "@primevue/core/api";
 
-const { vehiclesList, getVehicles, deleteVehicle } = useVehicles()
+import { useAbility } from '@casl/vue'
 const { can } = useAbility()
+
+import useReserves from "@/composables/reserves.js"
+const { fetchReserves, reserves, deleteReserve } = useReserves();
 
 const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -80,16 +75,17 @@ const initFilters = () => {
 };
 
 onMounted(() => {
-    getVehicles();
+    fetchReserves();
 })
 
-const deleteVehicleAdmin = (vehicle) => {
-    deleteVehicle(vehicle);
+const deleteReserveAdmin = (reserve2) => {
+    deleteReserve(reserve2);
 }
 
-const refreshVehicles = () =>{
-    vehiclesList.value = [];
-    getVehicles();
+const refreshReserves = () => {
+    reserves.value = [];
+    fetchReserves();
 }
+
 
 </script>

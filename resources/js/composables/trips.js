@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useToast } from "primevue/usetoast";
 import { ref, inject } from "vue";
+import { tr } from "yup-locales";
 
 
 export default function useTrips() {
@@ -9,7 +10,7 @@ export default function useTrips() {
     const tripList = ref([]);
     // const trip = ref({});
     const searchTripList = ref([]);
-
+    const reservesList = ref([]);
     const isLoading = ref(false);
     const validationErrors = ref([]);
     const swal = inject("$swal");
@@ -348,6 +349,25 @@ export default function useTrips() {
         }
     }
 
+    const getReserves = () => {
+        if (isLoading.value) return;
+
+        isLoading.value = true;
+        validationErrors.value = {};
+
+        axios
+        .get("/api/reserva/")
+        .then((response) => {
+            // console.log("api");
+            console.log("API response: ", response.data);
+        }).catch((error) => {
+            if (error.response?.data) {
+                validationErrors.value = error.response.data.errors;
+                console.log(validationErrors.value);
+            }
+        }).finally(() => isLoading.value = false);
+    }
+
     return {
         // trips,
         // trip,
@@ -355,6 +375,8 @@ export default function useTrips() {
         tripList,
         searchTripList,
         getTrips,
+        getReserves,
+        reservesList,
         getTrip,
         updateTrip,
         deleteTrip,

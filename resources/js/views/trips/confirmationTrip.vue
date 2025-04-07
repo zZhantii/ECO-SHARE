@@ -31,12 +31,12 @@
             </div>
             <div class="col-12 border rounded">
                 <Map v-if="!showFirstMap" :origin="start_point" :destination="end_point"
-                    @updateMapsInfo="handleMapsInfo"  />
+                    @updateMapsInfo="handleMapsInfo" />
             </div>
 
         </div>
         <div class="row row_2 border rounded justify-content-center p-5">
-            
+
             <div class="col d-flex align-items-center flex-column">
                 <h3>Conductor</h3>
                 <div class="circle my-2">
@@ -180,7 +180,7 @@ const lowPrice = (price) => {
 
     return finalPrice
 }
- 
+
 function formatDate(dateTime) {
     const date = new Date(dateTime);
     if (isNaN(date.getTime())) {

@@ -63,6 +63,24 @@ const model = ref([
             { label: 'Viajes  ', icon: 'pi pi-fw pi-id-card', to: '/admin/trips', permision: 'user-list' }
         ]
     },
+    {
+        label: 'Tags',
+        items: [
+            { label: 'Tags  ', icon: 'pi pi-fw pi-id-card', to: '/admin/tags', permision: 'user-list' }
+        ]
+    },
+    {
+        label: 'Reserves',
+        items: [
+            { label: 'Reserves  ', icon: 'pi pi-fw pi-id-card', to: '/admin/reserves', permision: 'user-list' }
+        ]
+    },
+    {
+        label: 'rates',
+        items: [
+            { label: 'rates  ', icon: 'pi pi-fw pi-id-card', to: '/admin/rates', permision: 'user-list' }
+        ]
+    },
 ]);
 </script>
 

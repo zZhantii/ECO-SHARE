@@ -89,8 +89,8 @@ export default function useVehicles() {
 
         try {
             const response = await axios.get("/api/vehicle/" + vehicleId);
-            console.log("API Response:", response.data);
-            vehicle.value = response.data;
+            console.log("API Response:", response.data.data);
+            vehicle.value = response.data.data;
             console.log("Vehiculo con ID cargado:", vehicle.value);
         } catch (error) {
             console.error("Error fetching trips:", error);

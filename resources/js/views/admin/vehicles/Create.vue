@@ -6,8 +6,6 @@
                 <div class="card-body">
                     <h6 class="mb-2 text-primary">Crear Vehiculo</h6>
 
-                    {{ tempVehicle.user_id }}
-
                     <Select v-model="tempVehicle.user_id" :options="users.data" filter optionLabel="name"
                         optionValue="id" dataKey="id" placeholder="Select a Country" class="w-full md:w-56">
                     </Select>
@@ -150,7 +148,6 @@ const tempVehicle = ref({
 
 onMounted(async () => {
     getUsers();
-
 });
 
 const vehicleSchema = yup.object().shape({
