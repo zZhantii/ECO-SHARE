@@ -100,6 +100,6 @@ class User extends Authenticatable implements HasMedia
     public function reserves()
     {
         return $this->belongsToMany(Trip::class, 'user_trips_reserves', 'user_id', 'trip_id')
-            ->withPivot('seats_reserved', 'reservation_date', 'check_in')->withTimestamps();
+            ->withPivot('seats_reserved', 'reservation_date', 'check_in', 'total_price')->withTimestamps();
     }
 }

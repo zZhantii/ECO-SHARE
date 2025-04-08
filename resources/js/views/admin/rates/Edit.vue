@@ -4,10 +4,9 @@
 
         <div class="col-12 md:col-8 lg:col-8 xl:col-8">
             <div class="card mb-3">
-                <div v-if="rate && rate.pivot" class="card-body">
-                    <h6 class="mb-2 text-primary">Reserve Details</h6>
+                <h6 class="mb-2 text-primary">Reserve Details</h6>
 
-                    {{ rate.pivot }}
+                <div v-if="rate && rate.pivot" class="card-body">
                     <div class="form-group">
                         <Select v-model="rate.pivot.user_id" :options="users.data" filter optionLabel="name"
                             optionValue="id" dataKey="id" placeholder="Select a User" class="w-full md:w-56">
@@ -17,26 +16,26 @@
                     <div class="form-group">
                         <Select v-model="rate.pivot.trip_id" :options="tripsList" filter
                             :optionLabel="option => `${option.start_point.address} - ${option.end_point.address}`"
-                            optionValue="id" dataKey="id" placeholder="Select a Start Point" class="w-full md:w-56"</Select>
+                            optionValue="id" dataKey="id" placeholder="Select a Start Point" class="w-full md:w-56"
+                            </Select>
                     </div>
 
                     <div class="form-group">
                         <label for="rate">Rate</label>
-                        <InputNumber v-model="rate.pivot.rate" type="text" class="d-flex w-100 w-100"
-                            id="rate" :min="0" :max="5" showButtons />
+                        <InputNumber v-model="rate.pivot.rate" type="text" class="d-flex w-100 w-100" id="rate" :min="0"
+                            :max="5" showButtons />
                         <div class="text-danger mt-1">
                             <div v-for="message in validationErrors?.seats_reserved">
                                 {{ message }}
                             </div>
                         </div>
                     </div>
-
+                    <button class="btn btn-primary" @click="submitUpdateRate">Guardar</button>
                 </div>
 
             </div>
         </div>
     </div>
-    <button class="btn btn-primary" @click="submitUpdateRate">Guardar</button>
     <Toast />
 </template>
 

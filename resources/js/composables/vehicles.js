@@ -105,6 +105,28 @@ export default function useVehicles() {
         }
     }
 
+    const getVehicleWithID = async (vehicleId) => {
+        if (isLoading.value || vehicle.value.length > 0) return;
+        isLoading.value = true;
+
+        try {
+            const response = await axios.get("/api/vehicle/" + vehicleId);
+            console.log("API Response:", response.data.data);
+            vehicle.value = response.data.data;
+            console.log("Vehiculo con ID cargado:", vehicle.value);
+        } catch (error) {
+            console.error("Error fetching trips:", error);
+            useToast().add({
+                severity: "error",
+                summary: "Error",
+                detail: "No se pudieron cargar los viajes",
+                life: 3000,
+            });
+        } finally {
+            isLoading.value = false;
+        }
+    }
+
     const createVehicleDB = async (id) => {
         return axios.put("/api/vehicles/db/create/" + id);
     }
@@ -242,7 +264,7 @@ export default function useVehicles() {
     return {
         vehicle,
         vehiclesList,
-
+        getVehicleWithID,
         getVehicles,
         getVehicle,
         updateVehicle,

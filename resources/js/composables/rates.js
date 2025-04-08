@@ -117,5 +117,16 @@ export default function useRates() {
     };
     
 
-    return { getRates, createRate, getRateWithId, updateRate, deleteRate, rateList, rate, rateSchema, isLoading, validationErrors };
+    return {
+        getRates,
+        createRate,
+        getRateWithId,
+        updateRate,
+        deleteRate,
+        rateList,
+        rate,
+        rateSchema,
+        isLoading,
+        validationErrors
+    }
 }

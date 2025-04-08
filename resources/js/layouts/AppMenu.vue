@@ -64,21 +64,21 @@ const model = ref([
         ]
     },
     {
-        label: 'Tags',
+        label: 'Etiquetas',
         items: [
             { label: 'Tags  ', icon: 'pi pi-fw pi-id-card', to: '/admin/tags', permision: 'user-list' }
         ]
     },
     {
-        label: 'Reserves',
+        label: 'Reservas',
         items: [
             { label: 'Reserves  ', icon: 'pi pi-fw pi-id-card', to: '/admin/reserves', permision: 'user-list' }
         ]
     },
     {
-        label: 'rates',
+        label: 'Valoraciones',
         items: [
-            { label: 'rates  ', icon: 'pi pi-fw pi-id-card', to: '/admin/rates', permision: 'user-list' }
+            { label: 'Rates  ', icon: 'pi pi-fw pi-id-card', to: '/admin/rates', permision: 'user-list' }
         ]
     },
 ]);

@@ -89,11 +89,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::delete("tag/{tag}", [TagController::class, "destroy"]);
 
     // Reservas
-    Route::get('reserves', [ReservesController::class, 'index']); 
+    Route::get('reserves', [ReservesController::class, 'index']);
     Route::post('reserves', [ReservesController::class, 'store']);
-    Route::get('reserves/{reserve}', [ReservesController::class, 'show']); 
-    Route::put('reserves/{reserve}', [ReservesController::class, 'update']); 
-    Route::delete('reserves/{user_id}/{trip_id}', [ReservesController::class, 'destroy']); 
+    Route::get('reserves/{user_id}/{trip_id}', [ReservesController::class, 'show']);
+    Route::put('reserves/{user_id}/{trip_id}', [ReservesController::class, 'update']);
+    Route::delete('reserves/{user_id}/{trip_id}', [ReservesController::class, 'destroy']);
 
     // Valoraciones
     Route::get('rates', [RatesController::class, 'index']);

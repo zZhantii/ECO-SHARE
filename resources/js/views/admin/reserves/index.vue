@@ -5,8 +5,9 @@
                 <div class="card-header bg-transparent ps-0 pe-0">
                     <h5 class="float-start mb-0">Reservas</h5>
                 </div>
-                <DataTable v-model:filters="filters" :value="reserves" paginator :rows="10"
-                    :globalFilterFields="['id', 'user_id', 'trip_id', 'seats_reserved', 'reservation_date', 'check_in']"
+
+                <DataTable v-model:filters="filters" :value="dataReserves" paginator :rows="10"
+                    :globalFilterFields="['user_id', 'trip_id', 'seats_reserved', 'reservation_date', 'check_in', 'total_price']"
                     stripedRows dataKey="id" size="small">
 
                     <template #header>
@@ -30,16 +31,16 @@
                     </template>
 
                     <template #empty> No customers found. </template>
-                    <Column field="id" header="id" sortable></Column>
                     <Column field="user_id" header="User_id" sortable></Column>
                     <Column field="trip_id" header="Trip_id" sortable></Column>
                     <Column field="seats_reserved" header="Seats_reserved" sortable></Column>
                     <Column field="reservation_date" header="Reservation_date" sortable></Column>
                     <Column field="check_in" header="Check_in" sortable></Column>
+                    <Column field="total_price" header="Total_price" sortable></Column>
                     <Column class="pe-0 me-0 icon-column-2">
                         <template #body="slotProps">
                             <router-link v-if="can('user-edit')"
-                                :to="{ name: 'reserves.edit', params: { id: slotProps.data.id } }">
+                                :to="{ name: 'reserves.edit', params: { user_id: slotProps.data.user_id, trip_id: slotProps.data.trip_id } }">
                                 <Button icon="pi pi-pencil" severity="info" size="small" class="mr-1" />
                             </router-link>
                             <Button icon="pi pi-trash" severity="danger" v-if="can('user-delete')"
@@ -55,14 +56,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { FilterMatchMode, FilterService } from "@primevue/core/api";
 
 import { useAbility } from '@casl/vue'
 const { can } = useAbility()
 
 import useReserves from "@/composables/reserves.js"
-const { fetchReserves, reserves, deleteReserve } = useReserves();
+const { getReserves, reserveList, deleteReserve } = useReserves();
 
 const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -74,17 +75,35 @@ const initFilters = () => {
     };
 };
 
-onMounted(() => {
-    fetchReserves();
+onMounted( async () => {
+    await getReserves();
 })
 
-const deleteReserveAdmin = (reserve2) => {
-    deleteReserve(reserve2);
+const dataReserves = computed(() => {
+    return reserveList.value.flatMap((reserve) =>
+        reserve.reserves.map((reserva2) => {
+            return {
+                user_id: reserva2.pivot.user_id,
+                trip_id: reserva2.pivot.trip_id,
+                seats_reserved: reserva2.pivot.seats_reserved,
+                reservation_date: reserva2.pivot.reservation_date,
+                check_in: reserva2.pivot.check_in,
+                total_price: reserva2.pivot.total_price,
+            };
+        })
+    );
+});
+
+
+const deleteReserveAdmin = async (reserve2) => {
+    await deleteReserve(reserve2).then(() => {
+        getReserves();
+    });
 }
 
 const refreshReserves = () => {
-    reserves.value = [];
-    fetchReserves();
+    reserveList.value = [];
+    getReserves();
 }
 
 

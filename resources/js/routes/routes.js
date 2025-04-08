@@ -434,7 +434,7 @@ export default [
                     },
                     {
                         name: "reserves.edit",
-                        path: "edit/:id",
+                        path: "edit/:user_id/:trip_id",
                         component: () =>
                             import("../views/admin/reserves/Edit.vue"),
                         meta: {

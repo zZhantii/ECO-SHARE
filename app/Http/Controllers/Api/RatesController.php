@@ -12,10 +12,7 @@ class RatesController extends Controller
 {
     public function index()
     {
-        $rates = User::with(['rates' => function($query) {
-            $query->withPivot('rate');
-        }])->get();
-
+        $rates = User::with("rates")->get();
         return response()->json(["success" => true, "data" => $rates], 200);
     }
 
@@ -33,7 +30,6 @@ class RatesController extends Controller
     public function show($user_id, $trip_id)
     {
         $rate = User::find($user_id)->rates()
-                    ->withPivot('rate')
                     ->where('trip_id', $trip_id)
                     ->first();        
         
@@ -49,7 +45,7 @@ class RatesController extends Controller
             $trip_id => ['rate' => $request->rate]
         ]); 
 
-        return response()->json(["success" => true,"message" => 'Valoración actualizado correctamente'], 200);
+        return response()->json(["success" => true, "message" => 'Valoración actualizado correctamente'], 200);
     }
 
     public function destroy($user_id, $trip_id)
