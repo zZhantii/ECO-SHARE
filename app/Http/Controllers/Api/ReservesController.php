@@ -19,48 +19,139 @@ class ReservesController extends Controller
     public function store(Request $request)
     {
         $user = User::find($request->user_id);
-
-        $user->reserves()->attach($request->trip_id, [
-            'seats_reserved' => $request->seats_reserved,
-            'reservation_date' => $request->reservation_date,
-            'check_in' => $request->check_in
-        ]);
-
-        return response()->json(["success" => true, "message" => "Reserva creada correctamente"], 200);
-    }
-
-    public function show($user_id, $trip_id)
-    {
-        $reserve = User::find($user_id)->reserves()
-                    ->withPivot('seats_reserved', 'reservation_date', 'check_in')
-                    ->where('trip_id', $trip_id)
-                    ->first();
-
-        return response()->json(["success" => true, "data" => $reserve], 200);
-    }
-
-    public function update(Request $request, $user_id, $trip_id)
-    {
-        $user = User::find($request->user_id);
-
-        $user->reserves()->sync([
-            $trip_id => [
+        
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "Usuario no encontrado"
+            ], 404);
+        }
+    
+        $existingReservation = $user->reserves()
+            ->where('trip_id', $request->trip_id)
+            ->first();
+    
+        if ($existingReservation) {
+            return response()->json([
+                "success" => false,
+                "message" => "Ya existe una reserva para este usuario y viaje"
+            ], 422);
+        }
+    
+        try {
+            $user->reserves()->attach($request->trip_id, [
                 'seats_reserved' => $request->seats_reserved,
                 'reservation_date' => $request->reservation_date,
                 'check_in' => $request->check_in,
                 'total_price' => $request->total_price
-            ]
-        ]);
+            ]);
+    
+            return response()->json([
+                "success" => true,
+                "message" => "Reserva creada correctamente"
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => "Error al crear la reserva",
+                "error" => $e->getMessage()
+            ], 500);
+        }
+    }
 
-        return response()->json(["success" => true, "message" => 'Reserva actualizado correctamente'], 200);
+    public function show($user_id, $trip_id)
+    {
+        try {
+            $reserve = User::find($user_id)->reserves()
+                ->where('trip_id', $trip_id)
+                ->first();
+
+            if (!$reserve) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "Reserva no encontrada"
+                ], 404);
+            }
+
+            return response()->json([
+                "success" => true,
+                "data" => $reserve
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => "Error al obtener la reserva",
+                "error" => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function update(Request $request, $user_id, $trip_id)
+    {
+        try {
+            $user = User::findOrFail($user_id);
+            
+            $existingReservation = $user->reserves()
+                ->where('trip_id', $trip_id)
+                ->first();
+
+            if (!$existingReservation) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "Reserva no encontrada"
+                ], 404);
+            }
+
+            $user->reserves()->sync([
+                $trip_id => [
+                    'seats_reserved' => $request->seats_reserved,
+                    'reservation_date' => $request->reservation_date,
+                    'check_in' => $request->check_in,
+                    'total_price' => $request->total_price
+                ]
+            ]);
+
+            return response()->json([
+                "success" => true,
+                "message" => 'Reserva actualizada correctamente'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => "Error al actualizar la reserva",
+                "error" => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function destroy($user_id, $trip_id)
     {
-        $user = User::find($user_id);
+        try {
+            $user = User::findOrFail($user_id);
+            
+            $existingReservation = $user->reserves()
+                ->where('trip_id', $trip_id)
+                ->first();
 
-        $user->reserves()->detach($trip_id);
-    
-        return response()->json(["success" => true, "message" => 'reserva eliminada correctamente'], 200);
+            if (!$existingReservation) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "Reserva no encontrada"
+                ], 404);
+            }
+
+            $user->reserves()->detach($trip_id);
+
+            return response()->json([
+                "success" => true,
+                "message" => 'Reserva eliminada correctamente'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => "Error al eliminar la reserva",
+                "error" => $e->getMessage()
+            ], 500);
+        }
     }
 }

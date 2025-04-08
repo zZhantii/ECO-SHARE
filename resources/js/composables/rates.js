@@ -15,7 +15,19 @@ export default function useRates() {
     yup.setLocale(es);
     const validationErrors = ref({});
     const rateSchema = yup.object().shape({
-        rate: yup.number().required("El campo es requerido"),
+        user_id: yup.number()
+            .required("El usuario es requerido")
+            .positive("El ID del usuario debe ser positivo")
+            .integer("El ID del usuario debe ser un número entero"),
+        trip_id: yup.number()
+            .required("El viaje es requerido")
+            .positive("El ID del viaje debe ser positivo")
+            .integer("El ID del viaje debe ser un número entero"),
+        rate: yup.number()
+            .required("La valoración es requerida")
+            .min(1, "La valoración debe ser entre 1 y 5")
+            .max(5, "La valoración debe ser entre 1 y 5")
+            .integer("La valoración debe ser un número entero")
     });
 
     const getRates = async () => {
@@ -25,13 +37,23 @@ export default function useRates() {
         validationErrors.value = {};
 
         axios.get("/api/rates/").then((response) => {
-            console.log("API response show rates: ", response.data.data);
+            console.log("Respuesta API mostrar valoraciones: ", response.data.data);
             rateList.value = response.data.data; 
         }).catch((error) => {
-            if (error.response?.data) {
-                validationErrors.value = error.response.data.errors;
-                console.log(validationErrors.value);
+            if (error.response?.status === 404) {
+                swal({
+                    icon: "info",
+                    title: "Información",
+                    text: "No hay valoraciones disponibles"
+                });
+            } else {
+                swal({
+                    icon: "error",
+                    title: "Error",
+                    text: "Error al cargar las valoraciones"
+                });
             }
+            console.error("Error:", error);
         }).finally(() => (isLoading.value = false));
     };
 
@@ -43,13 +65,23 @@ export default function useRates() {
 
         axios.get("/api/rates/" + user_id + "/" + trip_id)
             .then((response) => {
-                console.log("API response get rates with ID: ", response.data.data);
+                console.log("Respuesta API obtener valoración: ", response.data.data);
                 rate.value = response.data.data;
             }).catch((error) => {
-                if (error.response?.data) {
-                    validationErrors.value = error.response.data.errors;
-                    console.log(validationErrors.value);
+                if (error.response?.status === 404) {
+                    swal({
+                        icon: "error",
+                        title: "Error",
+                        text: "Valoración no encontrada"
+                    });
+                } else {
+                    swal({
+                        icon: "error",
+                        title: "Error",
+                        text: "Error al obtener la valoración"
+                    });
                 }
+                console.error("Error:", error);
             }).finally(() => isLoading.value = false);
     }
 
@@ -61,10 +93,11 @@ export default function useRates() {
 
         axios.post("/api/rates/", rate2.value)
             .then((response) => {
-                console.log("API response create: ", response.data.message)
+                console.log("Respuesta API crear valoración: ", response.data.message)
                 swal({
                     icon: "success",
-                    title: "Rate create successfully",
+                    title: "Éxito",
+                    text: "Valoración creada correctamente"
                 });
             }).catch((error) => {
                 if (error.response?.data) {
@@ -82,16 +115,27 @@ export default function useRates() {
 
         axios.put("/api/rates/" + rate2.value.pivot.user_id + "/" + rate2.value.pivot.trip_id, rate2.value.pivot)
             .then((response) => {
-                console.log("API response update: ", response.data.message)
+                console.log("Respuesta API actualizar: ", response.data.message)
                 swal({
                     icon: "success",
-                    title: "Rate updated successfully",
+                    title: "Éxito",
+                    text: "Valoración actualizada correctamente"
                 });
             }).catch((error) => {
-                if (error.response?.data) {
-                    validationErrors.value = error.response.data.errors;
-                    console.log(validationErrors.value);
+                if (error.response?.status === 404) {
+                    swal({
+                        icon: "error",
+                        title: "Error",
+                        text: "Valoración no encontrada"
+                    });
+                } else {
+                    swal({
+                        icon: "error",
+                        title: "Error",
+                        text: "Error al actualizar la valoración"
+                    });
                 }
+                console.error("Error:", error);
             }).finally(() => isLoading.value = false);
     };
 
@@ -103,16 +147,27 @@ export default function useRates() {
 
         axios.delete("/api/rates/" + rate2.user_id + "/" + rate2.trip_id)
             .then((response) => {
-                console.log("API response delete: ", response.data.message);
+                console.log("Respuesta API eliminar: ", response.data.message);
                 swal({
                     icon: "success",
-                    title: "Rate deleted successfully",
+                    title: "Éxito",
+                    text: "Valoración eliminada correctamente"
                 });
             }).catch((error) => {
-                if (error.response?.data) {
-                    validationErrors.value = error.response.data.errors;
-                    console.log(validationErrors.value);
+                if (error.response?.status === 404) {
+                    swal({
+                        icon: "error",
+                        title: "Error",
+                        text: "Valoración no encontrada"
+                    });
+                } else {
+                    swal({
+                        icon: "error",
+                        title: "Error",
+                        text: "Error al eliminar la valoración"
+                    });
                 }
+                console.error("Error:", error);
             }).finally(() => isLoading.value = false);
     };
     
