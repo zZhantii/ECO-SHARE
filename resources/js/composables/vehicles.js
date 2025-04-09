@@ -1,4 +1,3 @@
-import { text } from "@fortawesome/fontawesome-svg-core";
 import { useToast } from "primevue";
 import { ref, inject } from "vue";
 import * as yup from "yup";
@@ -16,11 +15,6 @@ export default function useVehicles() {
         user_id: 0,
     });
     const vehiclesList = ref([]);
-    const isLoading = ref(false);
-    const swal = inject("$swal");
-    const validationErrors = ref({});
-
-    yup.setLocale(es);
     const vehicleSchema = yup.object().shape({
         plate: yup.string().matches(/^[A-Z0-9-]+$/, "Formato de matrícula inválido, debe de ser 1234ABC").required("La matrícula es obligatoria"),
         brand: yup.string().required("La marca es obligatoria"),
@@ -31,7 +25,12 @@ export default function useVehicles() {
         fuel_type: yup.string().oneOf(["Gasolina", "Diésel"], "Tipo de combustible inválido").required("El tipo de combustible es obligatorio"),
     });
 
-    async function getVehicles() {
+    yup.setLocale(es);
+    const isLoading = ref(false);
+    const swal = inject("$swal");
+    const validationErrors = ref({});
+
+    const getVehicles = async () => {
         if (vehiclesList.value.length > 0) return;
         axios.get("/api/app/user-vehicle").then((response) => {
             console.log(response.data);
@@ -153,6 +152,7 @@ export default function useVehicles() {
         vehiclesList,
         vehicleSchema,
         validationErrors,
+        isLoading,
         getVehicles,
         getVehicle,
         createVehicle,

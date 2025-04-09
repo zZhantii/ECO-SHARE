@@ -18,13 +18,27 @@ class VehicleController extends Controller
 
     public function show(Vehicle $vehicle)
     {
-        $vehicleDetails = Vehicle::find($vehicle->id);
+        try {
+            $vehicleDetails = Vehicle::find($vehicle->id);
 
-        if (!$vehicleDetails) {
-            return response()->json(['message' => 'Vehículo no encontrado'], 404);
+            if (!$vehicleDetails) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "Vehículo no encontrado"
+                ], 404);
+            }
+
+            return response()->json([
+                "success" => true, 
+                "data" => $vehicleDetails
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => "Error al obtener el vehículo",
+                "error" => $e->getMessage()
+            ], 500);
         }
-
-        return response()->json(["success" => true, "data" => $vehicleDetails], 200);
     }
 
 

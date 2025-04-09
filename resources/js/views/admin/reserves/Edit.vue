@@ -93,7 +93,7 @@ import useUsers from "@/composables/users";
 import useTrips from "@/composables/trips";
 import useVehicles from "@/composables/vehicles";
 
-const { updateReserve, getReserveWithId, reserve, reserveSchema, validationErrors } = useReserves();
+const { updateReserve, getReserve, reserve, reserveSchema, validationErrors } = useReserves();
 const { getUsers, users } = useUsers();
 const { getTrips, tripsList } = useTrips();
 const { getVehicle, vehicle } = useVehicles();
@@ -106,7 +106,7 @@ const selectAvailable_seats = async () => {
 }
 
 onMounted(async () => {
-    await getReserveWithId(route.params.user_id, route.params.trip_id);
+    await getReserve(route.params.user_id, route.params.trip_id);
     await getUsers();
     await getTrips();
 

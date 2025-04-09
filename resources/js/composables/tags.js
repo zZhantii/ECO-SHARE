@@ -6,13 +6,14 @@ import { es } from "yup-locales";
 export default function useTags() {
     const tag = ref({ id: 0, tag_name: "" });
     const tagList = ref([]);
-    const isLoading = ref(false);
-    const swal = inject("$swal");
-    yup.setLocale(es);
-    const validationErrors = ref({});
     const tagSchema = yup.object().shape({
         tag_name: yup.string().required("El nombre de la etiqueta es requerido")
     });
+
+    yup.setLocale(es);
+    const validationErrors = ref({});
+    const isLoading = ref(false);
+    const swal = inject("$swal");
 
     const getTags = async () => {
         if (isLoading.value) return;
@@ -144,5 +145,16 @@ export default function useTags() {
             }).finally(() => isLoading.value = false);
     }
 
-    return { getTags, getTagWithID, updateTag, createTag, deleteTag, tagList, tag, tagSchema, isLoading, validationErrors };
+    return { 
+        tag,
+        tagList,
+        tagSchema,
+        validationErrors,
+        isLoading,
+        getTags, 
+        getTagWithID,
+        updateTag, 
+        createTag, 
+        deleteTag 
+    };
 }
