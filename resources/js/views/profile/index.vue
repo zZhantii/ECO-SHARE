@@ -562,7 +562,7 @@ const confirm = useConfirm();
 const toast = useToast();
 const { updateProfile, deleteImage, uploadAvatar } = useProfile();
 const { user } = useUsers();
-const { getVehicles, addVehicle, vehicle, vehiclesList, updateVehicle, deleteVehicle } =
+const { getVehicles, createVehicle, vehicle, vehiclesList, updateVehicle, deleteVehicle, vehicleSchema } =
     useVehicles();
 
 const avatarFile = ref(null);
@@ -599,30 +599,30 @@ const fullSurname = computed(() =>
         : `${tempData.value.surname1} ${tempData.value.surname2}`
 );
 
-const vehicleSchema = yup.object({
-    plate: yup
-        .string()
-        .required("La matrícula es un campo obligatorio")
-        .min(7)
-        .max(8),
-    brand: yup
-        .string()
-        .required("La marca del vehículo es un campo obligatorio."),
-    model: yup
-        .string()
-        .required("La marca del vehículo es un campo obligatorio."),
-    consumption: yup
-        .number()
-        .required("El consumo del vehículo es obligatorio.")
-        .min(1)
-        .max(50),
-    fuel_type: yup.string().required("Selecciona el tipo de combustible."),
-    pax_number: yup
-        .number()
-        .required("Introduce el número de plazas disponibles de tu vehículo")
-        .min(1)
-        .max(6),
-});
+// const vehicleSchema = yup.object({
+//     plate: yup
+//         .string()
+//         .required("La matrícula es un campo obligatorio")
+//         .min(7)
+//         .max(8),
+//     brand: yup
+//         .string()
+//         .required("La marca del vehículo es un campo obligatorio."),
+//     model: yup
+//         .string()
+//         .required("La marca del vehículo es un campo obligatorio."),
+//     consumption: yup
+//         .number()
+//         .required("El consumo del vehículo es obligatorio.")
+//         .min(1)
+//         .max(50),
+//     fuel_type: yup.string().required("Selecciona el tipo de combustible."),
+//     pax_number: yup
+//         .number()
+//         .required("Introduce el número de plazas disponibles de tu vehículo")
+//         .min(1)
+//         .max(6),
+// });
 
 onMounted(async () => {
     tempData.value = { ...user.value };
@@ -682,7 +682,7 @@ async function handleAddVehicle() {
             fuel_type: tempVehicle.value.fuel_type,
             pax_number: tempVehicle.value.pax_number,
         });
-        addVehicle(tempVehicle);
+        createVehicle(tempVehicle);
 
         visibleAddVehicle.value = false;
     } catch (Error) {

@@ -11,7 +11,7 @@ export default function useTags() {
     yup.setLocale(es);
     const validationErrors = ref({});
     const tagSchema = yup.object().shape({
-        tag_name: yup.string()
+        tag_name: yup.string().required("El nombre de la etiqueta es requerido")
     });
 
     const getTags = async () => {
@@ -28,9 +28,12 @@ export default function useTags() {
                 });
             }
         }).catch((error) => {
-            if (error.response?.data) {
-                validationErrors.value = error.response.data.errors;
-                console.log(validationErrors.value);
+            if (error.response?.status === 500) {
+                swal({
+                    icon: "error",
+                    title: "Error",
+                    text: error.response.data.message
+                });
             }
         }).finally(() => (isLoading.value = false));
     };
@@ -44,12 +47,21 @@ export default function useTags() {
         axios
         .get("/api/tag/" + tag2)
         .then((response) => {
-            console.log("API response show: ", response.data.data)
+            console.log("Respuesta API mostrando etiquetas: ", response.data.data)
             tag.value = response.data.data[0]; 
         }).catch((error) => {
-            if (error.response?.data) {
-                validationErrors.value = error.response.data.errors;
-                console.log(validationErrors.value);
+            if (error.response?.status === 404) {
+                swal({
+                    icon: "error",
+                    title: "Error",
+                    text: error.response.data.message
+                });
+            } else if (error.response?.status === 500) {
+                swal({
+                    icon: "error",
+                    title: "Error",
+                    text: error.response.data.message
+                });
             }
         }).finally(() => isLoading.value = false);
     }
@@ -62,15 +74,18 @@ export default function useTags() {
 
         axios.put("/api/tag/" + tag2.value.id, tag2.value)
         .then((response) => {
-            console.log("API response update: ", response.data.message)
+            console.log("Respuesta API actualizando etiqueta: ", response.data.message)
             swal({
                 icon: "success",
                 title: "Tag updated successfully",
             });
         }).catch((error) => {
-            if (error.response?.data) {
-                validationErrors.value = error.response.data.errors;
-                console.log(validationErrors.value);
+            if (error.response?.status === 500) {
+                swal({
+                    icon: "error",
+                    title: "Error",
+                    text: error.response.data.message
+                });
             }
         }).finally (() => isLoading.value = false);
     }
@@ -83,15 +98,24 @@ export default function useTags() {
 
         axios.post("/api/tag/", tag2.value)
             .then((response) => {
-                console.log("API response create: ", response.data.message)
+                console.log("Respuesta API creando etiqueta: ", response.data.message)
                 swal({
                     icon: "success",
                     title: "Tag create successfully",
                 });
             }).catch((error) => {
-                if (error.response?.data) {
-                    validationErrors.value = error.response.data.errors;
-                    console.log(validationErrors.value);
+                if (error.response?.status === 422) {
+                    swal({
+                        icon: "error",
+                        title: "Error",
+                        text: error.response.data.message
+                    });
+                } else if (error.response?.status === 500) {
+                    swal({
+                        icon: "error",
+                        title: "Error",
+                        text: error.response.data.message
+                    });
                 }
             }).finally(() => isLoading.value = false);
     }
@@ -104,15 +128,18 @@ export default function useTags() {
 
         axios.delete("/api/tag/" + tag2.id, tag2)
             .then((response) => {
-                console.log("API response delete: ", response.data.message)
+                console.log("Respuesta API eliminando etiqueta: ", response.data.message)
                 swal({
                     icon: "success",
                     title: "Tag deleted successfully",
                 });
             }).catch((error) => {
-                if (error.response?.data) {
-                    validationErrors.value = error.response.data.errors;
-                    console.log(validationErrors.value);
+                if (error.response?.status === 500) {
+                    swal({
+                        icon: "error",
+                        title: "Error",
+                        text: error.response.data.message
+                    });
                 }
             }).finally(() => isLoading.value = false);
     }

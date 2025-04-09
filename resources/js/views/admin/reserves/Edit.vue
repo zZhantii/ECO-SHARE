@@ -96,7 +96,7 @@ import useVehicles from "@/composables/vehicles";
 const { updateReserve, getReserveWithId, reserve, reserveSchema, validationErrors } = useReserves();
 const { getUsers, users } = useUsers();
 const { getTrips, tripsList } = useTrips();
-const { getVehicleWithID, vehicle } = useVehicles();
+const { getVehicle, vehicle } = useVehicles();
 
 const available_seats = ref(null);
 
@@ -113,7 +113,7 @@ onMounted(async () => {
 })
 
 watch(() => reserve.value.vehicle_id, async (tripId) => {
-    await getVehicleWithID(tripId); 
+    await getVehicle(tripId); 
     available_seats.value = vehicle.value.pax_number;
 });
 

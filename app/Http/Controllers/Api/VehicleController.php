@@ -28,6 +28,7 @@ class VehicleController extends Controller
     }
 
 
+
     public function update(Request $request, Vehicle $vehicle)
     {
         $vehicle->brand = $request->brand;
@@ -45,11 +46,17 @@ class VehicleController extends Controller
     {
 
         $vehicle->delete();
-        return response()->json(['success' => true, "data" => "Vehicle deleted successfully"], 200);
+        return response()->json(['success' => true, "data" => "Vehicle eliminado correctamente"], 200);
     }
 
     public function store(Request $request)
     {
+        $user_id = auth()->user()->id; 
+
+        if ($request->filled('user_id') && $request->user_id > 0) {
+            $user_id = $request->user_id;
+        }
+
         $vehicle = new Vehicle();
         $vehicle->plate = $request->plate;
         $vehicle->brand = $request->brand;
@@ -57,11 +64,10 @@ class VehicleController extends Controller
         $vehicle->model = $request->model;
         $vehicle->consumption = $request->consumption;
         $vehicle->pax_number = $request->pax_number;
-        $vehicle->user_id = Auth::id();
+        $vehicle->user_id =  $user_id;
 
         $vehicle->save();
 
-        return response()->json(["success" => true, "data" => $vehicle], 200);
-
+        return response()->json(["success" => true, "message" => 'Vehiculo creado correctamente'], 200);
     }
 }

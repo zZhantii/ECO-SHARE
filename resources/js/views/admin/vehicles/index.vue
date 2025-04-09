@@ -83,8 +83,10 @@ onMounted(() => {
     getVehicles();
 })
 
-const deleteVehicleAdmin = (vehicle) => {
-    deleteVehicle(vehicle);
+const deleteVehicleAdmin = async (vehicle) => {
+    await deleteVehicle(vehicle).then(() => {
+        refreshVehicles();
+    });
 }
 
 const refreshVehicles = () =>{

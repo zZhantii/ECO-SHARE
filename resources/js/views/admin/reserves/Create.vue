@@ -5,9 +5,9 @@
             <div class="card mb-3">
                 <div class="card-body">
                     <h4 class="mb-5 text-primary">Crear Etiqueta</h4>
-                    <div class="form-group">
 
-                        <div v-if="reserve">
+                    <div v-if="reserve">
+                        <div class="form-group">
                             <label for="reserve.user_id">Usuarios</label>
                             <Select v-model="reserve.user_id" :options="users.data" filter optionLabel="name"
                                 optionValue="id" dataKey="id" placeholder="Select a User" class="w-full md:w-56">
@@ -78,6 +78,9 @@
 <script setup>
 // VUE
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 // Composables
 import useReserves from "@/composables/reserves";

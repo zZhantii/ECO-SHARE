@@ -2,23 +2,60 @@ import axios from "axios";
 import { useToast } from "primevue/usetoast";
 import { ref, inject } from "vue";
 import { tr } from "yup-locales";
+import * as yup from "yup";
+import { es } from "yup-locales";
 
 
 export default function useTrips() {
     const tripsList = ref([]);
-    // const trips = ref({});
+    const trip = ref({
+        user_id: 0,
+        vehicle_id: 0,
+        start_point: null,
+        end_point: null,
+        available_seats: null,
+        price: null,
+        departure_time: null,
+        arrival_time: null,
+        drive_start: null,
+        drive_end: null,
+    });
     const tripList = ref([]);
-    // const trip = ref({});
     const searchTripList = ref([]);
     const reservesList = ref([]);
     const isLoading = ref(false);
     const validationErrors = ref([]);
     const swal = inject("$swal");
+    yup.setLocale(es);
 
     const activeDriverTripsList = ref([]);
     const activePassengerTripsList = ref([]);
 
-    const toast = useToast();
+    const TripSchema = yup.object().shape({
+        user_id: yup.number().integer("El User ID debe ser un número entero").required("El User ID es obligatorio"),
+        vehicle_id: yup.number().integer("El Vehicle ID debe ser un número entero").required("El Vehicle ID es obligatorio"),
+        // start_point: yup
+        //     .mixed()
+        //     .test("is-valid-json", "El punto de inicio debe ser un JSON válido", value => {
+        //         if (typeof value === "string" && value === "[object Object]") return true;
+        //         return typeof value === "object" && value !== null;
+        //     })
+        //     .required("El punto de inicio es obligatorio"),
+
+        // end_point: yup
+        //     .mixed()
+        //     .test("is-valid-json", "El punto de destino debe ser un JSON válido", value => {
+        //         if (typeof value === "string" && value === "[object Object]") return true;
+        //         return typeof value === "object" && value !== null;
+        //     })
+        //     .required("El punto de destino es obligatorio"),
+        departure_time: yup.date().required("La hora de salida es obligatoria"),
+        arrival_time: yup.date().required("La hora de llegada es obligatoria"),
+        available_seats: yup.number().integer("Debe ser un número entero").min(1, "Debe haber al menos un asiento disponible").required("El número de asientos es obligatorio"),
+        price: yup.number().typeError("El precio debe ser un número válido").positive("El precio debe ser mayor que 0").nullable(false).required("El precio es obligatorio"),
+        drive_start: yup.date().nullable(true),
+        drive_end: yup.date().nullable(true),
+    });
 
 
     // const getTrips = async () => {
@@ -267,14 +304,28 @@ export default function useTrips() {
     //     }
     // }
 
-    const addTrip = async (trip) => {
+    function formatDateTime(dateInput) {
+        if (!dateInput) return null;
+        return new Date(dateInput).toISOString().replace('T', ' ').slice(0, 19);
+    }
+
+    const createTrip = async (trip2) => {
+        if (isLoading.value) return;
+
+        isLoading.value = true;
+        validationErrors.value = {};
+
+        trip2.value.departure_time = formatDateTime(trip2.value.departure_time);
+        trip2.value.arrival_time = formatDateTime(trip2.value.arrival_time);
+
         axios
-            .post("/api/vehicle/", trip.value)
+            .post("/api/trip/", trip2.value)
             .then((response) => {
-                tripList.value.push(trip.value);
+                console.log("Respuesta API creando viaje", response.data.message);
                 swal({
                     icon: "success",
-                    title: "Vehículo guardado satisfactoriamente",
+                    title: "Viaje creado correctamente",
+                    text: response.data.message,
                 });
             })
             .catch((error) => {
@@ -370,10 +421,11 @@ export default function useTrips() {
 
     return {
         // trips,
-        // trip,
+        trip,
         tripsList,
         tripList,
         searchTripList,
+        TripSchema,
         getTrips,
         getReserves,
         reservesList,
@@ -390,6 +442,6 @@ export default function useTrips() {
         endDrive,
         activePassengerTripsList,
         cancellTripAsDriver,
-        addTrip
+        createTrip
     };
 }

@@ -39,21 +39,12 @@ export default function useRates() {
         axios.get("/api/rates/").then((response) => {
             console.log("Respuesta API mostrar valoraciones: ", response.data.data);
             rateList.value = response.data.data; 
-        }).catch((error) => {
-            if (error.response?.status === 404) {
-                swal({
-                    icon: "info",
-                    title: "Información",
-                    text: "No hay valoraciones disponibles"
-                });
-            } else {
-                swal({
-                    icon: "error",
-                    title: "Error",
-                    text: "Error al cargar las valoraciones"
-                });
-            }
-            console.error("Error:", error);
+        }).catch(() => { 
+            swal({
+                icon: "error",
+                title: "Error",
+                text: "Error al cargar las valoraciones"
+            });
         }).finally(() => (isLoading.value = false));
     };
 
@@ -72,15 +63,22 @@ export default function useRates() {
                     swal({
                         icon: "error",
                         title: "Error",
-                        text: "Valoración no encontrada"
+                        text: error.response.data.message
                     });
-                } else {
+                } else if (error.response?.status === 422) {
                     swal({
                         icon: "error",
                         title: "Error",
-                        text: "Error al obtener la valoración"
+                        text: error.response.data.message
+                    });
+                } else if (error.response?.status === 500) {
+                    swal({
+                        icon: "error",
+                        title: "Error",
+                        text: error.response.data.message
                     });
                 }
+                
                 console.error("Error:", error);
             }).finally(() => isLoading.value = false);
     }
@@ -100,9 +98,24 @@ export default function useRates() {
                     text: "Valoración creada correctamente"
                 });
             }).catch((error) => {
-                if (error.response?.data) {
-                    validationErrors.value = error.response.data.errors;
-                    console.log(validationErrors.value);
+                if (error.response?.status === 422) {
+                    swal({
+                        icon: "error",
+                        title: "Error",
+                        text: error.response.data.message
+                    });
+                } else if (error.response?.status === 404) {
+                    swal({
+                        icon: "error",
+                        title: "Error",
+                        text: error.response.data.message
+                    });
+                } else if (error.response?.status === 500) {
+                    swal({
+                        icon: "error",
+                        title: "Error",
+                        text: error.response.data.message
+                    });
                 }
             }).finally(() => isLoading.value = false);
     }
@@ -121,21 +134,15 @@ export default function useRates() {
                     title: "Éxito",
                     text: "Valoración actualizada correctamente"
                 });
-            }).catch((error) => {
-                if (error.response?.status === 404) {
-                    swal({
-                        icon: "error",
-                        title: "Error",
-                        text: "Valoración no encontrada"
-                    });
-                } else {
+            }).catch((error) => { {
+                if (error.response?.status === 500) {
                     swal({
                         icon: "error",
                         title: "Error",
                         text: "Error al actualizar la valoración"
                     });
                 }
-                console.error("Error:", error);
+            }
             }).finally(() => isLoading.value = false);
     };
 
