@@ -17,65 +17,38 @@
                                     <div class="row d-flex align-items-center">
                                         <!-- Mapa -->
 
-                                        <div
-                                            class="col-12 col-md-6 d-flex justify-content-center"
-                                        >
+                                        <div class="col-12 col-md-6 d-flex justify-content-center">
                                             <div class="mapTrip w-100">
-                                                <Map
-                                                    v-if="showFirstMap"
-                                                    :origin="
-                                                        tripData.start_point
-                                                    "
-                                                    :destination="
-                                                        tripData.end_point
-                                                    "
-                                                    @updateMapsInfo="
+                                                <Map v-if="showFirstMap" :origin="tripData.start_point
+                                                    " :destination="tripData.end_point
+                                                        " @updateMapsInfo="
                                                         handleMapsInfo
-                                                    "
-                                                />
+                                                    " />
                                             </div>
                                         </div>
 
-                                        <div
-                                            class="col-12 col-md-6 d-flex flex-column"
-                                        >
+                                        <div class="col-12 col-md-6 d-flex flex-column">
                                             <div class="text-center">
                                                 <h3 class="mt-2 mb-3 fs-5">
                                                     ¿Desde dónde sales?
                                                 </h3>
-                                                <InputText
-                                                    id="origin"
-                                                    type="text"
-                                                    class="form-control"
-                                                    placeholder="Punto de inicio"
-                                                />
+                                                <InputText id="origin" type="text" class="form-control"
+                                                    placeholder="Punto de inicio" />
                                             </div>
                                             <div class="text-center mt-3">
                                                 <h3 class="mt-2 mb-3 fs-5">
                                                     ¿A dónde vas?
                                                 </h3>
-                                                <InputText
-                                                    id="destination"
-                                                    type="text"
-                                                    class="form-control"
-                                                    placeholder="Destino"
-                                                />
+                                                <InputText id="destination" type="text" class="form-control"
+                                                    placeholder="Destino" />
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div
-                                        class="d-flex pt-4 justify-content-end"
-                                    >
-                                        <Button
-                                            label="Siguiente"
-                                            type="submit"
-                                            class="primary-a"
-                                            icon="pi pi-arrow-right"
-                                            :disabled="!isStep1Complete"
-                                            iconPos="right"
-                                            @click="activateCallback('2')"
-                                        />
+                                    <div class="d-flex pt-4 justify-content-end">
+                                        <Button label="Siguiente" type="submit" class="primary-a"
+                                            icon="pi pi-arrow-right" :disabled="!isStep1Complete" iconPos="right"
+                                            @click="activateCallback('2')" />
                                     </div>
 
                                 </form>
@@ -91,28 +64,13 @@
                                                 ¿Que Vehiculo utilizarás?
                                             </h3>
 
-                                            <div
-                                                class="d-flex align-items-center"
-                                            >
-                                                <FloatLabel
-                                                    class=""
-                                                    variant="on"
-                                                >
-                                                    <Select
-                                                        v-model="
-                                                            tripData.vehicle_id
-                                                        "
-                                                        inputId="on_label"
-                                                        :options="vehicles"
-                                                        optionValue="id"
-                                                        optionLabel="brand"
-                                                        class="w-full"
-                                                        appendOn=".show"
-                                                    />
-                                                    <label for="on_label"
-                                                        >Selecciones su
-                                                        vehiculo</label
-                                                    >
+                                            <div class="d-flex align-items-center">
+                                                <FloatLabel class="" variant="on">
+                                                    <Select v-model="tripData.vehicle_id
+                                                        " inputId="on_label" :options="vehiclesList" optionValue="id"
+                                                        optionLabel="brand" class="w-full" appendOn=".show" />
+                                                    <label for="on_label">Selecciones su
+                                                        vehiculo</label>
 
                                                 </FloatLabel>
                                             </div>
@@ -144,30 +102,17 @@
                                         </div>
                                     </div>
 
-                                    <div
-                                        class="d-flex justify-content-between pt-6"
-                                    >
-                                        <Button
-                                            label="Atrás"
-                                            severity="secondary"
-                                            icon="pi pi-arrow-left"
-                                            @click="
-                                                activateCallback('1'),
-                                                    (showFirstMap = true)
-                                            "
-                                        />
-                                        <Button
-                                            label="Siguiente"
-                                            type="submit"
-                                            class="primary-a"
-                                            icon="pi pi-arrow-right"
-                                            :disabled="!isStep2Complete"
-                                            iconPos="right"
+                                    <div class="d-flex justify-content-between pt-6">
+                                        <Button label="Atrás" severity="secondary" icon="pi pi-arrow-left" @click="
+                                            activateCallback('1'),
+                                            (showFirstMap = true)
+                                            " />
+                                        <Button label="Siguiente" type="submit" class="primary-a"
+                                            icon="pi pi-arrow-right" :disabled="!isStep2Complete" iconPos="right"
                                             @click="
                                                 activateCallback('3'),
-                                                    (showFirstMap = false)
-                                            "
-                                        />
+                                                (showFirstMap = false)
+                                                " />
 
                                     </div>
                                 </form>
@@ -193,14 +138,10 @@
                                                     Detalles del vehiculo
                                                 </h4>
 
-                                                <ul
-                                                    class="d-flex flex-column gap-3"
-                                                >
-                                                    <li
-                                                        v-if="
-                                                            selectedVehicleDetails
-                                                        "
-                                                    >
+                                                <ul class="d-flex flex-column gap-3">
+                                                    <li v-if="
+                                                        selectedVehicleDetails
+                                                    ">
                                                         {{
                                                             selectedVehicleDetails.brand
                                                                 ? `Marca: ${selectedVehicleDetails.brand}`
@@ -272,12 +213,12 @@
                                                                     .start_point
                                                                     .locality
                                                                 : tripData
-                                                                      .start_point
-                                                                      .address +
-                                                                  ", " +
-                                                                  tripData
-                                                                      .start_point
-                                                                      .locality
+                                                                    .start_point
+                                                                    .address +
+                                                                ", " +
+                                                                tripData
+                                                                    .start_point
+                                                                    .locality
 
                                                         }}
                                                     </li>
@@ -293,12 +234,12 @@
                                                                     .end_point
                                                                     .locality
                                                                 : tripData
-                                                                      .end_point
-                                                                      .address +
-                                                                  ", " +
-                                                                  tripData
-                                                                      .end_point
-                                                                      .locality
+                                                                    .end_point
+                                                                    .address +
+                                                                ", " +
+                                                                tripData
+                                                                    .end_point
+                                                                    .locality
 
                                                         }}
                                                     </li>
@@ -392,6 +333,11 @@ import useTags from "@/composables/tags";
 import axios from "axios";
 import { useRouter, useRoute } from "vue-router";
 
+// composables
+import useVehicles from "@/composables/vehicles.js";
+
+const { getVehicles, vehiclesList, vehicle, getVehicle } = useVehicles();
+
 const { getTags, tag, tagList } = useTags();
 const router = useRouter();
 const tempStartPoint = ref({});
@@ -412,12 +358,8 @@ let user_id = ref(0);
 user_id.value = authStore().user.id;
 
 onMounted(async () => {
-    try {
-        const responseVehicles = await axios.get("/api/vehicle");
-        vehicles.value = responseVehicles.data.data;
-    } catch (error) {
-        console.error("Error al cargar vehículos:", error);
-    }
+    getVehicles();
+
     const autocompleteStart = new google.maps.places.Autocomplete(
         document.getElementById("origin"),
         {
@@ -502,14 +444,9 @@ const isStep2Complete = computed(() => {
 });
 
 const findVehicleById = async (id) => {
-    try {
-        const response = await axios.get(`/api/vehicle/${id}`);
-        selectedVehicleDetails.value = response.data.data;
-        seats.value = response.data.pax_number;
-    } catch (error) {
-        console.error("Error al obtener los detalles del vehículo:", error);
-        selectedVehicleDetails.value = null;
-    }
+    await getVehicle(id);
+    selectedVehicleDetails.value = vehicle.value;
+    seats.value = vehicle.value.pax_number;
 };
 
 // const useGeocoder = (place, point) => {
@@ -614,7 +551,6 @@ const saveOption = async () => {
     }
 };
 
-const vehicles = ref([]);
 const CarSchema = yup.object().shape({
     vehicle_id: yup
         .number()

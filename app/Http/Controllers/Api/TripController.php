@@ -71,26 +71,26 @@ class TripController extends Controller
         $trip = Trip::create($data);
         $trip->tags()->sync($data['tags']);
 
-        try {
-            $existingTrip = $trip->where('user_id', $request->user_id)
-                ->where('vehicle_id', $request->vehicle_id)
-                ->where('departure_time', $request->departure_time)
-                ->where('arrival_time', $request->arrival_time)
-                ->first();
+        // try {
+        //     $existingTrip = $trip->where('user_id', $request->user_id)
+        //         ->where('vehicle_id', $request->vehicle_id)
+        //         ->where('departure_time', $request->departure_time)
+        //         ->where('arrival_time', $request->arrival_time)
+        //         ->first();
 
-            if ($existingTrip) {
-                return response()->json([
-                    "success" => false,
-                    "message" => "El viaje ya existe"
-                ], 400);
-            }    
-        } catch (\Exception $e) {
-            return response()->json([
-                "success" => false,
-                "message" => "Error al crear el viaje",
-                "error" => $e->getMessage()
-            ], 500);
-        }
+        //     if ($existingTrip) {
+        //         return response()->json([
+        //             "success" => false,
+        //             "message" => "El viaje ya existe"
+        //         ], 400);
+        //     }    
+        // } catch (\Exception $e) {
+        //     return response()->json([
+        //         "success" => false,
+        //         "message" => "Error al crear el viaje",
+        //         "error" => $e->getMessage()
+        //     ], 500);
+        // }
 
         return response()->json(["success" => true, "data" => $trip], 200);
     }
