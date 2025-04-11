@@ -32,8 +32,8 @@ class TripSeeder extends Seeder
                     "longitude" => 1.9177343
                 ]
             ],
-            'departure_time' => '2030-03-22 18:04:53',
-            'arrival_time' => '2030-03-22 18:22:44',
+            'departure_time' => '2025-04-22 18:04:53',
+            'arrival_time' => '2025-04-22 18:22:44',
             'available_seats' => 1,
             'price' => 7.0,
         ]);
@@ -57,8 +57,8 @@ class TripSeeder extends Seeder
                     "longitude" => 1.9177343
                 ]
             ],
-            'departure_time' => '2029-03-13 18:14:53',
-            'arrival_time' => '2029-03-13 18:32:44',
+            'departure_time' => '2025-04-13 18:14:53',
+            'arrival_time' => '2025-04-13 18:32:44',
             'available_seats' => 3,
             'price' => 7.0,
         ]);
@@ -82,34 +82,9 @@ class TripSeeder extends Seeder
                     "longitude" => 1.9177343
                 ]
             ],
-            'departure_time' => '2028-03-09 18:20:53',
-            'arrival_time' => '2028-03-09 18:42:44',
+            'departure_time' => '2024-04-09 18:20:53',
+            'arrival_time' => '2024-04-09 18:42:44',
             'available_seats' => 4,
-            'price' => 7.0,
-        ]);
-
-        $trip3 = Trip::create([
-            'user_id' => 1,
-            'vehicle_id' => 2,
-            'start_point' => [
-                "address" => "Molins de Rei",
-                "locality" => "Molins de Rei",
-                "location" => [
-                    "latitude" => 41.4134488,
-                    "longitude" => 2.0182425
-                ]
-            ],
-            'end_point' => [
-                "address" => "Martorell",
-                "locality" => "Martorell",
-                "location" => [
-                    "latitude" => 41.4777114,
-                    "longitude" => 1.9177343
-                ]
-            ],
-            'departure_time' => '2027-03-30 18:34:53',
-            'arrival_time' => '2027-03-30 18:52:44',
-            'available_seats' => 2,
             'price' => 7.0,
         ]);
     }
