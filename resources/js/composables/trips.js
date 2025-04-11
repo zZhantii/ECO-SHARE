@@ -448,7 +448,36 @@ export default function useTrips() {
         }
     };
 
-    const cancellPassengerTrip = async (trip) => {};
+    const cancellTripAsPassenger = async (tripId) => {
+        try {
+            const response = await axios.put(
+                `/api/app/cancel-passenger-trip/${tripId}`
+            );
+
+            if (response.data.success == true) {
+                swal({
+                    icon: "success",
+                    title: "Viaje cancelado",
+                });
+                const index = activeDriverTripsList.value.findIndex(
+                    (e) => e.id == tripId
+                );
+
+                activePassengerTripsList.value[index].cancelled_at =
+                    response.data.data.cancelled_at;
+            } else {
+                swal({
+                    icon: "error",
+                    title: "No se ha podido cancelar el viaje",
+                });
+            }
+        } catch (e) {
+            swal({
+                icon: "error",
+                title: "Error inesperado en el servidor",
+            });
+        }
+    };
 
     const getReserves = () => {
         if (isLoading.value) return;
@@ -485,7 +514,6 @@ export default function useTrips() {
         updateTrip,
         deleteTrip,
         makeCheckIn,
-        cancellPassengerTrip,
         // addUnavailable_seat,
         reservedTrip,
         searchTrip,
@@ -496,6 +524,7 @@ export default function useTrips() {
         endDrive,
         activePassengerTripsList,
         cancellTripAsDriver,
+        cancellTripAsPassenger,
         createTrip,
     };
 }

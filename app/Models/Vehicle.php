@@ -24,7 +24,7 @@ class Vehicle extends Model
     // Relacion usuarios-trips 1:N (N trips)
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, "user_id");
     }
 
 

@@ -26,13 +26,13 @@ class Trip extends Model
     // Relacion 1:N (N trips)
     public function user()
     {
-        return $this->belongsTo(User::class, 'id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     // Relacion vehicles-trips 1:N (N trip)
     public function vehicle()
     {
-        return $this->belongsTo(Vehicle::class, 'id');
+        return $this->belongsTo(Vehicle::class, 'vehicle_id');
     }
 
     // Relacion trips-tags N:M (N Trips)
@@ -51,7 +51,7 @@ class Trip extends Model
     public function reserves()
     {
         return $this->belongsToMany(User::class, 'user_trips_reserves', 'trip_id', 'user_id')
-            ->withPivot('seats_reserved', 'reservation_date', 'check_in', 'total_price')->withTimestamps();
+            ->withPivot('seats_reserved', 'reservation_date', 'check_in', 'cancelled_at', 'total_price')->withTimestamps();
 
     }
 

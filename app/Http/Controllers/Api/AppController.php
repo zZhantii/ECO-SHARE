@@ -144,7 +144,8 @@ class AppController extends Controller
     //Método para cancelar el viajr como conductor
     public function cancelDriverTrip($id)
     {
-        if (empty($trip->drive_start)) {
+        $trip = Trip::find($id);
+        if (empty($trip->drive_start && empty($trip->cancelled_at))) {
             $trip = Trip::find($id);
             $trip->cancelled_at = now();
             $trip->save();
@@ -154,6 +155,25 @@ class AppController extends Controller
 
 
         return response()->json(["success" => false, "data" => "No se ha podido cancelar el viaje"], 400);
+
+
+
+    }
+    public function cancelPassengerTrip($id)
+    {
+
+        $user = Auth::user();
+        $reserve = $user->reserves()->where("trip_id", $id)->first();
+
+        if (empty($reserve->pivot->check_in) && empty($reserve->pivot->cancelled_at)) {
+            $reserve->pivot->cancelled_at = now();
+            $reserve->pivot->save();
+
+            return response()->json(["success" => true, "data" => $reserve], 200);
+        }
+
+
+        return response()->json(["success" => false, "data" => "Has hecho check-in o ya has cancelado el viaje"], 400);
 
 
 

@@ -27,7 +27,9 @@
                             v-model:visible="visibleDriver"
                             modal
                             header="Detalles del viaje"
-                            :style="{ width: '30rem' }"
+                            :style="{
+                                width: '30rem',
+                            }"
                         >
                             <div class="mb-5">
                                 <div v-if="!passenger">
@@ -56,36 +58,56 @@
                                             >{{ selectedTrip.vehicle.model }}
                                         </strong>
                                     </p>
-                                    <h3 v-if="!passenger" class="fs-5 mt-4">
-                                        Lista de pasajeros:
-                                    </h3>
-                                    <ul
-                                        v-if="!passenger"
-                                        class="ps-0 passenger-list"
-                                    >
-                                        <li
-                                            class="gap-5 p-1 d-flex align-items-center gap-3 ms-3"
-                                            v-for="passenger in selectedTrip.reserves"
+                                    <div v-if="!passenger">
+                                        <h3 class="fs-5 mt-4">
+                                            Lista de pasajeros:
+                                        </h3>
+                                        <ul
+                                            v-if="
+                                                selectedTrip.reserves.length !=
+                                                0
+                                            "
+                                            class="ps-0 passenger-list"
                                         >
-                                            <i
-                                                v-if="
-                                                    passenger.pivot.check_in ==
-                                                    null
-                                                "
-                                                class="ms-1 fa-solid fa-hourglass-half"
-                                            ></i>
+                                            <li
+                                                class="gap-5 p-1 d-flex align-items-center gap-3 ms-3"
+                                                v-for="passenger in selectedTrip.reserves"
+                                            >
+                                                <i
+                                                    v-if="
+                                                        passenger.pivot
+                                                            .cancelled_at ==
+                                                        null
+                                                    "
+                                                    class="ms-1 fa-solid fa-xmark"
+                                                    style="color: red"
+                                                ></i>
+                                                <i
+                                                    v-else-if="
+                                                        passenger.pivot
+                                                            .check_in == null
+                                                    "
+                                                    class="ms-1 fa-solid fa-hourglass-half"
+                                                ></i>
 
-                                            <i
-                                                v-else
-                                                class="fa-solid fa-circle-check"
-                                                style="color: green"
-                                            ></i>
+                                                <i
+                                                    v-else
+                                                    class="fa-solid fa-circle-check"
+                                                    style="color: green"
+                                                ></i>
 
-                                            <p class="fs-4 m-0">
-                                                {{ passenger.alias }}
-                                            </p>
-                                        </li>
-                                    </ul>
+                                                <p class="fs-4 m-0">
+                                                    {{ passenger.alias }}
+                                                </p>
+                                            </li>
+                                        </ul>
+                                        <p>
+                                            <strong
+                                                >No hay reservas de
+                                                pasajeros</strong
+                                            >
+                                        </p>
+                                    </div>
                                 </div>
                                 <div v-else>
                                     <div>
@@ -373,6 +395,7 @@ const {
     startDrive,
     endDrive,
     cancellTripAsDriver,
+    cancellTripAsPassenger,
     makeCheckIn,
 } = useTrips();
 
@@ -444,7 +467,9 @@ function cancelAsPassenger(trip) {
         acceptProps: {
             label: "Cancelar viaje",
         },
-        accept: () => {},
+        accept: () => {
+            cancellTripAsPassenger(trip.id);
+        },
         reject: () => {
             toast.add({
                 severity: "info",
@@ -535,7 +560,7 @@ const confirmCancell = (trip) => {
             label: "Cancelar viaje",
         },
         accept: () => {
-            //cancellTripAsDriver(trip.id);
+            cancellTripAsDriver(trip.id);
         },
         reject: () => {
             toast.add({
