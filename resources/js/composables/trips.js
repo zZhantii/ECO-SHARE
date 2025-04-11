@@ -31,24 +31,15 @@ export default function useTrips() {
     const activeDriverTripsList = ref([]);
     const activePassengerTripsList = ref([]);
 
+    const startpointDefault = { "address": "", "locality": "", "location": { "latitude": 0.0, "longitude": 0.0 } }
+    const endpointDefault = { "address": "", "locality": "", "location": { "latitude": 0.0, "longitude": 0.0 } }
+
+
     const TripSchema = yup.object().shape({
         user_id: yup.number().integer("El User ID debe ser un número entero").required("El User ID es obligatorio"),
         vehicle_id: yup.number().integer("El Vehicle ID debe ser un número entero").required("El Vehicle ID es obligatorio"),
-        // start_point: yup
-        //     .mixed()
-        //     .test("is-valid-json", "El punto de inicio debe ser un JSON válido", value => {
-        //         if (typeof value === "string" && value === "[object Object]") return true;
-        //         return typeof value === "object" && value !== null;
-        //     })
-        //     .required("El punto de inicio es obligatorio"),
-
-        // end_point: yup
-        //     .mixed()
-        //     .test("is-valid-json", "El punto de destino debe ser un JSON válido", value => {
-        //         if (typeof value === "string" && value === "[object Object]") return true;
-        //         return typeof value === "object" && value !== null;
-        //     })
-        //     .required("El punto de destino es obligatorio"),
+        start_point: yup.mixed().default(startpointDefault).nullable(true),
+        end_point: yup.mixed().default(endpointDefault).nullable(true),
         departure_time: yup.date().required("La hora de salida es obligatoria"),
         arrival_time: yup.date().required("La hora de llegada es obligatoria"),
         available_seats: yup.number().integer("Debe ser un número entero").min(1, "Debe haber al menos un asiento disponible").required("El número de asientos es obligatorio"),
