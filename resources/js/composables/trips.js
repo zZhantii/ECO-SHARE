@@ -3,7 +3,6 @@ import { useToast } from "primevue/usetoast";
 import { ref, inject } from "vue";
 import { tr } from "yup-locales";
 
-
 export default function useTrips() {
     const tripsList = ref([]);
     // const trips = ref({});
@@ -19,7 +18,6 @@ export default function useTrips() {
     const activePassengerTripsList = ref([]);
 
     const toast = useToast();
-
 
     // const getTrips = async () => {
     //     try {
@@ -64,7 +62,7 @@ export default function useTrips() {
     //         console.log("Error fetching: ", error);
     //     }
     // }
-    
+
     async function getTrip(tripId) {
         if (isLoading.value || tripList.value.length > 0) return;
         isLoading.value = true;
@@ -90,18 +88,16 @@ export default function useTrips() {
     const searchTrip = async (searchParams) => {
         try {
             console.log("searchparams", searchParams);
-            const response = await axios.get('/api/trips/search', {
-                params: searchParams
+            const response = await axios.get("/api/trips/search", {
+                params: searchParams,
             });
 
             console.log("API response: ", response.data.data);
             searchTripList.value = response.data.data;
         } catch (error) {
-            console.error('Search error:', error);
-        } 
+            console.error("Search error:", error);
+        }
     };
-
-
 
     // const updateTrip = async (tripID, trip) => {
     //     try {
@@ -159,12 +155,13 @@ export default function useTrips() {
         const responsePassenger = await axios.get(
             "/api/app/passenger-active-trip"
         );
+
         if (responsePassenger.data.data) {
             for (const element of responsePassenger.data.data) {
                 activePassengerTripsList.value.push(element);
             }
         }
-        console.log("patata", activeDriverTripsList.value);
+        console.log("activePassenerTripsList", activePassengerTripsList.value);
     };
 
     const startDrive = async (tripId) => {
@@ -225,7 +222,36 @@ export default function useTrips() {
             });
         }
     };
-    
+
+    const makeCheckIn = async (trip) => {
+        try {
+            axios.put("/api/app/check-in", trip).then((response) => {
+                console.log("API response: ", trip);
+                if (response.data.success == true) {
+                    swal({
+                        icon: "success",
+                        title: "Check-in realizado",
+                    });
+                    const index = activePassengerTripsList.value.findIndex(
+                        (e) => e.id == trip.id
+                    );
+
+                    activePassengerTripsList.value[index] = response.data.data;
+                } else {
+                    swal({
+                        icon: "error",
+                        title: "No se ha podido realizar el check-in",
+                    });
+                }
+            });
+        } catch (e) {
+            swal({
+                icon: "error",
+                title: "Error inesperado en el servidor",
+            });
+        }
+    };
+
     const cancellTripAsDriver = async (tripId) => {
         try {
             const response = await axios.put(
@@ -318,7 +344,7 @@ export default function useTrips() {
     //         const response = await axios.put("/api/trip/" + tripID, {
     //             unavailable_seats: unavailable_seats
     //         });
-            
+
     //         const tripArray = Object.values(tripList);
 
     //         const index = tripArray.findIndex((ID) => ID.id === tripID);
@@ -336,18 +362,26 @@ export default function useTrips() {
             const dataTrip = {
                 available_seats: trip.value.available_seats,
                 seats_reserved: seats,
-                reservation_date: new Date().toISOString().slice(0, 19).replace("T", " "),
-                checkIn: null
-            }
+                reservation_date: new Date()
+                    .toISOString()
+                    .slice(0, 19)
+                    .replace("T", " "),
+                checkIn: null,
+            };
 
             console.log(dataTrip);
 
-            const response = await axios.post("/api/trip/reserve/" + tripID, dataTrip);
+            const response = await axios.post(
+                "/api/trip/reserve/" + tripID,
+                dataTrip
+            );
             console.log("API response, Trip reservado: " + response.data.data);
         } catch (error) {
             console.log("Error updating: ", error);
         }
-    }
+    };
+
+    const cancellPassengerTrip = async (trip) => {};
 
     const getReserves = () => {
         if (isLoading.value) return;
@@ -356,17 +390,19 @@ export default function useTrips() {
         validationErrors.value = {};
 
         axios
-        .get("/api/reserva/")
-        .then((response) => {
-            // console.log("api");
-            console.log("API response: ", response.data);
-        }).catch((error) => {
-            if (error.response?.data) {
-                validationErrors.value = error.response.data.errors;
-                console.log(validationErrors.value);
-            }
-        }).finally(() => isLoading.value = false);
-    }
+            .get("/api/reserva/")
+            .then((response) => {
+                // console.log("api");
+                console.log("API response: ", response.data);
+            })
+            .catch((error) => {
+                if (error.response?.data) {
+                    validationErrors.value = error.response.data.errors;
+                    console.log(validationErrors.value);
+                }
+            })
+            .finally(() => (isLoading.value = false));
+    };
 
     return {
         // trips,
@@ -380,6 +416,8 @@ export default function useTrips() {
         getTrip,
         updateTrip,
         deleteTrip,
+        makeCheckIn,
+        cancellPassengerTrip,
         // addUnavailable_seat,
         reservedTrip,
         searchTrip,
@@ -390,6 +428,6 @@ export default function useTrips() {
         endDrive,
         activePassengerTripsList,
         cancellTripAsDriver,
-        addTrip
+        addTrip,
     };
 }

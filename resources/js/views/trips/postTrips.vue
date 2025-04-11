@@ -462,7 +462,6 @@ import { ar, de, es, tr } from "yup-locales";
 import { useToast } from "primevue/usetoast";
 import { Toast } from "primevue";
 import { onMounted, ref, watch, computed } from "vue";
-import { start } from "@popperjs/core";
 import { authStore } from "../../store/auth";
 import Map from "@/components/Map.vue";
 import useTags from "@/composables/tags";

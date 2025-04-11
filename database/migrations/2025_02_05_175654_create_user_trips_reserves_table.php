@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->integer('seats_reserved');
             $table->timestamp('reservation_date');
             $table->timestamp('check_in')->nullable();
+            $table->timestamp('cancelled_at')->nullable();
             $table->timestamps();
             $table->float("total_price")->nullable();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
