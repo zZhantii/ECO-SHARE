@@ -2,6 +2,7 @@ import { useToast } from "primevue";
 import { ref, inject } from "vue";
 import * as yup from "yup";
 import { es } from "yup-locales";
+import { useRouter } from "vue-router";
 
 export default function useVehicles() {
     const vehicle = ref({
@@ -48,6 +49,7 @@ export default function useVehicles() {
     const isLoading = ref(false);
     const swal = inject("$swal");
     const validationErrors = ref({});
+    const router = useRouter();
 
     const getVehicles = async () => {
         if (vehiclesList.value.length > 0) return;
@@ -126,10 +128,6 @@ export default function useVehicles() {
         }
     };
 
-    const createVehicleDB = async (id) => {
-        return axios.put("/api/vehicles/db/create/" + id);
-    };
-
     const updateVehicle = async (vehicle) => {
         if (isLoading.value) return;
 
@@ -168,23 +166,38 @@ export default function useVehicles() {
         isLoading.value = true;
         validationErrors.value = {};
 
-        axios
-            .delete("/api/vehicle/" + vehicle.id)
-            .then((response) => {
-                console.log(
-                    "Respuesta API actualizando vehículo: ",
-                    response.data.message
-                );
-                swal({
-                    icon: "success",
-                    title: "Vehicle actualizado con éxito",
-                    text: response.data.message,
-                });
-            })
-            .catch((error) => {
-                console.log("Error actualizando el vehículo:", error);
-            })
-            .finally(() => (isLoading.value = false));
+        swal({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this action!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            confirmButtonColor: '#ef4444',
+            timer: 20000,
+            timerProgressBar: true,
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios
+                    .delete("/api/vehicle/" + vehicle.id)
+                    .then((response) => {
+                        console.log(
+                            "Respuesta API actualizando vehículo: ",
+                            response.data.message
+                        );
+                        router.push({ name: 'vehicles.index' })
+                        swal({
+                            icon: "success",
+                            title: "Vehicle actualizado con éxito",
+                            text: response.data.message,
+                        });
+                    })
+                    .catch((error) => {
+                        console.log("Error actualizando el vehículo:", error);
+                    })
+                    .finally(() => (isLoading.value = false));
+            }
+        })
     };
 
     return {

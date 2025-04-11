@@ -7,44 +7,52 @@
                     <div class="account-settings">
                         <div class="user-profile">
                             <div class="user-avatar">
-                                <!--                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Maxwell Admin">-->
+                                <!-- <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Maxwell Admin"> -->
 
                                 <!-- :fileLimit=1  -->
-                                <FileUpload
-                                    name="picture"
-                                    url="/api/users/updateimg"
-                                    @before-upload="onBeforeUpload"
-                                    @upload="onTemplatedUpload($event)"
-                                    accept="image/*"
-                                    :maxFileSize="1500000"
-                                    @select="onSelectedFiles"
-                                    pt:content:class="fu-content"
-                                    pt:buttonbar:class="fu-header"
-                                    pt:root:class="fu"
-                                    class="fu"
-                                    >
+                                <FileUpload name="picture" url="/api/users/updateimg" @before-upload="onBeforeUpload"
+                                    @upload="onTemplatedUpload($event)" accept="image/*" :maxFileSize="1500000"
+                                    @select="onSelectedFiles" pt:content:class="fu-content"
+                                    pt:buttonbar:class="fu-header" pt:root:class="fu" class="fu">
 
-                                    <template #header="{ chooseCallback, uploadCallback, clearCallback, files, uploadedFiles }">
-                                        <div class="flex flex-wrap justify-content-between align-items-center flex-1 gap-2">
+                                    <template
+                                        #header="{ chooseCallback, uploadCallback, clearCallback, files, uploadedFiles }">
+                                        <div
+                                            class="flex flex-wrap justify-content-between align-items-center flex-1 gap-2">
                                             <div class="flex gap-2">
-                                                <Button @click="chooseCallback()" icon="pi pi-images" rounded outlined></Button>
-                                                <Button @click="uploadEvent(uploadCallback, uploadedFiles)" icon="pi pi-cloud-upload" rounded outlined severity="success" :disabled="!files || files.length === 0"></Button>
-                                                <Button @click="clearCallback()" icon="pi pi-times" rounded outlined severity="danger" :disabled="!files || files.length === 0"></Button>
+                                                <Button @click="chooseCallback()" icon="pi pi-images" rounded
+                                                    outlined></Button>
+                                                <Button @click="uploadEvent(uploadCallback, uploadedFiles)"
+                                                    icon="pi pi-cloud-upload" rounded outlined severity="success"
+                                                    :disabled="!files || files.length === 0"></Button>
+                                                <Button @click="clearCallback()" icon="pi pi-times" rounded outlined
+                                                    severity="danger" :disabled="!files || files.length === 0"></Button>
                                             </div>
                                             <p class="mt-4 mb-0">Drag and drop files to here to upload.</p>
                                         </div>
                                     </template>
 
-                                    <template #content="{ files, uploadedFiles, removeUploadedFileCallback, removeFileCallback }">
-                                        <img v-if=" files.length > 0" v-for="(file, index) of files" :key="file.name + file.type + file.size" role="presentation" :alt="file.name" :src="file.objectURL" class="object-fit-cover w-100 h-100 img-profile" />
+                                    <template
+                                        #content="{ files, uploadedFiles, removeUploadedFileCallback, removeFileCallback }">
+                                        <img v-if=" files.length > 0" v-for="(file, index) of files"
+                                            :key="file.name + file.type + file.size" role="presentation"
+                                            :alt="file.name" :src="file.objectURL"
+                                            class="object-fit-cover w-100 h-100 img-profile" />
                                         <div v-else>
-                                            <img v-if="uploadedFiles.length > 0" :key="uploadedFiles[uploadedFiles.length-1].name + uploadedFiles[uploadedFiles.length-1].type + uploadedFiles[uploadedFiles.length-1].size" role="presentation" :alt="uploadedFiles[uploadedFiles.length-1].name" :src="uploadedFiles[uploadedFiles.length-1].objectURL" class="object-fit-cover w-100 h-100 img-profile" />
+                                            <img v-if="uploadedFiles.length > 0"
+                                                :key="uploadedFiles[uploadedFiles.length-1].name + uploadedFiles[uploadedFiles.length-1].type + uploadedFiles[uploadedFiles.length-1].size"
+                                                role="presentation" :alt="uploadedFiles[uploadedFiles.length-1].name"
+                                                :src="uploadedFiles[uploadedFiles.length-1].objectURL"
+                                                class="object-fit-cover w-100 h-100 img-profile" />
                                         </div>
                                     </template>
 
                                     <template #empty>
-                                        <img v-if="user.avatar" :src=user.avatar alt="Avatar" class="object-fit-cover w-100 h-100 img-profile">
-                                        <img v-if="!user.avatar" src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Avatar Default" class="object-fit-cover w-100 h-100 img-profile">
+                                        <img v-if="user.avatar" :src=user.avatar alt="Avatar"
+                                            class="object-fit-cover w-100 h-100 img-profile">
+                                        <img v-if="!user.avatar"
+                                            src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                                            alt="Avatar Default" class="object-fit-cover w-100 h-100 img-profile">
                                     </template>
                                 </FileUpload>
 
@@ -59,7 +67,8 @@
 
                             <div class="form-group">
                                 <label for="roles">Roles</label>
-                                <MultiSelect id="roles" v-model="user.role_id" display="chip" :options="roleList" optionLabel="name" dataKey="id" placeholder="Seleciona los roles" appendTo="self"
+                                <MultiSelect id="roles" v-model="user.role_id" display="chip" :options="roleList"
+                                    optionLabel="name" dataKey="id" placeholder="Seleciona los roles" appendTo="self"
                                     class="w-100" />
                             </div>
 
@@ -112,6 +121,17 @@
                         <div class="text-danger mt-1">{{ errors.surname2 }}</div>
                         <div class="text-danger mt-1">
                             <div v-for="message in validationErrors?.surname2">
+                                {{ message }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="alias">Alias</label>
+                        <input v-model="user.alias" type="text" class="form-control" id="alias">
+                        <div class="text-danger mt-1">{{ errors.alias }}</div>
+                        <div class="text-danger mt-1">
+                            <div v-for="message in validationErrors?.alias">
                                 {{ message }}
                             </div>
                         </div>
@@ -176,18 +196,22 @@ const schema = {
 // Create a form context with the validation schema
 const { validate, errors, resetForm } = useForm({ validationSchema: schema })
 // Define actual fields for validation
+const { value: id } = useField('id', null, { initialValue: '' });
 const { value: name } = useField('name', null, { initialValue: '' });
 const { value: email } = useField('email', null, { initialValue: '' });
 const { value: surname1 } = useField('surname1', null, { initialValue: '' });
 const { value: surname2 } = useField('surname2', null, { initialValue: '' });
 const { value: password } = useField('password', null, { initialValue: '' });
+const { value: alias } = useField('alias', null, { initialValue: '' });
 const { value: role_id } = useField('role_id', null, { initialValue: '', label: 'role' });
 
 const user = reactive({
+    id,
     name,
     email,
     surname1,
     surname2,
+    alias,
     password,
     role_id
 })
@@ -197,10 +221,9 @@ function submitForm() {
     validate().then(form => { if (form.valid) updateUser(user) })
 }
 
-onMounted(() => {
+onMounted(async () => {
     getRoleList()
-    getUser(route.params.id)
-
+    await getUser(route.params.id)
 })
 // https://vuejs.org/api/reactivity-core.html#watcheffect
 watchEffect(() => {
@@ -210,6 +233,7 @@ watchEffect(() => {
     user.surname1 = postData.value.surname1
     user.surname2 = postData.value.surname2
     user.role_id = postData.value.role_id
+    user.alias = postData.value.alias
     user.avatar = postData.value.avatar
 })
 

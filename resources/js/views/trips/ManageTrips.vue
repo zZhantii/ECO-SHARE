@@ -29,6 +29,7 @@
                             header="Detalles del viaje"
                             :style="{ width: '30rem' }"
                         >
+
                             <div class="mb-5">
                                 <div v-if="!passenger">
                                     <p>

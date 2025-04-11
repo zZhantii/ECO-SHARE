@@ -26,13 +26,13 @@ class Trip extends Model
     // Relacion 1:N (N trips)
     public function user()
     {
-        return $this->belongsTo(User::class, 'id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     // Relacion vehicles-trips 1:N (N trip)
     public function vehicle()
     {
-        return $this->belongsTo(Vehicle::class, 'id');
+        return $this->belongsTo(Vehicle::class, 'vehicle_id');
     }
 
     // Relacion trips-tags N:M (N Trips)

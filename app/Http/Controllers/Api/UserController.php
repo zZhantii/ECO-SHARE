@@ -51,22 +51,23 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request)
     {
-        $role = Role::find($request->role_id);
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->surname1 = $request->surname1;
-        $user->surname2 = $request->surname2;
-        // $user->rating = $request->rating;
+        return $request;
+        // $role = Role::find($request->role_id);
+        // $user = new User();
+        // $user->name = $request->name;
+        // $user->email = $request->email;
+        // $user->surname1 = $request->surname1;
+        // $user->surname2 = $request->surname2;
+        // $user->alias = $request->alias;
 
-        $user->password = Hash::make($request->password);
+        // $user->password = Hash::make($request->password);
 
-        if ($user->save()) {
-            if ($role) {
-                $user->assignRole($role);
-            }
-            return new UserResource($user);
-        }
+        // if ($user->save()) {
+        //     if ($role) {
+        //         $user->assignRole($role);
+        //     }
+        //     return new UserResource($user);
+        // }
     }
 
     /**

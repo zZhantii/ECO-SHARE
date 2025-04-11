@@ -22,7 +22,7 @@
                                     <Button type="button" icon="pi pi-refresh" class="h-100 ml-1" outlined @click="getUsers()" />
                                 </template>
                                 <template #end>
-                                    <Button v-if="can('exercise-create')" icon="pi pi-external-link" label="Crear Usuario" @click="$router.push('users/create')" class="float-end" />
+                                    <Button icon="pi pi-external-link" label="Crear Usuario" @click="$router.push('users/create')" class="float-end" />
                                 </template>
                             </Toolbar>
                             <!--
