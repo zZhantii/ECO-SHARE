@@ -4,15 +4,8 @@
             <router-link to="/" class="navbar-brand">
                 <SVGLogo class="logo" />
             </router-link>
-            <a
-                class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-            >
+            <a class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon toggle-icon"></span>
             </a>
 
@@ -20,110 +13,55 @@
                 <ul class="navbar-nav mt-2 mt-lg-0 me-auto mb-2 mb-lg-0 gap-3">
                     <!-- <LocaleSwitcher /> -->
                     <li>
-                        <router-link
-                            :to="{ name: 'PostTrips' }"
-                            class="primary-a nav-link text-center text-md-start"
-                            >Publicar</router-link
-                        >
+                        <router-link :to="{ name: 'PostTrips' }"
+                            class="primary-a nav-link text-center text-md-start">Publicar</router-link>
                     </li>
                     <li>
-                        <router-link
-                            to=""
-                            class="primary-a nav-link text-center text-md-start"
-                            >Empresa</router-link
-                        >
+                        <router-link to="" class="primary-a nav-link text-center text-md-start">Empresa</router-link>
                     </li>
                 </ul>
                 <ul class="navbar-nav mt-lg-0 ms-auto gap-3 align-items-center">
                     <li v-if="!user?.name" class="nav-item">
-                        <router-link to="" class="primary-a nav-link"
-                            >Ayuda</router-link
-                        >
+                        <router-link to="" class="primary-a nav-link">Ayuda</router-link>
                     </li>
 
                     <li v-if="!user?.name" class="nav-item">
-                        <router-link
-                            :to="{ name: 'auth.login' }"
-                            class="primary-a nav-link"
-                            >Iniciar sesión</router-link
-                        >
+                        <router-link :to="{ name: 'auth.login' }" class="primary-a nav-link">Iniciar
+                            sesión</router-link>
                     </li>
                     <li v-if="!user?.name" class="nav-item">
                         <router-link class="" to="/register">
-                            <Button
-                                label="Registro"
-                                class="btn-header-secondary"
-                        /></router-link>
+                            <Button label="Registro" class="btn-header-secondary" /></router-link>
                     </li>
 
                     <li v-else-if="user?.name" class="nav-item dropdown">
-                        <a
-                            class="primary-link dropdown-toa"
-                            href="#"
-                            role="button"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                        >
-                            <Avatar
-                                v-if="user?.avatar"
-                                :image="user.avatar"
-                                class="avatar mt-1"
-                                size="xlarge"
-                                shape="circle"
-                            />
-                            <Avatar
-                                v-else
-                                :label="user.alias?.charAt(0).toUpperCase()"
-                                class="avatar"
-                                size="xlarge"
+                        <a class="primary-link dropdown-toa" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <Avatar v-if="user?.avatar" :image="user.avatar" class="avatar mt-1" size="xlarge"
+                                shape="circle" />
+                            <Avatar v-else :label="user.alias?.charAt(0).toUpperCase()" class="avatar" size="xlarge"
                                 style="
                                     background-color: #ece9fc;
                                     color: #2a1261;
-                                "
-                            />
+                                " />
                         </a>
-                        <ul
-                            class="dropdown-menu dropdown-menu-end custom-dropdown"
-                        >
-                            <li
-                                v-if="user?.roles[0].name == 'admin'"
-                                class="nav-item"
-                            >
-                                <router-link
-                                    class="dropdown-item primary-a"
-                                    to="/admin"
-                                    >Admin</router-link
-                                >
+                        <ul class="dropdown-menu dropdown-menu-end custom-dropdown">
+                            <li v-if="user?.roles[0].name == 'admin'" class="nav-item">
+                                <router-link class="dropdown-item primary-a" to="/admin">Admin</router-link>
                             </li>
                             <li>
-                                <router-link
-                                    to="/trips/manage"
-                                    class="dropdown-item primary-a"
-                                    >Tus viajes</router-link
-                                >
+                                <router-link to="/trips/manage" class="dropdown-item primary-a">Tus viajes</router-link>
                             </li>
                             <li>
-                                <router-link
-                                    to="/auth/profile"
-                                    class="dropdown-item primary-a"
-                                    >Perfil</router-link
-                                >
+                                <router-link to="/auth/profile" class="dropdown-item primary-a">Perfil</router-link>
                             </li>
 
                             <li>
-                                <router-link
-                                    to=""
-                                    class="dropdown-item primary-a"
-                                    >Ayuda</router-link
-                                >
+                                <router-link to="" class="dropdown-item primary-a">Ayuda</router-link>
                             </li>
                             <li>
-                                <a
-                                    class="dropdown-item primary-a"
-                                    href="javascript:void(0)"
-                                    @click="logout"
-                                    >Cerrar sesión</a
-                                >
+                                <a class="dropdown-item primary-a" href="javascript:void(0)" @click="logout">Cerrar
+                                    sesión</a>
                             </li>
                         </ul>
                     </li>

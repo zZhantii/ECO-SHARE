@@ -6,26 +6,47 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Trip;
-use App\Models\User_trips_reserve;
 use Illuminate\Support\Facades\Validator;
 
 class TripController extends Controller
 {
     public function index()
     {
-        $trips = Trip::All();
-        return response()->json(["success" => true, "data" => $trips], 200);
+    try {
+            $trips = Trip::All();
+            return response()->json(["success" => true, "data" => $trips], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => "Error al obtener los viajes",
+                "error" => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function show(Trip $trip)
     {
-        $tripDetails = Trip::find($trip->id);
+       try {
+            $tripDetails = Trip::find($trip->id);
 
-        if (!$tripDetails) {
-            return response()->json(['message' => 'Trip no encontrado'], 404);
+            if (!$tripDetails) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "Viaje no encontrada"
+                ], 404);
+            }
+
+            return response()->json([
+                "success" => true, 
+                "data" => $tripDetails
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => "Error al obtener el viaje",
+                "error" => $e->getMessage()
+            ], 500);
         }
-
-        return response()->json(["success" => true, "data" => $tripDetails], 200);
     }
 
     public function store(Request $request)
@@ -50,31 +71,71 @@ class TripController extends Controller
         $trip = Trip::create($data);
         $trip->tags()->sync($data['tags']);
 
+        // try {
+        //     $existingTrip = $trip->where('user_id', $request->user_id)
+        //         ->where('vehicle_id', $request->vehicle_id)
+        //         ->where('departure_time', $request->departure_time)
+        //         ->where('arrival_time', $request->arrival_time)
+        //         ->first();
+
+        //     if ($existingTrip) {
+        //         return response()->json([
+        //             "success" => false,
+        //             "message" => "El viaje ya existe"
+        //         ], 400);
+        //     }    
+        // } catch (\Exception $e) {
+        //     return response()->json([
+        //         "success" => false,
+        //         "message" => "Error al crear el viaje",
+        //         "error" => $e->getMessage()
+        //     ], 500);
+        // }
+
         return response()->json(["success" => true, "data" => $trip], 200);
     }
 
     public function update(Request $request, Trip $trip)
     {
-        $trip->user_id = $request->user_id;
-        $trip->vehicle_id = $request->vehicle_id;
-        $trip->start_point = is_string($request->start_point) ? json_decode($request->start_point, true) : $request->start_point;
-        $trip->end_point = is_string($request->end_point) ? json_decode($request->end_point, true) : $request->end_point;
-        $trip->departure_time = $request->departure_time;
-        $trip->arrival_time = $request->arrival_time;
-        $trip->available_seats = $request->available_seats;
-        $trip->price = $request->price;
+        try {
+            $trip->user_id = $request->user_id;
+            $trip->vehicle_id = $request->vehicle_id;
+            $trip->start_point = is_string($request->start_point) ? json_decode($request->start_point, true) : $request->start_point;
+            $trip->end_point = is_string($request->end_point) ? json_decode($request->end_point, true) : $request->end_point;
+            $trip->departure_time = $request->departure_time;
+            $trip->arrival_time = $request->arrival_time;
+            $trip->available_seats = $request->available_seats;
+            $trip->price = $request->price;
 
-        $trip->save();
+            $trip->save();
 
-        return response()->json(['success' => true, "data" => $trip], 200);
+            return response()->json([
+                "success" => true,  
+                "message" => "Viaje actualizado correctamente",
+                "data" => $trip
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => "Error al actualizar el viaje",
+                "error" => $e->getMessage()
+            ], 500);
+        }
+
     }
 
-    
     public function destroy(Trip $trip)
     {
-
-        $trip->delete();
-        return response()->json(['success' => true, "data" => "Trip deleted successfully"], 200);
+        try {
+            $trip->delete();
+            return response()->json(['success' => true, "data" => "Trip deleted successfully"], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => "Error al eliminar el viaje",
+                "error" => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function searchTrip(Request $request)
@@ -139,15 +200,6 @@ class TripController extends Controller
         ], 200);
     }
 
-    // public function updateSeats(Request $request, Trip $trip)
-    // {
-    //     $trip->unavailable_seats = $request->unavailable_seats;
-        
-    //     $trip->save();
-
-    //     return response()->json(["success" => true, "data" => $trip], 200);
-    // }
-
     public function reserve(Trip $trip, Request $request)
     {           
         $user_id = auth()->user()->id;
@@ -165,12 +217,5 @@ class TripController extends Controller
         }
 
         return response()->json(["success" => false, 'message' => 'Error al reservar'], 400);
-    }
-
-    public function getAllReservations()
-    {
-        $reservations = User_trips_reserve::with(['user', 'trip']);
-
-        return response()->json(["success" => true, 'data' => $reservations], 200);
     }
 }

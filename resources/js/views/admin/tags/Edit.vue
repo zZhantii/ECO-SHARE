@@ -5,23 +5,22 @@
         <div class="col-12 md:col-8 lg:col-8 xl:col-8">
             <div class="card mb-3">
                 <div class="card-body">
-                    <h6 class="mb-2 text-primary">Tags Details</h6>
+                    <h4 class="mb-2 text-primary">Tags Details</h4>
 
-                    <div class="form-group">
+                    <div class="form-group mb-5">
                         <label for="tag_name">Tag_name</label>
                         <InputText v-model="tag.tag_name" type="text" class="d-flex w-100 w-100" id="plate" />
-                        <!-- <div class="text-danger mt-1">{{ errors.tag_name }}</div> -->
-                        <div class="text-danger mt-1">
-                            <div v-for="message in validationErrors?.tag_name">
-                                {{ message }}
+                        <div v-if="validationErrors.tag_name" class="text-danger mt-1">
+                            <div v-for="message in validationErrors.tag_name" :key="message">{{ message }}
                             </div>
                         </div>
                     </div>
+                    <button class="btn btn-primary" @click="submitUpdateTag">Guardar</button>
+
                 </div>
             </div>
         </div>
     </div>
-    <button class="btn btn-primary" @click="submitUpdateTag">Guardar</button>
     <Toast />
 </template>
 
@@ -47,12 +46,13 @@ onMounted(async () => {
 
 const submitUpdateTag = async () => {
     try {
-        tagSchema.validate(tag, {abortEarly: false})
+        tagSchema.validate(tag.valueº, {abortEarly: false})
         .then(() => {
             updateTag(tag);
         })
     } catch (error) {
         if (error.inner) {
+            validationErrors.value = {}
             error.inner.forEach((e) => {
                 if (!validationErrors.value[e.path]) {
                     validationErrors.value[e.path] = [];

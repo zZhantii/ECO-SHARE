@@ -23,7 +23,6 @@ const hideFooter = ref(false);
 
 const visibilityRoute = () => {
     const [firstPart, routeName] = route.name.split(".");
-    console.log(routeName);
 
     const routeNames = ["register", "login"];
 

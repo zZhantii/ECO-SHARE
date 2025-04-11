@@ -18,14 +18,29 @@ class VehicleController extends Controller
 
     public function show(Vehicle $vehicle)
     {
-        $vehicleDetails = Vehicle::find($vehicle->id);
+        try {
+            $vehicleDetails = Vehicle::find($vehicle->id);
 
-        if (!$vehicleDetails) {
-            return response()->json(['message' => 'Vehículo no encontrado'], 404);
+            if (!$vehicleDetails) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "Vehículo no encontrado"
+                ], 404);
+            }
+
+            return response()->json([
+                "success" => true, 
+                "data" => $vehicleDetails
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => "Error al obtener el vehículo",
+                "error" => $e->getMessage()
+            ], 500);
         }
-
-        return response()->json(["success" => true, "data" => $vehicleDetails], 200);
     }
+
 
 
     public function update(Request $request, Vehicle $vehicle)
@@ -45,11 +60,17 @@ class VehicleController extends Controller
     {
 
         $vehicle->delete();
-        return response()->json(['success' => true, "data" => "Vehicle deleted successfully"], 200);
+        return response()->json(['success' => true, "data" => "Vehicle eliminado correctamente"], 200);
     }
 
     public function store(Request $request)
     {
+        $user_id = auth()->user()->id; 
+
+        if ($request->filled('user_id') && $request->user_id > 0) {
+            $user_id = $request->user_id;
+        }
+
         $vehicle = new Vehicle();
         $vehicle->plate = $request->plate;
         $vehicle->brand = $request->brand;
@@ -57,11 +78,10 @@ class VehicleController extends Controller
         $vehicle->model = $request->model;
         $vehicle->consumption = $request->consumption;
         $vehicle->pax_number = $request->pax_number;
-        $vehicle->user_id = Auth::id();
+        $vehicle->user_id =  $user_id;
 
         $vehicle->save();
 
-        return response()->json(["success" => true, "data" => $vehicle], 200);
-
+        return response()->json(["success" => true, "message" => 'Vehiculo creado correctamente'], 200);
     }
 }

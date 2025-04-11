@@ -55,7 +55,7 @@ export default function useAuth() {
             .then(async (response) => {
                 console.log("await auth.getUser()");
                 await auth.getUser();
-                console.log("uth.user.value");
+                console.log("auth.user.value");
                 console.log(auth.user.value);
                 //await store.dispatch('auth/getUser')
                 await loginUser();

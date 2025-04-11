@@ -78,8 +78,10 @@ onMounted(() => {
     getTags();
 })
 
-const deleteTagAdmin = (tag) => {
-    deleteTag(tag);
+const deleteTagAdmin = async (tag) => {
+    deleteTag(tag).then(() => {
+        refreshTags();
+    }); 
 }
 
 const refreshTags = () => {

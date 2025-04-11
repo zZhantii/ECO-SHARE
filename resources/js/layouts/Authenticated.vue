@@ -21,7 +21,6 @@
                             <span class="text-color">{{ item.label }}</span>
                         </a>
                     </template>
-
                 </Breadcrumb>
 
 
@@ -34,7 +33,7 @@
                     <router-view></router-view>
                 </Suspense>
             </div>
-            <app-footer></app-footer>
+            <!-- <app-footer></app-footer> -->
         </div>
 
         <div class="layout-mask"></div>
@@ -121,6 +120,9 @@ const bindOutsideClickListener = () => {
         document.addEventListener("click", outsideClickListener.value);
     }
 };
+
+console.log(route.name);
+
 const unbindOutsideClickListener = () => {
     if (outsideClickListener.value) {
         document.removeEventListener("click", outsideClickListener);

@@ -114,7 +114,7 @@
                                                             tripData.vehicle_id
                                                         "
                                                         inputId="on_label"
-                                                        :options="vehicles"
+                                                        :options="vehiclesList"
                                                         optionValue="id"
                                                         optionLabel="brand"
                                                         class="w-full"
@@ -470,6 +470,11 @@ import useTags from "@/composables/tags";
 import axios from "axios";
 import { useRouter, useRoute } from "vue-router";
 
+// composables
+import useVehicles from "@/composables/vehicles.js";
+
+const { getVehicles, vehiclesList, vehicle, getVehicle } = useVehicles();
+
 const { getTags, tag, tagList } = useTags();
 const router = useRouter();
 const tempStartPoint = ref({});
@@ -490,12 +495,8 @@ let user_id = ref(0);
 user_id.value = authStore().user.id;
 
 onMounted(async () => {
-    try {
-        const responseVehicles = await axios.get("/api/vehicle");
-        vehicles.value = responseVehicles.data.data;
-    } catch (error) {
-        console.error("Error al cargar vehículos:", error);
-    }
+    getVehicles();
+
     const autocompleteStart = new google.maps.places.Autocomplete(
         document.getElementById("origin"),
         {
@@ -580,15 +581,9 @@ const isStep2Complete = computed(() => {
 });
 
 const findVehicleById = async (id) => {
-    try {
-        const response = await axios.get(`/api/vehicle/${id}`);
-        selectedVehicleDetails.value = response.data.data;
-        selectedVehicleDetails.value = response.data.data;
-        seats.value = response.data.pax_number;
-    } catch (error) {
-        console.error("Error al obtener los detalles del vehículo:", error);
-        selectedVehicleDetails.value = null;
-    }
+    await getVehicle(id);
+    selectedVehicleDetails.value = vehicle.value;
+    seats.value = vehicle.value.pax_number;
 };
 
 // const useGeocoder = (place, point) => {
@@ -693,7 +688,6 @@ const saveOption = async () => {
     }
 };
 
-const vehicles = ref([]);
 const CarSchema = yup.object().shape({
     vehicle_id: yup
         .number()
