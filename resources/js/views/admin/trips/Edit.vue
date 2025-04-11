@@ -7,7 +7,8 @@
                 <div class="card-body">
                     <h6 class="mb-2 text-primary">Vehicles Details</h6>
 
-                    {{ tripList }}
+                    <!-- {{ tripList }} -->
+                    <!-- {{ startPointStr }} -->
 
                     <div class="form-group">
                         <label for="user_id">user_id</label>
@@ -30,12 +31,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="start_point">start_point</label>
-                        <InputText v-model="startPointStr" type="text" class="d-flex w-100" id="start_point" />
-                        <div v-if="validationErrors.start_point" class="text-danger mt-1">
-                            <div v-for="message in validationErrors.start_point" :key="message">{{ message }}
-                            </div>
-                        </div>
+                        <label for="start_point">Start Point (JSON)</label>
+                        <textarea v-model="startPointStr" class="form-control" rows="4" id="start_point" />
                     </div>
 
                     <div class="form-group">
@@ -131,11 +128,22 @@ const toast = useToast();
 import useTrips from "@/composables/trips";
 
 const { updateTrip, getTrip, trip, tripList, TripSchema, validationErrors } = useTrips();
+const startPointStr = ref('');
+const endPointStr = ref('');
 
 onMounted(() => {
     getTrip(route.params.id)
 
-    
+    if (tripList.start_point) {
+        startPointStr.value = JSON.stringify(tripList.start_point, null, 2);
+    } else {
+        console.log("")
+    }
+
+    if (tripList.end_point) {
+        endPointStr.value = JSON.stringify(tripList.start_point, null, 2);
+    }
+
 })
 
 const TempTrip = ref({});
@@ -156,8 +164,6 @@ const submitUpdateVehicle = async () => {
         });
     }
 }
-
-const startPointStr = ref(JSON.stringify(tripList.start_point));
 
 watch(startPointStr, (newVal) => {
     try {
