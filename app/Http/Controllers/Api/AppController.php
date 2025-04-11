@@ -82,6 +82,25 @@ class AppController extends Controller
 
     }
 
+    //Método para el registro del check-in del usuario
+    public function checkIn(Request $request)
+    {
+
+        $user = Auth::user();
+
+
+
+        $user->reserves()->updateExistingPivot($request->id, [
+            'check_in' => now()
+        ]);
+
+        $reserve = $user->reserves()->where('trip_id', $request->id)->first();
+
+
+        return response()->json(["success" => true, "data" => $reserve], 200);
+
+    }
+
     //Método que recoge los viajes activos como conductor
     public function indexDriverTrips(Request $request)
     {
@@ -98,12 +117,29 @@ class AppController extends Controller
     public function indexPassengerTrips(Request $request)
     {
 
+
         $user = Auth::user();
 
+        $reserves = $user->reserves()
+            ->where('departure_time', '>=', now())
+            ->with([
+                'vehicle:id,brand,model,plate',
+                'user:id,alias',
+            ])
+            ->get();
 
-        $trips = Trip::where("user_id", $user->id)->where("departure_time", ">=", now())->with("vehicle")->get();
+        // ->with("reserves.vehicle:id,brand,model,plate")
+        // ->with("reserves.user:id,alias")
+        // ->whereHas("reserves", function ($query) {
+        //     $query->where("departure_time", ">=", now());
+        // })
 
-        return response()->json(["suceess" => True, "data" => $trips], 200);
+        // ->get();
+        // $reserves = $user->reserves()
+        //     ->where('departure_time', '>=', now())
+        //     ->get();
+
+        return response()->json(["suceess" => True, "data" => $reserves], 200);
     }
     //Método para cancelar el viajr como conductor
     public function cancelDriverTrip($id)
@@ -123,6 +159,6 @@ class AppController extends Controller
 
     }
 
-    
+
 
 }

@@ -51,6 +51,13 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     //Conseguir todos los vehículos del usuario autenticado
     Route::get("app/user-vehicle", [AppController::class, "indexVehicle"]);
 
+    Route::put("app/check-in", [AppController::class, "checkIn"]);
+
+    Route::put("app/start-drive/{trip}", [AppController::class, "startDrive"]);
+    Route::put("app/end-drive/{trip}", [AppController::class, "endDrive"]);
+    Route::put("app/cancel-driver-trip/{trip}", [AppController::class, "cancelDriverTrip"]);
+
+
 
     //Subir img/avatar del usuario
     Route::post("user-avatar", [ProfileController::class, "uploadAvatar"]);
@@ -128,9 +135,7 @@ Route::put("author/{author}", [AuthorController::class, "update"]);
 Route::get("author/{author}", [AuthorController::class, "show"]);
 
 
-Route::put("app/start-drive/{trip}", [AppController::class, "startDrive"]);
-Route::put("app/end-drive/{trip}", [AppController::class, "endDrive"]);
-Route::put("app/cancel-driver-trip/{trip}", [AppController::class, "cancelDriverTrip"]);
+
 
 
 
