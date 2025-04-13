@@ -7,7 +7,7 @@
                         <div class="card-header bg-transparent d-flex flex-column align-items-center justify-content-around">
                             <img src="/images/Logo_es.svg" alt="Logotipo" height="75px" />
 
-                            <h2>{{ $t("¡Regístrate ya!") }}</h2>
+                            <h2 class="text-center">{{ $t("¡Regístrate ya!") }}</h2>
                         </div>
                         <div class="card-body">
                             <form @submit.prevent="onFormSubmitRegister">
@@ -159,5 +159,13 @@ const onFormSubmitRegister = async () => {
 
 .ms-buttons {
     margin-left: 75px;
+    border: 1px solid red;
+}
+
+@media (max-width: 390px) {
+    .ms-buttons {
+        margin-left: 43px;
+        border: 0;
+    }
 }
 </style>

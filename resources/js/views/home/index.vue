@@ -43,7 +43,7 @@
                     que cada kilómetro cuente!
                 </p>
 
-                <router-link to="/login" class="btn-primary">Inicia sesión</router-link>
+                <a @click="handleLoginClick" class="btn-primary">Inicia sesión</a>
             </div>
         </section>
         <section
@@ -81,16 +81,35 @@
                     agradecerá!
                 </p>
 
-                <router-link to="/register" class="btn-primary">Regístrate ahora</router-link>
+                <a @click="handleRegisterClick" class="btn-primary">Regístrate ahora</a>
             </div>
         </section>
     </main>
 </template>
 
 <script setup>
-import { RouterLink } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 import TripFinder from "../../components/TripFinder.vue";
-import { document } from "postcss";
+import { authStore } from "../../store/auth";
+
+const router = useRouter();
+const auth = authStore();
+
+const handleLoginClick = () => {
+    if (auth.authenticated) {
+        router.push('/auth/profile');
+    } else {
+        router.push('/login');
+    }
+}
+
+const handleRegisterClick = () => {
+    if (auth.authenticated) {
+        router.push('/auth/profile');
+    } else {
+        router.push('/register');
+    }
+}
 </script>
 <style scoped>
 #home-finder-section {
@@ -118,6 +137,10 @@ import { document } from "postcss";
 
 .last-section {
     background-color: #f6f6f6 !important;
+}
+
+a {
+    cursor: pointer;
 }
 </style>
 <!--
