@@ -11,434 +11,289 @@
                     </StepList>
                     <StepPanels>
                         <StepPanel v-slot="{ activateCallback }" value="1">
-                            <div
-                                class="flex-auto d-flex justify-content-center"
-                            >
+                            <div class="flex-auto d-flex justify-content-center">
                                 <Toast />
-                                <form
-                                    @submit.prevent="saveOption"
-                                    class="w-100"
-                                >
-                                    <div class="row d-flex align-items-center">
-                                        <!-- Mapa -->
+                                <form @submit.prevent="saveOption" class="w-100">
 
-                                        <div
-                                            class="col-12 col-md-6 d-flex justify-content-center"
-                                        >
-                                            <div class="mapTrip w-100">
-                                                <Map
-                                                    v-if="showFirstMap"
-                                                    :origin="
-                                                        tripData.start_point
-                                                    "
-                                                    :destination="
-                                                        tripData.end_point
-                                                    "
-                                                    @updateMapsInfo="
-                                                        handleMapsInfo
-                                                    "
-                                                />
+                                    <div class="row">
+                                        <Map v-if="showFirstMap" :origin="tripData.start_point
+                                            " :destination="tripData.end_point
+                                                        " @updateMapsInfo="
+                                                            handleMapsInfo
+                                                        " />
+                                    </div>
+
+
+                                    <div class="row mt-4">
+                                        <div class="col-12 col-md-6 mb-3 mb-md-0">
+                                            <div class="d-flex flex-column">
+                                                <div class="mb-3">
+                                                    <h3 class="text-center text-md-start">¿De dónde sales?</h3>
+                                                    <InputText id="origin" type="text" placeholder="Inicio"
+                                                        class="w-100" />
+                                                </div>
                                             </div>
                                         </div>
 
-                                        <div
-                                            class="col-12 col-md-6 d-flex flex-column"
-                                        >
-                                            <div class="text-center">
-                                                <h3 class="mt-2 mb-3 fs-5">
-                                                    ¿Desde dónde sales?
-                                                </h3>
-                                                <InputText
-                                                    id="origin"
-                                                    type="text"
-                                                    class="form-control"
-                                                    placeholder="Punto de inicio"
-                                                />
-                                            </div>
-                                            <div class="text-center mt-3">
-                                                <h3 class="mt-2 mb-3 fs-5">
-                                                    ¿A dónde vas?
-                                                </h3>
-                                                <InputText
-                                                    id="destination"
-                                                    type="text"
-                                                    class="form-control"
-                                                    placeholder="Destino"
-                                                />
+                                        <div class="col-12 col-md-6">
+                                            <div class="d-flex flex-column">
+                                                <div class="mb-3">
+                                                    <h3 class="text-center text-md-start">¿A dónde vas?</h3>
+                                                    <InputText id="destination" type="text" placeholder="Destino"
+                                                        class="w-100" />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div
-                                        class="d-flex pt-4 justify-content-end"
-                                    >
-                                        <Button
-                                            label="Siguiente"
-                                            type="submit"
-                                            class="primary-a"
-                                            icon="pi pi-arrow-right"
-                                            :disabled="!isStep1Complete"
-                                            iconPos="right"
-                                            @click="activateCallback('2')"
-                                        />
+
+                                    <div class="d-flex pt-4 justify-content-end">
+                                        <Button label="Siguiente" type="submit" class="primary-a"
+                                            icon="pi pi-arrow-right" :disabled="!isStep1Complete" iconPos="right"
+                                            @click="activateCallback('2')" />
                                     </div>
                                 </form>
                             </div>
                         </StepPanel>
                         <StepPanel v-slot="{ activateCallback }" value="2">
-                            <div
-                                class="flex-auto d-flex justify-content-center"
-                            >
+                            <div class="flex-auto d-flex justify-content-center">
                                 <Toast />
-                                <form
-                                    @submit.prevent="saveOptionCar"
-                                    class="w-100"
-                                >
-                                    <div class="row d-flex align-items-center">
-                                        <div
-                                            class="col-12 col-md-6 d-flex justify-content-center"
-                                        >
-                                            <h3 class="mt-3 mb-5">
-                                                ¿Que Vehiculo utilizarás?
-                                            </h3>
-
-                                            <div
-                                                class="d-flex align-items-center"
-                                            >
-                                                <FloatLabel
-                                                    class=""
-                                                    variant="on"
-                                                >
-                                                    <Select
-                                                        v-model="
-                                                            tripData.vehicle_id
-                                                        "
-                                                        inputId="on_label"
-                                                        :options="vehiclesList"
-                                                        optionValue="id"
-                                                        optionLabel="brand"
-                                                        class="w-full"
-                                                        appendOn=".show"
-                                                    />
-                                                    <label for="on_label"
-                                                        >Selecciones su
-                                                        vehiculo</label
-                                                    >
-                                                </FloatLabel>
+                                <form @submit.prevent="saveOptionCar" class="w-100">
+                                    <div class="row g-4">
+                                        <div class="col-12 col-md-6">
+                                            <div class="card h-100">
+                                                <div class="card-body d-flex flex-column">
+                                                    <h3 class="card-title text-center mb-4">¿Qué vehículo utilizarás?
+                                                    </h3>
+                                                    <div class="mt-auto">
+                                                        <FloatLabel variant="on">
+                                                            <Select v-model="tripData.vehicle_id"
+                                                                inputId="vehicle_select" :options="vehiclesList"
+                                                                optionValue="id" optionLabel="brand" class="w-100"
+                                                                appendOn=".show" />
+                                                            <label for="vehicle_select">Seleccione su vehículo</label>
+                                                        </FloatLabel>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <h3 class="mt-3 mb-5">
-                                                ¿Cuándo viajarás?
-                                            </h3>
-                                            <div
-                                                class="d-flex align-items-center"
-                                            ></div>
-                                            <DatePicker
-                                                id="datepicker-24"
-                                                v-model="
-                                                    tripData.departure_time
-                                                "
-                                                showTime
-                                                :min-date="today"
-                                                hourFormat="24"
-                                                fluid
-                                            />
                                         </div>
-                                        <div
-                                            class="col-12 col-md-6 d-flex justify-content-center"
-                                        >
-                                            <h3 class="mt-3 mb-5">
-                                                ¿Cuantos asientos hay
-                                                disponibles?
-                                            </h3>
-                                            <div
-                                                class="d-flex align-items-center"
-                                            >
-                                                <InputNumber
-                                                    v-model="
-                                                        tripData.available_seats
-                                                    "
-                                                    inputId="minmax-buttons"
-                                                    mode="decimal"
-                                                    showButtons
-                                                    :min="1"
-                                                    :max="seats"
-                                                    fluid
-                                                />
+
+                                        <div class="col-12 col-md-6">
+                                            <div class="card h-100">
+                                                <div class="card-body d-flex flex-column">
+                                                    <h3 class="card-title text-center mb-4">¿Cuándo viajarás?</h3>
+                                                    <div class="mt-auto">
+                                                        <DatePicker id="departure_time"
+                                                            v-model="tripData.departure_time" showTime :min-date="today"
+                                                            hourFormat="24" class="w-100" fluid />
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <h3 class="mt-3 mb-5">
-                                                ¿Tienes alguna restricción para
-                                                este viaje?
-                                            </h3>
-                                            <div
-                                                class="d-flex align-items-center"
-                                            ></div>
-                                            <MultiSelect
-                                                v-model="selectedTags"
-                                                inputId="tags"
-                                                :options="tagList"
-                                                optionLabel="tag_name"
-                                                filter
-                                                :maxSelectedLabels="3"
-                                                class="w-50"
-                                                variant="filled"
-                                            />
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <div class="card h-100">
+                                                <div class="card-body d-flex flex-column">
+                                                    <h3 class="card-title text-center mb-4">¿Cuántos asientos hay
+                                                        disponibles?</h3>
+                                                    <div class="mt-auto">
+                                                        <InputNumber v-model="tripData.available_seats"
+                                                            inputId="available_seats" mode="decimal" showButtons
+                                                            :min="1" :max="seats" class="w-100" fluid />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <div class="card h-100">
+                                                <div class="card-body d-flex flex-column">
+                                                    <h3 class="card-title text-center mb-4">¿Tienes alguna restricción
+                                                        para este viaje?</h3>
+                                                    <div class="mt-auto">
+                                                        <MultiSelect v-model="selectedTags" inputId="restrictions"
+                                                            :options="tagList" optionLabel="tag_name" filter
+                                                            :maxSelectedLabels="3" class="w-100" variant="filled" />
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div
-                                        class="d-flex justify-content-between pt-6"
-                                    >
-                                        <Button
-                                            label="Atrás"
-                                            severity="secondary"
-                                            icon="pi pi-arrow-left"
-                                            @click="
-                                                activateCallback('1'),
-                                                    (showFirstMap = true)
-                                            "
-                                        />
-                                        <Button
-                                            label="Siguiente"
-                                            type="submit"
-                                            class="primary-a"
-                                            icon="pi pi-arrow-right"
-                                            :disabled="!isStep2Complete"
-                                            iconPos="right"
+                                    <div class="d-flex justify-content-between pt-6">
+                                        <Button label="Atrás" severity="secondary" icon="pi pi-arrow-left" @click="
+                                            activateCallback('1'),
+                                            (showFirstMap = true)
+                                            " />
+                                        <Button label="Siguiente" type="submit" class="primary-a"
+                                            icon="pi pi-arrow-right" :disabled="!isStep2Complete" iconPos="right"
                                             @click="
                                                 activateCallback('3'),
-                                                    (showFirstMap = false)
-                                            "
-                                        />
+                                                (showFirstMap = false)
+                                                " />
                                     </div>
                                 </form>
-                                {{ selectedVehicleDetails }}
                             </div>
                         </StepPanel>
                         <StepPanel v-slot="{ activateCallback }" value="3">
-                            <div
-                                class="flex-auto d-flex justify-content-center"
-                            >
-                                <div
-                                    class="row d-flex align-items-center w-100"
-                                >
-                                    <div
-                                        class="col-12 col-md-6 d-flex justify-content-center"
-                                    >
-                                        <div class="mapTrip w-100">
-                                            <Map
-                                                v-if="!showFirstMap"
-                                                :origin="tempStartPoint"
-                                                :destination="tempEndPoint"
-                                                @updateMapsInfo="handleMapsInfo"
-                                            />
+                            <div class="row g-4">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <Map v-if="!showFirstMap" :origin="tempStartPoint"
+                                                :destination="tempEndPoint" @updateMapsInfo="handleMapsInfo" />
                                         </div>
                                     </div>
-                                    <div
-                                        class="col-12 col-md-6 d-flex flex-column"
-                                    >
-                                        <h2 class="font-bold">
-                                            ¡Resumen del viaje!
-                                        </h2>
-                                        <div
-                                            class="col d-flex justify-content-between gap-5"
-                                        >
-                                            <div>
-                                                <h4 class="mb-3">
-                                                    Detalles del vehiculo
-                                                </h4>
+                                </div>
 
-                                                <ul
-                                                    class="d-flex flex-column gap-3"
-                                                >
-                                                    <li
-                                                        v-if="
-                                                            selectedVehicleDetails
-                                                        "
-                                                    >
-                                                        {{
-                                                            selectedVehicleDetails.brand
-                                                                ? `Marca: ${selectedVehicleDetails.brand}`
-                                                                : "Marca no disponible"
-                                                        }}
-                                                    </li>
-                                                    <li
-                                                        v-if="
-                                                            selectedVehicleDetails
-                                                        "
-                                                    >
-                                                        {{
-                                                            selectedVehicleDetails.model
-                                                                ? `Modelo: ${selectedVehicleDetails.model}`
-                                                                : "Modelo no disponible"
-                                                        }}
-                                                    </li>
-                                                    <li
-                                                        v-if="
-                                                            selectedVehicleDetails
-                                                        "
-                                                    >
-                                                        {{
-                                                            selectedVehicleDetails.plate
-                                                                ? `Matrícula: ${selectedVehicleDetails.plate}`
-                                                                : "Matrícula no disponible"
-                                                        }}
-                                                    </li>
-                                                    <li
-                                                        v-if="
-                                                            selectedVehicleDetails
-                                                        "
-                                                    >
-                                                        {{
-                                                            selectedVehicleDetails.consumption
-                                                                ? `Consumo: ${selectedVehicleDetails.consumption} L / 100 Km`
-                                                                : "Consumo no disponible"
-                                                        }}
-                                                    </li>
-                                                    <li
-                                                        v-if="
-                                                            selectedVehicleDetails
-                                                        "
-                                                    >
-                                                        {{
-                                                            tripData.available_seats
-                                                                ? `Número de asientos: ${tripData.available_seats}`
-                                                                : "Número de asientos no disponible"
-                                                        }}
-                                                    </li>
-                                                    <li
-                                                        v-if="
-                                                            selectedVehicleDetails
-                                                        "
-                                                    >
-                                                        {{
-                                                            selectedVehicleDetails.fuel_type
-                                                                ? `Tipo de gasolina: ${selectedVehicleDetails.fuel_type}`
-                                                                : "Tipo de gasolina no disponible"
-                                                        }}
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="ms-5">
-                                                <h4 class="mb-3">
-                                                    Detalles del viaje
-                                                </h4>
-                                                <ul
-                                                    class="d-flex flex-column gap-3"
-                                                >
-                                                    <li>
-                                                        Origen:
-                                                        {{
-                                                            tripData.start_point
-                                                                .address ===
-                                                            tripData.start_point
-                                                                .locality
-                                                                ? tripData
-                                                                      .start_point
-                                                                      .locality
-                                                                : tripData
-                                                                      .start_point
-                                                                      .address +
-                                                                  ", " +
-                                                                  tripData
-                                                                      .start_point
-                                                                      .locality
-                                                        }}
-                                                    </li>
-                                                    <li>
-                                                        Destino:
-                                                        {{
-                                                            tripData.end_point
-                                                                .address ===
-                                                            tripData.end_point
-                                                                .locality
-                                                                ? tripData
-                                                                      .end_point
-                                                                      .locality
-                                                                : tripData
-                                                                      .end_point
-                                                                      .address +
-                                                                  ", " +
-                                                                  tripData
-                                                                      .end_point
-                                                                      .locality
-                                                        }}
-                                                    </li>
-                                                    <li>
-                                                        Fecha de inicio:
-                                                        {{ formattedDate }}
-                                                    </li>
-                                                    <li>
-                                                        Horas de salida:
-                                                        {{
-                                                            tripData.departure_time
-                                                        }}
-                                                    </li>
-                                                    <li>
-                                                        Horas estimada de
-                                                        llegada:
-                                                        {{
-                                                            tripData.arrival_time
-                                                        }}
-                                                    </li>
-                                                    <li>
-                                                        Distancia:
-                                                        {{ distance }} Km
-                                                    </li>
-                                                    <li
-                                                        v-if="
-                                                            tripData.tags
-                                                                .length > 0
-                                                        "
-                                                    >
-                                                        Reglas de viaje:
-                                                        <ul
-                                                            class="d-flex flex-column mb-1"
-                                                        >
-                                                            <li
-                                                                v-for="tag in selectedTags"
-                                                                class="ms-1 m-1 fs-55"
-                                                            >
-                                                                -
-                                                                {{
-                                                                    tag.tag_name
-                                                                }}
+
+                            </div>
+                            <div class="row g-4">
+                                <div class="col-12 col-md-6">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h2 class="card-title text-center text-md-start mb-4 fw-bold">
+                                                ¡Resumen del viaje!
+                                            </h2>
+
+                                            <!-- Contenedor de detalles responsive - En móvil se apilan, en desktop una al lado de otra -->
+                                            <div class="row">
+                                                <!-- Detalles del vehículo -->
+                                                <div class="col-12 col-md-6  mb-4 mb-md-0">
+                                                    <div class="p-3 bg-light rounded-3 h-100">
+                                                        <h4 class="mb-3 fw-semibold">
+                                                            Detalles del vehículo
+                                                        </h4>
+
+                                                        <ul class="list-unstyled d-flex flex-column gap-3">
+                                                            <li v-if="selectedVehicleDetails"
+                                                                class="d-flex align-items-start">
+                                                                <i class="bi bi-car-front me-2 text-primary"></i>
+                                                                <span>
+                                                                    {{ selectedVehicleDetails.brand ? `Marca:                                                                    ${selectedVehicleDetails.brand}` : "Marca no                                                                    disponible" }}
+                                                                </span>
+                                                            </li>
+                                                            <li v-if="selectedVehicleDetails"
+                                                                class="d-flex align-items-start">
+                                                                <i class="bi bi-info-circle me-2 text-primary"></i>
+                                                                <span>
+                                                                    {{ selectedVehicleDetails.model ? `Modelo:
+                                                                    ${selectedVehicleDetails.model}` : "Modelo no                                                                    disponible" }}
+                                                                </span>
+                                                            </li>
+                                                            <li v-if="selectedVehicleDetails"
+                                                                class="d-flex align-items-start">
+                                                                <i class="bi bi-bookmark me-2 text-primary"></i>
+                                                                <span>
+                                                                    {{ selectedVehicleDetails.plate ? `Matrícula:                                                                    ${selectedVehicleDetails.plate}` : "Matrícula no                                                                    disponible" }}
+                                                                </span>
+                                                            </li>
+                                                            <li v-if="selectedVehicleDetails"
+                                                                class="d-flex align-items-start">
+                                                                <i class="bi bi-fuel-pump me-2 text-primary"></i>
+                                                                <span>
+                                                                    {{ selectedVehicleDetails.consumption ? `Consumo:                                                                    ${selectedVehicleDetails.consumption} L / 100 Km` :                                                                    "Consumo no disponible" }}
+                                                                </span>
+                                                            </li>
+                                                            <li v-if="selectedVehicleDetails"
+                                                                class="d-flex align-items-start">
+                                                                <i class="bi bi-people me-2 text-primary"></i>
+                                                                <span>
+                                                                    {{ tripData.available_seats ? `Número de asientos:                                                                    ${tripData.available_seats}` : "Número de asientos                                                                    no disponible" }}
+                                                                </span>
+                                                            </li>
+                                                            <li v-if="selectedVehicleDetails"
+                                                                class="d-flex align-items-start">
+                                                                <i class="bi bi-droplet me-2 text-primary"></i>
+                                                                <span>
+                                                                    {{ selectedVehicleDetails.fuel_type ? `Tipo de                                                                    gasolina: ${selectedVehicleDetails.fuel_type}` :                                                                    "Tipo de gasolina no disponible" }}
+                                                                </span>
                                                             </li>
                                                         </ul>
-                                                    </li>
-                                                    <li class="mt-1 fs-4">
-                                                        <strong>
-                                                            {{
-                                                                tripData.price >
-                                                                7
-                                                                    ? `Precio: ${tripData.price}`
-                                                                    : `Tarifa mínima aplicada: ${tripData.price}`
-                                                            }}
-                                                            €</strong
-                                                        >
-                                                    </li>
-                                                </ul>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12 col-md-6 ">
+                                                    <div class="p-3 bg-light rounded-3 h-100">
+                                                        <h4 class="mb-3 fw-semibold">
+                                                            Detalles del viaje
+                                                        </h4>
+                                                        <ul class="list-unstyled d-flex flex-column gap-3">
+                                                            <li class="d-flex align-items-start">
+                                                                <i class="bi bi-geo-alt me-2 text-primary"></i>
+                                                                <span>
+                                                                    Origen:
+                                                                    {{ tripData.start_point.address ===
+                                                                    tripData.start_point.locality
+                                                                    ? tripData.start_point.locality
+                                                                    : tripData.start_point.address + ", " +
+                                                                    tripData.start_point.locality }}
+                                                                </span>
+                                                            </li>
+                                                            <li class="d-flex align-items-start">
+                                                                <i class="bi bi-geo me-2 text-primary"></i>
+                                                                <span>
+                                                                    Destino:
+                                                                    {{ tripData.end_point.address ===
+                                                                    tripData.end_point.locality
+                                                                    ? tripData.end_point.locality
+                                                                    : tripData.end_point.address + ", " +
+                                                                    tripData.end_point.locality }}
+                                                                </span>
+                                                            </li>
+                                                            <li class="d-flex align-items-start">
+                                                                <i class="bi bi-calendar-date me-2 text-primary"></i>
+                                                                <span>Fecha de inicio: {{ formattedDate }}</span>
+                                                            </li>
+                                                            <li class="d-flex align-items-start">
+                                                                <i class="bi bi-clock me-2 text-primary"></i>
+                                                                <span>Hora de salida: {{ tripData.departure_time
+                                                                    }}</span>
+                                                            </li>
+                                                            <li class="d-flex align-items-start">
+                                                                <i class="bi bi-clock-history me-2 text-primary"></i>
+                                                                <span>Hora estimada de llegada: {{ tripData.arrival_time
+                                                                    }}</span>
+                                                            </li>
+                                                            <li class="d-flex align-items-start">
+                                                                <i class="bi bi-signpost-split me-2 text-primary"></i>
+                                                                <span>Distancia: {{ distance }} Km</span>
+                                                            </li>
+                                                            <li v-if="tripData.tags.length > 0"
+                                                                class="d-flex align-items-start">
+                                                                <i class="bi bi-tags me-2 text-primary"></i>
+                                                                <div>
+                                                                    <span>Reglas de viaje:</span>
+                                                                    <ul class="list-unstyled mt-1 ms-2">
+                                                                        <li v-for="tag in selectedTags" class="mb-1">
+                                                                            <span class="badge bg-secondary">{{
+                                                                                tag.tag_name }}</span>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </li>
+                                                            <li class="d-flex align-items-start mt-2">
+                                                                <i class="bi bi-cash-coin me-2 text-success"></i>
+                                                                <span class="fs-4 fw-bold">
+                                                                    {{ tripData.price > 7 ? `Precio: ${tripData.price}`
+                                                                    : `Tarifa mínima aplicada: ${tripData.price}` }} €
+                                                                </span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between pt-6">
-                                <Button
-                                    label="Atrás"
-                                    severity="secondary"
-                                    icon="pi pi-arrow-left"
-                                    @click="
-                                        activateCallback('2'),
-                                            (isStep2Complete = false)
-                                    "
-                                />
-                                <Button
-                                    label="Confirmar Viaje"
-                                    @click="postTrips"
-                                    class="primary-a"
-                                    icon="pi pi-arrow-right"
-                                    iconPos="right"
-                                />
+                                <Button label="Atrás" severity="secondary" icon="pi pi-arrow-left" @click="
+                                    activateCallback('2'),
+                                    (isStep2Complete = false)
+                                    " />
+                                <Button label="Confirmar Viaje" @click="postTrips" class="primary-a"
+                                    icon="pi pi-arrow-right" iconPos="right" />
                             </div>
                         </StepPanel>
                     </StepPanels>
@@ -724,9 +579,9 @@ const getPrice = () => {
             tripData.value.price =
                 Math.round(
                     (selectedVehicleDetails.value.consumption / 100.0) *
-                        gasolineRate.value *
-                        distance.value *
-                        100
+                    gasolineRate.value *
+                    distance.value *
+                    100
                 ) / 100;
 
             break;
@@ -734,9 +589,9 @@ const getPrice = () => {
             tripData.value.price =
                 Math.round(
                     (selectedVehicleDetails.value.consumption / 100.0) *
-                        dieselRate.value *
-                        distance.value *
-                        100
+                    dieselRate.value *
+                    distance.value *
+                    100
                 ) / 100;
             break;
         default:
@@ -827,23 +682,4 @@ ul {
     height: 250px;
 }
 
-.col-12 {
-    width: 100% !important;
-}
-
-@media (min-width: 450px) {
-    .col-md-6 {
-        width: 50% !important;
-        flex-direction: column;
-        align-items: center;
-    }
-}
-
-@media (max-width: 450px) {
-    .StepList {
-        display: flex;
-        justify-content: center;
-        text-align: center;
-    }
-}
 </style>
