@@ -459,7 +459,7 @@ export default function useTrips() {
                     icon: "success",
                     title: "Viaje cancelado",
                 });
-                const index = activeDriverTripsList.value.findIndex(
+                const index = activePassengerTripsList.value.findIndex(
                     (e) => e.id == tripId
                 );
 

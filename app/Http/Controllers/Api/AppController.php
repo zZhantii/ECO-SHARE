@@ -166,8 +166,10 @@ class AppController extends Controller
         $reserve = $user->reserves()->where("trip_id", $id)->first();
 
         if (empty($reserve->pivot->check_in) && empty($reserve->pivot->cancelled_at)) {
-            $reserve->pivot->cancelled_at = now();
-            $reserve->pivot->save();
+            $user->reserves()->updateExistingPivot($id, [
+                'cancelled_at' => now(),
+            ]);
+            $reserve = $user->reserves()->where("trip_id", $id)->first();
 
             return response()->json(["success" => true, "data" => $reserve], 200);
         }

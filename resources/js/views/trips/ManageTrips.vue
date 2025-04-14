@@ -13,6 +13,130 @@
                 <h1 class="fs-3 text-center m-5">
                     Revisa aquí tus próximos viajes
                 </h1>
+                <Dialog
+                    v-model:visible="visibleDriver"
+                    modal
+                    header="Detalles del viaje"
+                    :style="{
+                        width: '30rem',
+                    }"
+                >
+                    <div class="mb-5">
+                        <div v-if="!passenger">
+                            <p>
+                                Precio:
+                                <strong>{{ selectedTrip.price }} €</strong>
+                            </p>
+                            <p>
+                                Plazas ofertadas:
+                                <strong
+                                    >{{ selectedTrip.available_seats }}
+                                </strong>
+                            </p>
+
+                            <p>
+                                Vehículo:
+                                <strong
+                                    >{{ selectedTrip.vehicle.brand }}
+                                </strong>
+                            </p>
+                            <p>
+                                Vehículo:
+                                <strong
+                                    >{{ selectedTrip.vehicle.model }}
+                                </strong>
+                            </p>
+                            <div v-if="!passenger">
+                                <h3 class="fs-5 mt-4">Lista de pasajeros:</h3>
+                                <ul
+                                    v-if="selectedTrip.reserves.length != 0"
+                                    class="ps-0 passenger-list"
+                                >
+                                    <li
+                                        class="gap-5 p-1 d-flex align-items-center gap-3 ms-3"
+                                        v-for="passenger in selectedTrip.reserves"
+                                    >
+                                        <i
+                                            v-if="
+                                                passenger.pivot.cancelled_at !=
+                                                null
+                                            "
+                                            class="ms-1 fa-solid fa-xmark"
+                                            style="color: red"
+                                        ></i>
+                                        <i
+                                            v-else-if="
+                                                passenger.pivot.check_in == null
+                                            "
+                                            class="ms-1 fa-solid fa-hourglass-half"
+                                        ></i>
+
+                                        <i
+                                            v-else
+                                            class="fa-solid fa-circle-check"
+                                            style="color: green"
+                                        ></i>
+
+                                        <p class="fs-4 m-0">
+                                            {{ passenger.alias }}
+                                        </p>
+                                    </li>
+                                </ul>
+                                <p v-else>
+                                    <strong
+                                        >No hay reservas de pasajeros</strong
+                                    >
+                                </p>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <div>
+                                <p>
+                                    Precio total a pagar
+                                    <strong class="ms-2"
+                                        >{{ selectedTrip.price }} €</strong
+                                    >
+                                </p>
+                                <p>
+                                    Plazas reservadas
+                                    <strong class="ms-2"
+                                        >{{ selectedTrip.pivot.seats_reserved }}
+                                    </strong>
+                                </p>
+                                <p>
+                                    Alias del conductor
+                                    <strong class="ms-2"
+                                        >{{ selectedTrip.user.alias }}
+                                    </strong>
+                                </p>
+                                <p>
+                                    Vehículo
+                                    <strong class="ms-2"
+                                        >{{ selectedTrip.vehicle.brand }}
+                                        {{ selectedTrip.vehicle.model }}
+                                    </strong>
+                                </p>
+                                <p>
+                                    Matrícula
+                                    <strong class="ms-2"
+                                        >{{ selectedTrip.vehicle.plate }}
+                                    </strong>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-end gap-2">
+                        <Button
+                            type="button"
+                            label="Cancelar"
+                            class="btn-primary"
+                            severity="secondary"
+                            @click="
+                                (visibleDriver = false), (passenger = false)
+                            "
+                        ></Button>
+                    </div>
+                </Dialog>
                 <div
                     class="d-flex flex-column align-items-center"
                     v-if="activeDriverTripsList.length > 0"
@@ -23,152 +147,6 @@
                     </div>
 
                     <ul class="col-sm-11 col-md-7 p-0">
-                        <Dialog
-                            v-model:visible="visibleDriver"
-                            modal
-                            header="Detalles del viaje"
-                            :style="{
-                                width: '30rem',
-                            }"
-                        >
-                            <div class="mb-5">
-                                <div v-if="!passenger">
-                                    <p>
-                                        Precio:
-                                        <strong
-                                            >{{ selectedTrip.price }} €</strong
-                                        >
-                                    </p>
-                                    <p>
-                                        Plazas ofertadas:
-                                        <strong
-                                            >{{ selectedTrip.available_seats }}
-                                        </strong>
-                                    </p>
-
-                                    <p>
-                                        Vehículo:
-                                        <strong
-                                            >{{ selectedTrip.vehicle.brand }}
-                                        </strong>
-                                    </p>
-                                    <p>
-                                        Vehículo:
-                                        <strong
-                                            >{{ selectedTrip.vehicle.model }}
-                                        </strong>
-                                    </p>
-                                    <div v-if="!passenger">
-                                        <h3 class="fs-5 mt-4">
-                                            Lista de pasajeros:
-                                        </h3>
-                                        <ul
-                                            v-if="
-                                                selectedTrip.reserves.length !=
-                                                0
-                                            "
-                                            class="ps-0 passenger-list"
-                                        >
-                                            <li
-                                                class="gap-5 p-1 d-flex align-items-center gap-3 ms-3"
-                                                v-for="passenger in selectedTrip.reserves"
-                                            >
-                                                <i
-                                                    v-if="
-                                                        passenger.pivot
-                                                            .cancelled_at ==
-                                                        null
-                                                    "
-                                                    class="ms-1 fa-solid fa-xmark"
-                                                    style="color: red"
-                                                ></i>
-                                                <i
-                                                    v-else-if="
-                                                        passenger.pivot
-                                                            .check_in == null
-                                                    "
-                                                    class="ms-1 fa-solid fa-hourglass-half"
-                                                ></i>
-
-                                                <i
-                                                    v-else
-                                                    class="fa-solid fa-circle-check"
-                                                    style="color: green"
-                                                ></i>
-
-                                                <p class="fs-4 m-0">
-                                                    {{ passenger.alias }}
-                                                </p>
-                                            </li>
-                                        </ul>
-                                        <p>
-                                            <strong
-                                                >No hay reservas de
-                                                pasajeros</strong
-                                            >
-                                        </p>
-                                    </div>
-                                </div>
-                                <div v-else>
-                                    <div>
-                                        <p>
-                                            Precio total a pagar
-                                            <strong class="ms-2"
-                                                >{{
-                                                    selectedTrip.pivot
-                                                        .total_price
-                                                }}
-                                                €</strong
-                                            >
-                                        </p>
-                                        <p>
-                                            Plazas reservadas
-                                            <strong class="ms-2"
-                                                >{{
-                                                    selectedTrip.pivot
-                                                        .seats_reserved
-                                                }}
-                                            </strong>
-                                        </p>
-                                        <p>
-                                            Alias del conductor
-                                            <strong class="ms-2"
-                                                >{{ selectedTrip.user.alias }}
-                                            </strong>
-                                        </p>
-                                        <p>
-                                            Vehículo
-                                            <strong class="ms-2"
-                                                >{{
-                                                    selectedTrip.vehicle.brand
-                                                }}
-                                                {{ selectedTrip.vehicle.model }}
-                                            </strong>
-                                        </p>
-                                        <p>
-                                            Matrícula
-                                            <strong class="ms-2"
-                                                >{{
-                                                    selectedTrip.vehicle.plate
-                                                }}
-                                            </strong>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex justify-end gap-2">
-                                <Button
-                                    type="button"
-                                    label="Cancelar"
-                                    class="btn-primary"
-                                    severity="secondary"
-                                    @click="
-                                        (visibleDriver = false),
-                                            (passenger = false)
-                                    "
-                                ></Button>
-                            </div>
-                        </Dialog>
                         <li v-for="trip in activeDriverTripsList">
                             <div
                                 class="timeline mb-4 m-4 p-4 pt-2 pb-3 rounded-1"
@@ -291,7 +269,7 @@
                 </div>
                 <div
                     class="d-flex flex-column align-items-center mt-3 mb-3"
-                    v-if="activeDriverTripsList.length > 0"
+                    v-if="activePassengerTripsList.length > 0"
                 >
                     <div class="d-flex gap-5 mt-5">
                         <i class="fa-solid fa-users-between-lines"></i>
@@ -324,11 +302,23 @@
                                         </div>
                                     </template>
                                 </Timeline>
+                                <p v-if="trip.pivot.check_in == null">
+                                    El check-in abre 90 minutos antes del inicio
+                                    previsto del viaje
+                                </p>
                                 <div
                                     class="d-flex gap-2 justify-content-between"
                                 >
                                     <div v-if="trip.pivot.check_in == null">
+                                        <Toast />
+                                        <ConfirmPopup />
                                         <Button
+                                            v-if="
+                                                checkBoarding(
+                                                    trip.departure_time,
+                                                    true
+                                                ) && trip.cancelled_at == null
+                                            "
                                             class="btn-secondary m-1"
                                             label="Check-In"
                                             @click="checkIn(trip)"
@@ -337,7 +327,7 @@
                                         <Button
                                             class="btn-secondary m-1"
                                             label="Cancelar viaje"
-                                            @click="cancelAsPassenger(trip)"
+                                            @click="cancellAsPassenger(trip)"
                                         />
                                     </div>
                                     <div
@@ -388,6 +378,7 @@ import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
 
 const visibleDriver = ref(false);
+
 const {
     getActiveTrips,
     activeDriverTripsList,
@@ -428,6 +419,7 @@ function getTimeToBoarding(trip) {
 }
 
 function checkIn(trip) {
+    console.log("papapatata");
     confirm.require({
         message: "Seguro que quieres hacer check-in?",
         header: "Confirmar",
@@ -454,7 +446,7 @@ function checkIn(trip) {
     });
 }
 
-function cancelAsPassenger(trip) {
+function cancellAsPassenger(trip) {
     confirm.require({
         message: "Seguro que quieres cancelar el viaje?",
         header: "Confirmar",
@@ -481,13 +473,17 @@ function cancelAsPassenger(trip) {
     });
 }
 
-function checkBoarding(startTime) {
+function checkBoarding(startTime, passenger = false) {
     const start = new Date(startTime);
     const now = new Date();
 
     const minutesDiff = Math.abs(start - now) / 1000 / 60;
 
-    if (minutesDiff <= 15 || start < now) {
+    if (!passenger && (minutesDiff <= 15 || start < now - 60)) {
+        return true;
+    }
+
+    if (passenger && (minutesDiff <= 90 || start < now - 15)) {
         return true;
     }
 
