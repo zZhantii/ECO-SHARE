@@ -534,11 +534,11 @@ function checkBoarding(startTime, passenger = false) {
 
     const minutesDiff = Math.abs(start - now) / 1000 / 60;
 
-    if (!passenger && (minutesDiff <= 15 || start < now - 60)) {
+    if (!passenger && (minutesDiff <= 60 || start < now - 60)) {
         return true;
     }
 
-    if (passenger && (minutesDiff <= 90 || start < now - 15)) {
+    if (passenger && (minutesDiff <= 60 || start < now - 15)) {
         return true;
     }
 

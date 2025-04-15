@@ -109,7 +109,7 @@ class AppController extends Controller
         $user = Auth::user();
 
 
-        $trips = Trip::where("user_id", $user->id)->where("departure_time", ">=", now())->with("vehicle")->with("reserves")->get();
+        $trips = Trip::where("user_id", $user->id)->where(DB::raw("departure_time + INTERVAL 1 HOUR"), '>=', now())->with("vehicle")->with("reserves")->get();
 
         return response()->json(["suceess" => True, "data" => $trips], 200);
     }
@@ -122,7 +122,7 @@ class AppController extends Controller
         $user = Auth::user();
 
         $reserves = $user->reserves()
-            ->where('departure_time', '>=', now())
+            ->where(DB::raw("departure_time + INTERVAL 1 HOUR"), '>=', now())
             ->with([
                 'vehicle:id,brand,model,plate',
                 'user:id,alias',
@@ -195,7 +195,7 @@ class AppController extends Controller
                 $query->whereNotNull("drive_end")
                     ->orWhereNotNull("cancelled_at")
                     ->orWhere(function ($q) {
-                        $q->where(DB::raw("departure_time + INTERVAL 2 HOUR"), '<', now())
+                        $q->where(DB::raw("departure_time + INTERVAL 1 HOUR"), '<', now())
                             ->whereNull('drive_start');
 
                     });
@@ -221,7 +221,7 @@ class AppController extends Controller
                     ->orWhereNotNull("trips.drive_end")
                     ->orWhere(function ($q) {
                         $q->whereNull('trips.drive_start')
-                            ->where(DB::raw("trips.departure_time + INTERVAL 2 HOUR"), '<', now());
+                            ->where(DB::raw("trips.departure_time + INTERVAL 1 HOUR"), '<', now());
                     });
             })
             ->get();
