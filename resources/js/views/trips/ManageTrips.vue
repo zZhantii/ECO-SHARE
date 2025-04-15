@@ -302,14 +302,26 @@
                                         </div>
                                     </template>
                                 </Timeline>
-                                <p v-if="trip.pivot.check_in == null">
+                                <p
+                                    v-if="
+                                        trip.pivot.check_in == null &&
+                                        trip.pivot.cancelled_at == null
+                                    "
+                                >
                                     El check-in abre 90 minutos antes del inicio
                                     previsto del viaje
                                 </p>
+
                                 <div
                                     class="d-flex gap-2 justify-content-between"
                                 >
-                                    <div v-if="trip.pivot.check_in == null">
+                                    <div
+                                        v-if="
+                                            trip.pivot.check_in == null &&
+                                            trip.pivot.cancelled_at == null &&
+                                            trip.cancelled_at == null
+                                        "
+                                    >
                                         <Toast />
                                         <ConfirmPopup />
                                         <Button
@@ -317,7 +329,8 @@
                                                 checkBoarding(
                                                     trip.departure_time,
                                                     true
-                                                ) && trip.cancelled_at == null
+                                                ) &&
+                                                trip.pivot.cancelled_at == null
                                             "
                                             class="btn-secondary m-1"
                                             label="Check-In"
@@ -329,6 +342,35 @@
                                             label="Cancelar viaje"
                                             @click="cancellAsPassenger(trip)"
                                         />
+                                    </div>
+                                    <div
+                                        v-else-if="trip.cancelled_at != null"
+                                        class="d-flex align-items-center gap-3"
+                                    >
+                                        <i
+                                            class="fa-solid fa-ban"
+                                            style="color: red"
+                                        ></i>
+                                        <p style="color: #054851">
+                                            <strong>
+                                                Viaje cancelado por el
+                                                conductor</strong
+                                            >
+                                        </p>
+                                    </div>
+                                    <div
+                                        v-else-if="
+                                            trip.pivot.cancelled_at != null
+                                        "
+                                        class="d-flex align-items-center gap-3"
+                                    >
+                                        <i
+                                            class="fa-solid fa-ban"
+                                            style="color: red"
+                                        ></i>
+                                        <p style="color: #054851">
+                                            <strong> Viaje cancelado</strong>
+                                        </p>
                                     </div>
                                     <div
                                         v-else-if="trip.drive_end != null"
@@ -388,12 +430,25 @@ const {
     cancellTripAsDriver,
     cancellTripAsPassenger,
     makeCheckIn,
+    driverHistory,
+    passengerHistory,
+    getDriverHistory,
+    getPassengerHistory,
 } = useTrips();
 
 const confirm = useConfirm();
 const toast = useToast();
 const selectedTrip = ref({});
 const passenger = ref(false);
+
+onMounted(() => {
+    getActiveTrips();
+    getDriverHistory();
+    getPassengerHistory();
+
+    console.log("El historial como conductor: ", driverHistory.value);
+    console.log("El historial como pasajero: ", passengerHistory.value);
+});
 
 function getTimeToBoarding(trip) {
     const start = new Date(trip.departure_time);
@@ -510,10 +565,6 @@ const showTripDetails = (tripId, show = false) => {
         console.log("selectedTrip", selectedTrip.value);
     }
 };
-
-onMounted(() => {
-    getActiveTrips();
-});
 
 const confirmStart = (trip) => {
     confirm.require({

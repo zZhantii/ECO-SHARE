@@ -7,6 +7,7 @@ use App\Models\Vehicle;
 use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -179,6 +180,53 @@ class AppController extends Controller
 
 
 
+    }
+
+    public function indexHistoryAsDriver()
+    {
+        $user = Auth::user();
+
+        $trips = Trip::with([
+            'vehicle:id,brand,model',
+            'user:id,alias'
+        ])
+            ->where('user_id', $user->id)
+            ->where(function ($query) {
+                $query->whereNotNull("drive_end")
+                    ->orWhereNotNull("cancelled_at")
+                    ->orWhere(function ($q) {
+                        $q->where(DB::raw("departure_time + INTERVAL 2 HOUR"), '<', now())
+                            ->whereNull('drive_start');
+
+                    });
+            })
+            ->get();
+
+        return response()->json(["success" => true, "data" => $trips], 200);
+    }
+
+
+    public function indexHistoryAsPassenger()
+    {
+        $user = Auth::user();
+
+        $trips = $user->reserves()->select('trips.id', 'trips.cancelled_at', 'trips.drive_end', 'trips.vehicle_id', 'trips.user_id')
+            ->with([
+                "vehicle:id,plate,brand,model",
+                "user:id,alias"
+            ])
+            ->where(function ($query) {
+                $query->orWhereNotNull("trips.cancelled_at")
+                    ->orWhereNotNull('user_trips_reserves.cancelled_at')
+                    ->orWhereNotNull("trips.drive_end")
+                    ->orWhere(function ($q) {
+                        $q->whereNull('trips.drive_start')
+                            ->where(DB::raw("trips.departure_time + INTERVAL 2 HOUR"), '<', now());
+                    });
+            })
+            ->get();
+
+        return response()->json(["success" => true, "data" => $trips], 200);
     }
 
 

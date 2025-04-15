@@ -24,6 +24,8 @@ export default function useTrips() {
     const reservesList = ref([]);
     const isLoading = ref(false);
     const validationErrors = ref([]);
+    const driverHistory = ref([]);
+    const passengerHistory = ref([]);
     const swal = inject("$swal");
     yup.setLocale(es);
 
@@ -500,6 +502,23 @@ export default function useTrips() {
             .finally(() => (isLoading.value = false));
     };
 
+    const getDriverHistory = async () => {
+        axios.get("/api/app/driver-history").then((response) => {
+            const trips = response.data.data;
+            for (const element of trips) {
+                driverHistory.value.push(element);
+            }
+        });
+    };
+    const getPassengerHistory = async () => {
+        axios.get("/api/app/passenger-history").then((response) => {
+            const trips = response.data.data;
+            for (const element of trips) {
+                passengerHistory.value.push(element);
+            }
+        });
+    };
+
     return {
         // trips,
         trip,
@@ -514,6 +533,10 @@ export default function useTrips() {
         updateTrip,
         deleteTrip,
         makeCheckIn,
+        getDriverHistory,
+        getPassengerHistory,
+        driverHistory,
+        passengerHistory,
         // addUnavailable_seat,
         reservedTrip,
         searchTrip,
