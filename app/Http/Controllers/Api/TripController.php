@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Trip;
+use App\Model\Tag;
 use Illuminate\Support\Facades\Validator;
 
 class TripController extends Controller
@@ -47,6 +48,33 @@ class TripController extends Controller
                 "error" => $e->getMessage()
             ], 500);
         }
+    }
+
+    public function showTag($trip_id)
+    {
+      try {
+            $trip = Trip::with('tags')->findOrFail($trip_id);
+
+            $tagIds = $trip->tags->pluck('id');
+
+        if (!$trip) {
+            return response()->json([
+                "success" => false,
+                "message" => "Viaje no encontrado"
+            ], 404);
+        }
+
+        return response()->json([
+            "success" => true, 
+            "data" => $tagIds
+        ], 200);
+    } catch (\Exception $e) {
+        return response()->json([
+            "success" => false,
+            "message" => "Error al obtener las etiquetas",
+            "error" => $e->getMessage()
+        ], 500);
+    }
     }
 
     public function store(Request $request)

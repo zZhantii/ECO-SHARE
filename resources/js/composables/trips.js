@@ -20,6 +20,7 @@ export default function useTrips() {
         drive_end: null,
     });
     const tripList = ref([]);
+    const tags = ref([]);
     const searchTripList = ref([]);
     const reservesList = ref([]);
     const isLoading = ref(false);
@@ -471,6 +472,27 @@ export default function useTrips() {
             .finally(() => (isLoading.value = false));
     };
 
+    const getTagTrips = async (trip_id) => {
+        if (isLoading.value) return;
+
+        isLoading.value = true;
+        validationErrors.value = {};
+
+        await axios
+            .get("/api/tags/" + trip_id)
+            .then((response) => {
+                console.log("Respuesta API recogiendo todas las etiquetas: ", response.data.data);
+                tags.value = response.data.data;
+            })
+            .catch((error) => {
+                if (error.response?.data) {
+                    validationErrors.value = error.response.data.errors;
+                    console.log(validationErrors.value);
+                }
+            })
+            .finally(() => (isLoading.value = false));
+    }
+
     return {
         // trips,
         trip,
@@ -478,6 +500,8 @@ export default function useTrips() {
         tripList,
         searchTripList,
         TripSchema,
+        tags,
+        getTagTrips,
         getTrips,
         getReserves,
         reservesList,

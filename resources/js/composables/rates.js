@@ -54,7 +54,7 @@ export default function useRates() {
         isLoading.value = true;
         validationErrors.value = {};
 
-        axios.get("/api/rates/" + user_id + "/" + trip_id)
+        await axios.get("/api/rates/" + user_id + "/" + trip_id)
             .then((response) => {
                 console.log("Respuesta API obtener valoración: ", response.data.data);
                 rate.value = response.data.data;

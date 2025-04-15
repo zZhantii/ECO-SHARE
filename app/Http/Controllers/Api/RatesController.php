@@ -57,10 +57,10 @@ class RatesController extends Controller
                 ->first();
 
             if (!$rate) {
-                return response()->json([
-                    "success" => false,
-                    "message" => "Valoración no encontrada"
-                ], 404);
+                $user = User::find($user_id);
+                $user->rates()->attach($trip_id, [
+                    'rate' => 0
+                ]);
             }
 
             return response()->json([

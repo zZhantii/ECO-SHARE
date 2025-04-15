@@ -141,9 +141,13 @@ import TripFinder from "../../components/TripFinder.vue";
 
 // Composables
 import useTrips from "@/composables/trips";
-const { getTrips, tripsList, searchTrip, searchTripList } = useTrips();
+const { getTrips, tripsList, searchTrip, searchTripList, getTagTrips, tags } = useTrips();
 import useUsers from "@/composables/users";
 const { getUser, user } = useUsers();
+import useRates from "@/composables/rates";
+const { getRateWithId, rate } = useRates();
+import useTags from "@/composables/tags";
+const { getTagWithID, tag } = useTags();
 
 // Routes
 import { useRoute } from "vue-router";
@@ -220,21 +224,35 @@ const handleSearch = async (searchData) => {
 
         await searchTrip(searchTrip2.value);
 
-        console.log("SearchTrip", searchTripList.value);
+        console.log("searchtrip", searchTripList.value);
 
-        const user_id = ref(null)
+        const user_id = ref(null);
+        const trip_id = ref(null);
 
-        for (const key of searchTripList.value) {
-            user_id.value = key.user_id;
+        for (const element of searchTripList.value) {
+            trip_id.value = element.id;
+            user_id.value = element.user_id;
         }
 
-        await getUser(user_id.value);
+        await getRateWithId(user_id.value, trip_id.value);
+        rating.value = rate.value.pivot.rate;
 
-        for (const key of user.value) {
-            rating.value = key.rating
+        await getTagTrips(trip_id.value);
+
+        console.log("rates", tags.value)
+
+        const tagsData = [];
+
+        for (const tagId of tags.value) {
+            console.log(tagId);
+            await getTagWithID(tagId);
+            const tagInfo = tag.value.tag_name;
+            tagsData.push(tagInfo);
         }
 
-        applyFilters();
+        console.log("data", tagsData);
+
+        await applyFilters();
     } catch (err) {
         console.error('Error in search:', err);
     }

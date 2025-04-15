@@ -231,7 +231,7 @@
                                                                 </span>
                                                             </li>
                                                             <li class="d-flex align-items-start">
-                                                                <i class="bi bi-geo me-2 text-primary"></i>
+                                                                <i class="bi bi-geo me-2 text-primary"></i> 
                                                                 <span>
                                                                     Destino:
                                                                     {{ tripData.end_point.address ===

@@ -45,7 +45,7 @@ export default function useTags() {
         isLoading.value = true;
         validationErrors.value = {};
 
-        axios
+        await axios
         .get("/api/tag/" + tag2)
         .then((response) => {
             console.log("Respuesta API mostrando etiquetas: ", response.data.data)

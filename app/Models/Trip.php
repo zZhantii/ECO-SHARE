@@ -38,7 +38,8 @@ class Trip extends Model
     // Relacion trips-tags N:M (N Trips)
     public function tags()
     {
-        return $this->belongsToMany(Tag::class, 'tags_trips', 'trip_id', 'tag_id');
+        return $this->belongsToMany(Tag::class, 'tags_trips', 'trip_id', 'tag_id')
+            ->withTimestamps();
     }
 
     public function rates()
@@ -46,7 +47,6 @@ class Trip extends Model
         return $this->belongsToMany(User::class, 'user_trips_rates', 'trip_id', 'user_id')
             ->withPivot('rate')->withTimestamps();
     }
-
 
     public function reserves()
     {
