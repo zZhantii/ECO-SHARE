@@ -125,8 +125,10 @@
                         <div class="border-start border-end ps-5 w-75">
                             <p>Tags</p>
                         </div>
-                        <div class="d-flex align-items-center ps-5 gap-5">
-                            <Rating v-model="rating" disabled />
+                        <div v-for="trip in tripsWithRatings" :key="trip.id"
+                            class="d-flex align-items-center ps-5 gap-5">
+                            <p>{{ trip.start_point.name }} - {{ trip.end_point.name }}</p>
+                            <Rating v-model="trip.rate" disabled />
                         </div>
                     </div>
                 </div>
@@ -158,7 +160,7 @@ import Timeline from "primevue/timeline";
 import Rating from 'primevue/rating';
 import Checkbox from 'primevue/checkbox';
 
-const rating = ref(null);
+const tripsWithRatings = ref([]);
 
 // Vue
 import { onMounted, ref, watch, computed } from "vue";
@@ -232,10 +234,15 @@ const handleSearch = async (searchData) => {
         for (const element of searchTripList.value) {
             trip_id.value = element.id;
             user_id.value = element.user_id;
-        }
 
-        await getRateWithId(user_id.value, trip_id.value);
-        rating.value = rate.value.pivot.rate;
+            await getRateWithId(user_id.value, trip_id.value);
+
+            tripsWithRatings.value.push({
+                ...element,
+                rate: rate.value.pivot.rate
+            });
+            console.log("tripRating", tripRating.value)
+        }
 
         await getTagTrips(trip_id.value);
 
