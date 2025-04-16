@@ -28,35 +28,47 @@ class AppController extends Controller
     {
         $trip = Trip::find($id);
 
-        $user = Auth::user();
 
+        if (!empty($trip->drive_end)) {
+            return response()->json(["success" => false, "data" => "El viaje ya ha terminado"], 400);
+        }
+        if (!empty($trip->drive_start)) {
+            return response()->json(["success" => false, "data" => "El viaje ya ha comenzado"], 400);
+        }
+        if (!empty($trip->cancelled_at)) {
+            return response()->json(["success" => false, "data" => "El viaje ha sido cancelado previamente"], 400);
+        }
+        if (!now()->between(Carbon::parse($trip->departure_time), Carbon::parse($trip->departure_time)->addHour())) {
+            return response()->json(["success" => false, "data" => "El viaje ha pasado el límite de la hora de margen."], 400);
+        }
+        $price = $trip->price;
+        $totalSeatsReserved = $trip->reserves()->whereNotNull("check_in")->sum('seats_reserved');
 
-        if (empty($trip->drive_start) && empty($trip->drive_end) && empty($trip->cancelled_at)) {
-
-            $price = $trip->price;
-            $totalSeatsReserved = $trip->reserves()->whereNotNull("check_in")->sum('seats_reserved');
-
-            $averagePricePerSeat = round($price / $totalSeatsReserved, 2);
-
-
-            $reserves = $trip->reserves()->whereNotNull("check_in")->get();
-
-            foreach ($reserves as $reserve) {
-
-                $totalPrice = round($averagePricePerSeat * $reserve->pivot->seats_reserved, 2);
-
-                $trip->reserves()->updateExistingPivot($reserve->id, [
-                    'total_price' => $totalPrice
-                ]);
-            }
-
-            $trip->drive_start = now();
-            $trip->save();
-
-            return response()->json(["success" => true, "data" => $trip], 200);
+        if ($totalSeatsReserved == 0) {
+            return response()->json(["success" => false, "data" => "No tienes pasajeros confirmados para realizar el viaje."], 400);
         }
 
-        return response()->json(["success" => false, "data" => $trip], 400);
+        $averagePricePerSeat = round($price / $totalSeatsReserved, 2);
+
+
+        $reserves = $trip->reserves()->whereNotNull("check_in")->get();
+
+        foreach ($reserves as $reserve) {
+
+            $totalPrice = round($averagePricePerSeat * $reserve->pivot->seats_reserved, 2);
+
+            $trip->reserves()->updateExistingPivot($reserve->id, [
+                'total_price' => $totalPrice
+            ]);
+        }
+
+        // $trip->drive_start = now();
+        // $trip->save();
+
+        return response()->json(["success" => true, "data" => $totalSeatsReserved], 200);
+
+
+
 
     }
 

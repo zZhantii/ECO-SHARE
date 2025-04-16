@@ -194,7 +194,10 @@
                                 <div class="d-flex justify-content-between">
                                     <div
                                         v-if="
-                                            checkBoarding(trip.departure_time)
+                                            checkBoarding(
+                                                trip.drive_start,
+                                                trip.departure_time
+                                            )
                                         "
                                         class="d-flex align-items-center"
                                     >
@@ -308,7 +311,7 @@
                                         trip.pivot.cancelled_at == null
                                     "
                                 >
-                                    El check-in abre 90 minutos antes del inicio
+                                    El check-in abre 60 minutos antes del inicio
                                     previsto del viaje
                                 </p>
 
@@ -317,6 +320,25 @@
                                 >
                                     <div
                                         v-if="
+                                            trip.drive_start != null &&
+                                            trip.pivot.check_in == null
+                                        "
+                                        class="d-flex align-items-center gap-3"
+                                    >
+                                        <i
+                                            class="fa-solid fa-ban"
+                                            style="color: red"
+                                        ></i>
+                                        <p style="color: #054851">
+                                            <strong>
+                                                El viaje ha comenzado y no has
+                                                podido realizar el
+                                                check-in.</strong
+                                            >
+                                        </p>
+                                    </div>
+                                    <div
+                                        v-else-if="
                                             trip.pivot.check_in == null &&
                                             trip.pivot.cancelled_at == null &&
                                             trip.cancelled_at == null
@@ -327,6 +349,7 @@
                                         <Button
                                             v-if="
                                                 checkBoarding(
+                                                    trip.drive_start,
                                                     trip.departure_time,
                                                     true
                                                 ) &&
@@ -358,6 +381,7 @@
                                             >
                                         </p>
                                     </div>
+
                                     <div
                                         v-else-if="
                                             trip.pivot.cancelled_at != null
@@ -528,17 +552,21 @@ function cancellAsPassenger(trip) {
     });
 }
 
-function checkBoarding(startTime, passenger = false) {
+function checkBoarding(driveStart, startTime, passenger = false) {
     const start = new Date(startTime);
     const now = new Date();
 
     const minutesDiff = Math.abs(start - now) / 1000 / 60;
 
-    if (!passenger && (minutesDiff <= 60 || start < now - 60)) {
+    if (!passenger && (minutesDiff <= 0 || start <= now - 60)) {
         return true;
     }
 
-    if (passenger && (minutesDiff <= 60 || start < now - 15)) {
+    if (
+        passenger &&
+        (minutesDiff <= 60 || start <= now - 60) &&
+        driveStart == null
+    ) {
         return true;
     }
 

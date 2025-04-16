@@ -219,28 +219,23 @@ export default function useTrips() {
     const startDrive = async (tripId) => {
         try {
             const response = await axios.put(`/api/app/start-drive/${tripId}`);
+            console.log("API: ", response.data);
 
-            if (response.data.success == true) {
-                swal({
-                    icon: "success",
-                    title: "Viaje iniciado",
-                });
-                const index = activeDriverTripsList.value.findIndex(
-                    (e) => e.id == tripId
-                );
+            swal({
+                icon: "success",
+                title: "Viaje iniciado",
+            });
+            const index = activeDriverTripsList.value.findIndex(
+                (e) => e.id == tripId
+            );
 
-                activeDriverTripsList.value[index].drive_start =
-                    response.data.data.drive_start;
-            } else {
-                swal({
-                    icon: "error",
-                    title: "No se ha podido iniciar el viaje",
-                });
-            }
+            activeDriverTripsList.value[index].drive_start =
+                response.data.data.drive_start;
         } catch (e) {
             swal({
                 icon: "error",
-                title: "Error inesperado en el servidor",
+                title: "No se ha podido iniciar el viaje",
+                text: e.response.data.data,
             });
             console.log("error", e);
         }
