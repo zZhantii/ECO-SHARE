@@ -38,8 +38,12 @@ class AppController extends Controller
         if (!empty($trip->cancelled_at)) {
             return response()->json(["success" => false, "data" => "El viaje ha sido cancelado previamente"], 400);
         }
-        if (!now()->between(Carbon::parse($trip->departure_time), Carbon::parse($trip->departure_time)->addHour())) {
-            return response()->json(["success" => false, "data" => "El viaje ha pasado el límite de la hora de margen."], 400);
+
+        $departure = Carbon::parse($trip->departure_time);
+        $lastCall = $departure->copy()->addHour();
+
+        if (!now()->between($departure, $lastCall)) {
+            return response()->json(["success" => false, "data" => "El viaje debía inicirase entre {$departure} y {$lastCall}."], 400);
         }
         $price = $trip->price;
         $totalSeatsReserved = $trip->reserves()->whereNotNull("check_in")->sum('seats_reserved');
@@ -62,10 +66,10 @@ class AppController extends Controller
             ]);
         }
 
-        // $trip->drive_start = now();
-        // $trip->save();
+        $trip->drive_start = now();
+        $trip->save();
 
-        return response()->json(["success" => true, "data" => $totalSeatsReserved], 200);
+        return response()->json(["success" => true, "data" => $trip], 200);
 
 
 
@@ -82,7 +86,7 @@ class AppController extends Controller
             return response()->json(["success" => false, "data" => "El viaje no ha sido iniciado"], 400);
         } else {
             if (!empty($trip->drive_end)) {
-                return response()->json(["success" => false, "data" => $trip], 400);
+                return response()->json(["success" => false, "data" => "El viaje ya ha sido finalizado anteriormente."], 400);
 
             } else {
                 $trip->drive_end = now();
@@ -101,8 +105,26 @@ class AppController extends Controller
 
         $user = Auth::user();
 
+        $trip = $user->reserves()->select("trips.cancelled_at", "trips.drive_start", "trips.departure_time", )->where("trip_id", $request->id)->first();
 
+        if (!empty($trip->drive_start)) {
+            return response()->json(["success" => false, "data" => "El viaje ya ha comenzado y no se puede hacer check-in."], 400);
+        }
 
+        if (!empty($trip->cancelled_at)) {
+            return response()->json(["success" => false, "data" => "El viaje ha sido cancelado previamente por parte del conductor."], 400);
+        }
+        if (!empty($trip->pivot->cancelled_at)) {
+            return response()->json(["success" => false, "data" => "El viaje ha sido cancelado previamente por parte del pasajero."], 400);
+        }
+        $departure = Carbon::parse($trip->departure_time);
+        $startCheckIn = $departure->copy()->subHour();
+        if (!now()->between($startCheckIn, $departure)) {
+            return response()->json([
+                "success" => false,
+                "data" => "El check-indebia realizarse entre $startCheckIn y $departure."
+            ], 400);
+        }
         $user->reserves()->updateExistingPivot($request->id, [
             'check_in' => now()
         ]);
@@ -134,26 +156,16 @@ class AppController extends Controller
         $user = Auth::user();
 
         $reserves = $user->reserves()
-            ->where(DB::raw("departure_time + INTERVAL 1 HOUR"), '>=', now())
+            ->where("departure_time", '>=', now())
             ->with([
                 'vehicle:id,brand,model,plate',
                 'user:id,alias',
             ])
             ->get();
 
-        // ->with("reserves.vehicle:id,brand,model,plate")
-        // ->with("reserves.user:id,alias")
-        // ->whereHas("reserves", function ($query) {
-        //     $query->where("departure_time", ">=", now());
-        // })
-
-        // ->get();
-        // $reserves = $user->reserves()
-        //     ->where('departure_time', '>=', now())
-        //     ->get();
-
         return response()->json(["suceess" => True, "data" => $reserves], 200);
     }
+
     //Método para cancelar el viajr como conductor
     public function cancelDriverTrip($id)
     {
@@ -166,12 +178,11 @@ class AppController extends Controller
             return response()->json(["success" => true, "data" => $trip], 200);
         }
 
-
         return response()->json(["success" => false, "data" => "No se ha podido cancelar el viaje"], 400);
 
-
-
     }
+
+
     public function cancelPassengerTrip($id)
     {
 

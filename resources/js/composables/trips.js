@@ -271,8 +271,9 @@ export default function useTrips() {
     };
 
     const makeCheckIn = async (trip) => {
-        try {
-            axios.put("/api/app/check-in", trip).then((response) => {
+        axios
+            .put("/api/app/check-in", trip)
+            .then((response) => {
                 console.log("API response: ", trip);
                 if (response.data.success == true) {
                     swal({
@@ -288,15 +289,18 @@ export default function useTrips() {
                     swal({
                         icon: "error",
                         title: "No se ha podido realizar el check-in",
+                        text: e.response.data.data,
                     });
                 }
+            })
+            .catch((e) => {
+                console.log(e);
+                swal({
+                    icon: "error",
+                    title: "Error inesperado en el servidor",
+                    text: e.response.data.data,
+                });
             });
-        } catch (e) {
-            swal({
-                icon: "error",
-                title: "Error inesperado en el servidor",
-            });
-        }
     };
 
     const cancellTripAsDriver = async (tripId) => {

@@ -192,19 +192,15 @@
                                 </div>
 
                                 <div class="d-flex justify-content-between">
-                                    <div
-                                        v-if="
-                                            checkBoarding(
-                                                trip.drive_start,
-                                                trip.departure_time
-                                            )
-                                        "
-                                        class="d-flex align-items-center"
-                                    >
+                                    <div class="d-flex align-items-center">
                                         <Toast />
                                         <ConfirmPopup />
                                         <Button
                                             v-if="
+                                                checkBoarding(
+                                                    trip.drive_start,
+                                                    trip.departure_time
+                                                ) &&
                                                 trip.drive_start == null &&
                                                 trip.cancelled_at == null
                                             "
@@ -556,15 +552,16 @@ function checkBoarding(driveStart, startTime, passenger = false) {
     const start = new Date(startTime);
     const now = new Date();
 
-    const minutesDiff = Math.abs(start - now) / 1000 / 60;
+    const minutesDiff = (start - now) / 1000 / 60;
 
-    if (!passenger && (minutesDiff <= 0 || start <= now - 60)) {
+    if (!passenger && minutesDiff <= 0 && minutesDiff >= -60) {
         return true;
     }
 
     if (
         passenger &&
-        (minutesDiff <= 60 || start <= now - 60) &&
+        minutesDiff <= 60 &&
+        minutesDiff >= 0 &&
         driveStart == null
     ) {
         return true;
