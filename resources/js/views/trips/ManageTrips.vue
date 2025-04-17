@@ -423,9 +423,40 @@
             </div>
 
             <h2 v-else>No tienes viajes activos</h2>
-            <Accordion :activeIndex="-1" class="col-sm-11 col-md-7 p-5">
-                <AccordionTab class="mt-2" header="Historial de viajes">
-                </AccordionTab>
+
+            <Accordion
+                v-if="passengerHistory.length > 0 || driverHistory.length > 0"
+                class="col-sm-12 col-md-6 mt-3"
+                v-model:value="accordionValue"
+            >
+                <AccordionPanel v-if="driverHistory.length > 0" value="0">
+                    <AccordionHeader
+                        ><div class="d-flex gap-4">
+                            <i class="fa-solid fa-car"></i>
+                            <p>Historial como conductor</p>
+                        </div></AccordionHeader
+                    >
+                    <AccordionContent> </AccordionContent>
+                </AccordionPanel>
+                <AccordionPanel
+                    v-if="passengerHistory.length > 0"
+                    class="mt-3 mb-5"
+                    value="1"
+                >
+                    <AccordionHeader
+                        ><div class="d-flex gap-4">
+                            <i class="fa-solid fa-users-between-lines"></i>
+                            <p>Historial como pasajero</p>
+                        </div></AccordionHeader
+                    >
+                    <AccordionContent>
+                        <ul class="p-0">
+                            <li v-for="trip of passengerHistory">
+                                <CardPassengerHistory :trip="trip" />
+                            </li>
+                        </ul>
+                    </AccordionContent>
+                </AccordionPanel>
             </Accordion>
         </div>
     </main>
@@ -438,6 +469,11 @@ import { ref, onMounted } from "vue";
 import Timeline from "primevue/timeline";
 import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
+import CardPassengerHistory from "../../components/CardPassengerHistory.vue";
+
+import AccordionPanel from "primevue/accordionpanel";
+import AccordionHeader from "primevue/accordionheader";
+import AccordionContent from "primevue/accordioncontent";
 
 const visibleDriver = ref(false);
 
@@ -460,14 +496,15 @@ const confirm = useConfirm();
 const toast = useToast();
 const selectedTrip = ref({});
 const passenger = ref(false);
+const activePassengerHistory = ref(false);
+const activeDriverHistory = ref(false);
+const accordionValue = ref(false);
 
 onMounted(() => {
     getActiveTrips();
     getDriverHistory();
     getPassengerHistory();
-
-    console.log("El historial como conductor: ", driverHistory.value);
-    console.log("El historial como pasajero: ", passengerHistory.value);
+    console.log("Historial como pasajero", passengerHistory.value);
 });
 
 function getTimeToBoarding(trip) {
@@ -494,7 +531,6 @@ function getTimeToBoarding(trip) {
 }
 
 function checkIn(trip) {
-    console.log("papapatata");
     confirm.require({
         message: "Seguro que quieres hacer check-in?",
         header: "Confirmar",
@@ -692,7 +728,7 @@ function getTimelineEvents(trip) {
     ];
 }
 </script>
-<style scoped>
+<style>
 .gradient-img {
     height: 17rem;
     width: 17rem;
@@ -713,7 +749,8 @@ main {
 .timeline {
     border: 1px solid rgb(218, 218, 218);
 }
-.fa-solid.fa-car {
+.fa-solid.fa-car,
+.fa-solid.fa-users-between-lines {
     font-size: 25px;
     color: #054851;
 }
@@ -736,5 +773,11 @@ i {
     border-radius: 20px;
     padding: 10px;
     padding-top: 5px;
+}
+.timeline-directions {
+    width: 80% !important;
+}
+#undefined_accordioncontent_1 {
+    background-color: white !important;
 }
 </style>

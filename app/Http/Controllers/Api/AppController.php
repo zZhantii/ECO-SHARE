@@ -156,7 +156,10 @@ class AppController extends Controller
         $user = Auth::user();
 
         $reserves = $user->reserves()
-            ->where("departure_time", '>=', now())
+            ->where("trips.departure_time", '>=', now())
+            ->whereNull("trips.drive_end")
+            ->whereNull("trips.cancelled_at")
+            ->whereNull("user_trips_reserves.cancelled_at")
             ->with([
                 'vehicle:id,brand,model,plate',
                 'user:id,alias',
@@ -233,19 +236,21 @@ class AppController extends Controller
     {
         $user = Auth::user();
 
-        $trips = $user->reserves()->select('trips.id', 'trips.cancelled_at', 'trips.drive_end', 'trips.vehicle_id', 'trips.user_id')
+        $trips = $user->reserves()
             ->with([
                 "vehicle:id,plate,brand,model",
                 "user:id,alias"
             ])
             ->where(function ($query) {
-                $query->orWhereNotNull("trips.cancelled_at")
-                    ->orWhereNotNull('user_trips_reserves.cancelled_at')
-                    ->orWhereNotNull("trips.drive_end")
-                    ->orWhere(function ($q) {
-                        $q->whereNull('trips.drive_start')
-                            ->where(DB::raw("trips.departure_time + INTERVAL 1 HOUR"), '<', now());
-                    });
+                $query
+                    ->WhereNotNull("user_trips_reserves.check_in")
+                    ->WhereNotNull("trips.drive_end")
+                    ->Where(function ($q) {
+                        $q
+                            ->where(DB::raw("trips.departure_time"), '<', now());
+                    })
+                    ->orWhereNotNull("trips.cancelled_at")
+                    ->orWhereNotNull("user_trips_reserves.cancelled_at");
             })
             ->get();
 
