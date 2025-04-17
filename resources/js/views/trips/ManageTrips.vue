@@ -358,7 +358,6 @@
 </template>
 <script setup>
 import Accordion from "primevue/accordion";
-import AccordionTab from "primevue/accordiontab";
 import useTrips from "@/composables/trips.js";
 import { ref, onMounted } from "vue";
 import Timeline from "primevue/timeline";
@@ -671,7 +670,8 @@ i {
 .timeline-directions {
     width: 80% !important;
 }
-#undefined_accordioncontent_1 {
+#undefined_accordioncontent_1,
+#undefined_accordioncontent_0 {
     background-color: white !important;
 }
 </style>

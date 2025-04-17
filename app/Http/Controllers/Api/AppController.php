@@ -143,7 +143,10 @@ class AppController extends Controller
         $user = Auth::user();
 
 
-        $trips = Trip::where("user_id", $user->id)->where(DB::raw("departure_time + INTERVAL 1 HOUR"), '>=', now())->with("vehicle")->with("reserves")->get();
+        $trips = Trip::where("user_id", $user->id)
+            ->where(DB::raw("departure_time + INTERVAL 1 HOUR"), '>=', now())
+            ->whereNull("cancelled_at")
+            ->with("vehicle")->with("reserves")->get();
 
         return response()->json(["suceess" => True, "data" => $trips], 200);
     }
