@@ -40,16 +40,6 @@
             </div>
 
             <div
-                v-else-if="trip.pivot.cancelled_at != null"
-                class="d-flex align-items-center gap-3"
-            >
-                <i class="fa-solid fa-ban" style="color: red"></i>
-                <p style="color: #054851">
-                    <strong> Viaje cancelado por el pasajero</strong>
-                </p>
-            </div>
-
-            <div
                 v-else-if="trip.drive_end != null"
                 class="d-flex align-items-center gap-3"
             >
@@ -93,8 +83,9 @@ const props = defineProps({
     trip: Object,
 });
 </script>
+
 <style scoped>
-.timeline {
-    width: 97% !important;
+TimeLine {
+    width: 90% !important;
 }
 </style>

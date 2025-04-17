@@ -8,135 +8,23 @@
                     activeDriverTripsList.length > 0 ||
                     activePassengerTripsList.length
                 "
-                class="container"
+                class="container mb-5"
             >
                 <h1 class="fs-3 text-center m-5">
                     Revisa aquí tus próximos viajes
                 </h1>
-                <Dialog
-                    v-model:visible="visibleDriver"
-                    modal
-                    header="Detalles del viaje"
-                    :style="{
-                        width: '30rem',
-                    }"
-                >
-                    <div class="mb-5">
-                        <div v-if="!passenger">
-                            <p>
-                                Precio:
-                                <strong>{{ selectedTrip.price }} €</strong>
-                            </p>
-                            <p>
-                                Plazas ofertadas:
-                                <strong
-                                    >{{ selectedTrip.available_seats }}
-                                </strong>
-                            </p>
+                <DialogTripDetails
+                    v-show="
+                        activeDriverTripsList.length > 0 ||
+                        activePassengerTripsList.length > 0 ||
+                        passengerHistory.length > 0 ||
+                        driverHistory.length > 0
+                    "
+                    v-model:visibleDialog="visibleDialog"
+                    v-model:passenger="passenger"
+                    :selectedTrip="selectedTrip"
+                />
 
-                            <p>
-                                Vehículo:
-                                <strong
-                                    >{{ selectedTrip.vehicle.brand }}
-                                </strong>
-                            </p>
-                            <p>
-                                Vehículo:
-                                <strong
-                                    >{{ selectedTrip.vehicle.model }}
-                                </strong>
-                            </p>
-                            <div v-if="!passenger">
-                                <h3 class="fs-5 mt-4">Lista de pasajeros:</h3>
-                                <ul
-                                    v-if="selectedTrip.reserves.length != 0"
-                                    class="ps-0 passenger-list"
-                                >
-                                    <li
-                                        class="gap-5 p-1 d-flex align-items-center gap-3 ms-3"
-                                        v-for="passenger in selectedTrip.reserves"
-                                    >
-                                        <i
-                                            v-if="
-                                                passenger.pivot.cancelled_at !=
-                                                null
-                                            "
-                                            class="ms-1 fa-solid fa-xmark"
-                                            style="color: red"
-                                        ></i>
-                                        <i
-                                            v-else-if="
-                                                passenger.pivot.check_in == null
-                                            "
-                                            class="ms-1 fa-solid fa-hourglass-half"
-                                        ></i>
-
-                                        <i
-                                            v-else
-                                            class="fa-solid fa-circle-check"
-                                            style="color: green"
-                                        ></i>
-
-                                        <p class="fs-4 m-0">
-                                            {{ passenger.alias }}
-                                        </p>
-                                    </li>
-                                </ul>
-                                <p v-else>
-                                    <strong
-                                        >No hay reservas de pasajeros</strong
-                                    >
-                                </p>
-                            </div>
-                        </div>
-                        <div v-else>
-                            <div>
-                                <p>
-                                    Precio total a pagar
-                                    <strong class="ms-2"
-                                        >{{ selectedTrip.price }} €</strong
-                                    >
-                                </p>
-                                <p>
-                                    Plazas reservadas
-                                    <strong class="ms-2"
-                                        >{{ selectedTrip.pivot.seats_reserved }}
-                                    </strong>
-                                </p>
-                                <p>
-                                    Alias del conductor
-                                    <strong class="ms-2"
-                                        >{{ selectedTrip.user.alias }}
-                                    </strong>
-                                </p>
-                                <p>
-                                    Vehículo
-                                    <strong class="ms-2"
-                                        >{{ selectedTrip.vehicle.brand }}
-                                        {{ selectedTrip.vehicle.model }}
-                                    </strong>
-                                </p>
-                                <p>
-                                    Matrícula
-                                    <strong class="ms-2"
-                                        >{{ selectedTrip.vehicle.plate }}
-                                    </strong>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex justify-end gap-2">
-                        <Button
-                            type="button"
-                            label="Cancelar"
-                            class="btn-primary"
-                            severity="secondary"
-                            @click="
-                                (visibleDriver = false), (passenger = false)
-                            "
-                        ></Button>
-                    </div>
-                </Dialog>
                 <div
                     class="d-flex flex-column align-items-center"
                     v-if="activeDriverTripsList.length > 0"
@@ -422,12 +310,11 @@
                 </div>
             </div>
 
-            <h2 v-else>No tienes viajes activos</h2>
+            <h2 class="mb-5" v-else>No tienes viajes activos</h2>
 
             <Accordion
                 v-if="passengerHistory.length > 0 || driverHistory.length > 0"
-                class="col-sm-12 col-md-6 mt-3"
-                v-model:value="accordionValue"
+                class="col-sm-12 col-md-7 mt-3 mb-5"
             >
                 <AccordionPanel v-if="driverHistory.length > 0" value="0">
                     <AccordionHeader
@@ -436,7 +323,12 @@
                             <p>Historial como conductor</p>
                         </div></AccordionHeader
                     >
-                    <AccordionContent> </AccordionContent>
+                    <AccordionContent>
+                        <ul class="p-0">
+                            <li v-for="trip of driverHistory">
+                                <CardDriverHistory :trip="trip" />
+                            </li></ul
+                    ></AccordionContent>
                 </AccordionPanel>
                 <AccordionPanel
                     v-if="passengerHistory.length > 0"
@@ -451,7 +343,10 @@
                     >
                     <AccordionContent>
                         <ul class="p-0">
-                            <li v-for="trip of passengerHistory">
+                            <li
+                                v-for="trip of passengerHistory"
+                                class="d-flex justify-content-center"
+                            >
                                 <CardPassengerHistory :trip="trip" />
                             </li>
                         </ul>
@@ -470,12 +365,14 @@ import Timeline from "primevue/timeline";
 import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
 import CardPassengerHistory from "../../components/CardPassengerHistory.vue";
+import CardDriverHistory from "../../components/CardDriverHistory.vue";
+import DialogTripDetails from "../../components/DialogTripDetails.vue";
 
 import AccordionPanel from "primevue/accordionpanel";
 import AccordionHeader from "primevue/accordionheader";
 import AccordionContent from "primevue/accordioncontent";
 
-const visibleDriver = ref(false);
+const visibleDialog = ref(false);
 
 const {
     getActiveTrips,
@@ -496,9 +393,6 @@ const confirm = useConfirm();
 const toast = useToast();
 const selectedTrip = ref({});
 const passenger = ref(false);
-const activePassengerHistory = ref(false);
-const activeDriverHistory = ref(false);
-const accordionValue = ref(false);
 
 onMounted(() => {
     getActiveTrips();
@@ -607,7 +501,7 @@ function checkBoarding(driveStart, startTime, passenger = false) {
 }
 
 const showTripDetails = (tripId, show = false) => {
-    visibleDriver.value = true;
+    visibleDialog.value = true;
     passenger.value = show;
     let trip = null;
     if (!passenger.value) {
