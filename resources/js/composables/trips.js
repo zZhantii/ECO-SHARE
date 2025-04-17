@@ -275,29 +275,22 @@ export default function useTrips() {
             .put("/api/app/check-in", trip)
             .then((response) => {
                 console.log("API response: ", trip);
-                if (response.data.success == true) {
-                    swal({
-                        icon: "success",
-                        title: "Check-in realizado",
-                    });
-                    const index = activePassengerTripsList.value.findIndex(
-                        (e) => e.id == trip.id
-                    );
 
-                    activePassengerTripsList.value[index] = response.data.data;
-                } else {
-                    swal({
-                        icon: "error",
-                        title: "No se ha podido realizar el check-in",
-                        text: e.response.data.data,
-                    });
-                }
+                swal({
+                    icon: "success",
+                    title: "Check-in realizado",
+                });
+                const index = activePassengerTripsList.value.findIndex(
+                    (e) => e.id == trip.id
+                );
+
+                activePassengerTripsList.value[index] = response.data.data;
             })
             .catch((e) => {
                 console.log(e);
                 swal({
                     icon: "error",
-                    title: "Error inesperado en el servidor",
+                    title: "No se ha podido registrar la acción.",
                     text: e.response.data.data,
                 });
             });
@@ -465,7 +458,7 @@ export default function useTrips() {
                 );
 
                 activePassengerTripsList.value[index].cancelled_at =
-                    response.data.data.cancelled_at;
+                    response.data.data.pivot.cancelled_at;
             } else {
                 swal({
                     icon: "error",

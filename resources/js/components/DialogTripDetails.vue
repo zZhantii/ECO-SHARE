@@ -64,9 +64,16 @@
             </div>
             <div v-else>
                 <div>
-                    <p>
+                    <p
+                        v-if="
+                            selectedTrip.cancelled_at == null &&
+                            selectedTrip.pivot.cancelled_at == null
+                        "
+                    >
                         Precio total a pagar
-                        <strong class="ms-2">{{ selectedTrip.price }} €</strong>
+                        <strong class="ms-2"
+                            >{{ selectedTrip.pivot.total_price }} €</strong
+                        >
                     </p>
                     <p>
                         Plazas reservadas
@@ -108,8 +115,7 @@
     </Dialog>
 </template>
 <script setup>
-import { boolean, object } from "yup";
-import { toRef, onMounted } from "vue";
+import { toRef } from "vue";
 
 const props = defineProps({
     visibleDialog: Boolean,

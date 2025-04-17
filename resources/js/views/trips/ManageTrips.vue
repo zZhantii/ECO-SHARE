@@ -247,7 +247,7 @@
                                         <Button
                                             class="btn-secondary m-1"
                                             label="Cancelar viaje"
-                                            @click="cancellAsPassenger(trip)"
+                                            @click="confirmCancell(trip, true)"
                                         />
                                     </div>
                                     <div
@@ -326,7 +326,11 @@
                     <AccordionContent>
                         <ul class="p-0">
                             <li v-for="trip of driverHistory">
-                                <CardDriverHistory :trip="trip" />
+                                <CardDriverHistory
+                                    :trip="trip"
+                                    v-model:visibleDialog="visibleDialog"
+                                    v-model:passenger="passenger"
+                                />
                             </li></ul
                     ></AccordionContent>
                 </AccordionPanel>
@@ -450,33 +454,6 @@ function checkIn(trip) {
     });
 }
 
-function cancellAsPassenger(trip) {
-    confirm.require({
-        message: "Seguro que quieres cancelar el viaje?",
-        header: "Confirmar",
-        icon: "pi pi-exclamation-triangle",
-        rejectProps: {
-            label: "Cancelar",
-            severity: "secondary",
-            outlined: true,
-        },
-        acceptProps: {
-            label: "Cancelar viaje",
-        },
-        accept: () => {
-            cancellTripAsPassenger(trip.id);
-        },
-        reject: () => {
-            toast.add({
-                severity: "info",
-                summary: "No se ha cancelado el viaje",
-
-                life: 3000,
-            });
-        },
-    });
-}
-
 function checkBoarding(driveStart, startTime, passenger = false) {
     const start = new Date(startTime);
     const now = new Date();
@@ -547,31 +524,58 @@ const confirmStart = (trip) => {
     });
 };
 
-const confirmCancell = (trip) => {
-    confirm.require({
-        message: "Seguro que quieres cancelar el viaje?",
-        header: "Confirmar",
-        icon: "pi pi-exclamation-triangle",
-        rejectProps: {
-            label: "Cancelar",
-            severity: "secondary",
-            outlined: true,
-        },
-        acceptProps: {
-            label: "Cancelar viaje",
-        },
-        accept: () => {
-            cancellTripAsDriver(trip.id);
-        },
-        reject: () => {
-            toast.add({
-                severity: "info",
-                summary: "No se ha cancelado el viaje",
+const confirmCancell = (trip, passenger = false) => {
+    if (!passenger) {
+        confirm.require({
+            message: "Seguro que quieres cancelar el viaje?",
+            header: "Confirmar",
+            icon: "pi pi-exclamation-triangle",
+            rejectProps: {
+                label: "Cancelar",
+                severity: "secondary",
+                outlined: true,
+            },
+            acceptProps: {
+                label: "Cancelar viaje",
+            },
+            accept: () => {
+                cancellTripAsDriver(trip.id);
+            },
+            reject: () => {
+                toast.add({
+                    severity: "info",
+                    summary: "No se ha cancelado el viaje",
 
-                life: 3000,
-            });
-        },
-    });
+                    life: 3000,
+                });
+            },
+        });
+    } else {
+        confirm.require({
+            message: "Seguro que quieres cancelar el viaje?",
+            header: "Confirmar",
+            icon: "pi pi-exclamation-triangle",
+            rejectProps: {
+                label: "Cancelar",
+                severity: "secondary",
+                outlined: true,
+            },
+            acceptProps: {
+                label: "Cancelar viaje",
+            },
+            accept: () => {
+                cancellTripAsPassenger(trip.id);
+            },
+            reject: () => {
+                toast.add({
+                    severity: "info",
+                    summary: "No se ha cancelado el viaje",
+
+                    life: 3000,
+                });
+            },
+        });
+    }
 };
 
 const confirmEnd = (trip) => {
@@ -668,7 +672,7 @@ i {
     padding-top: 5px;
 }
 .timeline-directions {
-    width: 80% !important;
+    width: 85% !important;
 }
 #undefined_accordioncontent_1,
 #undefined_accordioncontent_0 {
