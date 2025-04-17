@@ -83,6 +83,41 @@ export default function useRates() {
             }).finally(() => isLoading.value = false);
     }
 
+    const getRateWithId2 = async (user_id) => {
+        if (isLoading.value) return;
+
+        isLoading.value = true;
+        validationErrors.value = {};
+
+        await axios.get("/api/rates/" + user_id)
+            .then((response) => {
+                console.log("Respuesta API obtener valoración: ", response.data.data);
+                rate.value = response.data.data;
+            }).catch((error) => {
+                if (error.response?.status === 404) {
+                    swal({
+                        icon: "error",
+                        title: "Error",
+                        text: error.response.data.message
+                    });
+                } else if (error.response?.status === 422) {
+                    swal({
+                        icon: "error",
+                        title: "Error",
+                        text: error.response.data.message
+                    });
+                } else if (error.response?.status === 500) {
+                    swal({
+                        icon: "error",
+                        title: "Error",
+                        text: error.response.data.message
+                    });
+                }
+
+                console.error("Error:", error);
+            }).finally(() => isLoading.value = false);
+    }
+
     const createRate = async (rate2) => {
         if (isLoading.value) return;
 
@@ -183,6 +218,7 @@ export default function useRates() {
         getRates,
         createRate,
         getRateWithId,
+        getRateWithId2,
         updateRate,
         deleteRate,
         rateList,

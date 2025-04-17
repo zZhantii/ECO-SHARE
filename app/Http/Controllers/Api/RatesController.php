@@ -57,11 +57,29 @@ class RatesController extends Controller
                 ->first();
 
             if (!$rate) {
-                $user = User::find($user_id);
-                $user->rates()->attach($trip_id, [
-                    'rate' => 0
-                ]);
+                return response()->json([
+                "success" => false,
+                "message" => "Error al obtener la valoración"
+                ], 404);
             }
+
+            return response()->json([
+                "success" => true,
+                "data" => $rate
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => "Error al obtener la valoración",
+                "error" => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function show2($user_id)
+    {
+        try {
+            $rate = User::find($user_id)->rates()->first();
 
             return response()->json([
                 "success" => true,

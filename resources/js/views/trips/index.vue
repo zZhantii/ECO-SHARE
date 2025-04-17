@@ -123,13 +123,13 @@
                             <p class="m-0">{{ trip.available_seats }}</p>
                         </div>
                         <div class="border-start border-end ps-5 w-75">
-                            <p>Tags</p>
+                            <span v-for="(tag, tagIndex) in tagsData[trip.id]" :key="tagIndex"
+                                class="badge bg-secondary">
+                                {{ tag }}
+                            </span>
+                            <span v-if="!tagsData[trip.id]?.length">Sin tags</span>
                         </div>
-                        <div v-for="trip in tripsWithRatings" :key="trip.id"
-                            class="d-flex align-items-center ps-5 gap-5">
-                            <p>{{ trip.start_point.name }} - {{ trip.end_point.name }}</p>
-                            <Rating v-model="trip.rate" disabled />
-                        </div>
+                        <Rating class="ms-4" v-model="ratings[trip.id]" disabled />
                     </div>
                 </div>
             </div>
@@ -147,7 +147,7 @@ const { getTrips, tripsList, searchTrip, searchTripList, getTagTrips, tags } = u
 import useUsers from "@/composables/users";
 const { getUser, user } = useUsers();
 import useRates from "@/composables/rates";
-const { getRateWithId, rate } = useRates();
+const { getRateWithId2, rate } = useRates();
 import useTags from "@/composables/tags";
 const { getTagWithID, tag } = useTags();
 
@@ -160,7 +160,7 @@ import Timeline from "primevue/timeline";
 import Rating from 'primevue/rating';
 import Checkbox from 'primevue/checkbox';
 
-const tripsWithRatings = ref([]);
+const ratings = ref({});
 
 // Vue
 import { onMounted, ref, watch, computed } from "vue";
@@ -202,6 +202,7 @@ const formatedtime = (date) => {
     return new Date(date).toISOString().slice(0, 10);
 }
 
+const tagsData = ref({});
 const searchTrip2 = ref({});
 const searchResults = ref({});
 const searchResultsFiltered = ref({});
@@ -226,38 +227,27 @@ const handleSearch = async (searchData) => {
 
         await searchTrip(searchTrip2.value);
 
-        console.log("searchtrip", searchTripList.value);
-
         const user_id = ref(null);
         const trip_id = ref(null);
 
         for (const element of searchTripList.value) {
-            trip_id.value = element.id;
             user_id.value = element.user_id;
+            trip_id.value = element.id;
 
-            await getRateWithId(user_id.value, trip_id.value);
+            await getRateWithId2(user_id.value);
 
-            tripsWithRatings.value.push({
-                ...element,
-                rate: rate.value.pivot.rate
-            });
-            console.log("tripRating", tripRating.value)
-        }
+            ratings.value[trip_id.value] = rate.value.pivot.rate;
 
-        await getTagTrips(trip_id.value);
+            await getTagTrips(trip_id.value);
 
-        console.log("rates", tags.value)
+            const currentTripTags = [];
+            for (const tagId of tags.value) {
+                await getTagWithID(tagId);
+                currentTripTags.push(tag.value.tag_name);
+            }
 
-        const tagsData = [];
-
-        for (const tagId of tags.value) {
-            console.log(tagId);
-            await getTagWithID(tagId);
-            const tagInfo = tag.value.tag_name;
-            tagsData.push(tagInfo);
-        }
-
-        console.log("data", tagsData);
+            tagsData.value[ trip_id.value] = currentTripTags;
+        }       
 
         await applyFilters();
     } catch (err) {

@@ -107,6 +107,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('rates', [RatesController::class, 'index']);
     Route::post('rates', [RatesController::class, 'store']);
     Route::get('rates/{user_id}/{trip_id}', [RatesController::class, 'show']);
+    Route::get('rates/{user_id}', [RatesController::class, 'show2']);
     Route::put('rates/{user_id}/{trip_id}', [RatesController::class, 'update']);
     Route::delete('rates/{user_id}/{trip_id}', [RatesController::class, 'destroy']);
 
