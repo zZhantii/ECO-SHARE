@@ -28,3 +28,7 @@ Route::view('/{any?}', 'main-view')
     ->where('any', '.*');
 
 
+
+Route::get('/', function () {
+return 'Hola mundo';
+});
