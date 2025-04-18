@@ -255,7 +255,11 @@ const handleSearch = async (searchData) => {
 
             await getRateWithId2(user_id.value);
 
-            ratings.value[trip_id.value] = rate.value.pivot.rate;
+            if (rate.value) {
+                ratings.value[trip_id.value] = rate.value.pivot.rate;
+            } else {
+                ratings.value[trip_id.value] = 0;
+            }
 
             await getTagTrips(trip_id.value);
 
