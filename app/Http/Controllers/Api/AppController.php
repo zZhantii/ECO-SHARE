@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Vehicle;
 use App\Models\Trip;
 use App\Models\User;
+use App\Models\Reserve;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -277,6 +278,38 @@ class AppController extends Controller
             ->get();
 
         return response()->json(["success" => true, "data" => $trips], 200);
+    }
+
+    public function indexAdmin()
+    {
+        $now = Carbon::now();
+        $weekAgo = $now->copy()->subWeek();
+
+        $stats = [
+            'users' => [
+                'total' => User::count(),
+                'new' => User::whereBetween('created_at', [$weekAgo, $now])->count()
+            ],
+            'vehicles' => [
+                'total' => Vehicle::count(),
+                'validated' => Vehicle::where('validation', true)->count()
+            ],
+            'trips' => [
+                'total' => Trip::count(),
+                'active' => Trip::where('departure_time', '>=', $now)
+                    ->where('arrival_time', '>=', $now)
+                    ->count()
+            ],
+            'reservas' => [
+                'total' => Trip::withCount(['reserves'])->get()->sum('reserves_count'),
+                'confirmed' => Trip::whereHas('reserves', function ($query) use ($weekAgo, $now) {
+                    $query->whereBetween('user_trips_reserves.created_at', [$weekAgo, $now])
+                        ->whereNotNull('check_in');
+                })->count()
+            ]
+        ];
+
+        return response()->json(["success" => true, "data" => $stats], 200);
     }
 
 

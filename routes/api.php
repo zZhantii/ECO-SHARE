@@ -115,6 +115,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::put('rates/{user_id}/{trip_id}', [RatesController::class, 'update']);
     Route::delete('rates/{user_id}/{trip_id}', [RatesController::class, 'destroy']);
 
+    Route::get('admin', [AppController::class, 'indexAdmin']);
 
     Route::get('abilities', function (Request $request) {
         return $request->user()->roles()->with('permissions')
