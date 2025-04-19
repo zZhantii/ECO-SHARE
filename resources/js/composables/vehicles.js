@@ -80,19 +80,20 @@ export default function useVehicles() {
             .finally(() => (isLoading.value = false));
     };
 
-    const createVehicle = async (vehicle2) => {
+    const createVehicle = async (vehicle) => {
         if (isLoading.value) return;
 
         isLoading.value = true;
         validationErrors.value = {};
 
         axios
-            .post("/api/vehicle/", vehicle2.value)
+            .post("/api/vehicle/", vehicle.value)
             .then((response) => {
                 console.log(
                     "Respuesta API creando vehículo: ",
                     response.data.message
                 );
+                vehiclesList.value.push(vehicle);
                 swal({
                     icon: "success",
                     title: "Vehículo guardado satisfactoriamente",
@@ -113,14 +114,20 @@ export default function useVehicles() {
         isLoading.value = true;
         validationErrors.value = {};
 
-        await axios.get("/api/vehicle/" + vehicleId).then((response) => {
-            console.log("Respuesta API obteniendo vehículo: ", response.data.data);
-            vehicle.value = response.data.data;
-        }).catch((error) => {
-            if (error.response?.data) {
-                validationErrors.value = error.response.data.errors;
-            }
-        })
+        await axios
+            .get("/api/vehicle/" + vehicleId)
+            .then((response) => {
+                console.log(
+                    "Respuesta API obteniendo vehículo: ",
+                    response.data.data
+                );
+                vehicle.value = response.data.data;
+            })
+            .catch((error) => {
+                if (error.response?.data) {
+                    validationErrors.value = error.response.data.errors;
+                }
+            })
             .finally(() => (isLoading.value = false));
     };
 
@@ -163,15 +170,15 @@ export default function useVehicles() {
         validationErrors.value = {};
 
         swal({
-            title: 'Are you sure?',
-            text: 'You won\'t be able to revert this action!',
-            icon: 'warning',
+            title: "Are you sure?",
+            text: "You won't be able to revert this action!",
+            icon: "warning",
             showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-            confirmButtonColor: '#ef4444',
+            confirmButtonText: "Yes, delete it!",
+            confirmButtonColor: "#ef4444",
             timer: 20000,
             timerProgressBar: true,
-            reverseButtons: true
+            reverseButtons: true,
         }).then((result) => {
             if (result.isConfirmed) {
                 axios
@@ -181,7 +188,7 @@ export default function useVehicles() {
                             "Respuesta API actualizando vehículo: ",
                             response.data.message
                         );
-                        router.push({ name: 'vehicles.index' })
+                        router.push({ name: "vehicles.index" });
                         swal({
                             icon: "success",
                             title: "Vehicle actualizado con éxito",
@@ -193,7 +200,7 @@ export default function useVehicles() {
                     })
                     .finally(() => (isLoading.value = false));
             }
-        })
+        });
     };
 
     return {
