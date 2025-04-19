@@ -47,6 +47,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get("app/driver-active-trip", [AppController::class, "indexDriverTrips"]);
     Route::get("app/driver-history", [AppController::class, "indexHistoryAsDriver"]);
     Route::get("app/passenger-history", [AppController::class, "indexHistoryAsPassenger"]);
+
     //Conseguir viajes activos como pasajero
     Route::get("app/passenger-active-trip", [AppController::class, "indexPassengerTrips"]);
     Route::put("app/cancel-passenger-trip/{trip}", [AppController::class, "cancelPassengerTrip"]);

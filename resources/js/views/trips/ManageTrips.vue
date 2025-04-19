@@ -1,5 +1,10 @@
 <template>
     <main class="container">
+        <RatingDialog
+            v-model:ratingDialog="ratingDialog"
+            :tripsToRate="tripsToRate"
+        />
+
         <div class="container mt-5 d-flex flex-column align-items-center">
             <div class="gradient-img"></div>
 
@@ -247,7 +252,7 @@
                                         <Button
                                             class="btn-secondary m-1"
                                             label="Cancelar viaje"
-                                            @click="cancellAsPassenger(trip)"
+                                            @click="confirmCancell(trip, true)"
                                         />
                                     </div>
                                     <div
@@ -326,7 +331,11 @@
                     <AccordionContent>
                         <ul class="p-0">
                             <li v-for="trip of driverHistory">
-                                <CardDriverHistory :trip="trip" />
+                                <CardDriverHistory
+                                    :trip="trip"
+                                    v-model:visibleDialog="visibleDialog"
+                                    v-model:passenger="passenger"
+                                />
                             </li></ul
                     ></AccordionContent>
                 </AccordionPanel>
@@ -366,6 +375,8 @@ import { useConfirm } from "primevue/useconfirm";
 import CardPassengerHistory from "../../components/CardPassengerHistory.vue";
 import CardDriverHistory from "../../components/CardDriverHistory.vue";
 import DialogTripDetails from "../../components/DialogTripDetails.vue";
+import RatingDialog from "../../components/RatingDialog.vue";
+import Rating from "primevue/rating";
 
 import AccordionPanel from "primevue/accordionpanel";
 import AccordionHeader from "primevue/accordionheader";
@@ -382,6 +393,7 @@ const {
     cancellTripAsDriver,
     cancellTripAsPassenger,
     makeCheckIn,
+    tripsToRate,
     driverHistory,
     passengerHistory,
     getDriverHistory,
@@ -392,13 +404,25 @@ const confirm = useConfirm();
 const toast = useToast();
 const selectedTrip = ref({});
 const passenger = ref(false);
+const ratingDialog = ref(false);
 
-onMounted(() => {
-    getActiveTrips();
-    getDriverHistory();
-    getPassengerHistory();
-    console.log("Historial como pasajero", passengerHistory.value);
+onMounted(async () => {
+    await getActiveTrips();
+    await getDriverHistory();
+    ratingDialog.value = await getPassengerHistory();
+
+    console.log("viajes como pasajero", passengerHistory.value);
 });
+
+function formatDate(timestamp) {
+    return new Date(timestamp).toLocaleString("es-ES", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+    });
+}
 
 function getTimeToBoarding(trip) {
     const start = new Date(trip.departure_time);
@@ -438,33 +462,6 @@ function checkIn(trip) {
         },
         accept: () => {
             makeCheckIn(trip);
-        },
-        reject: () => {
-            toast.add({
-                severity: "info",
-                summary: "No se ha cancelado el viaje",
-
-                life: 3000,
-            });
-        },
-    });
-}
-
-function cancellAsPassenger(trip) {
-    confirm.require({
-        message: "Seguro que quieres cancelar el viaje?",
-        header: "Confirmar",
-        icon: "pi pi-exclamation-triangle",
-        rejectProps: {
-            label: "Cancelar",
-            severity: "secondary",
-            outlined: true,
-        },
-        acceptProps: {
-            label: "Cancelar viaje",
-        },
-        accept: () => {
-            cancellTripAsPassenger(trip.id);
         },
         reject: () => {
             toast.add({
@@ -547,31 +544,58 @@ const confirmStart = (trip) => {
     });
 };
 
-const confirmCancell = (trip) => {
-    confirm.require({
-        message: "Seguro que quieres cancelar el viaje?",
-        header: "Confirmar",
-        icon: "pi pi-exclamation-triangle",
-        rejectProps: {
-            label: "Cancelar",
-            severity: "secondary",
-            outlined: true,
-        },
-        acceptProps: {
-            label: "Cancelar viaje",
-        },
-        accept: () => {
-            cancellTripAsDriver(trip.id);
-        },
-        reject: () => {
-            toast.add({
-                severity: "info",
-                summary: "No se ha cancelado el viaje",
+const confirmCancell = (trip, passenger = false) => {
+    if (!passenger) {
+        confirm.require({
+            message: "Seguro que quieres cancelar el viaje?",
+            header: "Confirmar",
+            icon: "pi pi-exclamation-triangle",
+            rejectProps: {
+                label: "Cancelar",
+                severity: "secondary",
+                outlined: true,
+            },
+            acceptProps: {
+                label: "Cancelar viaje",
+            },
+            accept: () => {
+                cancellTripAsDriver(trip.id);
+            },
+            reject: () => {
+                toast.add({
+                    severity: "info",
+                    summary: "No se ha cancelado el viaje",
 
-                life: 3000,
-            });
-        },
-    });
+                    life: 3000,
+                });
+            },
+        });
+    } else {
+        confirm.require({
+            message: "Seguro que quieres cancelar el viaje?",
+            header: "Confirmar",
+            icon: "pi pi-exclamation-triangle",
+            rejectProps: {
+                label: "Cancelar",
+                severity: "secondary",
+                outlined: true,
+            },
+            acceptProps: {
+                label: "Cancelar viaje",
+            },
+            accept: () => {
+                cancellTripAsPassenger(trip.id);
+            },
+            reject: () => {
+                toast.add({
+                    severity: "info",
+                    summary: "No se ha cancelado el viaje",
+
+                    life: 3000,
+                });
+            },
+        });
+    }
 };
 
 const confirmEnd = (trip) => {
@@ -668,10 +692,61 @@ i {
     padding-top: 5px;
 }
 .timeline-directions {
-    width: 80% !important;
+    width: 85% !important;
 }
 #undefined_accordioncontent_1,
 #undefined_accordioncontent_0 {
     background-color: white !important;
+}
+
+.timeline-item {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.trip-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+
+.user-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 120px;
+}
+
+.user-avatar,
+.avatar-placeholder {
+    margin-bottom: 0.5rem;
+}
+
+.user-name {
+    font-weight: 600;
+    margin: 0;
+    text-align: center;
+}
+
+.trip-info {
+    flex-grow: 1;
+}
+
+.route,
+.date {
+    margin: 0.25rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.rating-section {
+    min-width: 200px;
+    display: flex;
+    justify-content: center;
 }
 </style>

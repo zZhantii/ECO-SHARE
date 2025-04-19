@@ -64,9 +64,35 @@
             </div>
             <div v-else>
                 <div>
-                    <p>
+                    <Avatar
+                        v-if="selectedTrip.user.media[0]?.original_url"
+                        :image="selectedTrip.user.media[0].original_url"
+                        size="xlarge"
+                        shape="circle"
+                    />
+                    <Avatar
+                        v-else
+                        :label="trip.user.alias?.charAt(0).toUpperCase()"
+                        size="xlarge"
+                    />
+                    <p class="d-flex mb-3">
+                        Conductor
+                        <strong class="ms-2"
+                            >{{ selectedTrip.user.alias }}
+                        </strong>
+                    </p>
+                </div>
+                <div>
+                    <p
+                        v-if="
+                            selectedTrip.cancelled_at == null &&
+                            selectedTrip.pivot.cancelled_at == null
+                        "
+                    >
                         Precio total a pagar
-                        <strong class="ms-2">{{ selectedTrip.price }} €</strong>
+                        <strong class="ms-2"
+                            >{{ selectedTrip.pivot.total_price }} €</strong
+                        >
                     </p>
                     <p>
                         Plazas reservadas
@@ -74,12 +100,7 @@
                             >{{ selectedTrip.pivot.seats_reserved }}
                         </strong>
                     </p>
-                    <p>
-                        Alias del conductor
-                        <strong class="ms-2"
-                            >{{ selectedTrip.user.alias }}
-                        </strong>
-                    </p>
+
                     <p>
                         Vehículo
                         <strong class="ms-2"
@@ -108,8 +129,7 @@
     </Dialog>
 </template>
 <script setup>
-import { boolean, object } from "yup";
-import { toRef, onMounted } from "vue";
+import { toRef } from "vue";
 
 const props = defineProps({
     visibleDialog: Boolean,

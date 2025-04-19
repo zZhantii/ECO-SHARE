@@ -117,6 +117,9 @@ class AppController extends Controller
         if (!empty($trip->pivot->cancelled_at)) {
             return response()->json(["success" => false, "data" => "El viaje ha sido cancelado previamente por parte del pasajero."], 400);
         }
+        if (!empty($trip->pivot->check_in)) {
+            return response()->json(["success" => false, "data" => "El check-in ya se ha realizado con anterioridad."], 400);
+        }
         $departure = Carbon::parse($trip->departure_time);
         $startCheckIn = $departure->copy()->subHour();
         if (!now()->between($startCheckIn, $departure)) {
@@ -146,6 +149,7 @@ class AppController extends Controller
         $trips = Trip::where("user_id", $user->id)
             ->where(DB::raw("departure_time + INTERVAL 1 HOUR"), '>=', now())
             ->whereNull("cancelled_at")
+            ->whereNull("drive_end")
             ->with("vehicle")->with("reserves")->get();
 
         return response()->json(["suceess" => True, "data" => $trips], 200);
@@ -159,10 +163,20 @@ class AppController extends Controller
         $user = Auth::user();
 
         $reserves = $user->reserves()
-            ->where("trips.departure_time", '>=', now())
-            ->whereNull("trips.drive_end")
-            ->whereNull("trips.cancelled_at")
-            ->whereNull("user_trips_reserves.cancelled_at")
+            ->where(function ($query) {
+                $query->where("trips.departure_time", '>=', now())
+                    ->whereNull("trips.drive_end")
+                    ->whereNull("trips.cancelled_at")
+                    ->whereNull("user_trips_reserves.cancelled_at")
+
+                    ->orWhere(function ($q) {
+                        $q->whereNotNull("user_trips_reserves.check_in")
+                            ->whereNotNull("trips.drive_start")
+                            ->where('trips.arrival_time', '>', now());
+
+                    });
+            })
+
             ->with([
                 'vehicle:id,brand,model,plate',
                 'user:id,alias',
@@ -218,7 +232,7 @@ class AppController extends Controller
         $trips = Trip::with([
             'vehicle:id,brand,model',
             'user:id,alias'
-        ])
+        ])->with("reserves")
             ->where('user_id', $user->id)
             ->where(function ($query) {
                 $query->whereNotNull("drive_end")
@@ -241,8 +255,13 @@ class AppController extends Controller
 
         $trips = $user->reserves()
             ->with([
+                "rates" => function ($query) use ($user) {
+                    $query->where('user_id', $user->id)
+                        ->select('id', 'user_id', 'trip_id', 'rate');
+                },
                 "vehicle:id,plate,brand,model",
-                "user:id,alias"
+                "user:id,alias",
+                "user.media"
             ])
             ->where(function ($query) {
                 $query

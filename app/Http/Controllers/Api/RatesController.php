@@ -19,6 +19,7 @@ class RatesController extends Controller
     public function store(Request $request)
     {
         try {
+            $auth = Auth::user();
             $user = User::find($request->user_id);
 
             $existingRate = $user->rates()
@@ -33,9 +34,10 @@ class RatesController extends Controller
             }
 
             $user->rates()->attach($request->trip_id, [
-                'rate' => $request->rate
+                'rate' => $request->rate,
+                'user_id' => $auth->id
             ]);
-            
+
             return response()->json([
                 "success" => true,
                 "message" => "Valoración creada correctamente"
@@ -98,7 +100,7 @@ class RatesController extends Controller
     {
         try {
             $user = User::findOrFail($user_id);
-            
+
             $user->rates()->sync([
                 $trip_id => ['rate' => $request->rate]
             ]);
@@ -107,7 +109,7 @@ class RatesController extends Controller
                 "success" => true,
                 "message" => "Valoración actualizada correctamente"
             ], 200);
-            
+
         } catch (\Exception $e) {
             return response()->json([
                 "success" => false,

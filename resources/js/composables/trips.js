@@ -28,6 +28,7 @@ export default function useTrips() {
     const validationErrors = ref([]);
     const driverHistory = ref([]);
     const passengerHistory = ref([]);
+    const tripsToRate = ref([]);
     const swal = inject("$swal");
     yup.setLocale(es);
 
@@ -173,12 +174,15 @@ export default function useTrips() {
 
         try {
             const response = await axios.put("/api/trip/" + trip.id, trip);
-            console.log("API response, Trip actualizado: ", response.data.message);
+            console.log(
+                "API response, Trip actualizado: ",
+                response.data.message
+            );
             const index = tripsList.value.findIndex((t) => t.id === trip.id);
             if (index !== -1) {
                 tripsList.value[index] = trip;
             }
-            
+
             toast.add({
                 severity: "success",
                 summary: "Éxito",
@@ -279,29 +283,22 @@ export default function useTrips() {
             .put("/api/app/check-in", trip)
             .then((response) => {
                 console.log("API response: ", trip);
-                if (response.data.success == true) {
-                    swal({
-                        icon: "success",
-                        title: "Check-in realizado",
-                    });
-                    const index = activePassengerTripsList.value.findIndex(
-                        (e) => e.id == trip.id
-                    );
 
-                    activePassengerTripsList.value[index] = response.data.data;
-                } else {
-                    swal({
-                        icon: "error",
-                        title: "No se ha podido realizar el check-in",
-                        text: e.response.data.data,
-                    });
-                }
+                swal({
+                    icon: "success",
+                    title: "Check-in realizado",
+                });
+                const index = activePassengerTripsList.value.findIndex(
+                    (e) => e.id == trip.id
+                );
+
+                activePassengerTripsList.value[index] = response.data.data;
             })
             .catch((e) => {
                 console.log(e);
                 swal({
                     icon: "error",
-                    title: "Error inesperado en el servidor",
+                    title: "No se ha podido registrar la acción.",
                     text: e.response.data.data,
                 });
             });
@@ -365,11 +362,11 @@ export default function useTrips() {
         if (trip2.value.start_point === null) {
             trip2.value.start_point = startpointDefault;
         }
-        
+
         if (trip2.value.end_point === null) {
             trip2.value.end_point = endpointDefault;
         }
-        
+
         axios
             .post("/api/trip/", trip2.value)
             .then((response) => {
@@ -477,7 +474,7 @@ export default function useTrips() {
                 );
 
                 activePassengerTripsList.value[index].cancelled_at =
-                    response.data.data.cancelled_at;
+                    response.data.data.pivot.cancelled_at;
             } else {
                 swal({
                     icon: "error",
@@ -522,14 +519,59 @@ export default function useTrips() {
         });
     };
     const getPassengerHistory = async () => {
-        axios.get("/api/app/passenger-history").then((response) => {
+        return axios.get("/api/app/passenger-history").then((response) => {
             const trips = response.data.data;
             for (const element of trips) {
                 passengerHistory.value.push(element);
             }
+
+            getTripsToRate(passengerHistory.value);
+
+            console.log("veificaaahbshjbahjs", tripsToRate.value);
+
+            if (tripsToRate.value.length > 0) {
+                return true;
+            }
+            return false;
         });
     };
+    const getTripsToRate = (passengerHistory) => {
+        for (const trip of passengerHistory) {
+            if (trip.rates.length == 0) {
+                tripsToRate.value.push(trip);
+            }
+        }
+    };
 
+    const rateTrip = async (trip, localTrips, emit) => {
+        axios
+            .post("/api/rates", {
+                user_id: trip.user.id,
+                trip_id: trip.pivot.trip_id,
+                rate: trip.rate,
+            })
+            .then((response) => {
+                console.log("ANTES", tripsToRate.value);
+                const index = localTrips.value.findIndex(
+                    (t) => t.id == trip.id
+                );
+                if (index !== -1) {
+                    localTrips.value.splice(index, 1);
+                    emit("update:tripsToRate", localTrips.value);
+                }
+                swal({
+                    icon: "success",
+                    title: "Valoración registrada con éxito",
+                });
+            })
+            .catch((error) => {
+                swal({
+                    icon: "error",
+                    title: "No se ha podido registrar la valoración.",
+                    text: error.message,
+                });
+            });
+    };
     const getTagTrips = async (trip_id) => {
         if (isLoading.value) return;
 
@@ -539,7 +581,10 @@ export default function useTrips() {
         await axios
             .get("/api/tags/" + trip_id)
             .then((response) => {
-                console.log("Respuesta API recogiendo todas las etiquetas: ", response.data.data);
+                console.log(
+                    "Respuesta API recogiendo todas las etiquetas: ",
+                    response.data.data
+                );
                 tags.value = response.data.data;
             })
             .catch((error) => {
@@ -549,7 +594,7 @@ export default function useTrips() {
                 }
             })
             .finally(() => (isLoading.value = false));
-    }
+    };
 
     return {
         // trips,
@@ -583,5 +628,7 @@ export default function useTrips() {
         cancellTripAsDriver,
         cancellTripAsPassenger,
         createTrip,
+        rateTrip,
+        tripsToRate,
     };
 }

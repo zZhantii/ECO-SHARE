@@ -1,4 +1,9 @@
 <template>
+    <DialogTripDetails
+        v-model:visibleDialog="visibleDialog"
+        v-model:passenger="passenger"
+        :selectedTrip="selectedTrip"
+    />
     <div class="timeline mb-3 ps-2 mt-3 rounded-1">
         <Timeline
             :value="getTimelineEvents(trip)"
@@ -60,13 +65,15 @@
             <Button
                 class="btn-secondary m-3"
                 label="Ver detalles"
-                @click="showTripDetails(trip.id, true)"
+                @click="showTripDetails()"
             />
         </div>
     </div>
 </template>
 <script setup>
 import Timeline from "primevue/timeline";
+import { ref } from "vue";
+import DialogTripDetails from "./DialogTripDetails.vue";
 
 function getTimelineEvents(trip) {
     return [
@@ -91,7 +98,18 @@ function getTimelineEvents(trip) {
 
 const props = defineProps({
     trip: Object,
+    visibleDialog: Boolean,
+    passenger: Boolean,
 });
+
+const visibleDialog = ref(props.visibleDialog);
+const passenger = ref(props.passenger);
+const selectedTrip = props.trip;
+
+const showTripDetails = () => {
+    visibleDialog.value = true;
+    passenger.value = true;
+};
 </script>
 <style scoped>
 .timeline {
