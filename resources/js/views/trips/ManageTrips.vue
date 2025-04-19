@@ -682,9 +682,6 @@ i {
     font-size: 25px !important;
 }
 
-:deep(.p-timeline-event) {
-    height: 100% !important;
-}
 .passenger-list {
     background-color: rgb(246, 246, 246);
     border-radius: 20px;
@@ -714,13 +711,6 @@ i {
     gap: 1.5rem;
 }
 
-.user-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 120px;
-}
-
 .user-avatar,
 .avatar-placeholder {
     margin-bottom: 0.5rem;
@@ -732,21 +722,11 @@ i {
     text-align: center;
 }
 
-.trip-info {
-    flex-grow: 1;
-}
-
 .route,
 .date {
     margin: 0.25rem 0;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-}
-
-.rating-section {
-    min-width: 200px;
-    display: flex;
-    justify-content: center;
 }
 </style>

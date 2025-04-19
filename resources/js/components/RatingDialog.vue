@@ -4,7 +4,7 @@
         :tripsToRate="tripsToRate"
         modal
         header="Puntúa tus viajes realizados"
-        :style="{ width: '50rem' }"
+        class="col-sm-12 col-md-5"
         ><div>
             <span>
                 <p>
