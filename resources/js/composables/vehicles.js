@@ -93,7 +93,7 @@ export default function useVehicles() {
                     "Respuesta API creando vehículo: ",
                     response.data.message
                 );
-                vehiclesList.value.push(vehicle);
+                vehiclesList.value.push(vehicle.value);
                 swal({
                     icon: "success",
                     title: "Vehículo guardado satisfactoriamente",
@@ -170,11 +170,11 @@ export default function useVehicles() {
         validationErrors.value = {};
 
         swal({
-            title: "Are you sure?",
-            text: "You won't be able to revert this action!",
+            title: "Estás seguro?",
+            text: "Esta acción no se puede revertir.",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonText: "Yes, delete it!",
+            confirmButtonText: "Aceptar",
             confirmButtonColor: "#ef4444",
             timer: 20000,
             timerProgressBar: true,
@@ -188,6 +188,11 @@ export default function useVehicles() {
                             "Respuesta API actualizando vehículo: ",
                             response.data.message
                         );
+                        const index = vehiclesList.value.findIndex(
+                            (trip) => trip.id == vehicle.id
+                        );
+                        vehiclesList.value.splice(index, 1);
+
                         router.push({ name: "vehicles.index" });
                         swal({
                             icon: "success",
