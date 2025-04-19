@@ -26,6 +26,7 @@ export default function useTrips() {
     const validationErrors = ref([]);
     const driverHistory = ref([]);
     const passengerHistory = ref([]);
+    const tripsToRate = ref([]);
     const swal = inject("$swal");
     yup.setLocale(es);
 
@@ -503,14 +504,59 @@ export default function useTrips() {
         });
     };
     const getPassengerHistory = async () => {
-        axios.get("/api/app/passenger-history").then((response) => {
+        return axios.get("/api/app/passenger-history").then((response) => {
             const trips = response.data.data;
             for (const element of trips) {
                 passengerHistory.value.push(element);
             }
+
+            getTripsToRate(passengerHistory.value);
+
+            console.log("veificaaahbshjbahjs", tripsToRate.value);
+
+            if (tripsToRate.value.length > 0) {
+                return true;
+            }
+            return false;
         });
     };
+    const getTripsToRate = (passengerHistory) => {
+        for (const trip of passengerHistory) {
+            if (trip.rates.length == 0) {
+                tripsToRate.value.push(trip);
+            }
+        }
+    };
 
+    const rateTrip = async (trip, localTrips, emit) => {
+        axios
+            .post("/api/rates", {
+                user_id: trip.user.id,
+                trip_id: trip.pivot.trip_id,
+                rate: trip.rate,
+            })
+            .then((response) => {
+                console.log("ANTES", tripsToRate.value);
+                const index = localTrips.value.findIndex(
+                    (t) => t.id == trip.id
+                );
+                if (index !== -1) {
+                    localTrips.value.splice(index, 1);
+                    emit("update:tripsToRate", localTrips.value);
+                }
+                swal({
+                    icon: "success",
+                    title: "Valoración registrada con éxito",
+                });
+            })
+            .catch((error) => {
+                swal({
+                    icon: "error",
+                    title: "No se ha podido registrar la valoración.",
+                    text: error.message,
+                });
+            });
+    };
     return {
         // trips,
         trip,
@@ -541,5 +587,7 @@ export default function useTrips() {
         cancellTripAsDriver,
         cancellTripAsPassenger,
         createTrip,
+        rateTrip,
+        tripsToRate,
     };
 }

@@ -176,6 +176,7 @@ class AppController extends Controller
 
                     });
             })
+
             ->with([
                 'vehicle:id,brand,model,plate',
                 'user:id,alias',
@@ -254,8 +255,13 @@ class AppController extends Controller
 
         $trips = $user->reserves()
             ->with([
+                "rates" => function ($query) use ($user) {
+                    $query->where('user_id', $user->id)
+                        ->select('id', 'user_id', 'trip_id', 'rate');
+                },
                 "vehicle:id,plate,brand,model",
-                "user:id,alias"
+                "user:id,alias",
+                "user.media"
             ])
             ->where(function ($query) {
                 $query

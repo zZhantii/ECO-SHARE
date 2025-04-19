@@ -64,6 +64,25 @@
             </div>
             <div v-else>
                 <div>
+                    <Avatar
+                        v-if="selectedTrip.user.media[0]?.original_url"
+                        :image="selectedTrip.user.media[0].original_url"
+                        size="xlarge"
+                        shape="circle"
+                    />
+                    <Avatar
+                        v-else
+                        :label="trip.user.alias?.charAt(0).toUpperCase()"
+                        size="xlarge"
+                    />
+                    <p class="d-flex mb-3">
+                        Conductor
+                        <strong class="ms-2"
+                            >{{ selectedTrip.user.alias }}
+                        </strong>
+                    </p>
+                </div>
+                <div>
                     <p
                         v-if="
                             selectedTrip.cancelled_at == null &&
@@ -81,12 +100,7 @@
                             >{{ selectedTrip.pivot.seats_reserved }}
                         </strong>
                     </p>
-                    <p>
-                        Alias del conductor
-                        <strong class="ms-2"
-                            >{{ selectedTrip.user.alias }}
-                        </strong>
-                    </p>
+
                     <p>
                         Vehículo
                         <strong class="ms-2"

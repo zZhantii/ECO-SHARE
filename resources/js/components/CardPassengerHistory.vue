@@ -109,7 +109,6 @@ const selectedTrip = props.trip;
 const showTripDetails = () => {
     visibleDialog.value = true;
     passenger.value = true;
-    console.log("Ël viaje SELECTED ES", selectedTrip);
 };
 </script>
 <style scoped>
