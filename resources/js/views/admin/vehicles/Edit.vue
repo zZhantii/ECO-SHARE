@@ -1,98 +1,114 @@
 <template>
-
-    <div class="grid">
-
-        <div class="col-12 md:col-8 lg:col-8 xl:col-8">
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h6 class="mb-2 text-primary">Vehicles Details</h6>
-
-                    <div class="form-group">
-                        <label for="plate">Plate</label>
-                        <InputText v-model="vehicle.plate" type="text" class="d-flex w-100 w-100" id="plate" />
-                        <!-- <div class="text-danger mt-1">{{ errors.name }}</div>
-                        <div class="text-danger mt-1">
-                            <div v-for="message in validationErrors?.name">
-                                {{ message }}
-                            </div>
-                        </div> -->
+    <div class="surface-ground px-4 py-5 md:px-6 lg:px-8">
+        <div class="grid">
+            <div class="col-12 md:col-8 md:col-offset-2">
+                <div class="surface-card p-4 shadow-2 border-round">
+                    <div class="text-center mb-5">
+                        <h2 class="text-3xl font-medium text-900 mb-3">Editar Vehículo</h2>
+                        <span class="text-600 font-medium">Modifique los datos del vehículo</span>
                     </div>
 
-                    <div class="form-group">
-                        <label for="brand">Brand</label>
-                        <InputText v-model="vehicle.brand" type="text" class="d-flex w-100" id="brand" />
-                        <!-- <div class="text-danger mt-1">{{ errors.surname1 }}</div>
-                        <div class="text-danger mt-1">
-                            <div v-for="message in validationErrors?.surname1">
-                                {{ message }}
+
+                    <div v-if="vehicle" class="grid">
+                        <div class="grid">
+                            <div class="col-12 md:col-6 mb-4">
+                                <label for="plate" class="block text-900 font-medium mb-2">Matrícula</label>
+                                <InputText v-model="vehicle.plate" id="plate" type="text" class="w-full"
+                                    :class="{ 'p-invalid': validationErrors.plate }"
+                                    placeholder="Ingrese la matrícula" />
+                                <small v-if="validationErrors.plate" class="p-error block mt-1">
+                                    <div v-for="message in validationErrors.plate" :key="message">{{ message }}</div>
+                                </small>
                             </div>
-                        </div> -->
+
+                            <div class="col-12 md:col-6 mb-4">
+                                <label for="brand" class="block text-900 font-medium mb-2">Marca</label>
+                                <InputText v-model="vehicle.brand" id="brand" type="text" class="w-full"
+                                    :class="{ 'p-invalid': validationErrors.brand }" placeholder="Ingrese la marca" />
+                                <small v-if="validationErrors.brand" class="p-error block mt-1">
+                                    <div v-for="message in validationErrors.brand" :key="message">{{ message }}</div>
+                                </small>
+                            </div>
+
+                            <div class="col-12 md:col-6 mb-4">
+                                <label for="model" class="block text-900 font-medium mb-2">Modelo</label>
+                                <InputText v-model="vehicle.model" id="model" type="text" class="w-full"
+                                    :class="{ 'p-invalid': validationErrors.model }" placeholder="Ingrese el modelo" />
+                                <small v-if="validationErrors.model" class="p-error block mt-1">
+                                    <div v-for="message in validationErrors.model" :key="message">{{ message }}</div>
+                                </small>
+                            </div>
+
+                            <div class="col-12 md:col-6 mb-4">
+                                <label for="consumption" class="block text-900 font-medium mb-2">Consumo</label>
+                                <div class="p-inputgroup">
+                                    <InputNumber v-model="vehicle.consumption" id="consumption" :minFractionDigits="1"
+                                        :maxFractionDigits="1" showButtons class="w-full"
+                                        :class="{ 'p-invalid': validationErrors.consumption }" placeholder="L/100km" />
+                                    <span class="p-inputgroup-addon">L/100km</span>
+                                </div>
+                                <small v-if="validationErrors.consumption" class="p-error block mt-1">
+                                    <div v-for="message in validationErrors.consumption" :key="message">{{ message }}
+                                    </div>
+                                </small>
+                            </div>
+
+                            <div class="col-12 md:col-6 mb-4">
+                                <label for="pax_number" class="block text-900 font-medium mb-2">Número de
+                                    Pasajeros</label>
+                                <InputNumber v-model="vehicle.pax_number" id="pax_number" :min="1" showButtons
+                                    class="w-full" :class="{ 'p-invalid': validationErrors.pax_number }" />
+                                <small v-if="validationErrors.pax_number" class="p-error block mt-1">
+                                    <div v-for="message in validationErrors.pax_number" :key="message">{{ message }}
+                                    </div>
+                                </small>
+                            </div>
+
+                            <div class="col-12 md:col-6 mb-4">
+                                <label for="validation" class="block text-900 font-medium mb-2">Estado de
+                                    Validación</label>
+                                <SelectButton v-model="vehicle.validation" :options="validationOptions"
+                                    optionLabel="label" optionValue="value" class="w-full"
+                                    :class="{ 'p-invalid': validationErrors.validation }">
+                                    <template #option="slotProps">
+                                        <span
+                                            :class="{ 'text-green-600': slotProps.option.value === 1, 'text-red-600': slotProps.option.value === 0 }">
+                                            {{ slotProps.option.label }}
+                                        </span>
+                                    </template>
+                                </SelectButton>
+                                <small v-if="validationErrors.validation" class="p-error block mt-1">
+                                    <div v-for="message in validationErrors.validation" :key="message">{{ message }}
+                                    </div>
+                                </small>
+                            </div>
+
+                            <div class="col-12 md:col-6 mb-4">
+                                <label for="fuel_type" class="block text-900 font-medium mb-2">Tipo de
+                                    Combustible</label>
+                                <SelectButton v-model="vehicle.fuel_type" :options="options" class="w-full"
+                                    :class="{ 'p-invalid': validationErrors.fuel_type }" />
+                                <small v-if="validationErrors.fuel_type" class="p-error block mt-1">
+                                    <div v-for="message in validationErrors.fuel_type" :key="message">{{ message }}
+                                    </div>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else class="text-center">
+                        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+                        <p>Cargando datos del vehículo...</p>
                     </div>
 
-                    <div class="form-group">
-                        <label for="model">Model</label>
-                        <InputText v-model="vehicle.model" type="text" class="d-flex w-100" id="model" />
-                        <!-- <div class="text-danger mt-1">{{ errors.surname2 }}</div>
-                        <div class="text-danger mt-1">
-                            <div v-for="message in validationErrors?.surname2">
-                                {{ message }}
-                            </div>
-                        </div> -->
-                    </div>
-
-                    <div class="form-group">
-                        <label for="consumption">Consumption</label>
-                        <InputNumber v-model="vehicle.consumption" type="float" class="d-flex w-100" id="consumption"
-                            :minFractionDigits="1" :maxFractionDigits="1" showButtons />
-                        <!-- <div class="text-danger mt-1">{{ errors.email }}</div>
-                        <div class="text-danger mt-1">
-                            <div v-for="message in validationErrors?.email">
-                                {{ message }}
-                            </div>
-                        </div> -->
-                    </div>
-
-                    <div class="form-group">
-                        <label for="pax_number">Pax_number</label>
-                        <InputNumber v-model="vehicle.pax_number" type="text" class="d-flex w-100" id="pax_number"
-                            :min="1" showButtons />
-                        <!-- <div class="text-danger mt-1">{{ errors.password }}</div>
-                        <div class="text-danger mt-1">
-                            <div v-for="message in validationErrors?.password">
-                                {{ message }}
-                            </div>
-                        </div> -->
-                    </div>
-
-                    <div class="form-group">
-                        <label for="validation">Validation</label>
-                        <InputNumber v-model="vehicle.validation" class="d-flex w-100" id="validation" :min="0" :max="1"
-                            showButtons />
-                        <!-- <div class="text-danger mt-1">{{ errors.password }}</div>
-                        <div class="text-danger mt-1">
-                            <div v-for="message in validationErrors?.password">
-                                {{ message }}
-                            </div>
-                        </div> -->
-                    </div>
-
-                    <div class="form-group">
-                        <label for="fuel_type">Fuel_type</label>
-                        <SelectButton v-model="vehicle.fuel_type" :options="options" aria-labelledby="basic"
-                            class="d-flex w-100" id="fuel_type" />
-                        <!-- <div class="text-danger mt-1">{{ errors.password }}</div>
-                        <div class="text-danger mt-1">
-                            <div v-for="message in validationErrors?.password">
-                                {{ message }}
-                            </div>
-                        </div> -->
+                    <div class="flex justify-content-end">
+                        <Button label="Cancelar" class="p-button-text mr-2" @click="router.back()" />
+                        <Button label="Actualizar" icon="pi pi-check" class="p-button-success" :loading="loading"
+                            @click="submitUpdateVehicle" />
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
-    <button class="btn btn-primary" @click="submitUpdateVehicle">Guardar</button>
     <Toast />
 </template>
 
@@ -121,8 +137,20 @@ const tempVehicle = ref({});
 const options = ["Gasolina", "Diésel"];
 
 onMounted(async () => {
-    await getVehicle(route.params.id);
-})
+    loading.value = true;
+    try {
+        await getVehicle(route.params.id);
+    } catch (error) {
+        toast.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Error al cargar los datos del vehículo',
+            life: 3000
+        });
+    } finally {
+        loading.value = false;
+    }
+});
 
 const vehicleSchema = yup.object().shape({
     plate: yup.string().matches(/^[A-Z0-9-]+$/, "Formato de matrícula inválido").required("La matrícula es obligatoria"),

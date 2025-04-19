@@ -79,15 +79,13 @@ onMounted(() => {
 })
 
 const deleteTagAdmin = async (tag) => {
-    deleteTag(tag).then(() => {
-        refreshTags();
-    }); 
+    await deleteTag(tag);
+    refreshTags();
 }
 
 const refreshTags = () => {
     tagList.value = [];
     getTags();
-    console.log("Tags refresh")
 }
 
 

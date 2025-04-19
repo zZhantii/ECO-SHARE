@@ -14,6 +14,7 @@ export default function useVehicles() {
         fuel_type: "",
         pax_number: "",
         user_id: 0,
+        validation: 0,
     });
     const vehiclesList = ref([]);
     const vehicleSchema = yup.object().shape({

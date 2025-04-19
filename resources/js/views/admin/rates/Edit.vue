@@ -1,38 +1,63 @@
 <template>
-
-    <div class="grid">
-
-        <div class="col-12 md:col-8 lg:col-8 xl:col-8">
-            <div class="card mb-3">
-                <h6 class="mb-2 text-primary">Reserve Details</h6>
-
-                <div v-if="rate && rate.pivot" class="card-body">
-                    <div class="form-group">
-                        <Select v-model="rate.pivot.user_id" :options="users.data" filter optionLabel="name"
-                            optionValue="id" dataKey="id" placeholder="Select a User" class="w-full md:w-56">
-                        </Select>
+    <div class="surface-ground px-4 py-5 md:px-6 lg:px-8">
+        <div class="grid">
+            <div class="col-12 md:col-8 md:col-offset-2 lg:col-6 lg:col-offset-3">
+                <div class="surface-card p-4 shadow-2 border-round">
+                    <div class="text-center mb-5">
+                        <h2 class="text-3xl font-medium text-900 mb-3">Editar Valoración</h2>
+                        <span class="text-600 font-medium">Modifique los datos del formulario</span>
                     </div>
 
-                    <div class="form-group">
-                        <Select v-model="rate.pivot.trip_id" :options="tripsList" filter
-                            :optionLabel="option => `${option.start_point.address} - ${option.end_point.address}`"
-                            optionValue="id" dataKey="id" placeholder="Select a Start Point" class="w-full md:w-56"
+                    <div v-if="rate && rate.pivot">
+                        <div class="mb-4">
+                            <label for="user_id" class="block text-900 font-medium mb-2">Usuario</label>
+                            <Select v-model="rate.pivot.user_id" :options="users.data" filter optionLabel="name"
+                                optionValue="id" dataKey="id" placeholder="Seleccionar Usuario" class="w-full"
+                                :class="{ 'p-invalid': validationErrors.user_id }">
                             </Select>
-                    </div>
+                            <small v-if="validationErrors.user_id" class="p-error block mt-1">
+                                <div v-for="message in validationErrors.user_id" :key="message">{{ message }}</div>
+                            </small>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="rate">Rate</label>
-                        <InputNumber v-model="rate.pivot.rate" type="text" class="d-flex w-100 w-100" id="rate" :min="0"
-                            :max="5" showButtons />
-                        <div class="text-danger mt-1">
-                            <div v-for="message in validationErrors?.seats_reserved">
-                                {{ message }}
+                        <div class="mb-4">
+                            <label for="trip_id" class="block text-900 font-medium mb-2">Viaje</label>
+                            <Select v-model="rate.pivot.trip_id" :options="tripsList" filter
+                                :optionLabel="option => `${option.start_point.address} - ${option.end_point.address}`"
+                                optionValue="id" dataKey="id" placeholder="Seleccionar Viaje" class="w-full"
+                                :class="{ 'p-invalid': validationErrors.trip_id }">
+                            </Select>
+                            <small v-if="validationErrors.trip_id" class="p-error block mt-1">
+                                <div v-for="message in validationErrors.trip_id" :key="message">{{ message }}</div>
+                            </small>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="rate" class="block text-900 font-medium mb-2">
+                                Valoración
+                                <i v-for="i in 5" :key="i" class="pi"
+                                    :class="{ 'pi-star-fill': i <= rate.pivot.rate, 'pi-star': i > rate.pivot.rate }"
+                                    style="color: #FFA41C; margin-left: 0.2rem;">
+                                </i>
+                            </label>
+                            <div class="p-inputgroup">
+                                <InputNumber v-model="rate.pivot.rate" id="rate" :min="0" :max="5" showButtons
+                                    :step="0.5" placeholder="Ingrese una valoración" class="w-full"
+                                    :class="{ 'p-invalid': validationErrors.rate }">
+                                </InputNumber>
                             </div>
+                            <small v-if="validationErrors.rate" class="p-error block mt-1">
+                                <div v-for="message in validationErrors.rate" :key="message">{{ message }}</div>
+                            </small>
+                        </div>
+
+                        <div class="flex justify-content-end">
+                            <Button label="Cancelar" class="p-button-text mr-2" @click="router.back()" />
+                            <Button label="Actualizar" icon="pi pi-check" :loading="loading" class="p-button-success"
+                                @click="submitUpdateRate" />
                         </div>
                     </div>
-                    <button class="btn btn-primary" @click="submitUpdateRate">Guardar</button>
                 </div>
-
             </div>
         </div>
     </div>
@@ -42,11 +67,12 @@
 <script setup>
 // VUE
 import { onMounted, ref, computed } from "vue";
-import { useRoute } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import * as yup from "yup";
 import { es } from "yup-locales";
 
 yup.setLocale(es);
+const router = useRouter();
 const route = useRoute();
 
 // Composables
@@ -66,14 +92,14 @@ onMounted(async () => {
 
 const submitUpdateRate = async () => {
     try {
-        console.log("rate", rate.pivot);
-        updateRate(rate);
-        // rateSchema.validate(rate, { abortEarly: false })
-        //     .then(() => {
-        //         updateRates(rate);
-        //     })
+        await rateSchema.validate(rate.value.pivot, { abortEarly: false })
+            .then(() => {
+                updateRate(rate);
+            })
+        router.back();
     } catch (error) {
         if (error.inner) {
+            validationErrors.value = {}
             error.inner.forEach((e) => {
                 if (!validationErrors.value[e.path]) {
                     validationErrors.value[e.path] = [];

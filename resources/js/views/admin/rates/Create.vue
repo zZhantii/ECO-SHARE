@@ -1,46 +1,59 @@
 <template>
-    <div class="grid">
-
-        <div class="col-12 md:col-8 lg:col-8 xl:col-8">
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h4 class="mb-2 text-primary">Crear Valoracion</h4>
-
-
-                    <div class="form-group">
-                        <label for="rate.user_id">Usuarios</label>
-                        <Select v-model="rate.user_id" :options="users.data" filter optionLabel="name" optionValue="id"
-                            dataKey="id" placeholder="Select a User" class="w-full md:w-56">
-                        </Select>
-                        <div v-if="validationErrors.user_id" class="text-danger mt-1">
-                            <div v-for="message in validationErrors.user_id" :key="message">{{ message }}
-                            </div>
-                        </div>
+    <div class="surface-ground px-4 py-5 md:px-6 lg:px-8">
+        <div class="grid">
+            <div class="col-12 md:col-8 md:col-offset-2 lg:col-6 lg:col-offset-3">
+                <div class="surface-card p-4 shadow-2 border-round">
+                    <div class="text-center mb-5">
+                        <h2 class="text-3xl font-medium text-900 mb-3">Crear Valoración</h2>
+                        <span class="text-600 font-medium">Por favor, complete los datos del formulario</span>
                     </div>
 
-                    <div class="form-group">
-                        <label for="rate.trip_id">Viajes</label>
+                    <div class="mb-4">
+                        <label for="rate.user_id" class="block text-900 font-medium mb-2">Usuario</label>
+                        <Select v-model="rate.user_id" :options="users.data" filter optionLabel="name" optionValue="id"
+                            dataKey="id" placeholder="Seleccionar Usuario" class="w-full"
+                            :class="{ 'p-invalid': validationErrors.user_id }">
+                        </Select>
+                        <small v-if="validationErrors.user_id" class="p-error block mt-1">
+                            <div v-for="message in validationErrors.user_id" :key="message">{{ message }}</div>
+                        </small>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="rate.trip_id" class="block text-900 font-medium mb-2">Viaje</label>
                         <Select v-model="rate.trip_id" :options="tripsList" filter
                             :optionLabel="option => `${option.start_point.address} - ${option.end_point.address}`"
-                            optionValue="id" dataKey="id" placeholder="Select a Start Point" class="w-full md:w-56"
-                            </Select>
-                            <div v-if="validationErrors.trip_id" class="text-danger mt-1">
-                                <div v-for="message in validationErrors.trip_id" :key="message">{{ message }}
-                                </div>
-                            </div>
+                            optionValue="id" dataKey="id" placeholder="Seleccionar Viaje" class="w-full"
+                            :class="{ 'p-invalid': validationErrors.trip_id }">
+                        </Select>
+                        <small v-if="validationErrors.trip_id" class="p-error block mt-1">
+                            <div v-for="message in validationErrors.trip_id" :key="message">{{ message }}</div>
+                        </small>
                     </div>
 
-                    <div class="form-group">
-                        <label for="rates">Rate</label>
-                        <InputNumber v-model="rate.rate" type="number" class="d-flex w-100 w-100" id="rates" :min="0"
-                            :max="5" showButtons />
-                        <div v-if="validationErrors.rate" class="text-danger mt-1">
-                            <div v-for="message in validationErrors.rate" :key="message">{{ message }}
-                            </div>
+                    <div class="mb-4">
+                        <label for="rates" class="block text-900 font-medium mb-2">
+                            Valoración
+                            <i v-for="i in 5" :key="i" class="pi"
+                                :class="{ 'pi-star-fill': i <= rate.rate, 'pi-star': i > rate.rate }"
+                                style="color: #FFA41C; margin-left: 0.2rem;" @click="rate.rate = i" role="button">
+                            </i>
+                        </label>
+                        <div class="p-inputgroup">
+                            <InputNumber v-model="rate.rate" id="rates" :min="0" :max="5" showButtons :step="0.5"
+                                placeholder="Ingrese una valoración" class="w-full"
+                                :class="{ 'p-invalid': validationErrors.rate }">
+                            </InputNumber>
                         </div>
+                        <small v-if="validationErrors.rate" class="p-error block mt-1">
+                            <div v-for="message in validationErrors.rate" :key="message">{{ message }}</div>
+                        </small>
                     </div>
 
-                    <button class="btn btn-primary" @click="submitAddRate">Guardar</button>
+                    <div class="flex justify-content-end">
+                        <Button label="Cancelar" class="p-button-text mr-2" @click="router.back()" />
+                        <Button label="Guardar" icon="pi pi-check" @click="submitAddRate" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -73,9 +86,8 @@ const submitAddRate = async () => {
         await rateSchema.validate(rate.value, { abortEarly: false })
             .then(() => {
                 createRate(rate);
-            }).then(() => {
-                router.push({ name: "rate.index" });
             })
+        router.back();
     } catch (error) {
         if (error.inner) {
             validationErrors.value = {}

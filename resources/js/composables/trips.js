@@ -23,6 +23,7 @@ export default function useTrips() {
     const tags = ref([]);
     const searchTripList = ref([]);
     const reservesList = ref([]);
+    const toast = useToast();
     const isLoading = ref(false);
     const validationErrors = ref([]);
     const swal = inject("$swal");
@@ -92,7 +93,7 @@ export default function useTrips() {
             console.log("Trips cargados:", tripsList.value);
         } catch (error) {
             console.error("Error fetching trips:", error);
-            useToast().add({
+            toast.add({
                 severity: "error",
                 summary: "Error",
                 detail: "No se pudieron cargar los viajes",
@@ -115,17 +116,17 @@ export default function useTrips() {
     // }
 
     async function getTrip(tripId) {
-        if (isLoading.value || tripList.value.length > 0) return;
+        if (isLoading.value || trip.value.length > 0) return;
         isLoading.value = true;
 
         try {
             console.log("Cargando trip con ID:", tripId);
             const response = await axios.get("/api/trip/" + tripId);
-            tripList.value = response.data.data;
-            console.log("Trip con ID cargado:", tripList.value);
+            trip.value = response.data.data;
+            console.log("Trip con ID cargado:", trip.value);
         } catch (error) {
             console.error("Error fetching trips:", error);
-            useToast().add({
+            toast.add({
                 severity: "error",
                 summary: "Error",
                 detail: "No se pudieron cargar los viajes",
@@ -170,11 +171,13 @@ export default function useTrips() {
 
         try {
             const response = await axios.put("/api/trip/" + trip.id, trip);
+            console.log("API response, Trip actualizado: ", response.data.message);
             const index = tripsList.value.findIndex((t) => t.id === trip.id);
             if (index !== -1) {
                 tripsList.value[index] = trip;
             }
-            useToast().add({
+            
+            toast.add({
                 severity: "success",
                 summary: "Éxito",
                 detail: "Viaje actualizado correctamente",
@@ -184,7 +187,7 @@ export default function useTrips() {
             if (error.response?.data) {
                 validationErrors.value = error.response.data.errors;
             }
-            useToast().add({
+            toast.add({
                 severity: "error",
                 summary: "Error",
                 detail: "No se pudo actualizar el viaje",
@@ -358,6 +361,14 @@ export default function useTrips() {
         trip2.value.departure_time = formatDateTime(trip2.value.departure_time);
         trip2.value.arrival_time = formatDateTime(trip2.value.arrival_time);
 
+        if (trip2.value.start_point === null) {
+            trip2.value.start_point = startpointDefault;
+        }
+        
+        if (trip2.value.end_point === null) {
+            trip2.value.end_point = endpointDefault;
+        }
+        
         axios
             .post("/api/trip/", trip2.value)
             .then((response) => {
@@ -388,7 +399,7 @@ export default function useTrips() {
             await axios.delete("/api/trip/" + trip.id);
             // Eliminar el viaje de la lista
             tripsList.value = tripsList.value.find((t) => t.id !== trip.id);
-            useToast().add({
+            toast.add({
                 severity: "success",
                 summary: "Éxito",
                 detail: "Viaje eliminado correctamente",
@@ -396,7 +407,7 @@ export default function useTrips() {
             });
         } catch (error) {
             console.error("Error deleting trip:", error);
-            useToast().add({
+            toast.add({
                 severity: "error",
                 summary: "Error",
                 detail: "No se pudo eliminar el viaje",

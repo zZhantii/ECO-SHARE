@@ -120,6 +120,8 @@ class RatesController extends Controller
     public function destroy($user_id, $trip_id)
     {
         try {
+            $user = User::findOrFail($user_id);
+            
             $user->rates()->detach($trip_id);
 
             return response()->json([

@@ -78,6 +78,7 @@ class VehicleController extends Controller
         $vehicle->model = $request->model;
         $vehicle->consumption = $request->consumption;
         $vehicle->pax_number = $request->pax_number;
+        $vehicle->validation = $request->validation;
         $vehicle->user_id =  $user_id;
 
         $vehicle->save();
