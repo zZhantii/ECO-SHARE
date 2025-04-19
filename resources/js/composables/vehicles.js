@@ -108,25 +108,20 @@ export default function useVehicles() {
     };
 
     const getVehicle = async (vehicleId) => {
-        if (isLoading.value || vehicle.value.length > 0) return;
-        isLoading.value = true;
+        if (isLoading.value) return;
 
-        try {
-            const response = await axios.get("/api/vehicle/" + vehicleId);
-            console.log("API Response:", response.data.data);
+        isLoading.value = true;
+        validationErrors.value = {};
+
+        await axios.get("/api/vehicle/" + vehicleId).then((response) => {
+            console.log("Respuesta API obteniendo vehículo: ", response.data.data);
             vehicle.value = response.data.data;
-            console.log("Vehiculo con ID cargado:", vehicle.value);
-        } catch (error) {
-            console.error("Error fetching trips:", error);
-            useToast().add({
-                severity: "error",
-                summary: "Error",
-                detail: "No se pudieron cargar los viajes",
-                life: 3000,
-            });
-        } finally {
-            isLoading.value = false;
-        }
+        }).catch((error) => {
+            if (error.response?.data) {
+                validationErrors.value = error.response.data.errors;
+            }
+        })
+            .finally(() => (isLoading.value = false));
     };
 
     const updateVehicle = async (vehicle) => {
@@ -135,8 +130,8 @@ export default function useVehicles() {
         isLoading.value = true;
         validationErrors.value = {};
 
-        axios
-            .put("/api/vehicle/" + vehicle.id, vehicle)
+        await axios
+            .put("/api/vehicle/" + vehicle.value.id, vehicle.value)
             .then((response) => {
                 console.log(
                     "Respuesta API actualizando vehículo: ",

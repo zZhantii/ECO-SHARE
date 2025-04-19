@@ -515,7 +515,7 @@ async function handleVehicleUpdate() {
             pax_number: tempVehicle.value.pax_number,
         });
 
-        updateVehicle(tempVehicle.value);
+        updateVehicle(tempVehicle);
 
         visibleVehicleDialog.value = false;
     } catch (Error) {

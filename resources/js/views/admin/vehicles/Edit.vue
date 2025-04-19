@@ -8,96 +8,98 @@
                         <span class="text-600 font-medium">Modifique los datos del vehículo</span>
                     </div>
 
-
-                    <div v-if="vehicle" class="grid">
-                        <div class="grid">
-                            <div class="col-12 md:col-6 mb-4">
-                                <label for="plate" class="block text-900 font-medium mb-2">Matrícula</label>
-                                <InputText v-model="vehicle.plate" id="plate" type="text" class="w-full"
-                                    :class="{ 'p-invalid': validationErrors.plate }"
-                                    placeholder="Ingrese la matrícula" />
-                                <small v-if="validationErrors.plate" class="p-error block mt-1">
-                                    <div v-for="message in validationErrors.plate" :key="message">{{ message }}</div>
-                                </small>
-                            </div>
-
-                            <div class="col-12 md:col-6 mb-4">
-                                <label for="brand" class="block text-900 font-medium mb-2">Marca</label>
-                                <InputText v-model="vehicle.brand" id="brand" type="text" class="w-full"
-                                    :class="{ 'p-invalid': validationErrors.brand }" placeholder="Ingrese la marca" />
-                                <small v-if="validationErrors.brand" class="p-error block mt-1">
-                                    <div v-for="message in validationErrors.brand" :key="message">{{ message }}</div>
-                                </small>
-                            </div>
-
-                            <div class="col-12 md:col-6 mb-4">
-                                <label for="model" class="block text-900 font-medium mb-2">Modelo</label>
-                                <InputText v-model="vehicle.model" id="model" type="text" class="w-full"
-                                    :class="{ 'p-invalid': validationErrors.model }" placeholder="Ingrese el modelo" />
-                                <small v-if="validationErrors.model" class="p-error block mt-1">
-                                    <div v-for="message in validationErrors.model" :key="message">{{ message }}</div>
-                                </small>
-                            </div>
-
-                            <div class="col-12 md:col-6 mb-4">
-                                <label for="consumption" class="block text-900 font-medium mb-2">Consumo</label>
-                                <div class="p-inputgroup">
-                                    <InputNumber v-model="vehicle.consumption" id="consumption" :minFractionDigits="1"
-                                        :maxFractionDigits="1" showButtons class="w-full"
-                                        :class="{ 'p-invalid': validationErrors.consumption }" placeholder="L/100km" />
-                                    <span class="p-inputgroup-addon">L/100km</span>
-                                </div>
-                                <small v-if="validationErrors.consumption" class="p-error block mt-1">
-                                    <div v-for="message in validationErrors.consumption" :key="message">{{ message }}
-                                    </div>
-                                </small>
-                            </div>
-
-                            <div class="col-12 md:col-6 mb-4">
-                                <label for="pax_number" class="block text-900 font-medium mb-2">Número de
-                                    Pasajeros</label>
-                                <InputNumber v-model="vehicle.pax_number" id="pax_number" :min="1" showButtons
-                                    class="w-full" :class="{ 'p-invalid': validationErrors.pax_number }" />
-                                <small v-if="validationErrors.pax_number" class="p-error block mt-1">
-                                    <div v-for="message in validationErrors.pax_number" :key="message">{{ message }}
-                                    </div>
-                                </small>
-                            </div>
-
-                            <div class="col-12 md:col-6 mb-4">
-                                <label for="validation" class="block text-900 font-medium mb-2">Estado de
-                                    Validación</label>
-                                <SelectButton v-model="vehicle.validation" :options="validationOptions"
-                                    optionLabel="label" optionValue="value" class="w-full"
-                                    :class="{ 'p-invalid': validationErrors.validation }">
-                                    <template #option="slotProps">
-                                        <span
-                                            :class="{ 'text-green-600': slotProps.option.value === 1, 'text-red-600': slotProps.option.value === 0 }">
-                                            {{ slotProps.option.label }}
-                                        </span>
-                                    </template>
-                                </SelectButton>
-                                <small v-if="validationErrors.validation" class="p-error block mt-1">
-                                    <div v-for="message in validationErrors.validation" :key="message">{{ message }}
-                                    </div>
-                                </small>
-                            </div>
-
-                            <div class="col-12 md:col-6 mb-4">
-                                <label for="fuel_type" class="block text-900 font-medium mb-2">Tipo de
-                                    Combustible</label>
-                                <SelectButton v-model="vehicle.fuel_type" :options="options" class="w-full"
-                                    :class="{ 'p-invalid': validationErrors.fuel_type }" />
-                                <small v-if="validationErrors.fuel_type" class="p-error block mt-1">
-                                    <div v-for="message in validationErrors.fuel_type" :key="message">{{ message }}
-                                    </div>
-                                </small>
-                            </div>
+                    <div class="grid">
+                        <div class="col-12 md:col-6 mb-4">
+                            <label for="user_id" class="block text-900 font-medium mb-2">Usuario</label>
+                            <Select v-model="vehicle.user_id" :options="users.data" filter optionLabel="name"
+                                optionValue="id" dataKey="id" class="w-full"
+                                :class="{ 'p-invalid': validationErrors.user_id }" placeholder="Seleccionar Usuario">
+                            </Select>
+                            <small v-if="validationErrors.user_id" class="p-error block mt-1">
+                                <div v-for="message in validationErrors.user_id" :key="message">{{ message }}</div>
+                            </small>
                         </div>
-                    </div>
-                    <div v-else class="text-center">
-                        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
-                        <p>Cargando datos del vehículo...</p>
+
+                        <div class="col-12 md:col-6 mb-4">
+                            <label for="plate" class="block text-900 font-medium mb-2">Matrícula</label>
+                            <InputText v-model="vehicle.plate" id="plate" type="text" class="w-full"
+                                :class="{ 'p-invalid': validationErrors.plate }" placeholder="Ingrese la matrícula" />
+                            <small v-if="validationErrors.plate" class="p-error block mt-1">
+                                <div v-for="message in validationErrors.plate" :key="message">{{ message }}</div>
+                            </small>
+                        </div>
+
+                        <div class="col-12 md:col-6 mb-4">
+                            <label for="brand" class="block text-900 font-medium mb-2">Marca</label>
+                            <InputText v-model="vehicle.brand" id="brand" type="text" class="w-full"
+                                :class="{ 'p-invalid': validationErrors.brand }" placeholder="Ingrese la marca" />
+                            <small v-if="validationErrors.brand" class="p-error block mt-1">
+                                <div v-for="message in validationErrors.brand" :key="message">{{ message }}</div>
+                            </small>
+                        </div>
+
+                        <div class="col-12 md:col-6 mb-4">
+                            <label for="model" class="block text-900 font-medium mb-2">Modelo</label>
+                            <InputText v-model="vehicle.model" id="model" type="text" class="w-full"
+                                :class="{ 'p-invalid': validationErrors.model }" placeholder="Ingrese el modelo" />
+                            <small v-if="validationErrors.model" class="p-error block mt-1">
+                                <div v-for="message in validationErrors.model" :key="message">{{ message }}</div>
+                            </small>
+                        </div>
+
+                        <div class="col-12 md:col-6 mb-4">
+                            <label for="consumption" class="block text-900 font-medium mb-2">Consumo</label>
+                            <div class="p-inputgroup">
+                                <InputNumber v-model="vehicle.consumption" id="consumption" :minFractionDigits="1"
+                                    :maxFractionDigits="1" showButtons class="w-full"
+                                    :class="{ 'p-invalid': validationErrors.consumption }" placeholder="L/100km" />
+                            </div>
+                            <small v-if="validationErrors.consumption" class="p-error block mt-1">
+                                <div v-for="message in validationErrors.consumption" :key="message">{{ message }}
+                                </div>
+                            </small>
+                        </div>
+
+                        <div class="col-12 md:col-6 mb-4">
+                            <label for="pax_number" class="block text-900 font-medium mb-2">Número de
+                                Pasajeros</label>
+                            <InputNumber v-model="vehicle.pax_number" id="pax_number" :min="1" showButtons
+                                class="w-full" :class="{ 'p-invalid': validationErrors.pax_number }" />
+                            <small v-if="validationErrors.pax_number" class="p-error block mt-1">
+                                <div v-for="message in validationErrors.pax_number" :key="message">{{ message }}
+                                </div>
+                            </small>
+                        </div>
+
+                        <div class="col-12 md:col-6 mb-4">
+                            <label for="validation" class="block text-900 font-medium mb-2">Estado de
+                                Validación</label>
+                            <SelectButton v-model="vehicle.validation" :options="validationOptions" optionLabel="label"
+                                optionValue="value" class="w-full"
+                                :class="{ 'p-invalid': validationErrors.validation }">
+                                <template #option="slotProps">
+                                    <span
+                                        :class="{ 'text-green-600': slotProps.option.value === 1, 'text-red-600': slotProps.option.value === 0 }">
+                                        {{ slotProps.option.label }}
+                                    </span>
+                                </template>
+                            </SelectButton>
+                            <small v-if="validationErrors.validation" class="p-error block mt-1">
+                                <div v-for="message in validationErrors.validation" :key="message">{{ message }}
+                                </div>
+                            </small>
+                        </div>
+
+                        <div class="col-12 md:col-6 mb-4">
+                            <label for="fuel_type" class="block text-900 font-medium mb-2">Tipo de
+                                Combustible</label>
+                            <SelectButton v-model="vehicle.fuel_type" :options="options" class="w-full"
+                                :class="{ 'p-invalid': validationErrors.fuel_type }" />
+                            <small v-if="validationErrors.fuel_type" class="p-error block mt-1">
+                                <div v-for="message in validationErrors.fuel_type" :key="message">{{ message }}
+                                </div>
+                            </small>
+                        </div>
                     </div>
 
                     <div class="flex justify-content-end">
@@ -115,12 +117,13 @@
 <script setup>
 // VUE
 import { onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import * as yup from "yup";
 import { es } from "yup-locales";
 
 yup.setLocale(es);
 const route = useRoute();
+const router = useRouter();
 
 // PrimeVue
 import { useToast } from 'primevue/usetoast';
@@ -131,60 +134,37 @@ const toast = useToast();
 import useVehicles from "@/composables/vehicles";
 import useUsers from "@/composables/users";
 
-const { updateVehicle, getVehicle, vehicle } = useVehicles();
+const { updateVehicle, getVehicle, vehicle, validationErrors, vehicleSchema, isLoading } = useVehicles();
+const { getUsers, users } = useUsers();
 
-const tempVehicle = ref({});
 const options = ["Gasolina", "Diésel"];
+const validationOptions = [
+    { label: 'No Validado', value: 0 },
+    { label: 'Validado', value: 1 }
+];
 
 onMounted(async () => {
-    loading.value = true;
-    try {
-        await getVehicle(route.params.id);
-    } catch (error) {
-        toast.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Error al cargar los datos del vehículo',
-            life: 3000
-        });
-    } finally {
-        loading.value = false;
-    }
-});
-
-const vehicleSchema = yup.object().shape({
-    plate: yup.string().matches(/^[A-Z0-9-]+$/, "Formato de matrícula inválido").required("La matrícula es obligatoria"),
-    brand: yup.string().required("La marca es obligatoria"),
-    model: yup.string().required("El modelo es obligatorio"),
-    consumption: yup.number().positive("El consumo debe ser un número positivo").required("El consumo es obligatorio"),
-    pax_number: yup.number().integer("Debe ser un número entero").positive("Debe ser un número positivo").required("El número de pasajeros es obligatorio"),
-    validation: yup.number().required("La validación es obligatoria"),
-    fuel_type: yup.string().oneOf(["Gasolina", "Diésel"], "Tipo de combustible inválido").required("El tipo de combustible es obligatorio"),
+    await getVehicle(route.params.id);
+    await getUsers();
 });
 
 const submitUpdateVehicle = async () => {
     try {
-        tempVehicle.value = {...vehicle.value};
-        console.log(tempVehicle.value);
-        await vehicleSchema.validate({
-            plate: tempVehicle.value.plate,
-            brand: tempVehicle.value.brand,
-            model: tempVehicle.value.model,
-            consumption: tempVehicle.value.consumption,
-            fuel_type: tempVehicle.value.fuel_type,
-            pax_number: tempVehicle.value.pax_number,
-            validation: tempVehicle.value.validation
-        });
-
-        updateVehicle(tempVehicle.value);
+        await vehicleSchema.validate(vehicle.value, { abortEarly: false })
+            .then(() => {
+                updateVehicle(vehicle);
+            });
+        router.back();
     } catch (error) {
-        console.log(error);
-        toast.add({
-            severity: "info",
-            summary: "Faltan datos o los formatos no son adecuados.",
-            detail: Error.message,
-            life: 3000,
-        });
+        if (error.inner) {
+            validationErrors.value = {};
+            error.inner.forEach((e) => {
+                if (!validationErrors.value[e.path]) {
+                    validationErrors.value[e.path] = [];
+                }
+                validationErrors.value[e.path].push(e.message);
+            });
+        }
     }
 }
 </script>

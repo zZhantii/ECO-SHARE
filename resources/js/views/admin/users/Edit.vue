@@ -8,7 +8,6 @@
                         <div class="user-profile">
                             <div class="user-avatar">
                                 <!-- <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Maxwell Admin"> -->
-
                                 <!-- :fileLimit=1  -->
                                 <FileUpload name="picture" url="/api/users/updateimg" @before-upload="onBeforeUpload"
                                     @upload="onTemplatedUpload($event)" accept="image/*" :maxFileSize="1500000"
@@ -48,11 +47,11 @@
                                     </template>
 
                                     <template #empty>
-                                        <img v-if="user.avatar" :src=user.avatar alt="Avatar"
-                                            class="object-fit-cover w-100 h-100 img-profile">
-                                        <img v-if="!user.avatar"
-                                            src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                                            alt="Avatar Default" class="object-fit-cover w-100 h-100 img-profile">
+                                        <div class="flex justify-content-center align-items-center">
+                                            <img :src="user.value?.media?.[0]?.original_url || 'https://bootdey.com/img/Content/avatar/avatar7.png'"
+                                                :alt="user.value?.name || 'Default Avatar'"
+                                                class="object-fit-cover w-100 h-100 img-profile" />
+                                        </div>
                                     </template>
                                 </FileUpload>
 
@@ -90,13 +89,12 @@
         <div class="col-12 md:col-8 lg:col-8 xl:col-8">
             <div class="card mb-3">
                 <div class="card-body">
-                    {{ user.avatar }}
                     <h6 class="mb-2 text-primary">Personal Details</h6>
 
                     <div class="form-group">
                         <label for="name">Nombre</label>
-                        <input v-model="user.name" type="text" class="form-control" id="name">
-                        <div class="text-danger mt-1">{{ errors.name }}</div>
+                        <input v-model="user.name" type="text" class="form-control" id="name"
+                            :class="{ 'is-invalid': validationErrors?.name }">
                         <div class="text-danger mt-1">
                             <div v-for="message in validationErrors?.name">
                                 {{ message }}
@@ -107,7 +105,6 @@
                     <div class="form-group">
                         <label for="surname1">Apellido 1</label>
                         <input v-model="user.surname1" type="text" class="form-control" id="surname1">
-                        <div class="text-danger mt-1">{{ errors.surname1 }}</div>
                         <div class="text-danger mt-1">
                             <div v-for="message in validationErrors?.surname1">
                                 {{ message }}
@@ -118,7 +115,6 @@
                     <div class="form-group">
                         <label for="surname2">Apellido 2</label>
                         <input v-model="user.surname2" type="text" class="form-control" id="surname2">
-                        <div class="text-danger mt-1">{{ errors.surname2 }}</div>
                         <div class="text-danger mt-1">
                             <div v-for="message in validationErrors?.surname2">
                                 {{ message }}
@@ -129,7 +125,6 @@
                     <div class="form-group">
                         <label for="alias">Alias</label>
                         <input v-model="user.alias" type="text" class="form-control" id="alias">
-                        <div class="text-danger mt-1">{{ errors.alias }}</div>
                         <div class="text-danger mt-1">
                             <div v-for="message in validationErrors?.alias">
                                 {{ message }}
@@ -140,7 +135,6 @@
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input v-model="user.email" type="email" class="form-control" id="email">
-                        <div class="text-danger mt-1">{{ errors.email }}</div>
                         <div class="text-danger mt-1">
                             <div v-for="message in validationErrors?.email">
                                 {{ message }}
@@ -151,7 +145,6 @@
                     <div class="form-group">
                         <label for="password">Password</label>
                         <input v-model="user.password" type="password" class="form-control" id="password">
-                        <div class="text-danger mt-1">{{ errors.password }}</div>
                         <div class="text-danger mt-1">
                             <div v-for="message in validationErrors?.password">
                                 {{ message }}
@@ -179,63 +172,25 @@ import { useToast } from 'primevue/usetoast';
 const $primevue = usePrimeVue();
 const toast = useToast();
 const { roleList, getRoleList } = useRoles();
-const { updateUser, getUser, user: postData, createUserDB, deleteUserDB, changeUserPasswordDB, createUserProceduredDB, validationErrors, isLoading } = useUsers();
+const { updateUser, getUser, user, createUserDB, deleteUserDB, changeUserPasswordDB, createUserProceduredDB, validationErrors, isLoading } = useUsers();
 
-import { useForm, useField, defineRule } from "vee-validate";
-import { required, min } from "@/validation/rules"
-defineRule('required', required)
-defineRule('min', min);
-
-// Define a validation schema
-const schema = {
-    name: 'required',
-    email: 'required',
-    password: 'min:8'
-}
-
-// Create a form context with the validation schema
-const { validate, errors, resetForm } = useForm({ validationSchema: schema })
-// Define actual fields for validation
-const { value: id } = useField('id', null, { initialValue: '' });
-const { value: name } = useField('name', null, { initialValue: '' });
-const { value: email } = useField('email', null, { initialValue: '' });
-const { value: surname1 } = useField('surname1', null, { initialValue: '' });
-const { value: surname2 } = useField('surname2', null, { initialValue: '' });
-const { value: password } = useField('password', null, { initialValue: '' });
-const { value: alias } = useField('alias', null, { initialValue: '' });
-const { value: role_id } = useField('role_id', null, { initialValue: '', label: 'role' });
-
-const user = reactive({
-    id,
-    name,
-    email,
-    surname1,
-    surname2,
-    alias,
-    password,
-    role_id
-})
 
 const route = useRoute()
-function submitForm() {
-    validate().then(form => { if (form.valid) updateUser(user) })
-}
+
 
 onMounted(async () => {
-    getRoleList()
-    await getUser(route.params.id)
-})
+    await getRoleList();
+    await getUser(route.params.id);    
+});
 // https://vuejs.org/api/reactivity-core.html#watcheffect
-watchEffect(() => {
-    user.id = postData.value.id
-    user.name = postData.value.name
-    user.email = postData.value.email
-    user.surname1 = postData.value.surname1
-    user.surname2 = postData.value.surname2
-    user.role_id = postData.value.role_id
-    user.alias = postData.value.alias
-    user.avatar = postData.value.avatar
-})
+const submitForm = async () => {
+    try {
+        await updateUser(user.value);
+        toast.add({ severity: 'success', summary: 'Success', detail: 'Usuario actualizado correctamente', life: 3000 });
+    } catch (error) {
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Error al actualizar el usuario', life: 3000 });
+    }
+};
 
 const totalSize = ref(0);
 const totalSizePercent = ref(0);

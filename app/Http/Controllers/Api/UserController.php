@@ -51,23 +51,22 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request)
     {
-        return $request;
-        // $role = Role::find($request->role_id);
-        // $user = new User();
-        // $user->name = $request->name;
-        // $user->email = $request->email;
-        // $user->surname1 = $request->surname1;
-        // $user->surname2 = $request->surname2;
-        // $user->alias = $request->alias;
+        $role = Role::find($request->role_id);
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->surname1 = $request->surname1;
+        $user->surname2 = $request->surname2;
+        $user->alias = $request->alias;
 
-        // $user->password = Hash::make($request->password);
+        $user->password = Hash::make($request->password);
 
-        // if ($user->save()) {
-        //     if ($role) {
-        //         $user->assignRole($role);
-        //     }
-        //     return new UserResource($user);
-        // }
+        if ($user->save()) {
+            if ($role) {
+                $user->assignRole($role);
+            }
+            return new UserResource($user);
+        }
     }
 
     /**
@@ -111,6 +110,7 @@ class UserController extends Controller
             if ($role) {
                 $user->syncRoles($role);
             }
+            return response()->json(["success" => true, "message" => "Usuario actualizado correctamente"], 200);
             return new UserResource($user);
         }
     }

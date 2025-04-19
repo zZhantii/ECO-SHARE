@@ -146,6 +146,7 @@ const onFormSubmitRegister = async () => {
         });
     } catch (error) {
         if (error.inner) {
+            validationErrors.value = {};
             error.inner.forEach((e) => {
                 if (!validationErrors.value[e.path]) {
                     validationErrors.value[e.path] = [];

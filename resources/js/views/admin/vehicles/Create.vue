@@ -8,27 +8,27 @@
                         <span class="text-600 font-medium">Por favor, complete los datos del vehículo</span>
                     </div>
 
-                    <div class="mb-4">
-                        <label for="user_id" class="block text-900 font-medium mb-2">Usuario</label>
-                        <Select v-model="vehicle.user_id" :options="users.data" filter optionLabel="name"
-                            optionValue="id" dataKey="id" placeholder="Seleccionar Usuario" class="w-full"
-                            :class="{ 'p-invalid': validationErrors.user_id }">
-                        </Select>
-                        <small v-if="validationErrors.user_id" class="p-error block mt-1">
-                            <div v-for="message in validationErrors.user_id" :key="message">{{ message }}</div>
-                        </small>
-                    </div>
-
-                    <div class="mb-4">
-                        <label for="plate" class="block text-900 font-medium mb-2">Matrícula</label>
-                        <InputText v-model="vehicle.plate" id="plate" type="text" class="w-full"
-                            :class="{ 'p-invalid': validationErrors.plate }" placeholder="Ingrese la matrícula" />
-                        <small v-if="validationErrors.plate" class="p-error block mt-1">
-                            <div v-for="message in validationErrors.plate" :key="message">{{ message }}</div>
-                        </small>
-                    </div>
-
                     <div class="grid">
+                        <div class="col-12 md:col-6 mb-4">
+                            <label for="user_id" class="block text-900 font-medium mb-2">Usuario</label>
+                            <Select v-model="vehicle.user_id" :options="users.data" filter optionLabel="name"
+                                optionValue="id" dataKey="id" placeholder="Seleccionar Usuario" class="w-full"
+                                :class="{ 'p-invalid': validationErrors.user_id }">
+                            </Select>
+                            <small v-if="validationErrors.user_id" class="p-error block mt-1">
+                                <div v-for="message in validationErrors.user_id" :key="message">{{ message }}</div>
+                            </small>
+                        </div>
+
+                        <div class="col-12 md:col-6 mb-4">
+                            <label for="plate" class="block text-900 font-medium mb-2">Matrícula</label>
+                            <InputText v-model="vehicle.plate" id="plate" type="text" class="w-full"
+                                :class="{ 'p-invalid': validationErrors.plate }" placeholder="Ingrese la matrícula" />
+                            <small v-if="validationErrors.plate" class="p-error block mt-1">
+                                <div v-for="message in validationErrors.plate" :key="message">{{ message }}</div>
+                            </small>
+                        </div>
+                        
                         <div class="col-12 md:col-6 mb-4">
                             <label for="brand" class="block text-900 font-medium mb-2">Marca</label>
                             <InputText v-model="vehicle.brand" id="brand" type="text" class="w-full"
