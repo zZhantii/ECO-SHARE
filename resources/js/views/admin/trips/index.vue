@@ -76,7 +76,10 @@
 import { ref, onMounted } from "vue";
 import useTrips from "../../../composables/trips";
 import { useAbility } from '@casl/vue'
+import { useToast } from "primevue/usetoast";
 import { FilterMatchMode, FilterService } from "@primevue/core/api";
+
+const toast = useToast()
 
 const { tripsList, getTrips, deleteTrip } = useTrips()
 const { can } = useAbility()
@@ -95,8 +98,9 @@ onMounted(() => {
     getTrips();
 })
 
-const deleteTripAdmin = (trip2) => {
-    deleteTrip(trip2);
+const deleteTripAdmin = async (trip2) => {
+    await deleteTrip(trip2);
+    refreshTrips();
 }
 
 const refreshTrips = () => {

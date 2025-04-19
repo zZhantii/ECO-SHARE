@@ -2,6 +2,7 @@ import { useToast } from "primevue";
 import { ref, inject } from "vue";
 import * as yup from "yup";
 import { es } from "yup-locales";
+import { useRouter } from "vue-router";
 
 export default function useVehicles() {
     const vehicle = ref({
@@ -13,6 +14,7 @@ export default function useVehicles() {
         fuel_type: "",
         pax_number: "",
         user_id: 0,
+        validation: 0,
     });
     const vehiclesList = ref([]);
     const vehicleSchema = yup.object().shape({
@@ -48,6 +50,7 @@ export default function useVehicles() {
     const isLoading = ref(false);
     const swal = inject("$swal");
     const validationErrors = ref({});
+    const router = useRouter();
 
     const getVehicles = async () => {
         if (vehiclesList.value.length > 0) return;
@@ -105,29 +108,20 @@ export default function useVehicles() {
     };
 
     const getVehicle = async (vehicleId) => {
-        if (isLoading.value || vehicle.value.length > 0) return;
+        if (isLoading.value) return;
+
         isLoading.value = true;
+        validationErrors.value = {};
 
-        try {
-            const response = await axios.get("/api/vehicle/" + vehicleId);
-            console.log("API Response:", response.data.data);
+        await axios.get("/api/vehicle/" + vehicleId).then((response) => {
+            console.log("Respuesta API obteniendo vehículo: ", response.data.data);
             vehicle.value = response.data.data;
-            console.log("Vehiculo con ID cargado:", vehicle.value);
-        } catch (error) {
-            console.error("Error fetching trips:", error);
-            useToast().add({
-                severity: "error",
-                summary: "Error",
-                detail: "No se pudieron cargar los viajes",
-                life: 3000,
-            });
-        } finally {
-            isLoading.value = false;
-        }
-    };
-
-    const createVehicleDB = async (id) => {
-        return axios.put("/api/vehicles/db/create/" + id);
+        }).catch((error) => {
+            if (error.response?.data) {
+                validationErrors.value = error.response.data.errors;
+            }
+        })
+            .finally(() => (isLoading.value = false));
     };
 
     const updateVehicle = async (vehicle) => {
@@ -136,8 +130,8 @@ export default function useVehicles() {
         isLoading.value = true;
         validationErrors.value = {};
 
-        axios
-            .put("/api/vehicle/" + vehicle.id, vehicle)
+        await axios
+            .put("/api/vehicle/" + vehicle.value.id, vehicle.value)
             .then((response) => {
                 console.log(
                     "Respuesta API actualizando vehículo: ",
@@ -168,23 +162,38 @@ export default function useVehicles() {
         isLoading.value = true;
         validationErrors.value = {};
 
-        axios
-            .delete("/api/vehicle/" + vehicle.id)
-            .then((response) => {
-                console.log(
-                    "Respuesta API actualizando vehículo: ",
-                    response.data.message
-                );
-                swal({
-                    icon: "success",
-                    title: "Vehicle actualizado con éxito",
-                    text: response.data.message,
-                });
-            })
-            .catch((error) => {
-                console.log("Error actualizando el vehículo:", error);
-            })
-            .finally(() => (isLoading.value = false));
+        swal({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this action!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            confirmButtonColor: '#ef4444',
+            timer: 20000,
+            timerProgressBar: true,
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios
+                    .delete("/api/vehicle/" + vehicle.id)
+                    .then((response) => {
+                        console.log(
+                            "Respuesta API actualizando vehículo: ",
+                            response.data.message
+                        );
+                        router.push({ name: 'vehicles.index' })
+                        swal({
+                            icon: "success",
+                            title: "Vehicle actualizado con éxito",
+                            text: response.data.message,
+                        });
+                    })
+                    .catch((error) => {
+                        console.log("Error actualizando el vehículo:", error);
+                    })
+                    .finally(() => (isLoading.value = false));
+            }
+        })
     };
 
     return {

@@ -99,7 +99,11 @@ export default function useReserves() {
         isLoading.value = true;
         validationErrors.value = {};
 
-        reserve2.value.reservation_date = formatDateTime(reserve2.value.reservation_date);
+        // console.log("Reserva a crear: ", reserve2.value);
+
+        if (reserve2.value.reservation_date) {
+            reserve2.value.reservation_date = formatDateTime(reserve2.value.reservation_date);
+        }
         reserve2.value.check_in = reserve2.value.check_in ? formatDateTime(reserve2.value.check_in) : null;
         axios.post("/api/reserves/", reserve2.value)
             .then((response) => {

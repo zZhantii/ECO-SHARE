@@ -57,7 +57,7 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->surname1 = $request->surname1;
         $user->surname2 = $request->surname2;
-        // $user->rating = $request->rating;
+        $user->alias = $request->alias;
 
         $user->password = Hash::make($request->password);
 
@@ -110,6 +110,7 @@ class UserController extends Controller
             if ($role) {
                 $user->syncRoles($role);
             }
+            return response()->json(["success" => true, "message" => "Usuario actualizado correctamente"], 200);
             return new UserResource($user);
         }
     }

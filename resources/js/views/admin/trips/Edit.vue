@@ -1,123 +1,108 @@
 <template>
+    <div class="surface-ground px-4 py-5 md:px-6 lg:px-8">
+        <div class="grid">
+            <div class="col-12 md:col-8 md:col-offset-2">
+                <div class="surface-card p-4 shadow-2 border-round">
+                    <div class="text-center mb-5">
+                        <h2 class="text-3xl font-medium text-900 mb-3">Editar Viaje</h2>
+                        <span class="text-600 font-medium">Modifique los datos del viaje</span>
+                    </div>
 
-    <div class="grid">
-
-        <div class="col-12 md:col-8 lg:col-8 xl:col-8">
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h6 class="mb-2 text-primary">Vehicles Details</h6>
-
-                    <!-- {{ tripList }} -->
-                    <!-- {{ startPointStr }} -->
-
-                    <div class="form-group">
-                        <label for="user_id">user_id</label>
-                        <InputNumber v-model="tripList.user_id" type="number" class="d-flex w-100 w-100" id="user_id"
-                            showButtons />
-                        <div v-if="validationErrors.user_id" class="text-danger mt-1">
-                            <div v-for="message in validationErrors.user_id" :key="message">{{ message }}
-                            </div>
+                    <div class="grid">
+                        <div class="col-12 md:col-6 mb-4">
+                            <label for="user_id" class="block text-900 font-medium mb-2">Usuario</label>
+                            <Select v-model="trip.user_id" :options="users.data" filter optionLabel="name"
+                                optionValue="id" dataKey="id" class="w-full"
+                                :class="{ 'p-invalid': validationErrors.user_id }" placeholder="Seleccionar Usuario">
+                            </Select>
+                            <small v-if="validationErrors.user_id" class="p-error block mt-1">
+                                <div v-for="message in validationErrors.user_id" :key="message">{{ message }}</div>
+                            </small>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="vehicle_id">vehicle_id</label>
-                        <InputNumber v-model="tripList.vehicle_id" type="number" class="d-flex w-100" id="vehicle_id"
-                            showButtons />
-                        <div v-if="validationErrors.vehicle_id" class="text-danger mt-1">
-                            <div v-for="message in validationErrors.vehicle_id" :key="message">{{ message }}
-                            </div>
+                        <div class="col-12 md:col-6 mb-4">
+                            <label for="vehicle_id" class="block text-900 font-medium mb-2">Vehículo</label>
+                            <Select v-model="trip.vehicle_id" :options="vehiclesList" filter optionLabel="brand"
+                                optionValue="id" dataKey="id" class="w-full"
+                                :class="{ 'p-invalid': validationErrors.vehicle_id }"
+                                placeholder="Seleccionar Vehículo">
+                            </Select>
+                            <small v-if="validationErrors.vehicle_id" class="p-error block mt-1">
+                                <div v-for="message in validationErrors.vehicle_id" :key="message">{{ message }}</div>
+                            </small>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="start_point">Start Point (JSON)</label>
-                        <textarea v-model="startPointStr" class="form-control" rows="4" id="start_point" />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="end_point">end_point</label>
-                        <InputText v-model="tripList.end_point" type="text" class="d-flex w-100" id="end_point" />
-                        <div v-if="validationErrors.end_point" class="text-danger mt-1">
-                            <div v-for="message in validationErrors.end_point" :key="message">{{ message }}
-                            </div>
+                        <div class="col-12 md:col-6 mb-4">
+                            <label for="departure_time" class="block text-900 font-medium mb-2">Hora de Salida</label>
+                            <DatePicker v-model="trip.departure_time" showTime hourFormat="24" class="w-full"
+                                :showIcon="true" :class="{ 'p-invalid': validationErrors.departure_time }"
+                                placeholder="Seleccionar fecha y hora" dateFormat="dd/mm/yy" />
+                            <small v-if="validationErrors.departure_time" class="p-error block mt-1">
+                                <div v-for="message in validationErrors.departure_time" :key="message">{{ message }}
+                                </div>
+                            </small>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="departure_time">departure_time</label>
-                        <DatePicker v-model="tripList.departure_time" type="text" class="d-flex w-100"
-                            id="departure_time" />
-                        <div v-if="validationErrors.departure_time" class="text-danger mt-1">
-                            <div v-for="message in validationErrors.departure_time" :key="message">{{ message }}
-                            </div>
+                        <div class="col-12 md:col-6 mb-4">
+                            <label for="arrival_time" class="block text-900 font-medium mb-2">Hora de Llegada</label>
+                            <DatePicker v-model="trip.arrival_time" showTime hourFormat="24" class="w-full"
+                                :showIcon="true" :class="{ 'p-invalid': validationErrors.arrival_time }"
+                                placeholder="Seleccionar fecha y hora" dateFormat="dd/mm/yy" />
+                            <small v-if="validationErrors.arrival_time" class="p-error block mt-1">
+                                <div v-for="message in validationErrors.arrival_time" :key="message">{{ message }}</div>
+                            </small>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="arrival_time">arrival_time</label>
-                        <DatePicker v-model="tripList.arrival_time" class="d-flex w-100" id="arrival_time" />
-                        <div v-if="validationErrors.arrival_time" class="text-danger mt-1">
-                            <div v-for="message in validationErrors.arrival_time" :key="message">{{ message }}
+                        <div class="col-12 md:col-6 mb-4">
+                            <label for="available_seats" class="block text-900 font-medium mb-2">Asientos
+                                Disponibles</label>
+                            <div class="p-inputgroup">
+                                <InputNumber v-model="trip.available_seats" id="available_seats" showButtons
+                                    class="w-full" :class="{ 'p-invalid': validationErrors.available_seats }" />
                             </div>
+                            <small v-if="validationErrors.available_seats" class="p-error block mt-1">
+                                <div v-for="message in validationErrors.available_seats" :key="message">{{ message }}
+                                </div>
+                            </small>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="available_seats">available_seats</label>
-                        <InputNumber v-model="tripList.available_seats" class="d-flex w-100" id="available_seats"
-                            showButtons />
-                        <div v-if="validationErrors.available_seats" class="text-danger mt-1">
-                            <div v-for="message in validationErrors.available_seats" :key="message">{{ message }}
+                        <div class="col-12 md:col-6 mb-4">
+                            <label for="price" class="block text-900 font-medium mb-2">Precio</label>
+                            <div class="p-inputgroup">
+                                <InputNumber v-model="trip.price" id="price" :minFractionDigits="2"
+                                    :maxFractionDigits="2" mode="currency" currency="EUR" locale="es-ES" showButtons
+                                    class="w-full" :class="{ 'p-invalid': validationErrors.price }" />
                             </div>
+                            <small v-if="validationErrors.price" class="p-error block mt-1">
+                                <div v-for="message in validationErrors.price" :key="message">{{ message }}</div>
+                            </small>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="price">price</label>
-                        <InputNumber v-model="tripList.price" type="number" class="d-flex w-100" id="price"
-                            :minFractionDigits="2" :maxFractionDigits="2" showButtons />
-                        <div v-if="validationErrors.price" class="text-danger mt-1">
-                            <div v-for="message in validationErrors.price" :key="message">{{ message }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="drive_start">drive_start</label>
-                        <DatePicker v-model="tripList.drive_start" type="text" class="d-flex w-100" id="drive_start" />
-                        <div v-if="validationErrors.drive_start" class="text-danger mt-1">
-                            <div v-for="message in validationErrors.drive_start" :key="message">{{ message }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="drive_end">drive_end</label>
-                        <DatePicker v-model="tripList.drive_end" type="text" class="d-flex w-100" id="drive_end" />
-                        <div v-if="validationErrors.drive_end" class="text-danger mt-1">
-                            <div v-for="message in validationErrors.drive_end" :key="message">{{ message }}
+                        <div class="col-12">
+                            <div class="flex justify-content-end">
+                                <Button label="Cancelar" class="p-button-text mr-2" @click="router.back()" />
+                                <Button label="Actualizar" icon="pi pi-check" class="p-button-success"
+                                    :loading="loading" @click="submitUpdateVehicle" />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
-    <button class="btn btn-primary" @click="submitUpdateVehicle">Guardar</button>
     <Toast />
 </template>
 
 <script setup>
 // VUE
 import { onMounted, ref, watch } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import * as yup from "yup";
 import { es } from "yup-locales";
 
 yup.setLocale(es);
 const route = useRoute();
+const router = useRouter();
 
 // PrimeVue
 import { useToast } from 'primevue/usetoast';
@@ -126,52 +111,43 @@ const toast = useToast();
 
 // Composables
 import useTrips from "@/composables/trips";
+import useUsers from "@/composables/users";
+import useVehicles from "@/composables/vehicles";
 
-const { updateTrip, getTrip, trip, tripList, TripSchema, validationErrors } = useTrips();
-const startPointStr = ref('');
-const endPointStr = ref('');
 
-onMounted(() => {
-    getTrip(route.params.id)
+const { updateTrip, getTrip, trip, TripSchema, validationErrors } = useTrips();
+const { getUsers, users } = useUsers();
+const { getVehicles, vehiclesList } = useVehicles();
 
-    if (tripList.start_point) {
-        startPointStr.value = JSON.stringify(tripList.start_point, null, 2);
-    } else {
-        console.log("")
-    }
 
-    if (tripList.end_point) {
-        endPointStr.value = JSON.stringify(tripList.start_point, null, 2);
-    }
-
+onMounted( async() => {
+    await getTrip(route.params.id)
+    await getUsers(); 
+    await getVehicles(); 
 })
 
-const TempTrip = ref({});
+const loading = ref(false);
 
 const submitUpdateVehicle = async () => {
     try {
         await TripSchema.validate(trip.value, { abortEarly: false })
         .then(() => {
-            updateTrip(TempTrip.value);
+            updateTrip(trip);
         });
+        // router.back();
     } catch (error) {
-        console.log("Errores de validación:", error.errors);
-        toast.add({
-            severity: "info",
-            summary: "Errores en el formulario",
-            detail: error.errors.join(", "),
-            life: 3000,
-        });
+        if (error.inner) {
+            validationErrors.value = {};
+            error.inner.forEach((e) => {
+                if (!validationErrors.value[e.path]) {
+                    validationErrors.value[e.path] = [];
+                }
+                validationErrors.value[e.path].push(e.message);
+            });
+        }
     }
 }
 
-watch(startPointStr, (newVal) => {
-    try {
-        tripList.start_point = JSON.parse(newVal);
-    } catch (e) {
-        console.warn("JSON inválido");
-    }
-});
 </script>
 
 <style>

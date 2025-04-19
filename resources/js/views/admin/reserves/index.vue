@@ -96,9 +96,8 @@ const dataReserves = computed(() => {
 
 
 const deleteReserveAdmin = async (reserve2) => {
-    await deleteReserve(reserve2).then(() => {
-        getReserves();
-    });
+    await deleteReserve(reserve2)
+    refreshReserves();
 }
 
 const refreshReserves = () => {

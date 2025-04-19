@@ -16,7 +16,8 @@ class Vehicle extends Model
         'model',
         'consumption',
         'pax_number',
-        'validation'
+        'validation',
+        'fuel_type',
     ];
 
     // foreign key

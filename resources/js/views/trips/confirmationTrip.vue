@@ -1,106 +1,145 @@
 <template>
-    <div class="container d-flex justify-content-between y-4">
-        <div class="row row_1 gap-4 flex-column">
-            <div class="col-12 border rounded">
-                <div class="d-flex">
-                    <Timeline :value="getTimelineEvents(tripList)" layout="horizontal" align="top"
-                        class="border-end w-75 px-2">
-                        <template #marker="slotProps">
-                            <i class="pi pi-map-marker px-2" style="font-size: 1.5rem"></i>
-                            <p class="m-0 px-2">{{ slotProps.item.time }}</p>
-                        </template>
-                        <template #content="slotProps">
-                            <div class="timeline-event">
-                                <p class="m-0 px-3">{{ slotProps.item.location }}</p>
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-md-6 pe-md-2">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <Timeline :value="getTimelineEvents(tripList)" layout="horizontal" align="top"
+                                    class="w-100">
+                                    <template #marker="slotProps">
+                                        <i class="pi pi-map-marker" style="font-size: 1.5rem"></i>
+                                        <p class="m-0 small">{{ slotProps.item.time }}</p>
+                                    </template>
+                                    <template #content="slotProps">
+                                        <div class="timeline-event">
+                                            <p class="m-0">{{ slotProps.item.location }}</p>
+                                        </div>
+                                    </template>
+                                </Timeline>
                             </div>
-                        </template>
-                    </Timeline>
-                    <div class="d-flex gap-3 align-items-center px-5">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000"
-                            viewBox="0 0 256 256">
-                            <path
-                                d="M224,232a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16H216A8,8,0,0,1,224,232Zm0-72v32a16,16,0,0,1-16,16H114.11a15.93,15.93,0,0,1-14.32-8.85l-58.11-116a16.1,16.1,0,0,1,0-14.32l22.12-44A16,16,0,0,1,85,17.56l33.69,14.22.47.22a16,16,0,0,1,7.15,21.46,1.51,1.51,0,0,1-.11.22L112,80l31.78,64L208,144A16,16,0,0,1,224,160Zm-16,0H143.77a15.91,15.91,0,0,1-14.31-8.85l-31.79-64a16.07,16.07,0,0,1,0-14.29l.12-.22L112,46.32,78.57,32.21A4.84,4.84,0,0,1,78.1,32L56,76,114.1,192H208Z">
-                            </path>
-                        </svg>
-                        <p class="m-0">{{ tripList.available_seats }}</p>
+                            <div class="col-12 mt-3">
+                                <div class="d-flex align-items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="#0d6efd"
+                                        viewBox="0 0 256 256">
+                                        <path
+                                            d="M224,232a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16H216A8,8,0,0,1,224,232Zm0-72v32a16,16,0,0,1-16,16H114.11a15.93,15.93,0,0,1-14.32-8.85l-58.11-116a16.1,16.1,0,0,1,0-14.32l22.12-44A16,16,0,0,1,85,17.56l33.69,14.22.47.22a16,16,0,0,1,7.15,21.46,1.51,1.51,0,0,1-.11.22L112,80l31.78,64L208,144A16,16,0,0,1,224,160Zm-16,0H143.77a15.91,15.91,0,0,1-14.31-8.85l-31.79-64a16.07,16.07,0,0,1,0-14.29l.12-.22L112,46.32,78.57,32.21A4.84,4.84,0,0,1,78.1,32L56,76,114.1,192H208Z">
+                                        </path>
+                                    </svg>
+                                    <span class="ms-2 fw-medium">{{ tripList.available_seats }}</span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <span v-for="(tag, tagIndex) in tagsData" :key="tagIndex"
+                                    class="badge rounded-pill bg-light text-dark border me-1 mb-1">
+                                    {{ tag }}
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="border-top p-3 mt-2">
-                    <p>Labels</p>
+
+                <div class="card shadow-sm map-wrapper">
+                    <div class="card-body p-0">
+                        <Map v-if="!showFirstMap" :origin="start_point" :destination="end_point"
+                            @updateMapsInfo="handleMapsInfo" class="map-container" />
+                    </div>
                 </div>
-            </div>
-            <div class="col-12 border rounded">
-                <Map v-if="!showFirstMap" :origin="start_point" :destination="end_point"
-                    @updateMapsInfo="handleMapsInfo" />
             </div>
 
-        </div>
-        <div class="row row_2 border rounded justify-content-center p-5">
+            <div class="col-md-6 ps-md-2 mt-4 mt-md-0">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <div v-if="user && user.length > 0">
+                            <div v-for="(user, index) in user" :key="index">
+                                <div class="user-info mb-4">
+                                    <h3 class="fw-bold text-center mb-3">Información del Usuario</h3>
 
-            <div class="col d-flex align-items-center flex-column">
-                <h3>Conductor</h3>
-                <div class="circle my-2">
-                    <img :src="user.photo" alt="user photo" />
-                </div>
-                <div class="d-flex gap-5" v-for="(user, index) in user" :key="index">
-                    <div>
-                        <ul class="d-flex align-items-center flex-column p-0">
-                            <b class="mb-3">Usuario</b>
-                            <li class="d-flex ">{{ user.alias }}</li>
-                            <b class="my-3">Apellido 1</b>
-                            <li class="d-flex">{{ user.surname1 }}</li>
-                            <b class="my-3">Correo</b>
-                            <li class="d-flex">{{ user.email }}</li>
-                        </ul>
+                                    <div class="text-center mb-4">
+                                        <!-- User Image Section -->
+                                        <div class="user-image-container d-inline-block">
+                                            <img :src="user.media && user.media.length > 0
+                                                ? user.media[0].original_url
+                                                : '/images/default-avatar.png'" :alt="user.name"
+                                                class="rounded-circle user-avatar" />
+                                        </div>
+                                    </div>
+
+                                    <!-- User Info Section -->
+                                    <div class="row row-cols-1 row-cols-sm-2 g-3 text-center">
+                                        <div class="col">
+                                            <p class="text-muted mb-1">Usuario</p>
+                                            <p class="fw-medium">{{ user.alias }}</p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-muted mb-1">Nombre</p>
+                                            <p class="fw-medium">{{ user.name }}</p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-muted mb-1">Apellido 1</p>
+                                            <p class="fw-medium">{{ user.surname1 }}</p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-muted mb-1">Apellido 2</p>
+                                            <p class="fw-medium">{{ user.surname2 }}</p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-muted mb-1">Correo</p>
+                                            <p class="fw-medium">{{ user.email }}</p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-muted mb-1">Rating</p>
+                                            <p class="fw-medium">
+                                                <Rating v-model="rating" disabled />
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="vehicle-info mb-4">
+                            <h3 class="fw-bold text-center mb-3">Vehículo</h3>
+                            <div class="row row-cols-1 row-cols-sm-2 g-3 text-center">
+                                <div class="col">
+                                    <p class="text-muted mb-1">Marca</p>
+                                    <p class="fw-medium">{{ vehicle.brand }}</p>
+                                </div>
+                                <div class="col">
+                                    <p class="text-muted mb-1">Modelo</p>
+                                    <p class="fw-medium">{{ vehicle.model }}</p>
+                                </div>
+                                <div class="col">
+                                    <p class="text-muted mb-1">Placa</p>
+                                    <p class="fw-medium">{{ vehicle.plate }}</p>
+                                </div>
+                                <div class="col">
+                                    <p class="text-muted mb-1">Tipo</p>
+                                    <p class="fw-medium">{{ vehicle.fuel_type }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="cost-info text-center mb-4">
+                            <h3 class="fw-bold mb-3">Coste</h3>
+                            <h2 class="display-6 fw-bold text-primary">{{ tripList.price }} €</h2>
+                            <p class="text-muted">Coste mínimo</p>
+                            <h4>{{ lowPrice(tripList.price) }}</h4>
+                        </div>
+
+                        <div class="d-grid justify-content-center w-100">
+                            <button @click="PostTrip" class="btn btn-primary btn-lg py-3 fw-medium">
+                                Reservar ahora
+                            </button>
+                        </div>
                     </div>
-                    <div>
-                        <ul class="d-flex align-items-center flex-column p-0">
-                            <b class="mb-3">Nombre</b>
-                            <li class="d-flex ">{{ user.name }}</li>
-                            <b class="my-3">Apellido 2</b>
-                            <li class="d-flex">{{ user.surname2 }}</li>
-                            <b class="my-3">Rating</b>
-                            <li class="d-flex">
-                                <Rating v-model="rating" disabled />
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="row_separation"></div>
-            <div class="col d-flex align-items-center flex-column">
-                <h3>Vehiculo</h3>
-                <div class="d-flex gap-5">
-                    <div>
-                        <ul class="d-flex align-items-center flex-column p-0">
-                            <b class="mb-3">Marca</b>
-                            <li class="d-flex ">{{ vehicle.brand }}</li>
-                            <b class="my-3">Placa</b>
-                            <li class="d-flex">{{ vehicle.plate }}</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <ul class="d-flex align-items-center flex-column p-0">
-                            <b class="mb-3">Modelo</b>
-                            <li class="d-flex ">{{ vehicle.model }}</li>
-                            <b class="my-3">Tipo</b>
-                            <li class="d-flex">{{ vehicle.fuel_type }}</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="row_separation"></div>
-                <div class="col d-flex flex-column align-items-center">
-                    <h3>Coste</h3>
-                    <h4>{{ tripList.price }} €</h4>
-                    <p>Coste minimo</p>
-                    <h4>{{ lowPrice(tripList.price) }}</h4>
-                </div>
-                <div class="col">
-                    <button @click="PostTrip" class="btn btn-primary">Reservar</button>
                 </div>
             </div>
         </div>
     </div>
+    <Toast />
 </template>
 
 <script setup>
@@ -118,15 +157,21 @@ const end_point = ref(null);
 import useTrips from "@/composables/trips";
 import useVehicles from "@/composables/vehicles";
 import useUsers from "@/composables/users";
+import useRates from "@/composables/rates";
+import useTags from "@/composables/tags";
+import useReserves from "@/composables/reserves";
 
-const { getTrip, tripList, reservedTrip } = useTrips();
+const { createReserve } = useReserves();
+const { getTagWithID, tag } = useTags();
+const { getRateWithId2, rate } = useRates();
+const { getTrip, tripList, reservedTrip, getTagTrips, tags } = useTrips();
 const { getUser, user } = useUsers();
 const { getVehicle, vehicle } = useVehicles();
 
 // Routes
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
-
+const router = useRouter();
 const tripId = route.params.id;
 const seats = route.params.seats;
 
@@ -142,19 +187,38 @@ const rating = ref(null);
 import { onMounted, ref } from "vue";
 
 
+const tagsData = ref([]);
+
 onMounted(async () => {
-    await getTrip(tripId);
-    console.log("tripList", tripList.value);
-    // await getUser(tripList.value.user_id);
-    // console.log("User por ID", user.value);
-    await getVehicle(tripList.value.vehicle_id);
-    // console.log("Vehicle por ID", vehicle.value);
+    try {
+        await getTrip(tripId);
+        await getUser(tripList.value.user_id);
+        await getVehicle(tripList.value.vehicle_id);
+        await getRateWithId2(tripList.value.user_id);
 
-    start_point.value = tripStore.tripData.start_point;
-    console.log(tripStore.tripData.start_point);
-    end_point.value = tripStore.tripData.end_point;
+        if (rate.value) {
+            rating.value = rate.value.pivot.rate;
+        } else {
+            rating.value = 0;
+        }
+
+        await getTagTrips(tripId);
+
+        if (tags.value && tags.value.length > 0) {
+            for (const tagId of tags.value) {
+                await getTagWithID(tagId);
+                if (tag.value) {
+                    tagsData.value.push(tag.value.tag_name);
+                }
+            }
+        } else {
+            console.log('No hay tags disponibles');
+        }
+
+    } catch (error) {
+        console.error('Error al cargar los datos:', error);
+    }
 });
-
 
 
 // Funciones de formateo de Time para el TimeLine
@@ -174,7 +238,7 @@ const finalPrice = ref(null);
 price.value = tripList.price;
 
 const lowPrice = (price) => {
-    console.log("precio", price)
+    // console.log("precio", price)
     const available_seats = tripList.value.available_seats;
     finalPrice.value = price / available_seats;
 
@@ -208,17 +272,23 @@ function getTimelineEvents(tripList) {
 
 const PostTrip = async () => {
     try {
-        await reservedTrip(tripList, tripId, seats);
+        const newTrip = ref({});
+        newTrip.value = {
+            trip_id: tripList.value.id,
+            user_id: tripList.value.user_id,
+            seats_reserved: seats,
+            reservation_date: new Date(),
+            price: tripList.value.price,
+        };
 
-        toast.add({
-            severity: "success",
-            summary: "¡Asiento Reservado!",
-            detail: "El asiento ha sido reservado exitosamente.",
-            life: 3000,
-        });
+        // console.log("newTrip", newTrip.value);
+
+        await createReserve(newTrip);
+
+        router.push({ name: "ManageTrips" });
 
     } catch (error) {
-        console.error("Error Reservando el asiento:", error);
+        console.log("Error Reservando el asiento:", error);
         toast.add({
             severity: "error",
             summary: "Error",
@@ -230,35 +300,56 @@ const PostTrip = async () => {
 </script>
 
 <style scoped>
-.row_1 {
-    width: 65%;
-    margin-top: 30px;
-    margin-bottom: 30px;
+.container-fluid {
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
-.row_2 {
-    width: 35%;
-    margin-top: 30px;
-    margin-bottom: 30px;
+.map-wrapper {
+    height: calc(100vh - 450px);
+    min-height: 400px;
 }
 
-.row_separation {
-    border: 0.5px solid black;
-    width: 75%;
-    height: 0%;
-    margin-top: 16px;
-    margin-bottom: 16px;
+.map-container {
+    width: 100%;
+    height: 100%;
 }
 
-ul {
-    list-style-type: none;
+
+@media (min-width: 768px) {
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .col-md-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
 }
 
-.circle {
-    border: 1px solid black;
-    border-radius: 50%;
-    width: 75px;
-    height: 75px;
-    overflow: hidden;
+@media (max-width: 767.98px) {
+    .map-wrapper {
+        height: 300px;
+        min-height: auto;
+    }
+
+    .vehicle-info .row {
+        --bs-gutter-y: 1rem;
+    }
 }
+
+.user-image-container {
+    width: 100%;
+    padding: 1rem;
+}
+
+.user-avatar {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border: 3px solid #eee;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 </style>

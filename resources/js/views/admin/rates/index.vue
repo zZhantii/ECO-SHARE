@@ -91,15 +91,13 @@ const dataRates = computed(() => {
 
 
 
-const deleteRateAdmin = (rate) => {
-    deleteRate(rate);
+const deleteRateAdmin = async (rate) => {
+    await deleteRate(rate);
+    await refreshRates();
 }
 
 const refreshRates = () => {
     rateList.value = [];
     getRates();
-    console.log("Tags refresh")
 }
-
-
 </script>

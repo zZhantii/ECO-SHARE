@@ -85,6 +85,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post("trip/reserve/{trip}", [TripController::class, 'reserve']);
     Route::put("trip/{trip}", [TripController::class, 'update']);
     Route::delete("trip/{trip}", [TripController::class, 'destroy']);
+    Route::get("tags/{trip}", [TripController::class, 'showTag']);
 
     Route::get('category-list', [CategoryController::class, 'getList']);
     Route::get('user', [ProfileController::class, 'user']);
@@ -109,6 +110,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('rates', [RatesController::class, 'index']);
     Route::post('rates', [RatesController::class, 'store']);
     Route::get('rates/{user_id}/{trip_id}', [RatesController::class, 'show']);
+    Route::get('rates/{user_id}', [RatesController::class, 'show2']);
     Route::put('rates/{user_id}/{trip_id}', [RatesController::class, 'update']);
     Route::delete('rates/{user_id}/{trip_id}', [RatesController::class, 'destroy']);
 

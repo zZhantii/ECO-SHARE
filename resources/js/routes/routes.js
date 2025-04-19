@@ -412,7 +412,7 @@ export default [
             },
             {
                 name: "reserves",
-                path: "reserves",
+                path: "reserves",   
                 meta: { breadCrumb: "Reservas" },
                 children: [
                     {

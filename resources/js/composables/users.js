@@ -1,10 +1,9 @@
 import { ref, inject } from "vue";
 import { useRouter } from "vue-router";
 const user = ref({});
-
 export default function useUsers() {
     const users = ref([]);
-
+   
     const router = useRouter();
     const validationErrors = ref({});
     const isLoading = ref(false);
@@ -47,7 +46,7 @@ export default function useUsers() {
     const getUser = async (id) => {
         const response = await axios.get("/api/user/" + id);
         user.value = response.data.data;
-
+        console.log('Data from API:', user.value);
         return user.value;
     };
 
@@ -96,27 +95,24 @@ export default function useUsers() {
             .finally(() => (isLoading.value = false));
     };
 
-    const updateUser = async (user) => {
+    const updateUser = async (user2) => {
         if (isLoading.value) return;
 
         isLoading.value = true;
         validationErrors.value = {};
 
-        axios
-            .put("/api/users/" + user.id, user)
+        await axios
+            .put("/api/users/" + user2.id, user2)
             .then((response) => {
-                //router.push({name: 'users.index'})
-
+                console.log("User updated successfully", response.data.message);
                 swal({
                     icon: "success",
                     title: "User updated successfully",
                 });
             })
             .catch((error) => {
-                console.log("patata");
                 if (error.response?.data) {
                     validationErrors.value = error.response.data.errors;
-                    console.log(validationErrors.value);
                 }
             })
             .finally(() => (isLoading.value = false));

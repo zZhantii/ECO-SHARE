@@ -104,7 +104,7 @@ export default function usePermissions() {
                 if (result.isConfirmed) {
                     axios.delete('/api/permissions/' + id)
                         .then(response => {
-                            getRoles()
+                            // getRoles()
                             router.push({name: 'permissions.index'})
                             swal({
                                 icon: 'success',

@@ -58,10 +58,28 @@ class RatesController extends Controller
 
             if (!$rate) {
                 return response()->json([
-                    "success" => false,
-                    "message" => "Valoración no encontrada"
+                "success" => false,
+                "message" => "Error al obtener la valoración"
                 ], 404);
             }
+
+            return response()->json([
+                "success" => true,
+                "data" => $rate
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => "Error al obtener la valoración",
+                "error" => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function show2($user_id)
+    {
+        try {
+            $rate = User::find($user_id)->rates()->first();
 
             return response()->json([
                 "success" => true,
@@ -102,6 +120,8 @@ class RatesController extends Controller
     public function destroy($user_id, $trip_id)
     {
         try {
+            $user = User::findOrFail($user_id);
+            
             $user->rates()->detach($trip_id);
 
             return response()->json([

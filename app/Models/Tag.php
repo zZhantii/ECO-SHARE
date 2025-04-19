@@ -14,8 +14,9 @@ class Tag extends Model
     ];
 
     // Relacion trips-tags N:M (M Tags)
-    public function trip()
+    public function tags()
     {
-        return $this->belongsToMany(Trip::class, 'tags_trips', 'tag_id', 'trip_id');
+        return $this->belongsToMany(Trip::class, 'tags_trips', 'tag_id', 'trip_id')
+            ->withtimestamps();
     }
 }
