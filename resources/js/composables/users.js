@@ -44,6 +44,7 @@ export default function useUsers() {
     };
 
     const getUser = async (id) => {
+        console.log("Fetching user with ID:", id);
         const response = await axios.get("/api/user/" + id);
         user.value = response.data.data;
         console.log('Data from API:', user.value);

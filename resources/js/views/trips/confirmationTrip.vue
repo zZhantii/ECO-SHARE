@@ -6,7 +6,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col">
-                                <Timeline :value="getTimelineEvents(tripList)" layout="horizontal" align="top"
+                                <Timeline :value="getTimelineEvents(trip)" layout="horizontal" align="top"
                                     class="w-100">
                                     <template #marker="slotProps">
                                         <i class="pi pi-map-marker" style="font-size: 1.5rem"></i>
@@ -27,7 +27,7 @@
                                             d="M224,232a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16H216A8,8,0,0,1,224,232Zm0-72v32a16,16,0,0,1-16,16H114.11a15.93,15.93,0,0,1-14.32-8.85l-58.11-116a16.1,16.1,0,0,1,0-14.32l22.12-44A16,16,0,0,1,85,17.56l33.69,14.22.47.22a16,16,0,0,1,7.15,21.46,1.51,1.51,0,0,1-.11.22L112,80l31.78,64L208,144A16,16,0,0,1,224,160Zm-16,0H143.77a15.91,15.91,0,0,1-14.31-8.85l-31.79-64a16.07,16.07,0,0,1,0-14.29l.12-.22L112,46.32,78.57,32.21A4.84,4.84,0,0,1,78.1,32L56,76,114.1,192H208Z">
                                         </path>
                                     </svg>
-                                    <span class="ms-2 fw-medium">{{ tripList.available_seats }}</span>
+                                    <span class="ms-2 fw-medium">{{ trip.available_seats }}</span>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -124,9 +124,9 @@
 
                         <div class="cost-info text-center mb-4">
                             <h3 class="fw-bold mb-3">Coste</h3>
-                            <h2 class="display-6 fw-bold text-primary">{{ tripList.price }} €</h2>
+                            <h2 class="display-6 fw-bold text-primary">{{ trip.price }} €</h2>
                             <p class="text-muted">Coste mínimo</p>
-                            <h4>{{ lowPrice(tripList.price) }}</h4>
+                            <h4>{{ lowPrice(trip.price) }}</h4>
                         </div>
 
                         <div class="d-grid justify-content-center w-100">
@@ -164,7 +164,7 @@ import useReserves from "@/composables/reserves";
 const { createReserve } = useReserves();
 const { getTagWithID, tag } = useTags();
 const { getRateWithId2, rate } = useRates();
-const { getTrip, tripList, reservedTrip, getTagTrips, tags } = useTrips();
+const { getTrip, trip, reservedTrip, getTagTrips, tags } = useTrips();
 const { getUser, user } = useUsers();
 const { getVehicle, vehicle } = useVehicles();
 
@@ -192,9 +192,10 @@ const tagsData = ref([]);
 onMounted(async () => {
     try {
         await getTrip(tripId);
-        await getUser(tripList.value.user_id);
-        await getVehicle(tripList.value.vehicle_id);
-        await getRateWithId2(tripList.value.user_id);
+        console.log("trip", trip.value);
+        await getUser(trip.value.user_id);
+        await getVehicle(trip.value.vehicle_id);
+        await getRateWithId2(trip.value.user_id);
 
         if (rate.value) {
             rating.value = rate.value.pivot.rate;
@@ -235,11 +236,11 @@ function formatTime(dateTime) {
 
 const price = ref(null);
 const finalPrice = ref(null);
-price.value = tripList.price;
+price.value = trip.price;
 
 const lowPrice = (price) => {
     // console.log("precio", price)
-    const available_seats = tripList.value.available_seats;
+    const available_seats = trip.value.available_seats;
     finalPrice.value = price / available_seats;
 
     return finalPrice
@@ -257,15 +258,15 @@ function formatDate(dateTime) {
     }).format(date);
 }
 
-function getTimelineEvents(tripList) {
+function getTimelineEvents(trip) {
     return [
         {
-            location: tripList.start_point?.address,
-            time: tripList.departure_time,
+            location: trip.start_point?.address,
+            time: trip.departure_time,
         },
         {
-            location: tripList.end_point?.address,
-            time: tripList.arrival_time,
+            location: trip.end_point?.address,
+            time: trip.arrival_time,
         },
     ];
 }
@@ -274,11 +275,11 @@ const PostTrip = async () => {
     try {
         const newTrip = ref({});
         newTrip.value = {
-            trip_id: tripList.value.id,
-            user_id: tripList.value.user_id,
+            trip_id: trip.value.id,
+            user_id: trip.value.user_id,
             seats_reserved: seats,
             reservation_date: new Date(),
-            price: tripList.value.price,
+            price: trip.value.price,
         };
 
         // console.log("newTrip", newTrip.value);
