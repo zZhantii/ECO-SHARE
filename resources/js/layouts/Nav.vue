@@ -28,7 +28,7 @@
                     </li>
                     <li>
                         <router-link
-                            to=""
+                            to="business"
                             class="primary-a nav-link text-center text-md-start"
                             >Empresa</router-link
                         >
@@ -36,7 +36,7 @@
                 </ul>
                 <ul class="navbar-nav mt-lg-0 ms-auto gap-3 align-items-center">
                     <li v-if="!user?.name" class="nav-item">
-                        <router-link to="" class="primary-a nav-link"
+                        <router-link :to="{ name: 'help' }" class="primary-a nav-link"
                             >Ayuda</router-link
                         >
                     </li>
@@ -112,7 +112,7 @@
 
                             <li>
                                 <router-link
-                                    to=""
+                                    :to="{ name: 'help' }"
                                     class="dropdown-item primary-a"
                                     >Ayuda</router-link
                                 >

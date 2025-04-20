@@ -5,8 +5,8 @@ export default function useAdmin() {
     const stats = ref({
         users: { total: 0, new: 0 },
         vehicles: { total: 0, validated: 0 },
-        trips: { total: 0, active: 0 },
-        bookings: { total: 0, confirmed: 0 }
+        trips: { total: 0, active: 0 }, 
+        reserves: { total: 0, confirmed: 0 }
     });
 
     const isLoading = ref(false);

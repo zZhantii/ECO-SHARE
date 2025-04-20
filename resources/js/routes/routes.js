@@ -104,6 +104,16 @@ export default [
                 name: "auth.reset-password",
                 component: () => import("../views/auth/passwords/Reset.vue"),
                 beforeEnter: guest,
+            }, 
+            {
+                path: "business",
+                name: "business",
+                component: () => import("../views/home/business.vue"),
+            }, 
+            {
+                path: "help",
+                name: "help",
+                component: () => import("../views/home/help.vue"),
             },
         ],
     },
