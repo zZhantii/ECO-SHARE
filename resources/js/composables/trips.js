@@ -84,6 +84,23 @@ export default function useTrips() {
     //     }
     // }
 
+    const postTrips = async (trip) => {
+        // trip.value.user_id = userId.value;
+
+        try {
+            const response = await axios.post("/api/trip", trip);
+            swal({
+                icon: "success",
+                title: "Viaje registrado con éxito",
+            });
+        } catch (error) {
+            console.error("Error en la solicitud POST:", error);
+            swal({
+                icon: "error",
+                title: "No se ha podido registrar la publicación",
+            });
+        }
+    };
     async function getTrips() {
         if (isLoading.value || tripsList.value.length > 0) return;
         isLoading.value = true;
@@ -628,6 +645,7 @@ export default function useTrips() {
         cancellTripAsDriver,
         cancellTripAsPassenger,
         createTrip,
+        postTrips,
         rateTrip,
         tripsToRate,
     };
