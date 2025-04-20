@@ -1,6 +1,7 @@
 <template>
     <main class="container">
         <RatingDialog
+            v-show="tripsToRate.length > 0"
             v-model:ratingDialog="ratingDialog"
             :tripsToRate="tripsToRate"
         />
@@ -376,7 +377,6 @@ import CardPassengerHistory from "../../components/CardPassengerHistory.vue";
 import CardDriverHistory from "../../components/CardDriverHistory.vue";
 import DialogTripDetails from "../../components/DialogTripDetails.vue";
 import RatingDialog from "../../components/RatingDialog.vue";
-import Rating from "primevue/rating";
 
 import AccordionPanel from "primevue/accordionpanel";
 import AccordionHeader from "primevue/accordionheader";

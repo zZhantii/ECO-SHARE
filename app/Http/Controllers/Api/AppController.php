@@ -220,7 +220,7 @@ class AppController extends Controller
         }
 
 
-        return response()->json(["success" => false, "data" => "Has hecho check-in o ya has cancelado el viaje"], 400);
+        return response()->json(["success" => false, "data" => "Has hecho check-in o ya has cancelado el viaje"], 409);
 
 
 
