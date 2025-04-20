@@ -1,6 +1,7 @@
 <template>
     <div class="show"></div>
     <div class="container">
+        <div class="mt-4"><h1 class="fs-3 mb-0">Publicación de viajes</h1></div>
         <div class="row justify-content-center">
             <div class="card flex justify-center m-4 p-4">
                 <Stepper value="1" v-show="(value) => 1 && value <= 3">

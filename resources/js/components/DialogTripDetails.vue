@@ -65,15 +65,22 @@
             <div v-else>
                 <div>
                     <Avatar
-                        v-if="selectedTrip.user.media[0]?.original_url"
+                        v-if="
+                            selectedTrip?.user?.media?.length > 0 &&
+                            selectedTrip.user.media[0].original_url
+                        "
                         :image="selectedTrip.user.media[0].original_url"
                         size="xlarge"
                         shape="circle"
+                        class="mb-3"
                     />
                     <Avatar
                         v-else
-                        :label="trip.user.alias?.charAt(0).toUpperCase()"
+                        :label="
+                            selectedTrip.user.alias?.charAt(0).toUpperCase()
+                        "
                         size="xlarge"
+                        class="mb-3"
                     />
                     <p class="d-flex mb-3">
                         Conductor
