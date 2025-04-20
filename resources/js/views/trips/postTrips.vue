@@ -3,7 +3,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="card flex justify-center m-4 p-4">
-                <Stepper value="1">
+                <Stepper value="1" v-show="(value) => 1 && value <= 3">
                     <StepList class="StepList">
                         <Step value="1">Opciones de viajes</Step>
                         <Step value="2">Detalles del vehiculo</Step>
