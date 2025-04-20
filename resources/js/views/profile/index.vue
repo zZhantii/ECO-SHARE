@@ -1,7 +1,11 @@
 <template>
     <main id="tab-pannel" class="bg-white">
+        <div class="container col-6">
+            <h1 class="fs-2 mb-2 mt-4 text-center">Perfil del usuario</h1>
+        </div>
+
         <div class="p-0 col-11 d-flex justify-content-center">
-            <Tabs class="col-none-11 col-md-6 mt-4 mt-5" value="0">
+            <Tabs class="col-none-11 col-md-6 mt-5" value="0">
                 <TabList class="ms-4 col-11">
                     <Tab class="col-none-5 col-md-8 color-og fs-5 p-2" value="0"
                         >Información personal</Tab

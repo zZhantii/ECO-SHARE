@@ -1,9 +1,10 @@
 <template>
     <div class="show"></div>
     <div class="container">
+        <div class="mt-4"><h1 class="fs-3 mb-0">Publicación de viajes</h1></div>
         <div class="row justify-content-center">
             <div class="card flex justify-center m-4 p-4">
-                <Stepper value="1">
+                <Stepper value="1" v-show="(value) => 1 && value <= 3">
                     <StepList class="StepList">
                         <Step value="1">Opciones de viajes</Step>
                         <Step value="2">Detalles del vehiculo</Step>
@@ -11,272 +12,575 @@
                     </StepList>
                     <StepPanels>
                         <StepPanel v-slot="{ activateCallback }" value="1">
-                            <div class="flex-auto d-flex justify-content-center">
+                            <div
+                                class="flex-auto d-flex justify-content-center"
+                            >
                                 <Toast />
-                                <form @submit.prevent="saveOption" class="w-100">
-
+                                <form
+                                    @submit.prevent="saveOption"
+                                    class="w-100"
+                                >
                                     <div class="row">
-                                        <Map v-if="showFirstMap" :origin="tripData.start_point
-                                            " :destination="tripData.end_point
-                                                        " @updateMapsInfo="
-                                                            handleMapsInfo
-                                                        " />
+                                        <Map
+                                            v-if="showFirstMap"
+                                            :origin="tripData.start_point"
+                                            :destination="tripData.end_point"
+                                            @updateMapsInfo="handleMapsInfo"
+                                        />
                                     </div>
-
 
                                     <div class="row mt-4">
-                                        <div class="col-12 col-md-6 mb-3 mb-md-0">
+                                        <div
+                                            class="col-sm-12 col-md-6 mb-3 mb-md-0"
+                                        >
                                             <div class="d-flex flex-column">
                                                 <div class="mb-3">
-                                                    <h3 class="text-center text-md-start">¿De dónde sales?</h3>
-                                                    <InputText id="origin" type="text" placeholder="Inicio"
-                                                        class="w-100" />
+                                                    <h3
+                                                        class="text-center text-md-start"
+                                                    >
+                                                        ¿De dónde sales?
+                                                    </h3>
+                                                    <InputText
+                                                        id="origin"
+                                                        type="text"
+                                                        placeholder="Inicio"
+                                                        class="w-100"
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-md-6">
+                                        <div class="col-sm-12 col-md-6">
                                             <div class="d-flex flex-column">
                                                 <div class="mb-3">
-                                                    <h3 class="text-center text-md-start">¿A dónde vas?</h3>
-                                                    <InputText id="destination" type="text" placeholder="Destino"
-                                                        class="w-100" />
+                                                    <h3
+                                                        class="text-center text-md-start"
+                                                    >
+                                                        ¿A dónde vas?
+                                                    </h3>
+                                                    <InputText
+                                                        id="destination"
+                                                        type="text"
+                                                        placeholder="Destino"
+                                                        class="w-100"
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-
-                                    <div class="d-flex pt-4 justify-content-end">
-                                        <Button label="Siguiente" type="submit" class="primary-a"
-                                            icon="pi pi-arrow-right" :disabled="!isStep1Complete" iconPos="right"
-                                            @click="activateCallback('2')" />
+                                    <div
+                                        class="d-flex pt-4 justify-content-end"
+                                    >
+                                        <Button
+                                            label="Siguiente"
+                                            type="submit"
+                                            class="primary-a"
+                                            icon="pi pi-arrow-right"
+                                            :disabled="!isStep1Complete"
+                                            iconPos="right"
+                                            @click="activateCallback('2')"
+                                        />
                                     </div>
                                 </form>
                             </div>
                         </StepPanel>
                         <StepPanel v-slot="{ activateCallback }" value="2">
-                            <div class="flex-auto d-flex justify-content-center">
+                            <div
+                                class="flex-auto d-flex justify-content-center"
+                            >
                                 <Toast />
-                                <form @submit.prevent="saveOptionCar" class="w-100">
+                                <form
+                                    @submit.prevent="saveOptionCar"
+                                    class="w-100"
+                                >
                                     <div class="row g-4">
-                                        <div class="col-12 col-md-6">
+                                        <div class="col-sm-12 col-md-6">
                                             <div class="card h-100">
-                                                <div class="card-body d-flex flex-column">
-                                                    <h3 class="card-title text-center mb-4">¿Qué vehículo utilizarás?
+                                                <div
+                                                    class="card-body d-flex flex-column"
+                                                >
+                                                    <h3
+                                                        class="card-title text-center mb-4"
+                                                    >
+                                                        ¿Qué vehículo
+                                                        utilizarás?
                                                     </h3>
                                                     <div class="mt-auto">
-                                                        <FloatLabel variant="on">
-                                                            <Select v-model="tripData.vehicle_id"
-                                                                inputId="vehicle_select" :options="vehiclesList"
-                                                                optionValue="id" optionLabel="brand" class="w-100"
-                                                                appendOn=".show" />
-                                                            <label for="vehicle_select">Seleccione su vehículo</label>
+                                                        <FloatLabel
+                                                            variant="on"
+                                                        >
+                                                            <Select
+                                                                v-model="
+                                                                    tripData.vehicle_id
+                                                                "
+                                                                inputId="vehicle_select"
+                                                                :options="
+                                                                    vehiclesList
+                                                                "
+                                                                optionValue="id"
+                                                                optionLabel="brand"
+                                                                class="w-100"
+                                                                appendOn=".show"
+                                                            />
+                                                            <label
+                                                                for="vehicle_select"
+                                                                >Seleccione su
+                                                                vehículo</label
+                                                            >
                                                         </FloatLabel>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-md-6">
+                                        <div class="col-sm-12 col-md-6">
                                             <div class="card h-100">
-                                                <div class="card-body d-flex flex-column">
-                                                    <h3 class="card-title text-center mb-4">¿Cuándo viajarás?</h3>
+                                                <div
+                                                    class="card-body d-flex flex-column"
+                                                >
+                                                    <h3
+                                                        class="card-title text-center mb-4"
+                                                    >
+                                                        ¿Cuándo viajarás?
+                                                    </h3>
                                                     <div class="mt-auto">
-                                                        <DatePicker id="departure_time"
-                                                            v-model="tripData.departure_time" showTime :min-date="today"
-                                                            hourFormat="24" class="w-100" fluid />
+                                                        <DatePicker
+                                                            id="departure_time"
+                                                            v-model="
+                                                                tripData.departure_time
+                                                            "
+                                                            showTime
+                                                            :min-date="today"
+                                                            hourFormat="24"
+                                                            class="w-100"
+                                                            fluid
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-md-6">
+                                        <div class="col-sm-12 col-md-6">
                                             <div class="card h-100">
-                                                <div class="card-body d-flex flex-column">
-                                                    <h3 class="card-title text-center mb-4">¿Cuántos asientos hay
-                                                        disponibles?</h3>
+                                                <div
+                                                    class="card-body d-flex flex-column"
+                                                >
+                                                    <h3
+                                                        class="card-title text-center mb-4"
+                                                    >
+                                                        ¿Cuántos asientos hay
+                                                        disponibles?
+                                                    </h3>
                                                     <div class="mt-auto">
-                                                        <InputNumber v-model="tripData.available_seats"
-                                                            inputId="available_seats" mode="decimal" showButtons
-                                                            :min="1" :max="seats" class="w-100" fluid />
+                                                        <InputNumber
+                                                            v-model="
+                                                                tripData.available_seats
+                                                            "
+                                                            inputId="available_seats"
+                                                            mode="decimal"
+                                                            showButtons
+                                                            :min="1"
+                                                            :max="seats"
+                                                            class="w-100"
+                                                            fluid
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-md-6">
+                                        <div class="col-sm-12 col-md-6">
                                             <div class="card h-100">
-                                                <div class="card-body d-flex flex-column">
-                                                    <h3 class="card-title text-center mb-4">¿Tienes alguna restricción
-                                                        para este viaje?</h3>
+                                                <div
+                                                    class="card-body d-flex flex-column"
+                                                >
+                                                    <h3
+                                                        class="card-title text-center mb-4"
+                                                    >
+                                                        ¿Tienes alguna
+                                                        restricción para este
+                                                        viaje?
+                                                    </h3>
                                                     <div class="mt-auto">
-                                                        <MultiSelect v-model="selectedTags" inputId="restrictions"
-                                                            :options="tagList" optionLabel="tag_name" filter
-                                                            :maxSelectedLabels="3" class="w-100" variant="filled" />
+                                                        <MultiSelect
+                                                            v-model="
+                                                                selectedTags
+                                                            "
+                                                            inputId="restrictions"
+                                                            :options="tagList"
+                                                            optionLabel="tag_name"
+                                                            filter
+                                                            :maxSelectedLabels="
+                                                                3
+                                                            "
+                                                            class="w-100"
+                                                            variant="filled"
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="d-flex justify-content-between pt-6">
-                                        <Button label="Atrás" severity="secondary" icon="pi pi-arrow-left" @click="
-                                            activateCallback('1'),
-                                            (showFirstMap = true)
-                                            " />
-                                        <Button label="Siguiente" type="submit" class="primary-a"
-                                            icon="pi pi-arrow-right" :disabled="!isStep2Complete" iconPos="right"
+                                    <div
+                                        class="d-flex justify-content-between pt-6"
+                                    >
+                                        <Button
+                                            label="Atrás"
+                                            severity="secondary"
+                                            icon="pi pi-arrow-left"
+                                            @click="
+                                                activateCallback('1'),
+                                                    (showFirstMap = true)
+                                            "
+                                        />
+                                        <Button
+                                            label="Siguiente"
+                                            type="submit"
+                                            class="primary-a"
+                                            icon="pi pi-arrow-right"
+                                            :disabled="!isStep2Complete"
+                                            iconPos="right"
                                             @click="
                                                 activateCallback('3'),
-                                                (showFirstMap = false)
-                                                " />
+                                                    (showFirstMap = false)
+                                            "
+                                        />
                                     </div>
                                 </form>
                             </div>
                         </StepPanel>
                         <StepPanel v-slot="{ activateCallback }" value="3">
                             <div class="row g-4">
-                                <div class="col-12">
+                                <div class="col-sm-12">
                                     <div class="card">
                                         <div class="card-body">
-                                            <Map v-if="!showFirstMap" :origin="tempStartPoint"
-                                                :destination="tempEndPoint" @updateMapsInfo="handleMapsInfo" />
+                                            <Map
+                                                v-if="!showFirstMap"
+                                                :origin="tempStartPoint"
+                                                :destination="tempEndPoint"
+                                                @updateMapsInfo="handleMapsInfo"
+                                            />
                                         </div>
                                     </div>
                                 </div>
-
-
                             </div>
                             <div class="row g-4">
-                                <div class="col-12 col-md-6">
+                                <div class="col-sm-12">
                                     <div class="card h-100">
                                         <div class="card-body">
-                                            <h2 class="card-title text-center text-md-start mb-4 fw-bold">
+                                            <h2
+                                                class="card-title text-center text-md-start mb-4 fw-bold"
+                                            >
                                                 ¡Resumen del viaje!
                                             </h2>
 
                                             <!-- Contenedor de detalles responsive - En móvil se apilan, en desktop una al lado de otra -->
                                             <div class="row">
                                                 <!-- Detalles del vehículo -->
-                                                <div class="col-12 col-md-6  mb-4 mb-md-0">
-                                                    <div class="p-3 bg-light rounded-3 h-100">
-                                                        <h4 class="mb-3 fw-semibold">
-                                                            Detalles del vehículo
+                                                <div
+                                                    class="col-sm-12 col-md-6 mb-0"
+                                                >
+                                                    <div
+                                                        class="p-3 bg-light rounded-3 h-100"
+                                                    >
+                                                        <h4
+                                                            class="mb-3 fw-semibold"
+                                                        >
+                                                            Detalles del
+                                                            vehículo
                                                         </h4>
 
-                                                        <ul class="list-unstyled d-flex flex-column gap-3">
-                                                            <li v-if="selectedVehicleDetails"
-                                                                class="d-flex align-items-start">
-                                                                <i class="bi bi-car-front me-2 text-primary"></i>
+                                                        <ul
+                                                            class="list-unstyled d-flex flex-column gap-3"
+                                                        >
+                                                            <li
+                                                                v-if="
+                                                                    selectedVehicleDetails
+                                                                "
+                                                                class="d-flex align-items-start"
+                                                            >
+                                                                <i
+                                                                    class="bi bi-car-front me-2 text-primary"
+                                                                ></i>
                                                                 <span>
-                                                                    {{ selectedVehicleDetails.brand ? `Marca:                                                                    ${selectedVehicleDetails.brand}` : "Marca no                                                                    disponible" }}
+                                                                    {{
+                                                                        selectedVehicleDetails.brand
+                                                                            ? `Marca:                                                                    ${selectedVehicleDetails.brand}`
+                                                                            : "Marca no                                                                    disponible"
+                                                                    }}
                                                                 </span>
                                                             </li>
-                                                            <li v-if="selectedVehicleDetails"
-                                                                class="d-flex align-items-start">
-                                                                <i class="bi bi-info-circle me-2 text-primary"></i>
+                                                            <li
+                                                                v-if="
+                                                                    selectedVehicleDetails
+                                                                "
+                                                                class="d-flex align-items-start"
+                                                            >
+                                                                <i
+                                                                    class="bi bi-info-circle me-2 text-primary"
+                                                                ></i>
                                                                 <span>
-                                                                    {{ selectedVehicleDetails.model ? `Modelo:
-                                                                    ${selectedVehicleDetails.model}` : "Modelo no                                                                    disponible" }}
+                                                                    {{
+                                                                        selectedVehicleDetails.model
+                                                                            ? `Modelo:
+                                                                    ${selectedVehicleDetails.model}`
+                                                                            : "Modelo no                                                                    disponible"
+                                                                    }}
                                                                 </span>
                                                             </li>
-                                                            <li v-if="selectedVehicleDetails"
-                                                                class="d-flex align-items-start">
-                                                                <i class="bi bi-bookmark me-2 text-primary"></i>
+                                                            <li
+                                                                v-if="
+                                                                    selectedVehicleDetails
+                                                                "
+                                                                class="d-flex align-items-start"
+                                                            >
+                                                                <i
+                                                                    class="bi bi-bookmark me-2 text-primary"
+                                                                ></i>
                                                                 <span>
-                                                                    {{ selectedVehicleDetails.plate ? `Matrícula:                                                                    ${selectedVehicleDetails.plate}` : "Matrícula no                                                                    disponible" }}
+                                                                    {{
+                                                                        selectedVehicleDetails.plate
+                                                                            ? `Matrícula:                                                                    ${selectedVehicleDetails.plate}`
+                                                                            : "Matrícula no                                                                    disponible"
+                                                                    }}
                                                                 </span>
                                                             </li>
-                                                            <li v-if="selectedVehicleDetails"
-                                                                class="d-flex align-items-start">
-                                                                <i class="bi bi-fuel-pump me-2 text-primary"></i>
+                                                            <li
+                                                                v-if="
+                                                                    selectedVehicleDetails
+                                                                "
+                                                                class="d-flex align-items-start"
+                                                            >
+                                                                <i
+                                                                    class="bi bi-fuel-pump me-2 text-primary"
+                                                                ></i>
                                                                 <span>
-                                                                    {{ selectedVehicleDetails.consumption ? `Consumo:                                                                    ${selectedVehicleDetails.consumption} L / 100 Km` :                                                                    "Consumo no disponible" }}
+                                                                    {{
+                                                                        selectedVehicleDetails.consumption
+                                                                            ? `Consumo:                                                                    ${selectedVehicleDetails.consumption} L / 100 Km`
+                                                                            : "Consumo no disponible"
+                                                                    }}
                                                                 </span>
                                                             </li>
-                                                            <li v-if="selectedVehicleDetails"
-                                                                class="d-flex align-items-start">
-                                                                <i class="bi bi-people me-2 text-primary"></i>
+                                                            <li
+                                                                v-if="
+                                                                    selectedVehicleDetails
+                                                                "
+                                                                class="d-flex align-items-start"
+                                                            >
+                                                                <i
+                                                                    class="bi bi-people me-2 text-primary"
+                                                                ></i>
                                                                 <span>
-                                                                    {{ tripData.available_seats ? `Número de asientos:                                                                    ${tripData.available_seats}` : "Número de asientos                                                                    no disponible" }}
+                                                                    {{
+                                                                        tripData.available_seats
+                                                                            ? `Número de asientos:                                                                    ${tripData.available_seats}`
+                                                                            : "Número de asientos                                                                    no disponible"
+                                                                    }}
                                                                 </span>
                                                             </li>
-                                                            <li v-if="selectedVehicleDetails"
-                                                                class="d-flex align-items-start">
-                                                                <i class="bi bi-droplet me-2 text-primary"></i>
+                                                            <li
+                                                                v-if="
+                                                                    selectedVehicleDetails
+                                                                "
+                                                                class="d-flex align-items-start"
+                                                            >
+                                                                <i
+                                                                    class="bi bi-droplet me-2 text-primary"
+                                                                ></i>
                                                                 <span>
-                                                                    {{ selectedVehicleDetails.fuel_type ? `Tipo de                                                                    gasolina: ${selectedVehicleDetails.fuel_type}` :                                                                    "Tipo de gasolina no disponible" }}
+                                                                    {{
+                                                                        selectedVehicleDetails.fuel_type
+                                                                            ? `Tipo de                                                                    gasolina: ${selectedVehicleDetails.fuel_type}`
+                                                                            : "Tipo de gasolina no disponible"
+                                                                    }}
                                                                 </span>
                                                             </li>
                                                         </ul>
                                                     </div>
                                                 </div>
 
-                                                <div class="col-12 col-md-6 ">
-                                                    <div class="p-3 bg-light rounded-3 h-100">
-                                                        <h4 class="mb-3 fw-semibold">
+                                                <div class="col-sm-12 col-md-6">
+                                                    <div
+                                                        class="p-3 bg-light rounded-3 h-100"
+                                                    >
+                                                        <h4
+                                                            class="mb-3 fw-semibold"
+                                                        >
                                                             Detalles del viaje
                                                         </h4>
-                                                        <ul class="list-unstyled d-flex flex-column gap-3">
-                                                            <li class="d-flex align-items-start">
-                                                                <i class="bi bi-geo-alt me-2 text-primary"></i>
+                                                        <ul
+                                                            class="list-unstyled d-flex flex-column gap-3"
+                                                        >
+                                                            <li
+                                                                class="d-flex align-items-start"
+                                                            >
+                                                                <i
+                                                                    class="bi bi-geo-alt me-2 text-primary"
+                                                                ></i>
                                                                 <span>
                                                                     Origen:
-                                                                    {{ tripData.start_point.address ===
-                                                                    tripData.start_point.locality
-                                                                    ? tripData.start_point.locality
-                                                                    : tripData.start_point.address + ", " +
-                                                                    tripData.start_point.locality }}
+                                                                    {{
+                                                                        tripData
+                                                                            .start_point
+                                                                            .address ===
+                                                                        tripData
+                                                                            .start_point
+                                                                            .locality
+                                                                            ? tripData
+                                                                                  .start_point
+                                                                                  .locality
+                                                                            : tripData
+                                                                                  .start_point
+                                                                                  .address +
+                                                                              ", " +
+                                                                              tripData
+                                                                                  .start_point
+                                                                                  .locality
+                                                                    }}
                                                                 </span>
                                                             </li>
-                                                            <li class="d-flex align-items-start">
-                                                                <i class="bi bi-geo me-2 text-primary"></i> 
+                                                            <li
+                                                                class="d-flex align-items-start"
+                                                            >
+                                                                <i
+                                                                    class="bi bi-geo me-2 text-primary"
+                                                                ></i>
                                                                 <span>
                                                                     Destino:
-                                                                    {{ tripData.end_point.address ===
-                                                                    tripData.end_point.locality
-                                                                    ? tripData.end_point.locality
-                                                                    : tripData.end_point.address + ", " +
-                                                                    tripData.end_point.locality }}
+                                                                    {{
+                                                                        tripData
+                                                                            .end_point
+                                                                            .address ===
+                                                                        tripData
+                                                                            .end_point
+                                                                            .locality
+                                                                            ? tripData
+                                                                                  .end_point
+                                                                                  .locality
+                                                                            : tripData
+                                                                                  .end_point
+                                                                                  .address +
+                                                                              ", " +
+                                                                              tripData
+                                                                                  .end_point
+                                                                                  .locality
+                                                                    }}
                                                                 </span>
                                                             </li>
-                                                            <li class="d-flex align-items-start">
-                                                                <i class="bi bi-calendar-date me-2 text-primary"></i>
-                                                                <span>Fecha de inicio: {{ formattedDate }}</span>
+                                                            <li
+                                                                class="d-flex align-items-start"
+                                                            >
+                                                                <i
+                                                                    class="bi bi-calendar-date me-2 text-primary"
+                                                                ></i>
+                                                                <span
+                                                                    >Fecha de
+                                                                    inicio:
+                                                                    {{
+                                                                        formattedDate
+                                                                    }}</span
+                                                                >
                                                             </li>
-                                                            <li class="d-flex align-items-start">
-                                                                <i class="bi bi-clock me-2 text-primary"></i>
-                                                                <span>Hora de salida: {{ tripData.departure_time
-                                                                    }}</span>
+                                                            <li
+                                                                class="d-flex align-items-start"
+                                                            >
+                                                                <i
+                                                                    class="bi bi-clock me-2 text-primary"
+                                                                ></i>
+                                                                <span
+                                                                    >Hora de
+                                                                    salida:
+                                                                    {{
+                                                                        tripData.departure_time
+                                                                    }}</span
+                                                                >
                                                             </li>
-                                                            <li class="d-flex align-items-start">
-                                                                <i class="bi bi-clock-history me-2 text-primary"></i>
-                                                                <span>Hora estimada de llegada: {{ tripData.arrival_time
-                                                                    }}</span>
+                                                            <li
+                                                                class="d-flex align-items-start"
+                                                            >
+                                                                <i
+                                                                    class="bi bi-clock-history me-2 text-primary"
+                                                                ></i>
+                                                                <span
+                                                                    >Hora
+                                                                    estimada de
+                                                                    llegada:
+                                                                    {{
+                                                                        tripData.arrival_time
+                                                                    }}</span
+                                                                >
                                                             </li>
-                                                            <li class="d-flex align-items-start">
-                                                                <i class="bi bi-signpost-split me-2 text-primary"></i>
-                                                                <span>Distancia: {{ distance }} Km</span>
+                                                            <li
+                                                                class="d-flex align-items-start"
+                                                            >
+                                                                <i
+                                                                    class="bi bi-signpost-split me-2 text-primary"
+                                                                ></i>
+                                                                <span
+                                                                    >Distancia:
+                                                                    {{
+                                                                        distance
+                                                                    }}
+                                                                    Km</span
+                                                                >
                                                             </li>
-                                                            <li v-if="tripData.tags.length > 0"
-                                                                class="d-flex align-items-start">
-                                                                <i class="bi bi-tags me-2 text-primary"></i>
+                                                            <li
+                                                                v-if="
+                                                                    tripData
+                                                                        .tags
+                                                                        .length >
+                                                                    0
+                                                                "
+                                                                class="d-flex align-items-start"
+                                                            >
+                                                                <i
+                                                                    class="bi bi-tags me-2 text-primary"
+                                                                ></i>
                                                                 <div>
-                                                                    <span>Reglas de viaje:</span>
-                                                                    <ul class="list-unstyled mt-1 ms-2">
-                                                                        <li v-for="tag in selectedTags" class="mb-1">
-                                                                            <span class="badge bg-secondary">{{
-                                                                                tag.tag_name }}</span>
+                                                                    <span
+                                                                        >Reglas
+                                                                        de
+                                                                        viaje:</span
+                                                                    >
+                                                                    <ul
+                                                                        class="list-unstyled mt-1 ms-2"
+                                                                    >
+                                                                        <li
+                                                                            v-for="tag in selectedTags"
+                                                                            class="mb-1"
+                                                                        >
+                                                                            <span
+                                                                                class="badge bg-secondary"
+                                                                                >{{
+                                                                                    tag.tag_name
+                                                                                }}</span
+                                                                            >
                                                                         </li>
                                                                     </ul>
                                                                 </div>
                                                             </li>
-                                                            <li class="d-flex align-items-start mt-2">
-                                                                <i class="bi bi-cash-coin me-2 text-success"></i>
-                                                                <span class="fs-4 fw-bold">
-                                                                    {{ tripData.price > 7 ? `Precio: ${tripData.price}`
-                                                                    : `Tarifa mínima aplicada: ${tripData.price}` }} €
+                                                            <li
+                                                                class="d-flex align-items-start mt-2"
+                                                            >
+                                                                <i
+                                                                    class="bi bi-cash-coin me-2 text-success"
+                                                                ></i>
+                                                                <span
+                                                                    class="fs-4 fw-bold"
+                                                                >
+                                                                    {{
+                                                                        tripData.price >
+                                                                        7
+                                                                            ? `Precio: ${tripData.price}`
+                                                                            : `Tarifa mínima aplicada: ${
+                                                                                  tripData.price ??
+                                                                                  ""
+                                                                              }`
+                                                                    }}
+                                                                    €
                                                                 </span>
                                                             </li>
                                                         </ul>
@@ -288,12 +592,22 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between pt-6">
-                                <Button label="Atrás" severity="secondary" icon="pi pi-arrow-left" @click="
-                                    activateCallback('2'),
-                                    (isStep2Complete = false)
-                                    " />
-                                <Button label="Confirmar Viaje" @click="postTrips" class="primary-a"
-                                    icon="pi pi-arrow-right" iconPos="right" />
+                                <Button
+                                    label="Atrás"
+                                    severity="secondary"
+                                    icon="pi pi-arrow-left"
+                                    @click="
+                                        activateCallback('2'),
+                                            (isStep2Complete = false)
+                                    "
+                                />
+                                <Button
+                                    label="Confirmar Viaje"
+                                    @click="handlePost"
+                                    class="primary-a"
+                                    icon="pi pi-arrow-right"
+                                    iconPos="right"
+                                />
                             </div>
                         </StepPanel>
                     </StepPanels>
@@ -327,7 +641,9 @@ import { useRouter, useRoute } from "vue-router";
 
 // composables
 import useVehicles from "@/composables/vehicles.js";
+import useTrips from "../../composables/trips";
 
+const { postTrips } = useTrips();
 const { getVehicles, vehiclesList, vehicle, getVehicle } = useVehicles();
 
 const { getTags, tag, tagList } = useTags();
@@ -401,6 +717,11 @@ const tripData = ref({
     tags: [],
 });
 
+function handlePost() {
+    tripData.value.user_id = user_id.value;
+    postTrips(tripData.value);
+    router.push({ name: "ManageTrips" });
+}
 const selectedVehicleDetails = ref(null);
 
 watch(
@@ -579,9 +900,9 @@ const getPrice = () => {
             tripData.value.price =
                 Math.round(
                     (selectedVehicleDetails.value.consumption / 100.0) *
-                    gasolineRate.value *
-                    distance.value *
-                    100
+                        gasolineRate.value *
+                        distance.value *
+                        100
                 ) / 100;
 
             break;
@@ -589,9 +910,9 @@ const getPrice = () => {
             tripData.value.price =
                 Math.round(
                     (selectedVehicleDetails.value.consumption / 100.0) *
-                    dieselRate.value *
-                    distance.value *
-                    100
+                        dieselRate.value *
+                        distance.value *
+                        100
                 ) / 100;
             break;
         default:
@@ -640,29 +961,6 @@ const saveOptionCar = async () => {
         });
     }
 };
-
-const postTrips = async () => {
-    tripData.value.user_id = user_id.value;
-    console.log("ripdata", tripData.value);
-    try {
-        console.log("Enviando datos del viaje: ", tripData.value);
-        const response = await axios.post("/api/trip", tripData.value);
-        toast.add({
-            severity: "success",
-            summary: "¡Viaje registrado!",
-            detail: "El viaje ha sido guardado exitosamente.",
-            life: 3000,
-        });
-    } catch (error) {
-        console.error("Error en la solicitud POST:", error);
-        toast.add({
-            severity: "error",
-            summary: "Error",
-            detail: "No se pudo registrar el viaje.",
-            life: 3000,
-        });
-    }
-};
 </script>
 
 <style scoped>
@@ -681,5 +979,4 @@ ul {
     max-width: 500px;
     height: 250px;
 }
-
 </style>
