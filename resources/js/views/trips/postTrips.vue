@@ -30,7 +30,7 @@
 
                                     <div class="row mt-4">
                                         <div
-                                            class="col-12 col-md-6 mb-3 mb-md-0"
+                                            class="col-sm-12 col-md-6 mb-3 mb-md-0"
                                         >
                                             <div class="d-flex flex-column">
                                                 <div class="mb-3">
@@ -49,7 +49,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-md-6">
+                                        <div class="col-sm-12 col-md-6">
                                             <div class="d-flex flex-column">
                                                 <div class="mb-3">
                                                     <h3
@@ -94,7 +94,7 @@
                                     class="w-100"
                                 >
                                     <div class="row g-4">
-                                        <div class="col-12 col-md-6">
+                                        <div class="col-sm-12 col-md-6">
                                             <div class="card h-100">
                                                 <div
                                                     class="card-body d-flex flex-column"
@@ -133,7 +133,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-md-6">
+                                        <div class="col-sm-12 col-md-6">
                                             <div class="card h-100">
                                                 <div
                                                     class="card-body d-flex flex-column"
@@ -160,7 +160,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-md-6">
+                                        <div class="col-sm-12 col-md-6">
                                             <div class="card h-100">
                                                 <div
                                                     class="card-body d-flex flex-column"
@@ -189,7 +189,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-12 col-md-6">
+                                        <div class="col-sm-12 col-md-6">
                                             <div class="card h-100">
                                                 <div
                                                     class="card-body d-flex flex-column"
@@ -252,7 +252,7 @@
                         </StepPanel>
                         <StepPanel v-slot="{ activateCallback }" value="3">
                             <div class="row g-4">
-                                <div class="col-12">
+                                <div class="col-sm-12">
                                     <div class="card">
                                         <div class="card-body">
                                             <Map
@@ -266,7 +266,7 @@
                                 </div>
                             </div>
                             <div class="row g-4">
-                                <div class="col-12 col-md-6">
+                                <div class="col-sm-12">
                                     <div class="card h-100">
                                         <div class="card-body">
                                             <h2
@@ -279,7 +279,7 @@
                                             <div class="row">
                                                 <!-- Detalles del vehículo -->
                                                 <div
-                                                    class="col-12 col-md-6 mb-4 mb-md-0"
+                                                    class="col-sm-12 col-md-6 mb-0"
                                                 >
                                                     <div
                                                         class="p-3 bg-light rounded-3 h-100"
@@ -401,7 +401,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-12 col-md-6">
+                                                <div class="col-sm-12 col-md-6">
                                                     <div
                                                         class="p-3 bg-light rounded-3 h-100"
                                                     >
@@ -574,7 +574,10 @@
                                                                         tripData.price >
                                                                         7
                                                                             ? `Precio: ${tripData.price}`
-                                                                            : `Tarifa mínima aplicada: ${tripData.price}`
+                                                                            : `Tarifa mínima aplicada: ${
+                                                                                  tripData.price ??
+                                                                                  ""
+                                                                              }`
                                                                     }}
                                                                     €
                                                                 </span>
