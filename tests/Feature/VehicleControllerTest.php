@@ -20,6 +20,7 @@ class VehicleControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
+    // Método que comprueba que se muestran correctamente todos los vehiculos creados
     public function test_index_all_vehicles()
     {
         $user = User::factory()->create();

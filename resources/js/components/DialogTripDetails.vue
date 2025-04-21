@@ -146,8 +146,8 @@ const props = defineProps({
 
 const visibleDialog = toRef(props, "visibleDialog");
 const passenger = toRef(props, "passenger");
+// Implementación de los detalles para poner a false los reactivos que abren el modal
 const emit = defineEmits(["update:visibleDialog", "update:passenger"]);
-
 const closeDialog = () => {
     emit("update:visibleDialog", false);
     emit("update:passenger", false);

@@ -404,12 +404,13 @@ const passenger = ref(false);
 const ratingDialog = ref(false);
 const mount = ref(true);
 
+// Al montar el componente se consiguen los viajes activos e históricos como pasajero y conductor
 onMounted(async () => {
     await getActiveTrips();
     await getDriverHistory();
+    // De inicio si se recibe una respuesta true del historial del pasajero, se abre el modal que activa
+    // el modo de valoración de viajes
     ratingDialog.value = await getPassengerHistory();
-
-    console.log("viajes como pasajero", passengerHistory.value);
 });
 
 onBeforeUnmount(() => {
@@ -426,6 +427,7 @@ function formatDate(timestamp) {
     });
 }
 
+// Función que permite realizar la cuenta atrás del tiempo que falta al conductor para abrir el viaje
 function getTimeToBoarding(trip) {
     const start = new Date(trip.departure_time);
     const now = new Date();
@@ -435,6 +437,7 @@ function getTimeToBoarding(trip) {
     const hours = Math.floor(diffInMinutes / 60);
     const minutes = diffInMinutes % 60;
 
+    //  Devuelve diferentes respuestas en relación a los periodos de tiempo
     if (hours >= 24) {
         return "Aún falta un día o más para poder iniciar el viaje";
     }
@@ -449,6 +452,7 @@ function getTimeToBoarding(trip) {
     }
 }
 
+// Método que a través del composable y confirms, gestiona la realización del checkin por parte de los pasajeros
 function checkIn(trip) {
     confirm.require({
         message: "Seguro que quieres hacer check-in?",
@@ -476,16 +480,21 @@ function checkIn(trip) {
     });
 }
 
+// Método que devuelve el estado del embaque para pasajeros y conductor y que controla el estado de los votones que se muestran
+// en los TIMELINE.
 function checkBoarding(driveStart, startTime, passenger = false) {
     const start = new Date(startTime);
     const now = new Date();
 
     const minutesDiff = (start - now) / 1000 / 60;
 
+    // Si conductor los botones se activan desde el momento de salida hasta la hora posterior al momento de la salida
     if (!passenger && minutesDiff <= 0 && minutesDiff >= -60) {
         return true;
     }
 
+    // Si es pasajero, los botones se mostrarán para el embaruqe desde una hora previa hasta el momento de salida
+    // del vehículo
     if (
         passenger &&
         minutesDiff <= 60 &&
@@ -498,19 +507,19 @@ function checkBoarding(driveStart, startTime, passenger = false) {
     return false;
 }
 
+// Método que gestiona la apertura del modal con los detalles del viaje para pasajeros y conductores
+// En este caso show, es una variable que de ser true, indica que el usuario es pasajero para que
+// el modal muestre otra información
 const showTripDetails = (tripId, show = false) => {
     visibleDialog.value = true;
     passenger.value = show;
     let trip = null;
     if (!passenger.value) {
         trip = activeDriverTripsList.value.find((trip) => trip.id === tripId);
-        console.log("conducot");
     } else {
         trip = activePassengerTripsList.value.find(
             (trip) => trip.id === tripId
         );
-
-        console.log("pasajero");
     }
 
     if (trip) {
@@ -519,6 +528,7 @@ const showTripDetails = (tripId, show = false) => {
     }
 };
 
+// Método qu marca el inicio del viaje como conductor a partir de los datos del viaje
 const confirmStart = (trip) => {
     confirm.require({
         message: "Seguro que quieres iniciar el viaje?",
@@ -546,6 +556,7 @@ const confirmStart = (trip) => {
     });
 };
 
+// Método que permita cancelar el viaje con un booleano de control que marca si el usuario es pasajero o conductor
 const confirmCancell = (trip, passenger = false) => {
     if (!passenger) {
         confirm.require({
@@ -600,6 +611,7 @@ const confirmCancell = (trip, passenger = false) => {
     }
 };
 
+// Método que marca el final del viaje como conductor a partir de los datos del viaje
 const confirmEnd = (trip) => {
     confirm.require({
         message: "Seguro que quieres finalizar el viaje?",
@@ -626,6 +638,8 @@ const confirmEnd = (trip) => {
         },
     });
 };
+
+// Método que completa con los datos de ubicación y tiempo los timeline con los dats del viaje
 function getTimelineEvents(trip) {
     return [
         {

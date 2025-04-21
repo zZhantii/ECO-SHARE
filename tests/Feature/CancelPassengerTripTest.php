@@ -21,6 +21,7 @@ class CancelPassengerTripTest extends TestCase
 
     public function test_cancel_trip_as_passenger()
     {
+        // Comprobación en caso de que conste una reserva en caso de haber hecho checkin con resultado false
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
@@ -40,6 +41,8 @@ class CancelPassengerTripTest extends TestCase
             "success" => false,
             "data" => "Has hecho check-in o ya has cancelado el viaje",
         ]);
+
+        // Comprobación en caso de que conste una reserva en caso de haber hecho anulación previa del viaje con resultado false
         $user->reserves()->updateExistingPivot($trip->id, [
             "cancelled_at" => now(),
         ]);
@@ -51,6 +54,7 @@ class CancelPassengerTripTest extends TestCase
             "data" => "Has hecho check-in o ya has cancelado el viaje",
         ]);
 
+        // Comprobación  que debe devolver true en caso que el viaje no este cancelado ni tenga checkin
         $user->reserves()->updateExistingPivot($trip->id, [
             "cancelled_at" => null,
             "check_in" => null,

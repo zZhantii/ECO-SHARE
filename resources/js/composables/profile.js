@@ -16,6 +16,7 @@ export default function useProfile() {
         profile.value = auth.user.value;
     };
 
+    // Método para la actualización del perfil del usario
     const updateProfile = async (profile) => {
         if (isLoading.value) return;
 
@@ -40,6 +41,7 @@ export default function useProfile() {
             .finally(() => (isLoading.value = false));
     };
 
+    // Este método se encarga de actualizar la imagen de perfil del usuario
     const uploadAvatar = async (avatarFile, user) => {
         if (isLoading.value) return;
 
@@ -48,8 +50,8 @@ export default function useProfile() {
 
         console.log(avatarFile.value);
 
+        // Se serializala información con form Data
         let serializedForm = new FormData();
-
         serializedForm.append("avatar", avatarFile.value);
 
         axios
@@ -73,6 +75,8 @@ export default function useProfile() {
             })
             .finally(() => (isLoading.value = false));
     };
+
+    // Método que llama a la API para eliminar la imagen de perfil del usuario
     const deleteImage = async () => {
         const response = await axios.delete("/api/delete-avatar");
         if (response.data.success) {

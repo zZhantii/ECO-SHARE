@@ -42,12 +42,14 @@ class Trip extends Model
             ->withTimestamps();
     }
 
+    // Relación trips users N:M para la gestión de puntuaciones
     public function rates()
     {
         return $this->belongsToMany(User::class, 'user_trips_rates', 'trip_id', 'user_id')
             ->withPivot('rate')->withTimestamps();
     }
 
+    // Relación trips users N:M para la gestión de reservas
     public function reserves()
     {
         return $this->belongsToMany(User::class, 'user_trips_reserves', 'trip_id', 'user_id')
@@ -55,7 +57,7 @@ class Trip extends Model
 
     }
 
-
+    // Se hace un cast a array para poder tratar los datos de la base de datos que están en JSON
     protected $casts = [
         'start_point' => 'array',
         'end_point' => 'array'

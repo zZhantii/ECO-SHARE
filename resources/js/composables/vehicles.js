@@ -16,7 +16,9 @@ export default function useVehicles() {
         user_id: 0,
         validation: 0,
     });
+    // Array reactivo para la gestión de vehículos
     const vehiclesList = ref([]);
+
     const vehicleSchema = yup.object().shape({
         plate: yup
             .string()
@@ -52,6 +54,7 @@ export default function useVehicles() {
     const validationErrors = ref({});
     const router = useRouter();
 
+    // Método que consigue todos los vehículos de la API
     const getVehicles = async () => {
         if (vehiclesList.value.length > 0) return;
         axios.get("/api/app/user-vehicle").then((response) => {
@@ -62,6 +65,7 @@ export default function useVehicles() {
         });
     };
 
+    // Método API para añadir un vehículo de un usuario con los datos de un objeto vehicle
     const addVehicle = async (vehicle) => {
         axios
             .post("/api/vehicle/", vehicle.value)
@@ -108,6 +112,7 @@ export default function useVehicles() {
             .finally(() => (isLoading.value = false));
     };
 
+    // Método API para conseguir un vehículo con sus datos de un usuario a partir del id del vehículo
     const getVehicle = async (vehicleId) => {
         if (isLoading.value) return;
 
@@ -131,6 +136,7 @@ export default function useVehicles() {
             .finally(() => (isLoading.value = false));
     };
 
+    // Método API para actualizar los datos de un vehículo a partir de un objeto vehicle
     const updateVehicle = async (vehicle) => {
         if (isLoading.value) return;
 
@@ -140,11 +146,6 @@ export default function useVehicles() {
         await axios
             .put("/api/vehicle/" + vehicle.value.id, vehicle.value)
             .then((response) => {
-                console.log(
-                    "Respuesta API actualizando vehículo: ",
-                    response.data.message
-                );
-
                 // Volver reactividad
                 const index = vehiclesList.value.findIndex(
                     (v) => v.id == vehicle.id
@@ -163,6 +164,7 @@ export default function useVehicles() {
             .finally(() => (isLoading.value = false));
     };
 
+    // Método API que elimina un vehículo a partir de los daos del vehículo activo
     const deleteVehicle = async (vehicle) => {
         if (isLoading.value) return;
 

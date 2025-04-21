@@ -607,6 +607,7 @@ const passSchema = yup.object().shape({
         .min(8, "La contraseña debe tener al menos 8 carácteres"),
 });
 
+// Computado que se utiliza para mostrar el nombre completo
 const fullSurname = computed(() => {
     if (visible.value) return `${user.surname1 ?? ""} ${user.surname2 ?? ""}`;
     return tempData.value.surname2 == null
@@ -640,10 +641,13 @@ const fullSurname = computed(() => {
 // });
 
 onMounted(async () => {
+    // Al montar el perfil, se consigue una copia para la gestión temporal de los datos del usuario
+    // y se consiguen todos los vehículos
     tempData.value = { ...user.value };
     getVehicles();
 });
 
+// Recibe el vehículo como evento para su eliminación con el método del composable
 const removeVehicle = (event) => {
     confirm.require({
         target: event.currentTarget,
@@ -677,16 +681,21 @@ const removeVehicle = (event) => {
     });
 };
 
+// Función para la gestión del modal para añadir vehículos con la carga de los datos temporales del vehículo
+// para su gestión posterior
 function openAddVehicleDialog() {
     tempVehicle.value = { ...vehicle.value };
     visibleAddVehicle.value = true;
 }
 
+// Abre el diálogo para la edición de datos de un vehículo concreto con la carga de datos temporales a partir
+// del id del vehículo
 function openDialog(id) {
     visibleVehicleDialog.value = true;
     tempVehicle.value = { ...vehiclesList.value.find((v) => v.id == id) };
 }
 
+// Método que gestiona con el composable la creación de un vehículo
 async function handleAddVehicle() {
     try {
         await vehicleSchema.validate({
@@ -711,12 +720,15 @@ async function handleAddVehicle() {
     }
 }
 
+// Método que gestiona la modificación de la contraseña del usuario
 async function handlePassUpdate() {
+    // Verificación de que las contraseñas coinciden
     if (pwd1.value != "" && pwd1.value == pwd2.value) {
         try {
             tempData.value.password = pwd1.value;
             let tempPassword = { value: tempData.value.password };
-            console.log(tempPassword);
+
+            // Validación del formato de las contraseñas con yup
             await passSchema.validate({ password: tempPassword.value });
             toast.add({
                 severity: "success",
@@ -724,6 +736,8 @@ async function handlePassUpdate() {
                 detail: "La contraseña ha sida cambiada con éxito.",
                 life: 3000,
             });
+
+            // Actualización y carga de los datos del perfil del usaurio
             updateProfile(tempData.value);
             user.value = { ...tempData.value };
             visiblePassDialog.value = false;
@@ -745,6 +759,7 @@ async function handlePassUpdate() {
     }
 }
 
+// Función para la carga del avatar con imagen de perfil con el composable
 function upAvatarFile() {
     if (!avatarFile.value) {
         toast.add({
@@ -759,6 +774,8 @@ function upAvatarFile() {
         avatarFile.value = null;
     }
 }
+
+// Método que gestiona la modificación de los datos del usuario con el composable
 async function handleUserUpdate() {
     try {
         await userSchema.validate({
@@ -790,6 +807,7 @@ async function handleUserUpdate() {
     }
 }
 
+// Función de reseteo de los cxampos del los formularios al salir
 function resetForm() {
     visible.value = false;
     tempData.value = { ...user.value };
@@ -799,12 +817,14 @@ function resetForm() {
     visiblePassDialog.value = false;
 }
 
+// Función de acción de la eliminación de la imafgen de perfil del usuario con el composable
 function removeAvatar() {
     deleteImage();
     user.value.avatar = null;
     visibleAvatarDialog.value = false;
 }
 
+// Función que gestiona la modificación y validación de datos de un vehículo
 async function handleVehicleUpdate() {
     try {
         console.log(tempVehicle.value);

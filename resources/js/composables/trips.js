@@ -26,12 +26,18 @@ export default function useTrips() {
     const toast = useToast();
     const isLoading = ref(false);
     const validationErrors = ref([]);
+
+    // Arrays reactivos para los viajes del histórico como pasajeros o conductor
     const driverHistory = ref([]);
     const passengerHistory = ref([]);
+
+    // Array reactivo con los viajes a puntuar
     const tripsToRate = ref([]);
+
     const swal = inject("$swal");
     yup.setLocale(es);
 
+    // Arrays reactivos para llos viajes activos como pasajeros o conductor
     const activeDriverTripsList = ref([]);
     const activePassengerTripsList = ref([]);
 
@@ -84,6 +90,7 @@ export default function useTrips() {
     //     }
     // }
 
+    // Método API para el registro de un viaje
     const postTrips = async (trip) => {
         // trip.value.user_id = userId.value;
 
@@ -101,6 +108,8 @@ export default function useTrips() {
             });
         }
     };
+
+    // Método API para la carga de todos los viajes
     async function getTrips() {
         if (isLoading.value || tripsList.value.length > 0) return;
         isLoading.value = true;
@@ -135,6 +144,7 @@ export default function useTrips() {
     //     }
     // }
 
+    // Méodo API para conseguir un viaje concreto a partir de su d
     async function getTrip(tripId) {
         if (isLoading.value || trip.value.length > 0) return;
         isLoading.value = true;
@@ -221,9 +231,11 @@ export default function useTrips() {
         }
     };
 
+    // Método API  para conseguir todos los viajes activos del usuario autenticado
     const getActiveTrips = async () => {
         const responseDriver = await axios.get("/api/app/driver-active-trip");
 
+        // Recepción de los viajes activos como conductor
         if (responseDriver.data.data) {
             for (const element of responseDriver.data.data) {
                 activeDriverTripsList.value.push(element);
@@ -233,14 +245,15 @@ export default function useTrips() {
             "/api/app/passenger-active-trip"
         );
 
+        // Recepción de los viajes activos como pasajero
         if (responsePassenger.data.data) {
             for (const element of responsePassenger.data.data) {
                 activePassengerTripsList.value.push(element);
             }
         }
-        console.log("activePassenerTripsList", activePassengerTripsList.value);
     };
 
+    // Método que marca el inicio del viaje como conductor con el id del viaje
     const startDrive = async (tripId) => {
         try {
             const response = await axios.put(`/api/app/start-drive/${tripId}`);
@@ -266,6 +279,7 @@ export default function useTrips() {
         }
     };
 
+    // Método que marca el final del viaje como conductor con el id del viaje
     const endDrive = async (tripId) => {
         try {
             const response = await axios.put(`/api/app/end-drive/${tripId}`);
@@ -295,6 +309,7 @@ export default function useTrips() {
         }
     };
 
+    // Método que marca el checkin del pasajero a partir del id del viaje
     const makeCheckIn = async (trip) => {
         axios
             .put("/api/app/check-in", trip)
@@ -321,6 +336,7 @@ export default function useTrips() {
             });
     };
 
+    //  Método API para cancelar el viaje como conductor con el id del viaje
     const cancellTripAsDriver = async (tripId) => {
         try {
             const response = await axios.put(
@@ -362,6 +378,7 @@ export default function useTrips() {
     //     }
     // }
 
+    // Formateador de fecha
     function formatDateTime(dateInput) {
         if (!dateInput) return null;
         return new Date(dateInput).toISOString().replace("T", " ").slice(0, 19);
@@ -475,6 +492,7 @@ export default function useTrips() {
         }
     };
 
+    //  Método API para cancelar el viaje como conductor con el id del viaje
     const cancellTripAsPassenger = async (tripId) => {
         try {
             const response = await axios.put(
@@ -527,6 +545,7 @@ export default function useTrips() {
             .finally(() => (isLoading.value = false));
     };
 
+    // Método API que consigue todos los viajes históricos del conductor
     const getDriverHistory = async () => {
         axios.get("/api/app/driver-history").then((response) => {
             const trips = response.data.data;
@@ -535,6 +554,7 @@ export default function useTrips() {
             }
         });
     };
+    // Método API que consigue todos los viajes históricos del pasajero
     const getPassengerHistory = async () => {
         return axios.get("/api/app/passenger-history").then((response) => {
             const trips = response.data.data;
@@ -550,14 +570,20 @@ export default function useTrips() {
             return false;
         });
     };
+
+    // Método API que consigue todos los viajes del pasajero pendientes de puntuar. Recibe un array con todos los viajes pendientes
     const getTripsToRate = (passengerHistory) => {
         for (const trip of passengerHistory) {
+            // En cada viaje se comprueba el campo de las puntuaciones y simplifica los datos dentro del array tripToRate
+            // para su gfestión más cómoda
             if (trip.rates.length == 0) {
                 tripsToRate.value.push(trip);
             }
         }
     };
 
+    // Método para la puntuación del viaje como usuario que recibe el viaje a puntuar, el array para establecer los cambios
+    //  y el emit para emitir esto entre componentes
     const rateTrip = async (trip, localTrips, emit) => {
         axios
             .post("/api/rates", {
@@ -566,7 +592,6 @@ export default function useTrips() {
                 rate: trip.rate,
             })
             .then((response) => {
-                console.log("ANTES", tripsToRate.value);
                 const index = localTrips.value.findIndex(
                     (t) => t.id == trip.id
                 );

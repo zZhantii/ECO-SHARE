@@ -1,4 +1,6 @@
 <template>
+    <!-- Este modal tien un booleano de control y utiliza los datos cargados de la API con los viajes
+     que todavía no han sido puntuados -->
     <Dialog
         v-model:visible="visible"
         :tripsToRate="tripsToRate"
@@ -76,11 +78,14 @@ const props = defineProps({
 });
 
 const { rateTrip } = useTrips();
+// Se hace referencia a los props que proceden del padre con los viajes a puntuar y el booleano de control.
 const visible = toRef(props, "ratingDialog");
-
 const localTrips = toRef(props, "tripsToRate");
+
+// Se establecen los emits que devuelven en false el control y la información de la puntuación del viaje
 const emit = defineEmits(["update:ratingDialog", "update:tripsToRate"]);
 
+// Este watch se encarga de cerrar el dialog cuando ya no quedan viajes por puntuar en el modal
 watch(
     () => props.tripsToRate.length,
     (newLength) => {
@@ -90,6 +95,7 @@ watch(
     }
 );
 
+// Funcion de formateo para el campo timestamp de la base de datos
 function formatDate(timestamp) {
     return new Date(timestamp).toLocaleString("es-ES", {
         day: "2-digit",
@@ -99,10 +105,11 @@ function formatDate(timestamp) {
         minute: "2-digit",
     });
 }
-
+// Función de cierre del modal
 function closeDialog() {
     emit("update:ratingDialog", false);
 }
+// Gestiona la llamada al composable para puntuar el viaje
 function handleRateTrip(trip) {
     rateTrip(trip, localTrips, emit);
 }

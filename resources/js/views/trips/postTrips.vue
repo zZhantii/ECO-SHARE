@@ -670,6 +670,7 @@ onMounted(async () => {
     getVehicles();
     today.value.setDate(today.value.getDate() + 1);
 
+    // Reactivo que consigue de autocomplete de google los datos de origen del viaje
     const autocompleteStart = new google.maps.places.Autocomplete(
         document.getElementById("origin"),
         {
@@ -677,6 +678,7 @@ onMounted(async () => {
             fields: ["address_components", "geometry", "icon", "name"],
         }
     );
+    // Reactivo que consigue de autocomplete de google los datos de destino del viaje
     autocompleteStart.addListener("place_changed", () => {
         tripData.value.start_point = autocompleteStart.getPlace();
         tempStartPoint.value = autocompleteStart.getPlace();
@@ -703,14 +705,18 @@ onMounted(async () => {
             }
         }
     });
+
+    // Al montar se cargan las etiquetas y os precios del combustible al día actual
     getFuelRates();
     getTags();
 });
 
+// Se desmona el modal para prevenir conflictos al desmontar componentes
 onBeforeUnmount(() => {
     show.value = false;
 });
 
+// TripData es el objeto que va a ir cargando todos los detalles del viaje
 const tripData = ref({
     user_id: user_id.value,
     start_point: "",
@@ -723,6 +729,7 @@ const tripData = ref({
     tags: [],
 });
 
+// Realiza el llamado al compposable pasandole los detalles del viaje publicado para su guardado en la base de datos
 function handlePost() {
     tripData.value.user_id = user_id.value;
     postTrips(tripData.value);
@@ -806,6 +813,7 @@ const findVehicleById = async (id) => {
 //     });
 // };
 
+// Formatea la fecha de salida a un formato legible
 const formatDeparture = () => {
     const date = new Date(tripData.value.departure_time);
     formattedDate.value = date.toLocaleDateString("es-ES");
@@ -827,6 +835,7 @@ const formatDeparture = () => {
         .replace("T", " ");
 };
 
+// Método que calcula la distancia en kilóemtros para mostrar en el reusmen
 const handleDistance = () => {
     const metersDistance = tripData.value.Distance;
     distance.value = Math.round(metersDistance / 1000);
@@ -838,6 +847,7 @@ const pointSchema = yup.object().shape({
     end_point: yup.object().required("El destino es obligatorio"),
 });
 
+// Método de gestión de los datos devueltos por el componente MAPS.vue que ejecuta el mapa
 const handleMapsInfo = (mapsInfo) => {
     tripData.value.start_point = mapsInfo.origin;
     tripData.value.start_point.locality = start_locality.value;
@@ -887,20 +897,25 @@ const CarSchema = yup.object().shape({
 const getFuelRates = async () => {
     //Gasóleo A = id 6
     //Gasolina = id 10
+
+    // Esto realiza llamadas a la API para conseguir los precios del diesel y la gasolina de forma diaria
     await fetch(
-        "https://api.precioil.es/precios/medios/provincia/2?idFuelType=10"
+        "https://api.precioil.es/precios/medios/provincia/1?idFuelType=10"
     )
         .then((response) => response.json())
         .then((data) => (gasolineRate.value = data[0].averagePrice));
     await fetch(
-        "https://api.precioil.es/precios/medios/provincia/2?idFuelType=6"
+        "https://api.precioil.es/precios/medios/provincia/1?idFuelType=6"
     )
         .then((response) => response.json())
         .then((data) => (dieselRate.value = data[0].averagePrice));
 };
 
+// Establece el precio cuando se ha determinado el vehiculo con la distancia del recorrido que ha devuelto el mapa
+// de google maps, el precio del litro de diesel o gasoil y el consumo del vehículo concreto y su tipo de combustible
+
 const getPrice = () => {
-    console.log("detalles del vehiculo", selectedVehicleDetails.value);
+    // Para cada tipo de combustible en cada vehiculo, se aplica la formula para la gasolina o el diésel
     switch (selectedVehicleDetails.value.fuel_type) {
         case "Gasolina":
             tripData.value.price =
@@ -934,6 +949,8 @@ const getPrice = () => {
 };
 
 const saveOptionCar = async () => {
+    // Para guadar la opciuón del vehículo y preparar el reusmen del viaje, se formatea la fecha de salida,
+    // se obtienen los km a recorrer y se determina el precio exacto del viaje.
     formatDeparture();
     handleDistance();
     getPrice();

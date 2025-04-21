@@ -15,6 +15,7 @@ class ProfileController extends Controller
     /**
      * @throws ValidationException
      */
+    // Método para la actualización de los datos del usuario
     public function update(UpdateProfileRequest $request)
     {
         $profile = Auth::user();
@@ -23,7 +24,7 @@ class ProfileController extends Controller
         $profile->surname2 = $request->surname2;
         $profile->email = $request->email;
 
-
+        // Se hace la encriptación de la contraseña si viene para la modificación
         if (!empty($request->password)) {
             $profile->password = Hash::make($request->password) ?? $profile->password;
         }
@@ -48,10 +49,12 @@ class ProfileController extends Controller
         return $this->successResponse($user, 'User found');
     }
 
+    // Método para la subida de imagenes del usuario en su perfil
     public function uploadAvatar(Request $request)
     {
         $user = Auth::user();
 
+        // Si existe el campo avatar, se borra la imagen previa y se sube la nueva a la colección de media
         if ($request->hasFile("avatar")) {
 
             $user->media()->delete();
@@ -64,6 +67,8 @@ class ProfileController extends Controller
 
         return response()->json(["success" => true, "data" => $user], 200);
     }
+
+    // Método que elimina la imagen de perfil registrada del usuario
     public function unlinkAvatar()
     {
         $user = Auth::user();

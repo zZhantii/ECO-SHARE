@@ -1,4 +1,6 @@
 <template>
+    <!-- Se utliza el componete que abre os dates del viaje con un boolean de control del dialog y otro para verificar
+     si es usuario junto con e viaje seleccionado -->
     <DialogTripDetails
         v-model:visibleDialog="visibleDialog"
         v-model:passenger="passenger"
@@ -75,6 +77,8 @@ import Timeline from "primevue/timeline";
 import { ref } from "vue";
 import DialogTripDetails from "./DialogTripDetails.vue";
 
+// Definición de los props que recibe desde ManageTrips.vue con el viaje concreto a mostrar en la card
+// el control del modal de detalles, y el control del modal como pasajero
 function getTimelineEvents(trip) {
     return [
         {
@@ -96,6 +100,8 @@ function getTimelineEvents(trip) {
     ];
 }
 
+// Definición de los props que recibe desde ManageTrips.vue con el viaje concreto a mostrar en la card
+// el control del modal de detalles, y el control del modal como pasajero
 const props = defineProps({
     trip: Object,
     visibleDialog: Boolean,
@@ -106,6 +112,7 @@ const visibleDialog = ref(props.visibleDialog);
 const passenger = ref(props.passenger);
 const selectedTrip = props.trip;
 
+// Método que acciona el modal
 const showTripDetails = () => {
     visibleDialog.value = true;
     passenger.value = true;

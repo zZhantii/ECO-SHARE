@@ -10,12 +10,15 @@ use App\Models\Vehicle;
 
 class VehicleController extends Controller
 {
+    // Método para conseguir odos los vehículos registrados en la base de datos
     public function index()
     {
         $vehicles = Vehicle::All();
         return response()->json(["success" => true, "data" => $vehicles], 200);
     }
 
+
+    // Método que muestra los datos del vehículo que se identifica por el id de la request
     public function show(Vehicle $vehicle)
     {
         try {
@@ -29,7 +32,7 @@ class VehicleController extends Controller
             }
 
             return response()->json([
-                "success" => true, 
+                "success" => true,
                 "data" => $vehicleDetails
             ], 200);
         } catch (\Exception $e) {
@@ -41,6 +44,7 @@ class VehicleController extends Controller
         }
     }
 
+    // Método de actualización de los datos del vehículo
     public function update(Request $request, Vehicle $vehicle)
     {
         $vehicle->brand = $request->brand;
@@ -55,6 +59,7 @@ class VehicleController extends Controller
         return response()->json(['success' => true, "message" => "Vehiculo actualizado, correctamente"], 200);
     }
 
+    // Método que elimina el vehículo de la base de datos con la referencia del vehículo que procede de la petición API
     public function destroy(Vehicle $vehicle)
     {
 
@@ -62,9 +67,10 @@ class VehicleController extends Controller
         return response()->json(['success' => true, "data" => "Vehicle eliminado correctamente"], 200);
     }
 
+    // Método que guarda un solo vehículo con los datos recogidos en la petición API
     public function store(Request $request)
     {
-        $user_id = auth()->user()->id; 
+        $user_id = auth()->user()->id;
 
         if ($request->filled('user_id') && $request->user_id > 0) {
             $user_id = $request->user_id;
@@ -78,7 +84,7 @@ class VehicleController extends Controller
         $vehicle->consumption = $request->consumption;
         $vehicle->pax_number = $request->pax_number;
         $vehicle->validation = $request->validation;
-        $vehicle->user_id =  $user_id;
+        $vehicle->user_id = $user_id;
 
         $vehicle->save();
 

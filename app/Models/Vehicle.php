@@ -35,6 +35,7 @@ class Vehicle extends Model
         return $this->hasMany(Trip::class, 'vehicle_id');
     }
 
+    // Relación users-vehicles 1:N (N vehículos)
     public function users()
     {
         return $this->belongsToMany(User::class, 'user_rates', 'user_id');

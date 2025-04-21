@@ -128,6 +128,7 @@ import { authStore } from "../../store/auth";
 const router = useRouter();
 const auth = authStore();
 
+// Método que gestiona el loggin en función del estado actual de la autenticación
 const handleLoginClick = () => {
     if (auth.authenticated) {
         router.push("/auth/profile");
@@ -135,7 +136,7 @@ const handleLoginClick = () => {
         router.push("/login");
     }
 };
-
+// Método que gestiona el registro en función del estado actual de la autenticación
 const handleRegisterClick = () => {
     if (auth.authenticated) {
         router.push("/auth/profile");

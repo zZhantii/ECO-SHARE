@@ -1,50 +1,99 @@
 <template>
-    <form @submit.prevent="submitFinder" id="trip-finder" class="d-block d-md-flex justify-content-between">
+    <!-- Este formuarlio obtiene y gestiona con autocomplete el origen, destino, fecha y plazas
+     para la búsqueda de viajes como pasajero -->
+    <form
+        @submit.prevent="submitFinder"
+        id="trip-finder"
+        class="d-block d-md-flex justify-content-between"
+    >
         <div
-            class="col-none-12 col-md-9 d-block d-md-flex flex-row justify-content-around align-items-center gap-4 p-none-4 p-1 m-1">
+            class="col-none-12 col-md-9 d-block d-md-flex flex-row justify-content-around align-items-center gap-4 p-none-4 p-1 m-1"
+        >
             <IconField class="col-none-11 col-md-3 ms-none-0 m-1 p-0">
                 <InputIcon class="ms-1 pi pi-circle" />
-                <InputText type="text" id="origin" placeholder="De" class="rm-border w-100"
-                    :class="{ 'p-invalid': errors.origin }" />
-                <small class="p-error" v-if="errors.origin">{{ errors.origin }}</small>
+                <InputText
+                    type="text"
+                    id="origin"
+                    placeholder="De"
+                    class="rm-border w-100"
+                    :class="{ 'p-invalid': errors.origin }"
+                />
+                <small class="p-error" v-if="errors.origin">{{
+                    errors.origin
+                }}</small>
             </IconField>
             <IconField class="col-none-11 col-md-3 p-0 m-1">
                 <InputIcon class="ms-1 pi pi-circle" />
-                <InputText type="text" placeholder="A" id="destination" class="rm-border w-100"
-                    :class="{ 'p-invalid': errors.destination }" />
-                <small class="p-error" v-if="errors.destination">{{ errors.destination }}</small>
+                <InputText
+                    type="text"
+                    placeholder="A"
+                    id="destination"
+                    class="rm-border w-100"
+                    :class="{ 'p-invalid': errors.destination }"
+                />
+                <small class="p-error" v-if="errors.destination">{{
+                    errors.destination
+                }}</small>
             </IconField>
             <IconField class="col-none-11 col-md-3 p-0 m-1">
-                <DatePicker v-model="date" :min-date="today" class="rm-border w-100" placeholder="Fecha" showIcon
-                    iconDisplay="input" :class="{ 'p-invalid': errors.date }" />
-                <small class="p-error" v-if="errors.date">{{ errors.date }}</small>
+                <DatePicker
+                    v-model="date"
+                    :min-date="today"
+                    class="rm-border w-100"
+                    placeholder="Fecha"
+                    showIcon
+                    iconDisplay="input"
+                    :class="{ 'p-invalid': errors.date }"
+                />
+                <small class="p-error" v-if="errors.date">{{
+                    errors.date
+                }}</small>
             </IconField>
 
             <IconField class="col-none-11 col-md-3 p-0 m-1">
-                <InputNumber class="rm-border w-100" v-model="passengers" inputId="minmax-buttons" showButtons
-                    placeholder="Pasajeros" :min="0" :max="4" fluid :class="{ 'p-invalid': errors.passengers }" />
-                <small class="p-error" v-if="errors.passengers">{{ errors.passengers }}</small>
+                <InputNumber
+                    class="rm-border w-100"
+                    v-model="passengers"
+                    inputId="minmax-buttons"
+                    showButtons
+                    placeholder="Pasajeros"
+                    :min="0"
+                    :max="4"
+                    fluid
+                    :class="{ 'p-invalid': errors.passengers }"
+                />
+                <small class="p-error" v-if="errors.passengers">{{
+                    errors.passengers
+                }}</small>
             </IconField>
         </div>
-        <Button label="Buscar" type="submit"
-            class="col-md-2 d-none d-md-block btn-trip-finder w-none-100 w-md-auto h-100 p-4" />
-        <Button label="Buscar" type="submit" class="col-none-2 d-block d-md-none btn-trip-finder-phone w-100 p-3" />
+        <Button
+            label="Buscar"
+            type="submit"
+            class="col-md-2 d-none d-md-block btn-trip-finder w-none-100 w-md-auto h-100 p-4"
+        />
+        <Button
+            label="Buscar"
+            type="submit"
+            class="col-none-2 d-block d-md-none btn-trip-finder-phone w-100 p-3"
+        />
     </form>
 </template>
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import * as yup from 'yup';
-import { useToast } from 'primevue/usetoast';
-import { useForm } from 'vee-validate';
+import * as yup from "yup";
+import { useToast } from "primevue/usetoast";
+import { useForm } from "vee-validate";
 
 const schema = yup.object().shape({
-    origin: yup.object().required('El origen es obligatorio'),
-    destination: yup.object().required('El destino es obligatorio'),
-    date: yup.date().required('La fecha es obligatoria'),
-    passengers: yup.number()
-        .required('El número de pasajeros es obligatorio')
-        .min(1, 'Mínimo 1 pasajero'),
+    origin: yup.object().required("El origen es obligatorio"),
+    destination: yup.object().required("El destino es obligatorio"),
+    date: yup.date().required("La fecha es obligatoria"),
+    passengers: yup
+        .number()
+        .required("El número de pasajeros es obligatorio")
+        .min(1, "Mínimo 1 pasajero"),
 });
 
 const router = useRouter();
@@ -58,28 +107,37 @@ const passengers = ref(null);
 const data = ref({});
 const today = ref(new Date());
 
+// Método que gestiona  recibe los datos del formulario
 const submitFinder = async () => {
     try {
-        await schema.validate({
-            origin: origin.value?.getPlace(),
-            destination: destination.value?.getPlace(),
-            date: date.value,
-            passengers: passengers.value
-        }, { abortEarly: false });
+        await schema.validate(
+            {
+                origin: origin.value?.getPlace(),
+                destination: destination.value?.getPlace(),
+                date: date.value,
+                passengers: passengers.value,
+            },
+            { abortEarly: false }
+        );
 
         errors.value = {};
 
+        // Se formatean los datos para preparar la consulta en resultados de la búsqueda
         const selectedDate = new Date(date.value);
-        selectedDate.setMinutes(selectedDate.getMinutes() - selectedDate.getTimezoneOffset());
+        selectedDate.setMinutes(
+            selectedDate.getMinutes() - selectedDate.getTimezoneOffset()
+        );
         const formattedDate = selectedDate.toISOString().split("T")[0];
 
+        // Valores de interes en la página de resultados del viaje
         data.value = {
             origin: origin.value.getPlace(),
             destination: destination.value.getPlace(),
             date: formattedDate,
-            passengers: passengers.value
-        }
+            passengers: passengers.value,
+        };
 
+        // Paso de la información para su visualización dentro de la página de resultados del viaje
         router.push({
             name: "TripsIndex",
             query: { data: JSON.stringify(data.value) },
@@ -91,17 +149,17 @@ const submitFinder = async () => {
         }, {});
 
         toast.add({
-            severity: 'error',
-            summary: 'Error de validación',
-            detail: 'Por favor, complete todos los campos correctamente',
-            life: 3000
+            severity: "error",
+            summary: "Error de validación",
+            detail: "Por favor, complete todos los campos correctamente",
+            life: 3000,
         });
     }
-  
 };
 
-
 onMounted(() => {
+    // Al montar este componente se utiizan variables reactivas vinculadas a los inputs de texto de origen
+    // y destino para usar el autocomplete de Google Maps
     origin.value = new google.maps.places.Autocomplete(
         document.getElementById("origin"),
         {
