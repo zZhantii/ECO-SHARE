@@ -330,11 +330,12 @@ class AppController extends Controller
                     ->count()
             ],
             'reservas' => [
-                'total' => Trip::withCount(['reserves'])->get()->sum('reserves_count'),
-                'confirmed' => Trip::whereHas('reserves', function ($query) use ($weekAgo, $now) {
-                    $query->whereBetween('user_trips_reserves.created_at', [$weekAgo, $now])
-                        ->whereNotNull('check_in');
-                })->count()
+                'total' => Trip::join('user_trips_reserves', 'trips.id', '=', 'user_trips_reserves.trip_id')
+                    ->count(),
+                'confirmed' => Trip::join('user_trips_reserves', 'trips.id', '=', 'user_trips_reserves.trip_id')
+                    ->whereBetween('user_trips_reserves.created_at', [$weekAgo, $now])
+                    ->whereNotNull('user_trips_reserves.check_in')
+                    ->count()
             ]
         ];
 

@@ -14,7 +14,7 @@
                                 >
                                     <template #marker="slotProps">
                                         <i
-                                            class="pi pi-map-marker"
+                                            class="pi pi-map-marker p-2"
                                             style="font-size: 1.5rem"
                                         ></i>
                                         <p class="m-0 small">
@@ -23,7 +23,7 @@
                                     </template>
                                     <template #content="slotProps">
                                         <div class="timeline-event">
-                                            <p class="m-0">
+                                            <p class="px-5">
                                                 {{ slotProps.item.location }}
                                             </p>
                                         </div>
@@ -316,9 +316,9 @@ price.value = trip.price;
 const lowPrice = (price) => {
     // console.log("precio", price)
     const available_seats = trip.value.available_seats;
-    finalPrice.value = price / available_seats;
+    finalPrice.value = (price / available_seats).toFixed(2);
 
-    return finalPrice;
+    return `${finalPrice.value} €`;
 };
 
 function formatDate(dateTime) {
@@ -382,7 +382,7 @@ const PostTrip = async () => {
 
 .map-wrapper {
     height: calc(100vh - 450px);
-    min-height: 400px;
+    min-height: 345px;
 }
 
 .map-container {
@@ -425,4 +425,6 @@ const PostTrip = async () => {
     border: 3px solid #eee;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+
 </style>
