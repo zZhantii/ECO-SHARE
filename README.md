@@ -96,7 +96,7 @@ php artisan serve
 
 ```bash
 VITE_GOOGLE_MAPS_API_KEY="YOUR-API-KEY"
-
+```
 ### Lanzar a producción
 
 ```bash
