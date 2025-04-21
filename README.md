@@ -61,6 +61,11 @@ php artisan key:generate
 ```bash
 php artisan migrate
 ```
+### Crear enlace simbólico para la gestión de imágenes
+
+```bash
+php artisan storage:link
+```
 
 ### Lanzar Seeders
 
