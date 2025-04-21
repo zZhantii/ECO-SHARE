@@ -74,7 +74,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6 ps-md-2 mt-4 mt-md-0">
+            <div class="col-md-6 ps-md-2 mt-md-0">
                 <div class="card shadow-sm h-100">
                     <div class="card-body">
                         <div v-if="user && user.length > 0">
