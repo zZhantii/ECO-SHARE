@@ -34,7 +34,7 @@
                             <li>Inicia sesión en tu cuenta</li>
                             <li>Ve a "Publicar Viaje"</li>
                             <li>Completa los detalles del trayecto</li>
-                            <li>Establece el número de plazas y costes</li>
+                            <li>Establece el número de plazas, el dia y la hora de salida</li>
                             <li>¡Listo! Tu viaje ya está publicado</li>
                         </ol>
                     </AccordionTab>

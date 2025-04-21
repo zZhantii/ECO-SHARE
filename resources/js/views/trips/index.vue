@@ -90,68 +90,76 @@
                 <h4>Resultados de búsqueda</h4>
                 {{ departure_time }}, {{ start_point }} -> {{ end_point }}
             </div>
-            <div v-for="(trip, index) in displayResults" :key="index" class="col-12 mb-4">
-                <div class="card shadow-sm border-0">
-                    <!-- Sección superior con timeline y precio -->
-                    <div class="card-body pb-0">
-                        <div class="row">
-                            <div class="col-md-8 mb-3 mb-md-0">
-                                <Timeline :value="getTimelineEvents(trip)" layout="horizontal" align="top"
-                                    class="w-100">
-                                    <template #marker="slotProps">
-                                        <div class="text-center">
-                                            <i class="pi pi-map-marker" style="font-size: 1.25rem"></i>
-                                            <p class="small m-0 mt-1">{{ slotProps.item.time }}</p>
-                                        </div>
-                                    </template>
-                                    <template #content="slotProps">
-                                        <p class="m-0 fw-medium">{{ slotProps.item.location }}</p>
-                                    </template>
-                                </Timeline>
-                            </div>
-                            <div
-                                class="col-md-4 d-flex flex-column align-items-md-end align-items-center justify-content-center">
-                                <h4 class="fw-bold text-primary mb-2">${{ trip.price }}</h4>
-                                <router-link
-                                    :to="{ name: 'ConfirmationTrips', params: { id: trip.id, seats: searchTrip2.available_seats } }"
-                                    class="btn btn-primary px-4">
-                                    Reservar ahora
-                                </router-link>
+
+            <div v-if="isLoading" class="loading-container d-flex flex-column justify-content-center align-items-center">
+                <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="3" fill="var(--surface-ground)"
+                    animationDuration=".5s" />
+                <p class="mt-3">Cargando resultados...</p>
+            </div>
+
+            <div v-else>
+                <div v-for="(trip, index) in displayResults" :key="index" class="col-12 mb-4">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body pb-0">
+                            <div class="row">
+                                <div class="col-md-8 mb-3 mb-md-0">
+                                    <Timeline :value="getTimelineEvents(trip)" layout="horizontal" align="top"
+                                        class="w-100">
+                                        <template #marker="slotProps">
+                                            <div class="text-center">
+                                                <i class="pi pi-map-marker" style="font-size: 1.25rem"></i>
+                                                <p class="small m-0 mt-1">{{ slotProps.item.time }}</p>
+                                            </div>
+                                        </template>
+                                        <template #content="slotProps">
+                                            <p class="m-0 fw-medium">{{ slotProps.item.location }}</p>
+                                        </template>
+                                    </Timeline>
+                                </div>
+                                <div
+                                    class="col-md-4 d-flex flex-column align-items-md-end align-items-center justify-content-center">
+                                    <h4 class="fw-bold text-primary mb-2">${{ trip.price }}</h4>
+                                    <router-link
+                                        :to="{ name: 'ConfirmationTrips', params: { id: trip.id, seats: searchTrip2.available_seats } }"
+                                        class="btn btn-primary px-4">
+                                        Reservar ahora
+                                    </router-link>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Sección inferior con asientos, tags y rating -->
-                    <div class="card-footer bg-white mt-3">
-                        <div class="row align-items-center">
-                            <div class="col-sm-3 mb-2 mb-sm-0">
-                                <div class="d-flex align-items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#0d6efd"
-                                        viewBox="0 0 256 256">
-                                        <path
-                                            d="M224,232a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16H216A8,8,0,0,1,224,232Zm0-72v32a16,16,0,0,1-16,16H114.11a15.93,15.93,0,0,1-14.32-8.85l-58.11-116a16.1,16.1,0,0,1,0-14.32l22.12-44A16,16,0,0,1,85,17.56l33.69,14.22.47.22a16,16,0,0,1,7.15,21.46,1.51,1.51,0,0,1-.11.22L112,80l31.78,64L208,144A16,16,0,0,1,224,160Zm-16,0H143.77a15.91,15.91,0,0,1-14.31-8.85l-31.79-64a16.07,16.07,0,0,1,0-14.29l.12-.22L112,46.32,78.57,32.21A4.84,4.84,0,0,0,78.1,32L56,76,114.1,192H208Z">
-                                        </path>
-                                    </svg>
-                                    <span class="ms-2 fw-medium">{{ trip.available_seats }} asientos</span>
+                        <div class="card-footer bg-white mt-3">
+                            <div class="row align-items-center">
+                                <div class="col-sm-3 mb-2 mb-sm-0">
+                                    <div class="d-flex align-items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#0d6efd"
+                                            viewBox="0 0 256 256">
+                                            <path
+                                                d="M224,232a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16H216A8,8,0,0,1,224,232Zm0-72v32a16,16,0,0,1-16,16H114.11a15.93,15.93,0,0,1-14.32-8.85l-58.11-116a16.1,16.1,0,0,1,0-14.32l22.12-44A16,16,0,0,1,85,17.56l33.69,14.22.47.22a16,16,0,0,1,7.15,21.46,1.51,1.51,0,0,1-.11.22L112,80l31.78,64L208,144A16,16,0,0,1,224,160Zm-16,0H143.77a15.91,15.91,0,0,1-14.31-8.85l-31.79-64a16.07,16.07,0,0,1,0-14.29l.12-.22L112,46.32,78.57,32.21A4.84,4.84,0,0,0,78.1,32L56,76,114.1,192H208Z">
+                                            </path>
+                                        </svg>
+                                        <span class="ms-2 fw-medium">{{ trip.available_seats }} asientos</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-6 mb-2 mb-sm-0">
-                                <div class="tags">
-                                    <span v-for="(tag, tagIndex) in tagsData[trip.id]" :key="tagIndex"
-                                        class="badge rounded-pill bg-light text-dark border me-1 mb-1">
-                                        {{ tag }}
-                                    </span>
-                                    <span v-if="!tagsData[trip.id]?.length" class="text-muted fst-italic">Sin
-                                        tags</span>
+                                <div class="col-sm-6 mb-2 mb-sm-0">
+                                    <div class="tags">
+                                        <span v-for="(tag, tagIndex) in tagsData[trip.id]" :key="tagIndex"
+                                            class="badge rounded-pill bg-light text-dark border me-1 mb-1">
+                                            {{ tag }}
+                                        </span>
+                                        <span v-if="!tagsData[trip.id]?.length" class="text-muted fst-italic">Sin
+                                            tags</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-3 text-sm-end">
-                                <Rating v-model="ratings[trip.id]" disabled />
+                                <div class="col-sm-3 text-sm-end">
+                                    <Rating v-model="ratings[trip.id]" disabled />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </template>
@@ -178,8 +186,10 @@ const route = useRoute();
 import Timeline from "primevue/timeline";
 import Rating from 'primevue/rating';
 import Checkbox from 'primevue/checkbox';
+import ProgressSpinner from 'primevue/progressspinner';
 
 const ratings = ref({});
+const isLoading = ref(true);
 
 // Vue
 import { onMounted, ref, watch, computed } from "vue";
@@ -231,6 +241,8 @@ const departure_time = ref("");
 
 const handleSearch = async (searchData) => {
     try {
+        isLoading.value = true;
+
         searchTrip2.value = {
             start_point: searchData.origin.name,
             locality_start: searchData.origin.address_components.find(comp => comp.types.includes('locality')).long_name,
@@ -275,6 +287,8 @@ const handleSearch = async (searchData) => {
         await applyFilters();
     } catch (err) {
         console.error('Error in search:', err);
+    } finally {
+        isLoading.value = false;
     }
 };
 
@@ -428,15 +442,5 @@ label {
         justify-content: space-between;
         margin-bottom: 30px;
     }
-}
-
-.circle {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    border: 1px solid #000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 </style>
