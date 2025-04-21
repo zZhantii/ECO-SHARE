@@ -22,12 +22,17 @@
     <script>
         window.config = @json($config);
     </script>
+     <script async defer
+     src="https://maps.googleapis.com/maps/api/js?key={{ config('app.google_maps_api_key') }}&loading=async&libraries=places,geometry">
+ </script>
     <!-- Scripts -->
 {{--    @vite(['resources/sass/app.scss', 'resources/js/app.js'])--}}
         @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
 </head>
 <body class="font-sans antialiased" id="app">
+   
     <router-view></router-view>
+   
 </body>
 </html>

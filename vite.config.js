@@ -1,15 +1,12 @@
-import { defineConfig } from 'vite';
-import laravel from 'laravel-vite-plugin';
-import vue from '@vitejs/plugin-vue';
-import path from 'path';
+import { defineConfig } from "vite";
+import laravel from "laravel-vite-plugin";
+import vue from "@vitejs/plugin-vue";
+import path from "path";
 
 export default defineConfig({
     plugins: [
         laravel({
-            input: [
-                'resources/sass/app.scss',
-                'resources/js/app.js',
-            ],
+            input: ["resources/sass/app.scss", "resources/js/app.js"],
             // reactivityTransform: true,
             refresh: true,
         }),
@@ -27,15 +24,18 @@ export default defineConfig({
     // },
     resolve: {
         alias: {
-            vue: 'vue/dist/vue.esm-bundler.js',
-            '@': path.resolve(__dirname, './resources/js'),
+            vue: "vue/dist/vue.esm-bundler.js",
+            "@": path.resolve(__dirname, "./resources/js"),
         },
     },
     css: {
         preprocessorOptions: {
             scss: {
-                api: 'modern-compiler' // or "modern"
-            }
-        }
-    }
+                api: "modern-compiler", // or "modern"
+            },
+        },
+    },
+    optimizeDeps: {
+        include: ["@fawmi/vue-google-maps", "fast-deep-equal"],
+    },
 });

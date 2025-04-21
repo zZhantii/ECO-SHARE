@@ -1,6 +1,7 @@
 <?php
 
 namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -10,7 +11,10 @@ class DatabaseSeeder extends Seeder
         $this->call(CategoryTableSeeder::class);
         $this->call(PermissionTableSeeder::class);
         $this->call(CreateAdminUserSeeder::class);
-
+        $this->call(VehicleTableSeeder::class);
+        $this->call(TagSeeder::class);
+        $this->call(TripSeeder::class);
+    
         // $this->call(RoleSeeder::class);
         // \App\Models\User::factory(10)->create();
 

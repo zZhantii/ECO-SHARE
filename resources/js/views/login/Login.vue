@@ -1,64 +1,210 @@
 <template>
-    <div class="container">
-        <div class="row justify-content-center my-5">
-            <div class="col-md-6">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body">
+    <main class="container-login">
+        <section class="container">
+            <div class="row justify-content-center my-5">
+                <div class="col-md-6">
+                    <div class="card border-0 bg-transparent">
+                        <div
+                            class="card-header bg-transparent flex-column d-flex align-items-center justify-content-around"
+                        >
+                            <img
+                                src="/images/Logo_es.svg"
+                                alt="Logotipo"
+                                height="75px"
+                            />
 
-                        <form @submit.prevent="submitLogin">
-                            <div class="">
-                                <!-- Email -->
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">{{ $t('email') }}</label>
-                                    <input v-model="loginForm.email" id="email" type="email" class="form-control" required autofocus autocomplete="username">
+                            <h2 class="text-center">
+                                {{ $t("¡Inicia Sesión!") }}
+                            </h2>
+                        </div>
+                        <div class="card-body">
+                            <form
+                                class="d-flex flex-column align-items-center"
+                                @submit.prevent="submitLogin"
+                            >
+                                <!-- alias -->
+                                <div
+                                    class="mb-3 w-100 d-flex align-items-center flex-column"
+                                >
+                                    <InputText
+                                        v-model="loginForm.alias"
+                                        id="alias"
+                                        type="text"
+                                        class="w-75"
+                                        :placeholder="$t('Alias')"
+                                        required
+                                        autofocus
+                                        autocomplete="username"
+                                    />
                                     <!-- Validation Errors -->
                                     <div class="text-danger mt-1">
-                                        <div v-for="message in validationErrors?.email">
+                                        <div
+                                            v-for="message in validationErrors?.alias"
+                                        >
                                             {{ message }}
                                         </div>
                                     </div>
+                                    <Toast />
                                 </div>
                                 <!-- Password -->
-                                <div class="mb-4">
-                                    <label for="password" class="form-label">
-                                        {{ $t('password') }}
-                                    </label>
-                                    <input v-model="loginForm.password" id="password" type="password" class="form-control" required autocomplete="current-password">
+                                <div
+                                    class="mb-3 w-100 d-flex align-items-center flex-column"
+                                >
+                                    <InputText
+                                        v-model="loginForm.password"
+                                        id="password"
+                                        type="password"
+                                        :placeholder="$t('password')"
+                                        class="w-75"
+                                        required
+                                        autocomplete="current-password"
+                                    />
                                     <!-- Validation Errors -->
-                                    <div class="text-danger-600 mt-1">
-                                        <div v-for="message in validationErrors?.password">
+                                    <div class="text-danger mt-1">
+                                        <div
+                                            v-for="message in validationErrors?.password"
+                                        >
                                             {{ message }}
                                         </div>
                                     </div>
                                 </div>
                                 <!-- Remember me -->
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" v-model="loginForm.remember" id="flexCheckIndeterminate">
-                                    <label class="form-check-label" for="flexCheckIndeterminate">
-                                        {{ $t('remember_me') }}
-                                    </label>
+                                <div
+                                    class="form-check w-75 d-flex justify-content-center align-items-center"
+                                >
+                                    <div>
+                                        <Checkbox
+                                            class="mx-3"
+                                            v-model="loginForm.remember"
+                                            name="remember"
+                                            id="flexCheckIndeterminate"
+                                            value=""
+                                        />
+                                        <label
+                                            class="form-check-label"
+                                            for="flexCheckIndeterminate"
+                                        >
+                                            {{ $t("remember_me") }}
+                                        </label>
+                                    </div>
+                                    <router-link
+                                        :to="{
+                                            name: 'auth.forgot-password',
+                                        }"
+                                        class="primary-a mx-4"
+                                        >{{ $t("forgot_password") }}
+                                    </router-link>
                                 </div>
 
                                 <!-- Buttons -->
-                                <div class="flex items-center justify-end mt-4">
-                                    <button class="btn btn-primary" :class="{ 'opacity-25': processing }" :disabled="processing">
-                                        {{ $t('login') }}
+                                <div
+                                    class="d-flex gap-4 justify-content-center mt-4 w-75"
+                                >
+                                    <router-link
+                                        to="/"
+                                        class="primary-a d-flex justify-content-center align-items-center gap-3 me-5"
+                                    >
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="24"
+                                            height="24"
+                                            fill="#000000"
+                                            viewBox="0 0 256 256"
+                                        >
+                                            <path
+                                                d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"
+                                            ></path></svg
+                                        >{{ $t("Atrás") }}
+                                    </router-link>
+
+                                    <button
+                                        class="btn btn-primary w-75"
+                                        :class="{
+                                            'opacity-25': processing,
+                                        }"
+                                        :disabled="processing"
+                                        @click="onFormSubmitLogin"
+                                    >
+                                        {{ $t("login") }}
                                     </button>
                                 </div>
-                            </div>
-                            <router-link :to="{name: 'auth.forgot-password'}">{{ $t('forgot_password')}}</router-link>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 </template>
 
 <script setup>
+import useAuth from "@/composables/auth";
+import * as yup from "yup";
+import { es } from "yup-locales";
+import { useToast } from "primevue/usetoast";
+import { InputText, Toast } from "primevue";
 
-import useAuth from '@/composables/auth'
+yup.setLocale(es);
+const toast = useToast();
 
 const { loginForm, validationErrors, processing, submitLogin } = useAuth();
 
+const loginSchema = yup.object().shape({
+    alias: yup.string().required("El alias es obligatorio"),
+    password: yup.string().required("La contraseña es obligatoria"),
+});
+
+const onFormSubmitLogin = async () => {
+    try {
+        await loginSchema.validate(loginForm, { abortEarly: false });
+        toast.add({
+            severity: "success",
+            summary: "Registro exitoso",
+            detail: "Te has registrado correctamente",
+            life: 3000,
+        });
+    } catch (error) {
+        if (error.inner) {
+            error.inner.forEach((e) => {
+                if (!validationErrors.value[e.path]) {
+                    validationErrors.value[e.path] = [];
+                }
+                validationErrors.value[e.path].push(e.message);
+            });
+        }
+        toast.add({
+            severity: "error",
+            summary: "Error",
+            detail: "Por favor, corrija los errores en el formulario.",
+            life: 3000,
+        });
+    }
+};
 </script>
+
+<style scoped>
+.container-login {
+    display: flex;
+    align-items: center;
+    height: 100vh;
+}
+
+.w-75 {
+    width: 75% !important;
+}
+
+.ms-buttons {
+    margin-left: 75px;
+}
+
+@media (max-with: 390px) {
+    .w-75 {
+        width: 50% !important;
+    }
+
+    .form-check {
+        display: flex;
+        flex-direction: column;
+    }
+}
+</style>

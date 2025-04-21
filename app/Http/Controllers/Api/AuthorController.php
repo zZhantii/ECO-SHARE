@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Author;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 class AuthorController extends Controller
 {

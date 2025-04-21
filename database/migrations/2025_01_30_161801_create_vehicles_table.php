@@ -13,9 +13,9 @@ return new class extends Migration {
         Schema::create('vehicles', function (Blueprint $table) {
             $table->id();
             // Foreign key
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
 
-            $table->string('plate')->unique();
+            $table->string('plate');
             $table->string('brand');
             $table->string('model');
             $table->decimal('consumption', 5, 2)->nullable();
@@ -24,7 +24,7 @@ return new class extends Migration {
             $table->string('fuel_type');
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
         });
     }
 

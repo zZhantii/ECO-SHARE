@@ -38,19 +38,49 @@ const model = ref([
     {
         label: 'Usuarios',
         items: [
-            { label: 'Users', icon: 'pi pi-fw pi-id-card', to: '/admin/users', permision: 'user-list' },
-            { label: 'Roles', icon: 'pi pi-fw pi-check-square', to: '/admin/roles', permision:'role-list' },
-            { label: 'Permisos', icon: 'pi pi-fw pi-bookmark', to: '/admin/permissions', permision:'permission-list' }
+            { label: 'Usuarios', icon: 'pi pi-fw pi-id-card', to: '/admin/users', permision: 'user-list' },
+            { label: 'Roles', icon: 'pi pi-fw pi-shield', to: '/admin/roles', permision:'role-list' },
+            { label: 'Permisos', icon: 'pi pi-fw pi-key', to: '/admin/permissions', permision:'permission-list' }
+        ]
+    },
+    // {
+    //     label: 'Posts',
+    //     items: [
+    //         { label: 'Posts', icon: 'pi pi-fw pi-id-card', to: '/admin/posts', permision: 'post-list' },
+    //         { label: 'Categorias', icon: 'pi pi-fw pi-id-card', to: '/admin/categories', permision: 'category-list' }
+
+    //     ]
+    // }
+    {
+        label: 'Vehiculos',
+        items: [
+            { label: 'vehiculos  ', icon: 'pi pi-fw pi-car', to: '/admin/vehicles', permision: 'user-list' }
+        ]
+    }, 
+    {
+        label: 'Viajes',
+        items: [
+            { label: 'Viajes  ', icon: 'pi pi-fw pi-map-marker', to: '/admin/trips', permision: 'user-list' }
         ]
     },
     {
-        label: 'Posts',
+        label: 'Etiquetas',
         items: [
-            { label: 'Posts', icon: 'pi pi-fw pi-id-card', to: '/admin/posts', permision: 'post-list' },
-            { label: 'Categorias', icon: 'pi pi-fw pi-id-card', to: '/admin/categories', permision: 'category-list' }
-
+            { label: 'Etiquetas  ', icon: 'pi pi-fw pi-tags', to: '/admin/tags', permision: 'user-list' }
         ]
-    }
+    },
+    {
+        label: 'Reservas',
+        items: [
+            { label: 'Reservas  ', icon: 'pi pi-fw pi-calendar', to: '/admin/reserves', permision: 'user-list' }
+        ]
+    },
+    {
+        label: 'Valoraciones',
+        items: [
+            { label: 'valoraciones', icon: 'pi pi-fw pi-star', to: '/admin/rates', permision: 'user-list' }
+        ]
+    },
 ]);
 </script>
 

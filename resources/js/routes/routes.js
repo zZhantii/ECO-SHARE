@@ -48,7 +48,7 @@ async function requireAdmin(to, from, next) {
         if (hasAdmin(user.roles)) {
             next();
         } else {
-            next("/app");
+            next("/auth/profile");
         }
     } else {
         next("/login");
@@ -66,16 +66,16 @@ export default [
                 name: "home",
                 component: () => import("../views/home/index.vue"),
             },
-            {
-                path: "posts",
-                name: "public-posts.index",
-                component: () => import("../views/posts/index.vue"),
-            },
-            {
-                path: "posts/:id",
-                name: "public-posts.details",
-                component: () => import("../views/posts/details.vue"),
-            },
+            // {
+            //     path: "posts",
+            //     name: "public-posts.index",
+            //     component: () => import("../views/posts/index.vue"),
+            // },
+            // {
+            //     path: "posts/:id",
+            //     name: "public-posts.details",
+            //     component: () => import("../views/posts/details.vue"),
+            // },
             {
                 path: "category/:id",
                 name: "category-posts.index",
@@ -105,18 +105,55 @@ export default [
                 component: () => import("../views/auth/passwords/Reset.vue"),
                 beforeEnter: guest,
             },
+            {
+                path: "business",
+                name: "business",
+                component: () => import("../views/home/business.vue"),
+            },
+            {
+                path: "help",
+                name: "help",
+                component: () => import("../views/home/help.vue"),
+            },
         ],
     },
 
     {
-        path: "/app",
+        path: "/auth",
         component: AuthenticatedUserLayout,
         // redirect: {
         //     name: 'admin.index'
         // },
-        name: "app",
+        // name: "profile",
         beforeEnter: requireLogin,
-        meta: { breadCrumb: "Dashboard" },
+        // meta: { breadCrumb: "Dashboard" },
+        children: [
+            {
+                name: "/profile",
+                path: "profile",
+                component: () => import("../views/profile/index.vue"),
+            },
+            {
+                path: "/trips",
+                name: "TripsIndex",
+                component: () => import("../views/trips/index.vue"),
+            },
+            {
+                path: "/trips/post",
+                name: "PostTrips",
+                component: () => import("../views/trips/postTrips.vue"),
+            },
+            {
+                path: "/trips/confirmation/:id/:seats",
+                name: "ConfirmationTrips",
+                component: () => import("../views/trips/confirmationTrip.vue"),
+            },
+            {
+                path: "/trips/manage",
+                name: "ManageTrips",
+                component: () => import("../views/trips/ManageTrips.vue"),
+            },
+        ],
     },
 
     {
@@ -281,7 +318,175 @@ export default [
                     },
                 ],
             },
-
+            {
+                name: "vehicles",
+                path: "vehicles",
+                meta: { breadCrumb: "Vehiculos" },
+                children: [
+                    {
+                        name: "vehicle.index",
+                        path: "",
+                        component: () =>
+                            import("../views/admin/vehicles/index.vue"),
+                        meta: { breadCrumb: "Vehiculos" },
+                    },
+                    {
+                        name: "vehicles.create",
+                        path: "create",
+                        component: () =>
+                            import("../views/admin/vehicles/Create.vue"),
+                        meta: {
+                            breadCrumb: "Crear Usuario",
+                            linked: false,
+                        },
+                    },
+                    {
+                        name: "vehicles.edit",
+                        path: "edit/:id",
+                        component: () =>
+                            import("../views/admin/vehicles/Edit.vue"),
+                        meta: {
+                            breadCrumb: "Editar Vehiculo",
+                            linked: false,
+                        },
+                    },
+                ],
+            },
+            {
+                name: "trips",
+                path: "trips",
+                meta: { breadCrumb: "Viajes" },
+                children: [
+                    {
+                        name: "trips.index",
+                        path: "",
+                        component: () =>
+                            import("../views/admin/trips/index.vue"),
+                        meta: { breadCrumb: "Vehiculos" },
+                    },
+                    {
+                        name: "trips.create",
+                        path: "create",
+                        component: () =>
+                            import("../views/admin/trips/Create.vue"),
+                        meta: {
+                            breadCrumb: "Crear Usuario",
+                            linked: false,
+                        },
+                    },
+                    {
+                        name: "trips.edit",
+                        path: "edit/:id",
+                        component: () =>
+                            import("../views/admin/trips/Edit.vue"),
+                        meta: {
+                            breadCrumb: "Editar Vehiculo",
+                            linked: false,
+                        },
+                    },
+                ],
+            },
+            {
+                name: "tags",
+                path: "tags",
+                meta: { breadCrumb: "Etiquetas" },
+                children: [
+                    {
+                        name: "tags.index",
+                        path: "",
+                        component: () =>
+                            import("../views/admin/tags/index.vue"),
+                        meta: { breadCrumb: "Etiquetas" },
+                    },
+                    {
+                        name: "tags.create",
+                        path: "create",
+                        component: () =>
+                            import("../views/admin/tags/Create.vue"),
+                        meta: {
+                            breadCrumb: "Crear Etiqueta",
+                            linked: false,
+                        },
+                    },
+                    {
+                        name: "tags.edit",
+                        path: "edit/:id",
+                        component: () => import("../views/admin/tags/Edit.vue"),
+                        meta: {
+                            breadCrumb: "Editar Etiqueta",
+                            linked: false,
+                        },
+                    },
+                ],
+            },
+            {
+                name: "reserves",
+                path: "reserves",
+                meta: { breadCrumb: "Reservas" },
+                children: [
+                    {
+                        name: "reserves.index",
+                        path: "",
+                        component: () =>
+                            import("../views/admin/reserves/index.vue"),
+                        meta: { breadCrumb: "Reservas" },
+                    },
+                    {
+                        name: "reserves.create",
+                        path: "create",
+                        component: () =>
+                            import("../views/admin/reserves/Create.vue"),
+                        meta: {
+                            breadCrumb: "Crear Reserva",
+                            linked: false,
+                        },
+                    },
+                    {
+                        name: "reserves.edit",
+                        path: "edit/:user_id/:trip_id",
+                        component: () =>
+                            import("../views/admin/reserves/Edit.vue"),
+                        meta: {
+                            breadCrumb: "Editar Reserva",
+                            linked: false,
+                        },
+                    },
+                ],
+            },
+            {
+                name: "rates",
+                path: "rates",
+                meta: { breadCrumb: "Valoraciones" },
+                children: [
+                    {
+                        name: "rates.index",
+                        path: "",
+                        component: () =>
+                            import("../views/admin/rates/index.vue"),
+                        meta: { breadCrumb: "Valoraciones" },
+                    },
+                    {
+                        name: "rates.create",
+                        path: "create",
+                        component: () =>
+                            import("../views/admin/rates/Create.vue"),
+                        meta: {
+                            breadCrumb: "Crear Valoraciones",
+                            linked: false,
+                        },
+                    },
+                    {
+                        name: "rates.edit",
+                        path: "edit/:user_id/:trip_id",
+                        component: () =>
+                            import("../views/admin/rates/Edit.vue"),
+                        meta: {
+                            breadCrumb: "Editar Valoraciones",
+                            linked: false,
+                        },
+                    },
+                ],
+            },
             {
                 name: "authors",
                 path: "authors",

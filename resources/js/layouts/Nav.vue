@@ -1,9 +1,9 @@
 <template>
     <nav class="navbar navbar-expand-md bg-nav-color">
         <div class="container">
-            <router-link to="/" class="navbar-brand"
-                ><SVGLogo class="logo"
-            /></router-link>
+            <router-link to="/" class="navbar-brand">
+                <SVGLogo class="logo" />
+            </router-link>
             <a
                 class="navbar-toggler"
                 type="button"
@@ -21,34 +21,36 @@
                     <!-- <LocaleSwitcher /> -->
                     <li>
                         <router-link
-                            :to="{ name: 'public-posts.index' }"
+                            :to="{ name: 'PostTrips' }"
                             class="primary-a nav-link text-center text-md-start"
                             >Publicar</router-link
                         >
                     </li>
                     <li>
                         <router-link
-                            to=""
+                            :to="{ name: 'business' }"
                             class="primary-a nav-link text-center text-md-start"
                             >Empresa</router-link
                         >
                     </li>
                 </ul>
                 <ul class="navbar-nav mt-lg-0 ms-auto gap-3 align-items-center">
-                    <li class="nav-item">
-                        <router-link to="" class="primary-a nav-link"
+                    <li v-if="!user?.name" class="nav-item">
+                        <router-link
+                            :to="{ name: 'help' }"
+                            class="primary-a nav-link"
                             >Ayuda</router-link
                         >
                     </li>
 
-                    <li class="nav-item">
+                    <li v-if="!user?.name" class="nav-item">
                         <router-link
                             :to="{ name: 'auth.login' }"
                             class="primary-a nav-link"
                             >Iniciar sesión</router-link
                         >
                     </li>
-                    <li class="">
+                    <li v-if="!user?.name" class="nav-item">
                         <router-link class="" to="/register">
                             <Button
                                 label="Registro"
@@ -56,7 +58,7 @@
                         /></router-link>
                     </li>
 
-                    <li v-if="authStore().user?.name" class="nav-item dropdown">
+                    <li v-else-if="user?.name" class="nav-item dropdown">
                         <a
                             class="primary-link dropdown-toa"
                             href="#"
@@ -64,28 +66,65 @@
                             data-bs-toggle="dropdown"
                             aria-expanded="false"
                         >
-                            {{ authStore().user?.name }}
+                            <Avatar
+                                v-if="user?.avatar"
+                                :image="user.avatar"
+                                class="avatar mt-1"
+                                size="xlarge"
+                                shape="circle"
+                            />
+                            <Avatar
+                                v-else
+                                :label="user.alias?.charAt(0).toUpperCase()"
+                                class="avatar"
+                                size="large"
+                                style="
+                                    background-color: #ece9fc;
+                                    color: #2a1261;
+                                "
+                            />
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
-                                <router-link class="dropdown-item" to="/admin"
+                        <ul
+                            class="dropdown-menu dropdown-menu-end custom-dropdown"
+                        >
+                            <li
+                                v-if="user?.roles?.[0]?.name === 'admin'"
+                                class="nav-item"
+                            >
+                                <router-link
+                                    class="dropdown-item primary-a"
+                                    to="/admin"
                                     >Admin</router-link
                                 >
                             </li>
                             <li>
                                 <router-link
-                                    to="/admin/posts"
-                                    class="dropdown-item"
-                                    >Post</router-link
+                                    to="/trips/manage"
+                                    class="dropdown-item primary-a"
+                                    >Tus viajes</router-link
                                 >
                             </li>
-                            <li><hr class="dropdown-divider" /></li>
+                            <li>
+                                <router-link
+                                    to="/auth/profile"
+                                    class="dropdown-item primary-a"
+                                    >Perfil</router-link
+                                >
+                            </li>
+
+                            <li>
+                                <router-link
+                                    :to="{ name: 'help' }"
+                                    class="dropdown-item primary-a"
+                                    >Ayuda</router-link
+                                >
+                            </li>
                             <li>
                                 <a
-                                    class="dropdown-item"
+                                    class="dropdown-item primary-a"
                                     href="javascript:void(0)"
                                     @click="logout"
-                                    >Logout</a
+                                    >Cerrar sesión</a
                                 >
                             </li>
                         </ul>
@@ -100,17 +139,38 @@
 import useAuth from "@/composables/auth";
 import LocaleSwitcher from "../components/LocaleSwitcher.vue";
 import { authStore } from "../store/auth";
+import { useRoute } from "vue-router";
 import SVGLogo from "../components/SVGLogo.vue";
+import useUsers from "@/composables/users";
+import { onMounted, ref } from "vue";
 
 const { processing, logout } = useAuth();
+const { user: userFromComposables } = useUsers();
+const { user } = authStore();
+const router = useRoute();
+
+onMounted(() => {
+    userFromComposables.value = user;
+    console.log(userFromComposables.value);
+});
 </script>
 
 <style scoped>
 .bg-nav-color {
     background-color: black;
 }
+
 .nav-link {
     color: white;
     font-weight: 600;
+}
+
+.custom-dropdown {
+    border-radius: 0px !important;
+}
+
+.router-link-exact-active {
+    color: #298a96;
+    font-weight: 900;
 }
 </style>

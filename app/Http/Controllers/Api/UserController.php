@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\Task;
 use App\Models\User;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
@@ -24,16 +25,16 @@ class UserController extends Controller
             $orderDirection = 'desc';
         }
         $users = User::
-        when(request('search_id'), function ($query) {
-            $query->where('id', request('search_id'));
-        })
+            when(request('search_id'), function ($query) {
+                $query->where('id', request('search_id'));
+            })
             ->when(request('search_title'), function ($query) {
-                $query->where('name', 'like', '%'.request('search_title').'%');
+                $query->where('name', 'like', '%' . request('search_title') . '%');
             })
             ->when(request('search_global'), function ($query) {
-                $query->where(function($q) {
+                $query->where(function ($q) {
                     $q->where('id', request('search_global'))
-                        ->orWhere('name', 'like', '%'.request('search_global').'%');
+                        ->orWhere('name', 'like', '%' . request('search_global') . '%');
 
                 });
             })
@@ -41,6 +42,11 @@ class UserController extends Controller
             ->paginate(50);
 
         return UserResource::collection($users);
+    }
+
+    public function index2() {
+        $users = User::All();
+        return response()->json(["success" => true, "data" => $users], 200);
     }
 
     public function store(StoreUserRequest $request)
@@ -51,6 +57,7 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->surname1 = $request->surname1;
         $user->surname2 = $request->surname2;
+        $user->alias = $request->alias;
 
         $user->password = Hash::make($request->password);
 
@@ -68,10 +75,15 @@ class UserController extends Controller
      * @param  int  $id
      * @return UserResource
      */
+    // public function show(User $user)
+    // {
+    //     $user->load('roles')->get();
+    //     return new UserResource($user);
+    // }
     public function show(User $user)
     {
-        $user->load('roles')->get();
-        return new UserResource($user);
+        $user = User::with("media")->find($user);
+        return response()->json(["success" => true, "data" => $user], 200);
     }
 
     /**
@@ -90,7 +102,7 @@ class UserController extends Controller
         $user->surname1 = $request->surname1;
         $user->surname2 = $request->surname2;
 
-        if(!empty($request->password)) {
+        if (!empty($request->password)) {
             $user->password = Hash::make($request->password) ?? $user->password;
         }
 
@@ -98,6 +110,7 @@ class UserController extends Controller
             if ($role) {
                 $user->syncRoles($role);
             }
+            return response()->json(["success" => true, "message" => "Usuario actualizado correctamente"], 200);
             return new UserResource($user);
         }
     }
@@ -108,13 +121,13 @@ class UserController extends Controller
 
         $user = User::find($request->id);
 
-        if($request->hasFile('picture')) {
+        if ($request->hasFile('picture')) {
             $user->media()->delete();
             $media = $user->addMediaFromRequest('picture')->preservingOriginal()->toMediaCollection('images-users');
 
         }
-        $user =  User::with('media')->find($request->id);
-        return  $user;
+        $user = User::with('media')->find($request->id);
+        return $user;
     }
 
     public function destroy(User $user)
@@ -124,6 +137,4 @@ class UserController extends Controller
 
         return response()->noContent();
     }
-
-
 }

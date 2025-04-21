@@ -26,5 +26,3 @@ Route::post('logout', [AuthenticatedSessionController::class, 'logout']);
 Route::view('/{any?}', 'main-view')
     ->name('dashboard')
     ->where('any', '.*');
-
-

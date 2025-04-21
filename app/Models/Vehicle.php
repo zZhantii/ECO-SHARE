@@ -16,7 +16,8 @@ class Vehicle extends Model
         'model',
         'consumption',
         'pax_number',
-        'validation'
+        'validation',
+        'fuel_type',
     ];
 
     // foreign key
@@ -24,8 +25,9 @@ class Vehicle extends Model
     // Relacion usuarios-trips 1:N (N trips)
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, "user_id");
     }
+
 
     // Relacion vehicles-trips 1:N (1 vehicle)
     public function trips()
@@ -33,6 +35,7 @@ class Vehicle extends Model
         return $this->hasMany(Trip::class, 'vehicle_id');
     }
 
+    // Relación users-vehicles 1:N (N vehículos)
     public function users()
     {
         return $this->belongsToMany(User::class, 'user_rates', 'user_id');

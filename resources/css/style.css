@@ -1,9 +1,3 @@
-/* Borrar de este archivo y ponerlo en el head del html
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
-*/
-
 body {
     font-family: "Poppins", sans-serif;
     font-weight: 400;
@@ -20,13 +14,14 @@ body {
 h1 {
     font-family: inherit;
     font-weight: 700;
-    font-size: 3.25rem;
+    font-size: 4.25rem;
+    color: #054851;
 }
 
 h2 {
     font-family: inherit;
     font-weight: 700;
-    font-size: 2.25rem;
+    font-size: 3.25rem;
 }
 
 h3 {
@@ -88,6 +83,7 @@ h3 {
 .icon-rrss:hover {
     color: black !important;
 }
+
 .secondary-a:hover::after {
     transform: scaleX(1);
     transform-origin: left;
@@ -143,6 +139,7 @@ p {
     border-radius: 10px !important;
     background-color: white !important;
     font-weight: 600 !important;
+    width: fit-content !important;
 }
 
 .btn-secondary:hover {
@@ -150,6 +147,7 @@ p {
     color: white !important;
     border: #02aef8 1px solid !important;
 }
+
 .p-button-label {
     font-weight: 600 !important;
 }
@@ -174,6 +172,24 @@ p {
     border: black 1px solid !important;
     border-radius: 25px !important;
     background-color: black !important;
+}
+
+.btn-cancel {
+    font-family: inherit !important;
+    font-weight: 500 !important;
+    font-size: 1rem !important;
+    color: #f80223 !important;
+    text-decoration: none !important;
+    padding: 10px 15px !important;
+    border: #f80223 1px solid !important;
+    border-radius: 10px !important;
+    background-color: #fff4f4 !important;
+    width: fit-content !important;
+}
+
+.btn-cancel:hover {
+    background-color: #fa3852 !important;
+    color: #ffffff !important;
 }
 
 .btn-header-primary:hover {
@@ -220,8 +236,6 @@ p {
     display: none !important;
 }
 
-/* Img */
-
 img {
     /* min-width: 350px;
     min-height: 350px; */
@@ -239,6 +253,8 @@ svg {
     width: 120px;
     height: 60px;
 }
+
+/* Home */
 
 .navbar-toggler-icon {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cpath stroke='white' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E") !important;

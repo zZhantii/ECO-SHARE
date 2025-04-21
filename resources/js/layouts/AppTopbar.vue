@@ -1,8 +1,7 @@
 <template>
     <div class="layout-topbar">
         <router-link to="/" class="layout-topbar-logo">
-            <img src="/images/logo.svg" alt="logo" />
-            <span></span>
+            <img src="../../../public/images/Logo_es.svg" alt="logo" />
         </router-link>
 
         <button class="p-link layout-menu-button layout-topbar-button" @click="onMenuToggle()">
@@ -15,41 +14,41 @@
 
         <div class="layout-topbar-menu" :class="topbarMenuClasses">
 
-            <button class="p-link layout-topbar-button layout-topbar-button-c nav-item dropdown " role="button"
-                data-bs-toggle="dropdown">
+            <div class="dropdown">
+                <button class="p-link layout-topbar-button layout-topbar-button-c" type="button"
+                    @click="toggleDropdown">
+                    <i class="pi pi-user"></i>
+                    <span class="ms-2">Hola, {{ authStore().user.name }}</span>
+                </button>
 
-                <i class="pi pi-user"></i>
-                <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm">
+                <ul class="dropdown-menu" :class="{ 'show': isDropdownOpen }">
                     <li>
-                        <router-link :to="{ name: 'profile.index' }" class="dropdown-item">Perfil</router-link>
+                        <router-link :to="{ name: '/profile' }" class="dropdown-item" @click="closeDropdown">
+                            <i class="pi pi-user mr-2"></i>Perfil
+                        </router-link>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="#">Preferencias</a>
-                    </li>
-                    <li v-if="true">
-                        <a class="dropdown-item" href="#" @click="router.push({ name: 'admin.index' })">Panel Admin</a>
-                    </li>
-                    <li v-if="true">
-                        <a class="dropdown-item" href="#" @click="router.push({ name: 'app' })">Panel Usuario</a>
+                        <router-link :to="{ name: 'home' }" class="dropdown-item" @click="closeDropdown">
+                            <i class="pi pi-home mr-2"></i>Home
+                        </router-link>
                     </li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
                     <li>
-                        <a class="dropdown-item" :class="{ 'opacity-25': processing }" :disabled="processing" href="javascript:void(0)" @click="logout">Cerrar sessión</a>
+                        <a class="dropdown-item" :class="{ 'opacity-25': processing }" :disabled="processing" href="#"
+                            @click="handleLogout">
+                            <i class="pi pi-sign-out mr-2"></i>Cerrar sesión
+                        </a>
                     </li>
                 </ul>
-
-                <span class="nav-link dropdown-toggle ms-3 me-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Hola, {{ authStore().user.name }}
-                </span>
-            </button>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useLayout } from '../composables/layout';
 import useAuth from "@/composables/auth";
 import {  useRouter } from "vue-router";
@@ -70,6 +69,30 @@ const topbarMenuClasses = computed(() => {
     };
 });
 
+const isDropdownOpen = ref(false);
+
+const toggleDropdown = () => {
+    isDropdownOpen.value = !isDropdownOpen.value;
+};
+
+const closeDropdown = () => {
+    isDropdownOpen.value = false;
+};
+
+const handleLogout = async () => {
+    closeDropdown();
+    await logout();
+    router.push('/');
+};
+
+onMounted(() => {
+    document.addEventListener('click', (event) => {
+        const dropdown = document.querySelector('.dropdown');
+        if (dropdown && !dropdown.contains(event.target)) {
+            isDropdownOpen.value = false;
+        }
+    });
+});
 </script>
 
 <style lang="scss" scoped>
@@ -80,5 +103,42 @@ const topbarMenuClasses = computed(() => {
     border: 0;
     border-radius: 0%;
     padding: 1em;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    min-width: 200px;
+    padding: 0.5rem 0;
+    margin: 0.125rem 0 0;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 0.25rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+
+    &.show {
+        display: block;
+    }
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    color: #212529;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+
+    &:hover {
+        background-color: #f8f9fa;
+    }
+}
+
+.layout-topbar-logo {
+    width: 75px;
 }
 </style>

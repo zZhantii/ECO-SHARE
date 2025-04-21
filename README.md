@@ -9,7 +9,7 @@ Se recomienda usar Laragon
 
 # Características
 
-Ejemplo proyecto Laravel 10 + vue3 PAra DAW
+Proyecto Laravel 10 + vue3
 
 - ✅ Laravel 10
 - ✅ Vue 3
@@ -26,7 +26,10 @@ Ejemplo proyecto Laravel 10 + vue3 PAra DAW
 - ✅ Gestión de permisos (Spatie)
 - ✅ Cambio de contraseña
 - ✅ Verificación de correo electrónico
-- ✅ Gestión de Posts
+- ✅ Gestión de Viajes
+- ✅ Gestión de Vehículos
+- ✅ Gestión de Reservas
+- ✅ Valoración de viajes
 - ✅ Blog de Frontend
 - ✅ Boostrap 5
 

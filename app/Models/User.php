@@ -19,11 +19,11 @@ class User extends Authenticatable implements HasMedia
 
     protected $fillable = [
         'name',
+        'alias',
         'email',
         'password',
         'surname1',
-        'surname2',
-        'profile_photo'
+        'surname2'
     ];
 
     /**
@@ -71,8 +71,10 @@ class User extends Authenticatable implements HasMedia
                 ->height(env('IMAGE_HEIGHT', 300));
         }
     }
+    //Método para guardar las fotos/avatar del perfil de usuario
 
-    // Foreign Key
+
+
 
     // Relacion usuarios-vehiculos 1:N (1 Usuarios)
     public function vehicles()
@@ -89,14 +91,14 @@ class User extends Authenticatable implements HasMedia
     // Relacion user_trips_rates N:M (N Usuarios)
     public function rates()
     {
-        return $this->belongsToMany(Trip::class, 'user_trips_rates', 'trip_id')
-            ->withPivot('rating', 'comment');
+        return $this->belongsToMany(Trip::class, 'user_trips_rates', 'user_id', 'trip_id')
+            ->withPivot('rate')->withTimestamps();
     }
 
     // Relacion user_trips_reserves N:M (N Usuarios)
     public function reserves()
     {
-        return $this->belongsToMany(Trip::class, 'user_trips_reserves', 'trip_id')
-            ->withPivot('seats_reserved', 'reservation_date', 'check_in');
+        return $this->belongsToMany(Trip::class, 'user_trips_reserves', 'user_id', 'trip_id')
+            ->withPivot('seats_reserved', 'reservation_date', 'check_in', 'cancelled_at', 'total_price')->withTimestamps();
     }
 }

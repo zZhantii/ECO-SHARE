@@ -15,8 +15,12 @@ class Trip extends Model
         'start_point',
         'end_point',
         'departure_time',
+        'arrival_time',
         'available_seats',
         'price',
+        'drive_start',
+        'drive_end',
+        'cancelled_at'
     ];
 
     // Relacion 1:N (N trips)
@@ -34,15 +38,26 @@ class Trip extends Model
     // Relacion trips-tags N:M (N Trips)
     public function tags()
     {
-        return $this->belongsToMany(Tag::class, 'trip_taps', 'tag_id');
+        return $this->belongsToMany(Tag::class, 'tags_trips', 'trip_id', 'tag_id')
+            ->withTimestamps();
     }
 
-    // Relacion user_trips_rates N:M (M Trips)
-    public function users()
+    // Relación trips users N:M para la gestión de puntuaciones
+    public function rates()
     {
-        return $this->belongsToMany(User::class, 'user_rates', 'user_id');
+        return $this->belongsToMany(User::class, 'user_trips_rates', 'trip_id', 'user_id')
+            ->withPivot('rate')->withTimestamps();
     }
 
+    // Relación trips users N:M para la gestión de reservas
+    public function reserves()
+    {
+        return $this->belongsToMany(User::class, 'user_trips_reserves', 'trip_id', 'user_id')
+            ->withPivot('seats_reserved', 'reservation_date', 'check_in', 'cancelled_at', 'total_price')->withTimestamps();
+
+    }
+
+    // Se hace un cast a array para poder tratar los datos de la base de datos que están en JSON
     protected $casts = [
         'start_point' => 'array',
         'end_point' => 'array'

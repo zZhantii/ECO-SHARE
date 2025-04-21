@@ -31,10 +31,12 @@
         <section
             class="container-fluid w-100 h-auto home-section d-block d-md-flex flex-row-reverse justify-content-center gap-2"
         >
-            <div class="container col-none-12 col-md-4 mb-5">
+            <div
+                class="container col-none-12 col-md-4 mb-5 d-flex justify-content-center"
+            >
                 <img
                     src="images/home_airport.webp"
-                    class="image-style"
+                    class="image-style img-fluid"
                     alt="avión despegando de un aeropuerto"
                 />
             </div>
@@ -52,16 +54,20 @@
                     que cada kilómetro cuente!
                 </p>
 
-                <Button label="Inicia sesión" class="btn-primary" />
+                <a @click="handleLoginClick" class="btn-primary"
+                    >Inicia sesión</a
+                >
             </div>
         </section>
         <section
             class="container-fluid w-100 h-auto home-section d-block d-md-flex flex-row justify-content-center gap-2"
         >
-            <div class="container col-none-12 col-md-4 mb-5">
+            <div
+                class="container col-none-12 col-md-4 mb-5 d-flex justify-content-center"
+            >
                 <img
                     src="images/inside_car.webp"
-                    class="image-style"
+                    class="image-style img-fluid"
                     alt="avión despegando de un aeropuerto"
                 />
             </div>
@@ -77,17 +83,20 @@
                     mundo más sostenible. Viajar acompañado es más económico,
                     ecológico y social. ¡Únete y haz la diferencia!
                 </p>
-
-                <Button label="Publica tu viaje" class="btn-primary" />
+                <router-link :to="{ name: 'PostTrips' }" class="btn-primary"
+                    >Publica tu viaje</router-link
+                >
             </div>
         </section>
         <section
             class="container-fluid w-100 h-auto mb-4 home-section last-section d-block d-md-flex flex-row-reverse justify-content-center gap-2"
         >
-            <div class="container col-none-12 col-md-4 mb-5">
+            <div
+                class="container col-none-12 col-md-4 mb-5 d-flex justify-content-center"
+            >
                 <img
                     src="images/green_world.webp"
-                    class="image-style"
+                    class="image-style img-fluid"
                     alt="avión despegando de un aeropuerto"
                 />
             </div>
@@ -103,21 +112,45 @@
                     agradecerá!
                 </p>
 
-                <Button label="Regístrate ahora" class="btn-primary" />
+                <a @click="handleRegisterClick" class="btn-primary"
+                    >Regístrate ahora</a
+                >
             </div>
         </section>
     </main>
 </template>
 
 <script setup>
+import { RouterLink, useRouter } from "vue-router";
 import TripFinder from "../../components/TripFinder.vue";
+import { authStore } from "../../store/auth";
+
+const router = useRouter();
+const auth = authStore();
+
+// Método que gestiona el loggin en función del estado actual de la autenticación
+const handleLoginClick = () => {
+    if (auth.authenticated) {
+        router.push("/auth/profile");
+    } else {
+        router.push("/login");
+    }
+};
+// Método que gestiona el registro en función del estado actual de la autenticación
+const handleRegisterClick = () => {
+    if (auth.authenticated) {
+        router.push("/auth/profile");
+    } else {
+        router.push("/register");
+    }
+};
 </script>
 <style scoped>
 #home-finder-section {
     background-image: linear-gradient(
             to top,
-            rgba(255, 255, 255, 5),
-            rgba(255, 255, 255, 0.7)
+            rgba(255, 255, 255, 1),
+            rgba(255, 255, 255, 0.6)
         ),
         url("images/main_banner.webp");
     height: 620px;
@@ -132,6 +165,7 @@ import TripFinder from "../../components/TripFinder.vue";
     background-color: white;
     height: 700px;
 }
+
 .image-style {
     border-radius: 0px !important;
     max-width: 100% !important;
@@ -139,6 +173,10 @@ import TripFinder from "../../components/TripFinder.vue";
 
 .last-section {
     background-color: #f6f6f6 !important;
+}
+
+a {
+    cursor: pointer;
 }
 </style>
 <!--
