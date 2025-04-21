@@ -92,6 +92,11 @@ npm run dev
 php artisan serve
 ```
 
+### Se debe incorporar en .env la clave API de Google para el uso de los maps
+
+```bash
+VITE_GOOGLE_MAPS_API_KEY="YOUR-API-KEY"
+
 ### Lanzar a producción
 
 ```bash
