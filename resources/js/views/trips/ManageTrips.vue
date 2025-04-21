@@ -1,12 +1,13 @@
 <template>
     <main class="container">
-        <RatingDialog
-            v-show="tripsToRate.length > 0"
-            v-model:ratingDialog="ratingDialog"
-            :tripsToRate="tripsToRate"
-        />
-
         <div class="container mt-5 d-flex flex-column align-items-center">
+            <Toast /> <ConfirmPopup />
+            <RatingDialog
+                v-if="tripsToRate.length > 0"
+                v-model:ratingDialog="ratingDialog"
+                :tripsToRate="tripsToRate"
+            />
+
             <div class="gradient-img"></div>
 
             <div
@@ -87,8 +88,6 @@
 
                                 <div class="d-flex justify-content-between">
                                     <div class="d-flex align-items-center">
-                                        <Toast />
-                                        <ConfirmPopup />
                                         <Button
                                             v-if="
                                                 checkBoarding(
@@ -234,8 +233,6 @@
                                             trip.cancelled_at == null
                                         "
                                     >
-                                        <Toast />
-                                        <ConfirmPopup />
                                         <Button
                                             v-if="
                                                 checkBoarding(
@@ -369,7 +366,7 @@
 <script setup>
 import Accordion from "primevue/accordion";
 import useTrips from "@/composables/trips.js";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import Timeline from "primevue/timeline";
 import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
@@ -405,6 +402,7 @@ const toast = useToast();
 const selectedTrip = ref({});
 const passenger = ref(false);
 const ratingDialog = ref(false);
+const mount = ref(true);
 
 onMounted(async () => {
     await getActiveTrips();
@@ -412,6 +410,10 @@ onMounted(async () => {
     ratingDialog.value = await getPassengerHistory();
 
     console.log("viajes como pasajero", passengerHistory.value);
+});
+
+onBeforeUnmount(() => {
+    mount.value = false;
 });
 
 function formatDate(timestamp) {

@@ -2,30 +2,44 @@
     <div class="business-page">
         <section class="content-p">
             <div class="content">
-                <h1>ECO-Share</h1>
-                <p class="subtitle">Compartiendo viajes, reduciendo huella</p>
+                <h1>ECO-SHARE</h1>
+                <p class="subtitle">
+                    <strong>Compartiendo viajes, reduciendo huella</strong>
+                </p>
             </div>
         </section>
 
         <section class="about">
             <div class="container">
-                <h2>Sobre ECO-Share</h2>
+                <h2>Misión empresarial</h2>
                 <div class="about-grid">
                     <div class="about-text">
-                        <p>ECO-Share es una innovadora plataforma de economía circular que facilita la conexión entre
-                            personas para
-                            compartir trayectos de manera eficiente y sostenible.</p>
-                        <p>Nuestra misión es contribuir a la reducción de la huella de carbono facilitando la movilidad
-                            compartida,
-                            permitiendo que toda la comunidad pueda dividir los costes de combustible de manera
-                            equitativa.</p>
-                        <p>Apostamos por una movilidad inclusiva y sostenible, donde cada persona tiene la oportunidad
-                            de
-                            participar en la construcción de un futuro más verde.</p>
+                        <p>
+                            ECO-SHARE es una innovadora plataforma de economía
+                            circular que facilita la conexión entre personas
+                            para compartir trayectos de manera eficiente y
+                            sostenible.
+                        </p>
+                        <p>
+                            Nuestra misión es contribuir a la reducción de la
+                            huella de carbono facilitando la movilidad
+                            compartida, permitiendo que toda la comunidad pueda
+                            dividir los costes de combustible de manera
+                            equitativa.
+                        </p>
+                        <p>
+                            Apostamos por una movilidad inclusiva y sostenible,
+                            donde cada persona tiene la oportunidad de
+                            participar en la construcción de un futuro más
+                            verde.
+                        </p>
                     </div>
                     <div class="about-image">
-                        <img src="../../../../public/images/business/business_image_content.png" height="450"
-                            alt="Comunidad ECO-Share compartiendo viaje">
+                        <img
+                            src="../../../../public/images/business/business_image_content.png"
+                            height="450"
+                            alt="Comunidad ECO-Share compartiendo viaje"
+                        />
                     </div>
                 </div>
             </div>
@@ -38,22 +52,34 @@
                     <div class="feature-card">
                         <i class="pi pi-car"></i>
                         <h3>Publicación de Trayectos</h3>
-                        <p>Los conductores pueden publicar sus rutas y compartir gastos.</p>
+                        <p>
+                            Los conductores pueden publicar sus rutas y
+                            compartir gastos.
+                        </p>
                     </div>
                     <div class="feature-card">
                         <i class="pi pi-users"></i>
                         <h3>Reservas Flexibles</h3>
-                        <p>Los pasajeros pueden reservar asientos disponibles fácilmente.</p>
+                        <p>
+                            Los pasajeros pueden reservar asientos disponibles
+                            fácilmente.
+                        </p>
                     </div>
                     <div class="feature-card">
                         <i class="pi pi-map"></i>
                         <h3>Gestión de Rutas</h3>
-                        <p>Visualización y gestión de rutas mediante mapas interactivos.</p>
+                        <p>
+                            Visualización y gestión de rutas mediante mapas
+                            interactivos.
+                        </p>
                     </div>
                     <div class="feature-card">
                         <i class="pi pi-wallet"></i>
                         <h3>División de Gastos</h3>
-                        <p>Sistema inteligente de división de costes de combustible.</p>
+                        <p>
+                            Sistema inteligente de división de costes de
+                            combustible.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -66,7 +92,9 @@
                     <div class="benefit-item">
                         <i class="pi pi-heart"></i>
                         <h3>Sostenibilidad</h3>
-                        <p>Reducción de emisiones de CO2 y huella de carbono.</p>
+                        <p>
+                            Reducción de emisiones de CO2 y huella de carbono.
+                        </p>
                     </div>
                     <div class="benefit-item">
                         <i class="pi pi-money-bill"></i>
@@ -76,15 +104,16 @@
                     <div class="benefit-item">
                         <i class="pi pi-globe"></i>
                         <h3>Comunidad</h3>
-                        <p>Forma parte de una comunidad comprometida con el medio ambiente.</p>
+                        <p>
+                            Forma parte de una comunidad comprometida con el
+                            medio ambiente.
+                        </p>
                     </div>
                 </div>
             </div>
         </section>
     </div>
 </template>
-    
-
 
 <script setup>
 // Component logic here
@@ -97,7 +126,8 @@
 
 .content-p {
     position: relative;
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/business/business_image.png');
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url("/images/business/business_image.png");
     background-size: cover;
     background-position: center;
     height: 60vh;
@@ -109,19 +139,20 @@
 }
 
 .content-p::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to bottom,
-            rgba(248, 249, 250, 0.3) 0%,
-            rgba(248, 249, 250, 0.5) 40%,
-            rgba(248, 249, 250, 0.7) 60%,
-            rgba(248, 249, 250, 0.9) 80%,
-            rgba(248, 249, 250, 1) 100%
-        );
+    background: linear-gradient(
+        to bottom,
+        rgba(248, 249, 250, 0.3) 0%,
+        rgba(248, 249, 250, 0.5) 40%,
+        rgba(248, 249, 250, 0.7) 60%,
+        rgba(248, 249, 250, 0.9) 80%,
+        rgba(248, 249, 250, 1) 100%
+    );
 }
 
 .content {
@@ -176,7 +207,7 @@ h2 {
 
 .feature-card i {
     font-size: 2.5rem;
-    color: #4CAF50;
+    color: #4caf50;
     margin-bottom: 1rem;
 }
 
@@ -193,7 +224,7 @@ h2 {
 
 .benefit-item i {
     font-size: 2.5rem;
-    color: #4CAF50;
+    color: #4caf50;
     margin-bottom: 1rem;
 }
 

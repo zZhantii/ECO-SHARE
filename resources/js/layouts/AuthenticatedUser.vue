@@ -73,6 +73,7 @@
     <!-- <div class="layout-main"> -->
     <!--                <Suspense>-->
     <router-view></router-view>
+
     <!--                </Suspense>-->
     <!-- </div> -->
     <app-footer></app-footer>
@@ -93,12 +94,19 @@ import Nav from "./Nav.vue";
 import AppTopbar from "./AppTopbar.vue";
 import AppFooter from "./AppFooter.vue";
 import { useLayout } from "../composables/layout";
+import { useToast } from "primevue/usetoast";
+import { useConfirm } from "primevue/useconfirm";
+const confirm = useConfirm();
+const toast = useToast();
 
 const auth = authStore();
 const user = computed(() => auth.user);
 const route = useRoute();
 const router = useRouter();
-
+router.beforeEach((to, from, next) => {
+    toast.removeAllGroups();
+    next();
+});
 
 // const home = ref({
 //     icon: "pi pi-home",

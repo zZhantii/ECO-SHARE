@@ -3,8 +3,8 @@
     <div class="container">
         <div class="mt-4"><h1 class="fs-3 mb-0">Publicación de viajes</h1></div>
         <div class="row justify-content-center">
-            <div class="card flex justify-center m-4 p-4">
-                <Stepper value="1" v-show="(value) => 1 && value <= 3">
+            <div v-if="show" class="card flex justify-center m-4 p-4">
+                <Stepper value="1">
                     <StepList class="StepList">
                         <Step value="1">Opciones de viajes</Step>
                         <Step value="2">Detalles del vehiculo</Step>
@@ -630,7 +630,7 @@ import * as yup from "yup";
 import { ar, de, es, tr } from "yup-locales";
 import { useToast } from "primevue/usetoast";
 import { Toast } from "primevue";
-import { onMounted, ref, watch, computed } from "vue";
+import { onMounted, onBeforeUnmount, ref, watch, computed } from "vue";
 import { authStore } from "../../store/auth";
 import Map from "@/components/Map.vue";
 import useTags from "@/composables/tags";
@@ -661,12 +661,14 @@ const start_locality = ref("");
 const end_locality = ref("");
 const today = ref(new Date());
 const selectedTags = ref([]);
+const show = ref(true);
 
 let user_id = ref(0);
 user_id.value = authStore().user.id;
 
 onMounted(async () => {
     getVehicles();
+    today.value.setDate(today.value.getDate() + 1);
 
     const autocompleteStart = new google.maps.places.Autocomplete(
         document.getElementById("origin"),
@@ -703,6 +705,10 @@ onMounted(async () => {
     });
     getFuelRates();
     getTags();
+});
+
+onBeforeUnmount(() => {
+    show.value = false;
 });
 
 const tripData = ref({

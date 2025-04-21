@@ -28,7 +28,7 @@
                     </li>
                     <li>
                         <router-link
-                            to="business"
+                            :to="{ name: 'business' }"
                             class="primary-a nav-link text-center text-md-start"
                             >Empresa</router-link
                         >
@@ -36,7 +36,9 @@
                 </ul>
                 <ul class="navbar-nav mt-lg-0 ms-auto gap-3 align-items-center">
                     <li v-if="!user?.name" class="nav-item">
-                        <router-link :to="{ name: 'help' }" class="primary-a nav-link"
+                        <router-link
+                            :to="{ name: 'help' }"
+                            class="primary-a nav-link"
                             >Ayuda</router-link
                         >
                     </li>
@@ -137,6 +139,7 @@
 import useAuth from "@/composables/auth";
 import LocaleSwitcher from "../components/LocaleSwitcher.vue";
 import { authStore } from "../store/auth";
+import { useRoute } from "vue-router";
 import SVGLogo from "../components/SVGLogo.vue";
 import useUsers from "@/composables/users";
 import { onMounted, ref } from "vue";
@@ -144,6 +147,7 @@ import { onMounted, ref } from "vue";
 const { processing, logout } = useAuth();
 const { user: userFromComposables } = useUsers();
 const { user } = authStore();
+const router = useRoute();
 
 onMounted(() => {
     userFromComposables.value = user;

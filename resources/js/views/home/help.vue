@@ -3,7 +3,6 @@
         <section class="hero">
             <div class="hero-content">
                 <h1>Centro de Ayuda</h1>
-                <p>¿Cómo podemos ayudarte?</p>
             </div>
         </section>
 
@@ -13,11 +12,18 @@
 
                 <Accordion :activeIndex="0">
                     <AccordionTab header="¿Cómo funciona ECO-Share?">
-                        <p>ECO-Share es una plataforma que permite compartir viajes de manera sostenible:</p>
+                        <p>
+                            ECO-Share es una plataforma que permite compartir
+                            viajes de manera sostenible:
+                        </p>
                         <ul>
                             <li>Registra tu cuenta y verifica tus datos</li>
-                            <li>Publica tus trayectos o busca viajes disponibles</li>
-                            <li>Conecta con otras personas y comparte gastos</li>
+                            <li>
+                                Publica tus trayectos o busca viajes disponibles
+                            </li>
+                            <li>
+                                Conecta con otras personas y comparte gastos
+                            </li>
                             <li>Viaja de forma sostenible y económica</li>
                         </ul>
                     </AccordionTab>
@@ -37,7 +43,9 @@
                         <p>El sistema de pagos es transparente y seguro:</p>
                         <ul>
                             <li>Los costes se calculan por kilómetro</li>
-                            <li>El pago se realiza a través de la plataforma</li>
+                            <li>
+                                El pago se realiza a través de la plataforma
+                            </li>
                             <li>Los fondos se liberan después del viaje</li>
                             <li>Sistema de reembolso en caso de cancelación</li>
                         </ul>
@@ -72,11 +80,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import Accordion from 'primevue/accordion';
-import AccordionTab from 'primevue/accordiontab';
+import { ref } from "vue";
+import Accordion from "primevue/accordion";
+import AccordionTab from "primevue/accordiontab";
 
-const searchQuery = ref('');
+const searchQuery = ref("");
 </script>
 
 <style scoped>
@@ -86,7 +94,8 @@ const searchQuery = ref('');
 
 .hero {
     position: relative;
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/business/business_image.png');
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url("/images/business/business_image.png");
     background-size: cover;
     background-position: center;
     height: 40vh;
@@ -98,13 +107,14 @@ const searchQuery = ref('');
 }
 
 .hero::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to bottom,
+    background: linear-gradient(
+        to bottom,
         rgba(248, 249, 250, 0.1) 0%,
         rgba(248, 249, 250, 0.3) 40%,
         rgba(248, 249, 250, 0.5) 60%,
@@ -131,7 +141,6 @@ const searchQuery = ref('');
     margin-bottom: 2rem;
     color: white;
 }
-
 
 .faq-section {
     background: #f8f9fa;
@@ -184,7 +193,7 @@ const searchQuery = ref('');
 
 .contact-card i {
     font-size: 2.5rem;
-    color: #4CAF50;
+    color: #4caf50;
     margin-bottom: 1rem;
 }
 

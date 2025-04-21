@@ -104,12 +104,12 @@ export default [
                 name: "auth.reset-password",
                 component: () => import("../views/auth/passwords/Reset.vue"),
                 beforeEnter: guest,
-            }, 
+            },
             {
                 path: "business",
                 name: "business",
                 component: () => import("../views/home/business.vue"),
-            }, 
+            },
             {
                 path: "help",
                 name: "help",
@@ -411,8 +411,7 @@ export default [
                     {
                         name: "tags.edit",
                         path: "edit/:id",
-                        component: () =>
-                            import("../views/admin/tags/Edit.vue"),
+                        component: () => import("../views/admin/tags/Edit.vue"),
                         meta: {
                             breadCrumb: "Editar Etiqueta",
                             linked: false,
@@ -422,7 +421,7 @@ export default [
             },
             {
                 name: "reserves",
-                path: "reserves",   
+                path: "reserves",
                 meta: { breadCrumb: "Reservas" },
                 children: [
                     {
