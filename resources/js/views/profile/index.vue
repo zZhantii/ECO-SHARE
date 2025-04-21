@@ -607,11 +607,12 @@ const passSchema = yup.object().shape({
         .min(8, "La contraseña debe tener al menos 8 carácteres"),
 });
 
-const fullSurname = computed(() =>
-    tempData.value.surname2 == null
+const fullSurname = computed(() => {
+    if (visible.value) return `${user.surname1 ?? ""} ${user.surname2 ?? ""}`;
+    return tempData.value.surname2 == null
         ? `${tempData.value.surname1}`
-        : `${tempData.value.surname1} ${tempData.value.surname2}`
-);
+        : `${tempData.value.surname1} ${tempData.value.surname2}`;
+});
 
 // const vehicleSchema = yup.object({
 //     plate: yup

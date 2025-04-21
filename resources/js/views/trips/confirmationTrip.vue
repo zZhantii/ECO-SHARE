@@ -64,9 +64,9 @@
                 <div class="card shadow-sm map-wrapper">
                     <div class="card-body p-0">
                         <Map
-                            v-if="!showFirstMap"
-                            :origin="start_point"
-                            :destination="end_point"
+                            v-if="showFirstMap"
+                            v-model:origin="start_point"
+                            v-model:destination="end_point"
                             @updateMapsInfo="handleMapsInfo"
                             class="map-container"
                         />
@@ -223,6 +223,7 @@ import { useTripStore } from "@/store/trip.js";
 const tripStore = useTripStore();
 const start_point = ref(null);
 const end_point = ref(null);
+const showFirstMap = ref(false);
 
 // Composables
 import useTrips from "@/composables/trips";
@@ -272,6 +273,12 @@ onMounted(async () => {
         } else {
             rating.value = 0;
         }
+        start_point.value = trip.value.start_point;
+        end_point.value = trip.value.end_point;
+
+        console.log("STARTTTT", start_point.value.location);
+
+        showFirstMap.value = true;
 
         await getTagTrips(tripId);
 

@@ -13,6 +13,8 @@ const props = defineProps({
 
 const emit = defineEmits(["updateMapsInfo"]);
 onMounted(() => {
+    console.log("origen", props.origin);
+    console.log("destino", props.destination);
     if (
         props.origin?.geometry?.location ||
         props.destination?.geometry?.location
@@ -26,6 +28,17 @@ onMounted(() => {
         initMap();
         setMarker(mapData.value.mapCenter, "D");
         setMarker(mapData.value.destination, "O");
+    } else if (
+        props.origin?.location?.latitude &&
+        props.origin?.location?.longitude
+    ) {
+        mapData.value.mapCenter.lat = props.origin.location.latitude;
+        mapData.value.mapCenter.lng = props.origin.location.longitude;
+        mapData.value.destination.lat = props.destination.location.latitude;
+        mapData.value.destination.lng = props.destination.location.longitude;
+        initMap();
+        setMarker(mapData.value.mapCenter, "O");
+        setMarker(mapData.value.destination, "D");
     } else {
         initMap();
         setMarker(mapData.value.mapCenter, "O");

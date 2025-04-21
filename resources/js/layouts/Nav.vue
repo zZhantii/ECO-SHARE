@@ -88,7 +88,7 @@
                             class="dropdown-menu dropdown-menu-end custom-dropdown"
                         >
                             <li
-                                v-if="user?.roles[0].name == 'admin'"
+                                v-if="user?.roles?.[0]?.name === 'admin'"
                                 class="nav-item"
                             >
                                 <router-link

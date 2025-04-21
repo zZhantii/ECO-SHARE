@@ -544,8 +544,6 @@ export default function useTrips() {
 
             getTripsToRate(passengerHistory.value);
 
-            console.log("veificaaahbshjbahjs", tripsToRate.value);
-
             if (tripsToRate.value.length > 0) {
                 return true;
             }
@@ -584,9 +582,10 @@ export default function useTrips() {
             .catch((error) => {
                 swal({
                     icon: "error",
-                    title: "No se ha podido registrar la valoración.",
-                    text: error.message,
+                    title: "No se ha podido registrar la valoración",
+                    text: error.response.data.message,
                 });
+                console.log("ERROR", error);
             });
     };
     const getTagTrips = async (trip_id) => {
