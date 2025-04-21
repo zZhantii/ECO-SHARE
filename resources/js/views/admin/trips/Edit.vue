@@ -2,7 +2,7 @@
     <div class="surface-ground px-4 py-5 md:px-6 lg:px-8">
         <div class="grid">
             <div class="col-12 md:col-8 md:col-offset-2">
-                <div class="surface-card p-4 shadow-2 border-round">
+                <div class="surface-card p-4 shadow-2 rounded-4 ">
                     <div class="text-center mb-5">
                         <h2 class="text-3xl font-medium text-900 mb-3">Editar Viaje</h2>
                         <span class="text-600 font-medium">Modifique los datos del viaje</span>

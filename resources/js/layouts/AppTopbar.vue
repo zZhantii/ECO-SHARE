@@ -1,8 +1,7 @@
 <template>
     <div class="layout-topbar">
         <router-link to="/" class="layout-topbar-logo">
-            <img src="public/images/Logo_es.svg" alt="logo" />
-            <span></span>
+            <img src="../../../public/images/Logo_es.svg" alt="logo" />
         </router-link>
 
         <button class="p-link layout-menu-button layout-topbar-button" @click="onMenuToggle()">
@@ -137,5 +136,9 @@ onMounted(() => {
     &:hover {
         background-color: #f8f9fa;
     }
+}
+
+.layout-topbar-logo {
+    width: 75px;
 }
 </style>

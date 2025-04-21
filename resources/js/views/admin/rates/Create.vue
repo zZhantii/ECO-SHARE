@@ -1,8 +1,8 @@
 <template>
     <div class="surface-ground px-4 py-5 md:px-6 lg:px-8">
         <div class="grid">
-            <div class="col-12 md:col-8 md:col-offset-2 lg:col-6 lg:col-offset-3">
-                <div class="surface-card p-4 shadow-2 border-round">
+            <div class="col-12 md:col-8 md:col-offset-2 lg:col-6 lg:col-offset-3">createTrip
+                <div class="surface-card p-4 shadow-2 rounded-4">
                     <div class="text-center mb-5">
                         <h2 class="text-3xl font-medium text-900 mb-3">Crear Valoración</h2>
                         <span class="text-600 font-medium">Por favor, complete los datos del formulario</span>
