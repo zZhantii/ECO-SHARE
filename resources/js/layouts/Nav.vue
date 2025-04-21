@@ -168,4 +168,9 @@ onMounted(() => {
 .custom-dropdown {
     border-radius: 0px !important;
 }
+
+.router-link-exact-active {
+    color: #298a96;
+    font-weight: 900;
+}
 </style>
