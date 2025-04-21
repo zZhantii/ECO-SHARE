@@ -72,6 +72,11 @@ php artisan db:seed
 
 ```bash
 npm install
+```
+### Instalar depdendencias para los mapas de Google
+
+```bash
+npm install @fawmi/vue-google-maps
 
 npm run dev
 ```
