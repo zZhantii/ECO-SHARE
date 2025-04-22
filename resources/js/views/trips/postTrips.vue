@@ -682,10 +682,21 @@ onMounted(async () => {
     autocompleteStart.addListener("place_changed", () => {
         tripData.value.start_point = autocompleteStart.getPlace();
         tempStartPoint.value = autocompleteStart.getPlace();
+
+        //Controla el boolean que exista la coincidencia con los campos extraídos del automcomplete.
+        let match = false;
         for (const element of tempStartPoint.value.address_components) {
             if (element.types.includes("locality")) {
-                start_locality.value = element.long_name;
+                if (element.long_name) {
+                    start_locality.value = element.long_name;
+                    match = true;
+                }
             }
+        }
+        // En caso que no se encuentre el campo long_name procedente del autocomplete se asigna por defecto el valor de start point
+        if (!match) {
+            start_locality.value =
+                tripData.value.start_point.address_components[0].long_name;
         }
     });
 
@@ -850,9 +861,11 @@ const pointSchema = yup.object().shape({
 // Método de gestión de los datos devueltos por el componente MAPS.vue que ejecuta el mapa
 const handleMapsInfo = (mapsInfo) => {
     tripData.value.start_point = mapsInfo.origin;
-    tripData.value.start_point.locality = start_locality.value;
+    tripData.value.start_point.locality =
+        start_locality.value ?? tripData.value.start_point.address;
     tripData.value.end_point = mapsInfo.destination;
-    tripData.value.end_point.locality = end_locality.value;
+    tripData.value.end_point.locality =
+        end_locality.value ?? tripData.value.end_point.addres;
     tripData.value.duration = mapsInfo.duration;
     tripData.value.Distance = mapsInfo.distance;
 };
