@@ -381,29 +381,6 @@ const start_point = ref("");
 const end_point = ref("");
 const departure_time = ref("");
 
-const calculateAverageRating = async (userId) => {
-    console.log('Calculating average rating for user:', userId);
-    await getRateWithId2(userId);
-
-    console.log('Raw rates data:', rate.value);
-
-    if (rate.value && Array.isArray(rate.value)) {
-        const sum = rate.value.reduce((acc, curr) => {
-            console.log('Current rate:', curr.pivot.rate);
-            return acc + curr.pivot.rate;
-        }, 0);
-        const average = sum / rate.value.length;
-        console.log('Average rating:', average);
-        return average;
-    } else if (rate.value?.pivot?.rate) {
-        console.log('Single rating:', rate.value.pivot.rate);
-        return rate.value.pivot.rate;
-    }
-
-    console.log('No ratings found, returning 0');
-    return 0;
-};
-
 const handleSearch = async (searchData) => {
     try {
         isLoading.value = true;
@@ -431,20 +408,27 @@ const handleSearch = async (searchData) => {
         const trip_id = ref(null);
 
         for (const element of searchTripList.value) {
-            const user_id = element.user_id;
-            const trip_id = element.id;
+            user_id.value = element.user_id;
+            trip_id.value = element.id;
 
-            const averageRating = await calculateAverageRating(user_id);
-            ratings.value[trip_id] = averageRating;
+            await getRateWithId2(user_id.value);
 
-            await getTagTrips(trip_id);
+            if (rate.value) {
+                ratings.value[trip_id.value] = rate.value.pivot.rate;
+            } else {
+                ratings.value[trip_id.value] = 0;
+            }
+
+            await getTagTrips(trip_id.value);
+
             const currentTripTags = [];
             for (const tagId of tags.value) {
                 await getTagWithID(tagId);
                 currentTripTags.push(tag.value.tag_name);
             }
-            tagsData.value[trip_id] = currentTripTags;
-        }
+
+            tagsData.value[trip_id.value] = currentTripTags;
+        }     
 
         await applyFilters();
     } catch (err) {

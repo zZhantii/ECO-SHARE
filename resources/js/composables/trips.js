@@ -231,6 +231,44 @@ export default function useTrips() {
         }
     };
 
+    const updateTripAdmin = async (trip) => {
+        if (isLoading.value) return;
+
+        isLoading.value = true;
+        validationErrors.value = {};
+
+        try {
+            const response = await axios.put("/api/admin/trip/" + trip.value.id, trip.value);
+            console.log(
+                "API response, Trip actualizado: ",
+                response.data.message
+            );
+            const index = tripsList.value.findIndex((t) => t.id === trip.id);
+            if (index !== -1) {
+                tripsList.value[index] = trip;
+            }
+
+            toast.add({
+                severity: "success",
+                summary: "Éxito",
+                detail: "Viaje actualizado correctamente",
+                life: 3000,
+            });
+        } catch (error) {
+            if (error.response?.data) {
+                validationErrors.value = error.response.data.errors;
+            }
+            toast.add({
+                severity: "error",
+                summary: "Error",
+                detail: "No se pudo actualizar el viaje",
+                life: 3000,
+            });
+        } finally {
+            isLoading.value = false;
+        }
+    };
+
     // Método API  para conseguir todos los viajes activos del usuario autenticado
     const getActiveTrips = async () => {
         const responseDriver = await axios.get("/api/app/driver-active-trip");
@@ -665,5 +703,6 @@ export default function useTrips() {
         postTrips,
         rateTrip,
         tripsToRate,
+        updateTripAdmin,
     };
 }

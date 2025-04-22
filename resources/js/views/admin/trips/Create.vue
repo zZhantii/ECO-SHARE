@@ -140,11 +140,11 @@ import useVehicles from "@/composables/vehicles";
 
 const { createTrip, trip, validationErrors, TripSchema } = useTrips();
 const { getUsers, users } = useUsers();
-const { getVehicles, vehiclesList, getVehicle, vehicle } = useVehicles();
+const { getVehiclesAdmin, vehiclesList, getVehicle, vehicle } = useVehicles();
 
 onMounted(async () => {
     await getUsers();
-    await getVehicles();
+    await getVehiclesAdmin();
 });
 
 const available_seats = ref(null);

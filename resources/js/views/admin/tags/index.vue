@@ -24,7 +24,7 @@
                                     @click="refreshTags()" />
                             </template>
                             <template #end>
-                                <Button icon="pi pi-external-link" label="Crear Vehiculo"
+                                <Button icon="pi pi-external-link" label="Crear Etiqueta"
                                     @click="$router.push('tags/create')" class="float-end" />
                             </template>
                         </Toolbar>

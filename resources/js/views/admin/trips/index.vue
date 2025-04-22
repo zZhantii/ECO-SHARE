@@ -25,7 +25,7 @@
                                     @click="refreshTrips()" />
                             </template>
                             <template #end>
-                                <Button icon="pi pi-external-link" label="Crear Vehiculo"
+                                <Button icon="pi pi-external-link" label="Crear Viaje"
                                     @click="$router.push('trips/create')" class="float-end" />
                             </template>
                         </Toolbar>

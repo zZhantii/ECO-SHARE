@@ -89,7 +89,7 @@ class TripController extends Controller
             'arrival_time' => ["required"],
             'price' => ["required", "numeric", "min:7"],
             'available_seats' => ["required", "integer"],
-            'tags' => ["array"],
+            'tags' => ["array", "nullable"],
         ]);
 
         if ($validator->fails()) {
@@ -125,6 +125,35 @@ class TripController extends Controller
     }
 
     public function update(Request $request, Trip $trip)
+    {
+        try {
+            $trip->user_id = $request->user_id;
+            $trip->vehicle_id = $request->vehicle_id;
+            $trip->start_point = is_string($request->start_point) ? json_decode($request->start_point, true) : $request->start_point;
+            $trip->end_point = is_string($request->end_point) ? json_decode($request->end_point, true) : $request->end_point;
+            $trip->departure_time = $request->departure_time;
+            $trip->arrival_time = $request->arrival_time;
+            $trip->available_seats = $request->available_seats;
+            $trip->price = $request->price;
+
+            $trip->save();
+
+            return response()->json([
+                "success" => true,
+                "message" => "Viaje actualizado correctamente",
+                "data" => $trip
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => "Error al actualizar el viaje",
+                "error" => $e->getMessage()
+            ], 500);
+        }
+
+    }
+
+    public function updateAdmin(Request $request, Trip $trip)
     {
         try {
             $trip->user_id = $request->user_id;

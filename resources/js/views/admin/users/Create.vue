@@ -1,126 +1,109 @@
 <template>
-    <div class="row justify-content-center my-5">
-        <div class="col-md-10">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <form @submit.prevent="submitForm">
-                        <div class="mb-3">
-                            <label for="post-title" class="form-label">Name</label>
-                            <input v-model="post.name" id="post-title" type="text" class="form-control">
-                            <div class="text-danger mt-1">
-                                {{ errors.name }}
-                            </div>
-                            <div class="text-danger mt-1">
-                                <div v-for="message in validationErrors?.name">
-                                    {{ message }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="post-title" class="form-label">Alias</label>
-                            <input v-model="post.alias" id="post-title" type="text" class="form-control">
-                            <div class="text-danger mt-1">
-                                {{ errors.alias }}
-                            </div>
-                            <div class="text-danger mt-1">
-                                <div v-for="message in validationErrors?.alias">
-                                    {{ message }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="surname1" class="form-label">Surname1</label>
-                            <input v-model="post.surname1" id="surname1" type="surname1" class="form-control">
-                            <div class="text-danger mt-1">
-                                {{ errors.surname1 }}
-                            </div>
-                            <div class="text-danger mt-1">
-                                <div v-for="message in validationErrors?.surname1">
-                                    {{ message }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="surname2" class="form-label">Surname2</label>
-                            <input v-model="post.surname2" id="surname2" type="surname2" class="form-control">
-                            <div class="text-danger mt-1">
-                                {{ errors.surname2 }}
-                            </div>
-                            <div class="text-danger mt-1">
-                                <div v-for="message in validationErrors?.surname2">
-                                    {{ message }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input v-model="post.email" id="email" type="email" class="form-control">
-                            <div class="text-danger mt-1">
-                                {{ errors.email }}
-                            </div>
-                            <div class="text-danger mt-1">
-                                <div v-for="message in validationErrors?.email">
-                                    {{ message }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input v-model="post.password" id="password" type="password" class="form-control">
-                            <div class="text-danger mt-1">
-                                {{ errors.password }}
-                            </div>
-                            <div class="text-danger mt-1">
-                                <div v-for="message in validationErrors?.password">
-                                    {{ message }}
-                                </div>
-                            </div>
+    <div class="surface-ground px-4 py-5 md:px-6 lg:px-8">
+        <div class="grid">
+            <div class="col-12 md:col-8 md:col-offset-2">
+                <div class="surface-card p-4 shadow-2 rounded-4">
+                    <div class="text-center mb-5">
+                        <h2 class="text-3xl font-medium text-900 mb-3">Crear Nuevo Usuario</h2>
+                        <span class="text-600 font-medium">Ingrese los datos del nuevo usuario</span>
+                    </div>
+
+                    <form @submit.prevent="submitForm" class="grid">
+                        <div class="col-12 md:col-6 mb-4">
+                            <label for="name" class="block text-900 font-medium mb-2">Nombre</label>
+                            <InputText id="name" v-model="post.name" class="w-full"
+                                :class="{ 'p-invalid': errors.name || validationErrors?.name }"
+                                placeholder="Introduce el nombre" />
+                            <small class="p-error block mt-1" v-if="errors.name">{{ errors.name }}</small>
+                            <small class="p-error block mt-1" v-for="message in validationErrors?.name">{{ message
+                                }}</small>
                         </div>
 
-                        <!-- Role
-                        <div class="mb-3">
-                            <label for="post-category" class="form-label">
-                                Role
-                            </label>
-                            <v-select multiple v-model="post.role_id" :options="roleList" :reduce="role => role.id"
-                                label="name" class="form-control" />
-                            <div class="text-danger mt-1">
-                                {{ errors.role_id }}
-                            </div>
-                            <div class="text-danger mt-1">
-                                <div v-for="message in validationErrors?.role_id">
-                                    {{ message }}
-                                </div>
-                            </div>
-                        </div> -->
-                        <!-- Buttons -->
-                        <div class="mt-4">
-                            <button :disabled="isLoading" class="btn btn-primary">
-                                <div v-show="isLoading" class=""></div>
-                                <span v-if="isLoading">Processing...</span>
-                                <span v-else>Save</span>
-                            </button>
+                        <div class="col-12 md:col-6 mb-4">
+                            <label for="alias" class="block text-900 font-medium mb-2">Alias</label>
+                            <InputText id="alias" v-model="post.alias" class="w-full"
+                                :class="{ 'p-invalid': errors.alias || validationErrors?.alias }"
+                                placeholder="Introduce el alias" />
+                            <small class="p-error block mt-1" v-if="errors.alias">{{ errors.alias }}</small>
+                            <small class="p-error block mt-1" v-for="message in validationErrors?.alias">{{ message
+                                }}</small>
+                        </div>
+
+                        <div class="col-12 md:col-6 mb-4">
+                            <label for="surname1" class="block text-900 font-medium mb-2">Primer Apellido</label>
+                            <InputText id="surname1" v-model="post.surname1" class="w-full"
+                                :class="{ 'p-invalid': errors.surname1 || validationErrors?.surname1 }"
+                                placeholder="Introduce el primer apellido" />
+                            <small class="p-error block mt-1" v-if="errors.surname1">{{ errors.surname1 }}</small>
+                            <small class="p-error block mt-1" v-for="message in validationErrors?.surname1">{{ message
+                                }}</small>
+                        </div>
+
+                        <div class="col-12 md:col-6 mb-4">
+                            <label for="surname2" class="block text-900 font-medium mb-2">Segundo Apellido</label>
+                            <InputText id="surname2" v-model="post.surname2" class="w-full"
+                                :class="{ 'p-invalid': errors.surname2 || validationErrors?.surname2 }"
+                                placeholder="Introduce el segundo apellido" />
+                            <small class="p-error block mt-1" v-if="errors.surname2">{{ errors.surname2 }}</small>
+                            <small class="p-error block mt-1" v-for="message in validationErrors?.surname2">{{ message
+                                }}</small>
+                        </div>
+
+                        <div class="col-12 md:col-6 mb-4">
+                            <label for="email" class="block text-900 font-medium mb-2">Email</label>
+                            <InputText id="email" type="email" v-model="post.email" class="w-full"
+                                :class="{ 'p-invalid': errors.email || validationErrors?.email }"
+                                placeholder="ejemplo@email.com" />
+                            <small class="p-error block mt-1" v-if="errors.email">{{ errors.email }}</small>
+                            <small class="p-error block mt-1" v-for="message in validationErrors?.email">{{ message
+                                }}</small>
+                        </div>
+
+                        <div class="col-12 md:col-6 mb-4">
+                            <label for="password" class="block text-900 font-medium mb-2">Contraseña</label>
+                            <Password id="password" v-model="post.password" :feedback="true" :toggleMask="true"
+                                class="w-full" :class="{ 'p-invalid': errors.password || validationErrors?.password }"
+                                placeholder="Introduce la contraseña" />
+                            <small class="p-error block mt-1" v-if="errors.password">{{ errors.password }}</small>
+                            <small class="p-error block mt-1" v-for="message in validationErrors?.password">{{ message
+                                }}</small>
+                        </div>
+
+            
+                        <div class="col-12 flex justify-content-end">
+                            <Button type="button" label="Cancelar" class="p-button-text mr-2" @click="$router.back()" />
+                            <Button type="submit" label="Guardar" icon="pi pi-check" :loading="isLoading"
+                                class="p-button-success" />
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+    <Toast />
 </template>
 <script setup>
     import { onMounted, reactive } from "vue";
     import useRoles from "@/composables/roles";
     import useUsers from "@/composables/users";
+    import { useRouter } from "vue-router";
+
+    // Components
+    import InputText from 'primevue/inputtext';
+    import Password from 'primevue/password';
+    import MultiSelect from 'primevue/multiselect';
+    import Button from 'primevue/button';
 
     const { roleList, getRoleList } = useRoles();
     const { storeUser, validationErrors, isLoading } = useUsers();
+
+    const router = useRouter();
 
     import { useForm, useField, defineRule } from "vee-validate";
     import { required, min } from "@/validation/rules";
     defineRule('required', required);
     defineRule('min', min);
 
-    // Define a validation schema
     const schema = {
         name: 'required',
         email: 'required',
@@ -130,9 +113,7 @@
         alias: 'required',
     }
 
-    // Create a form context with the validation schema
     const { validate, errors } = useForm({ validationSchema: schema })
-    // Define actual fields for validation
     const { value: name } = useField('name', null, { initialValue: '' });
     const { value: email } = useField('email', null, { initialValue: '' });
     const { value: password } = useField('password', null, { initialValue: '' });
@@ -151,10 +132,16 @@
         alias
     })
     function submitForm() {
-        // console.log("hola")  
         validate().then(form => { if (form.valid) storeUser(post) })
+        router.back();
     }
-    onMounted(() => {
-        getRoleList()
-    })
 </script>
+<style scoped>
+.p-password {
+    width: 100%;
+}
+
+:deep(.p-password-input) {
+    width: 100%;
+}
+</style>

@@ -115,15 +115,15 @@ import useUsers from "@/composables/users";
 import useVehicles from "@/composables/vehicles";
 
 
-const { updateTrip, getTrip, trip, TripSchema, validationErrors } = useTrips();
+const { updateTripAdmin, getTrip, trip, TripSchema, validationErrors } = useTrips();
 const { getUsers, users } = useUsers();
-const { getVehicles, vehiclesList } = useVehicles();
+const { getVehiclesAdmin, vehiclesList } = useVehicles();
 
 
 onMounted( async() => {
     await getTrip(route.params.id)
     await getUsers(); 
-    await getVehicles(); 
+    await getVehiclesAdmin(); 
 })
 
 const loading = ref(false);
@@ -132,9 +132,9 @@ const submitUpdateVehicle = async () => {
     try {
         await TripSchema.validate(trip.value, { abortEarly: false })
         .then(() => {
-            updateTrip(trip);
+            updateTripAdmin(trip);
         });
-        // router.back();
+        router.back();
     } catch (error) {
         if (error.inner) {
             validationErrors.value = {};
