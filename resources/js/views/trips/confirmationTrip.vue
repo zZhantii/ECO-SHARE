@@ -61,23 +61,23 @@
                     </div>
                 </div>
 
-                <div class="card shadow-sm map-wrapper">
-                    <div class="card-body p-0">
-                        <Map
-                            v-if="showFirstMap"
-                            v-model:origin="start_point"
-                            v-model:destination="end_point"
-                            @updateMapsInfo="handleMapsInfo"
-                            class="map-container"
-                        />
-                    </div>
+                <div class="card-body p-0">
+                    <Map
+                        v-if="showFirstMap"
+                        v-model:origin="start_point"
+                        v-model:destination="end_point"
+                        @updateMapsInfo="handleMapsInfo"
+                        class="map-container"
+                    />
                 </div>
             </div>
 
             <div class="col-md-6 ps-md-2 mt-md-0">
                 <div class="card shadow-sm h-100">
-                    <div class="card-body">
-                        <div v-if="user && user.length > 0">
+                    <div
+                        class="card-body d-flex flex-column align-items-center"
+                    >
+                        <div class="" v-if="user && user.length > 0">
                             <div>
                                 <div class="user-info mb-4">
                                     <h3 class="fw-bold text-center mb-3">
@@ -87,7 +87,7 @@
                                     <div class="text-center mb-4">
                                         <!-- User Image Section -->
                                         <div
-                                            class="user-image-container d-inline-block"
+                                            class="user-image-container d-inline-block p-2"
                                         >
                                             <img
                                                 :src="
@@ -98,16 +98,16 @@
                                                         : '/images/default-avatar.png'
                                                 "
                                                 :alt="user[0].name"
-                                                class="rounded-circle user-avatar"
+                                                class="rounded-circle user-avatar mb-1"
                                             />
                                         </div>
                                     </div>
 
                                     <!-- User Info Section -->
                                     <div
-                                        class="row row-cols-1 row-cols-sm-2 g-3 text-center"
+                                        class="d-block d-md-flex gap-5 text-center w-100"
                                     >
-                                        <div class="col">
+                                        <div class="">
                                             <p class="text-muted mb-1">
                                                 Usuario
                                             </p>
@@ -115,7 +115,7 @@
                                                 {{ user[0].alias }}
                                             </p>
                                         </div>
-                                        <div class="col">
+                                        <div class="">
                                             <p class="text-muted mb-1">
                                                 Nombre
                                             </p>
@@ -123,23 +123,17 @@
                                                 {{ user[0].name }}
                                             </p>
                                         </div>
-                                        <div class="col">
+                                        <div class="">
                                             <p class="text-muted mb-1">
-                                                Apellido 1
+                                                Apellidos
                                             </p>
                                             <p class="fw-medium">
-                                                {{ user[0].surname1 }}
+                                                {{ user[0].surname1 ?? "" }}
+                                                {{ user[0].surname2 ?? "" }}
                                             </p>
                                         </div>
-                                        <div class="col">
-                                            <p class="text-muted mb-1">
-                                                Apellido 2
-                                            </p>
-                                            <p class="fw-medium">
-                                                {{ user[0].surname2 }}
-                                            </p>
-                                        </div>
-                                        <div class="col">
+
+                                        <div class="">
                                             <p class="text-muted mb-1">
                                                 Correo
                                             </p>
@@ -147,7 +141,9 @@
                                                 {{ user[0].email }}
                                             </p>
                                         </div>
-                                        <div class="col">
+                                        <div
+                                            class="col d-flex flex-column align-items-center"
+                                        >
                                             <p class="text-muted mb-1">
                                                 Rating
                                             </p>
@@ -163,7 +159,7 @@
                             </div>
                         </div>
 
-                        <div class="vehicle-info mb-4">
+                        <div class="vehicle-info mb-2 w-50">
                             <h3 class="fw-bold text-center mb-3">Vehículo</h3>
                             <div
                                 class="row row-cols-1 row-cols-sm-2 g-3 text-center"
@@ -189,16 +185,27 @@
                             </div>
                         </div>
 
-                        <div class="cost-info text-center mb-4">
+                        <div class="cost-info w-50 text-center m-3">
                             <h3 class="fw-bold mb-3">Coste</h3>
-                            <h2 class="display-6 fw-bold text-primary">
-                                {{ trip.price }} €
-                            </h2>
-                            <p class="text-muted">Coste mínimo</p>
-                            <h4>{{ lowPrice(trip.price) }}</h4>
+                            <div class="d-flex justify-content-center gap-5">
+                                <div>
+                                    <h4 class="mb-1">
+                                        {{ lowPrice(trip.price) }}
+                                    </h4>
+                                    <p class="text-muted fw-bold fs-6">
+                                        Coste mínimo
+                                    </p>
+                                </div>
+                                <div>
+                                    <h4 class="mb-1">{{ trip.price }} €</h4>
+                                    <p class="text-muted fw-bold fs-6">
+                                        Coste máximo
+                                    </p>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="d-grid justify-content-center w-100">
+                        <div class="d-grid justify-content-center w-100 m-2">
                             <button
                                 @click="PostTrip"
                                 class="btn btn-primary btn-lg py-3 fw-medium"
@@ -275,8 +282,6 @@ onMounted(async () => {
         }
         start_point.value = trip.value.start_point;
         end_point.value = trip.value.end_point;
-
-        console.log("STARTTTT", start_point.value.location);
 
         showFirstMap.value = true;
 
@@ -388,6 +393,7 @@ const PostTrip = async () => {
 .map-container {
     width: 100%;
     height: 100%;
+    border-radius: 70px !important;
 }
 
 @media (min-width: 768px) {
@@ -413,11 +419,21 @@ const PostTrip = async () => {
     }
 }
 
+.cost-info {
+    border: 1px solid #a1c6ca;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f8fcfd;
+}
+
 .user-image-container {
     width: 100%;
     padding: 1rem;
 }
 
+h3 {
+    color: #054851;
+}
 .user-avatar {
     width: 120px;
     height: 120px;
@@ -425,6 +441,4 @@ const PostTrip = async () => {
     border: 3px solid #eee;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
-
 </style>

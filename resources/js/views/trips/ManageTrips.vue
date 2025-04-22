@@ -107,7 +107,7 @@
                                                 trip.drive_start == null &&
                                                 trip.cancelled_at == null
                                             "
-                                            class="btn-cancel m-3"
+                                            class="btn-cancel m-2"
                                             label="Cancelar viaje"
                                             @click="confirmCancell(trip)"
                                         />
