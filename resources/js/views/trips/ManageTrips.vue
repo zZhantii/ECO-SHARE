@@ -1,7 +1,7 @@
 <template>
     <main class="container">
         <div class="container mt-5 d-flex flex-column align-items-center">
-            <Toast /> <ConfirmPopup />
+            <!-- <Toast /> <ConfirmPopup /> -->
             <RatingDialog
                 v-if="tripsToRate.length > 0"
                 v-model:ratingDialog="ratingDialog"

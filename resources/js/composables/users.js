@@ -48,7 +48,7 @@ export default function useUsers() {
         const response = await axios.get("/api/user/" + id);
         user.value = response.data.data;
         console.log('Data from API:', user.value);
-        return user.value;
+        // return user.value;
     };
 
     const createUserDB = async (id) => {
@@ -96,16 +96,16 @@ export default function useUsers() {
             .finally(() => (isLoading.value = false));
     };
 
-    const updateUser = async (user2) => {
+    const updateUser = async (user2, role) => {
         if (isLoading.value) return;
 
         isLoading.value = true;
         validationErrors.value = {};
 
         await axios
-            .put("/api/users/" + user2.id, user2)
+            .put("/api/users/" + user2[0].id, user2, role)
             .then((response) => {
-                console.log("User updated successfully", response.data.message);
+                console.log("User updated successfully", response.data.data);
                 swal({
                     icon: "success",
                     title: "User updated successfully",

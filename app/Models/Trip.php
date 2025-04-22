@@ -54,7 +54,6 @@ class Trip extends Model
     {
         return $this->belongsToMany(User::class, 'user_trips_reserves', 'trip_id', 'user_id')
             ->withPivot('seats_reserved', 'reservation_date', 'check_in', 'cancelled_at', 'total_price')->withTimestamps();
-
     }
 
     // Se hace un cast a array para poder tratar los datos de la base de datos que están en JSON

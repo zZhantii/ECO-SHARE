@@ -82,7 +82,7 @@ class UserController extends Controller
     // }
     public function show(User $user)
     {
-        $user = User::with("media")->find($user);
+        $user = User::with(['media', 'roles'])->find($user);
         return response()->json(["success" => true, "data" => $user], 200);
     }
 
@@ -93,26 +93,38 @@ class UserController extends Controller
      * @param User $user
      * @return UserResource
      */
-    public function update(UpdateUserRequest $request, User $user)
-    {
-        $role = Role::find($request->role_id);
-
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->surname1 = $request->surname1;
-        $user->surname2 = $request->surname2;
-
-        if (!empty($request->password)) {
-            $user->password = Hash::make($request->password) ?? $user->password;
-        }
-
+        public function update(UpdateUserRequest $request, User $user)
+    {        
+        $userData = $request->all()[0];
+        
+        $user->name = $userData['name'];
+        $user->email = $userData['email'];
+        $user->surname1 = $userData['surname1'];
+        $user->surname2 = $userData['surname2'];
+        $user->alias = $userData['alias'];
+    
         if ($user->save()) {
+            if (isset($userData['roles']) && !empty($userData['roles'])) {
+                $roleId = $userData['roles'][0]['id'];
+                $role = Role::find($roleId);
             if ($role) {
                 $user->syncRoles($role);
             }
-            return response()->json(["success" => true, "message" => "Usuario actualizado correctamente"], 200);
-            return new UserResource($user);
         }
+            
+            $user->load('media', 'roles');
+            
+            return response()->json([
+                "success" => true, 
+                "data" => $user,
+                "message" => "Usuario actualizado correctamente"
+            ], 200);
+        }
+    
+        return response()->json([
+            "success" => false,
+            "message" => "Error al actualizar el usuario"
+        ], 500);
     }
 
 

@@ -93,7 +93,7 @@
 
             <div v-if="isLoading" class="loading-container d-flex flex-column justify-content-center align-items-center">
                 <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="3" fill="var(--surface-ground)"
-                    animationDuration=".5s" />
+                    animationDuration=".7s" />
                 <p class="mt-3">Cargando resultados...</p>
             </div>
 

@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
         $this->call(VehicleTableSeeder::class);
         $this->call(TagSeeder::class);
         $this->call(TripSeeder::class);
+        $this->call(RateSeeder::class);
     
         // $this->call(RoleSeeder::class);
         // \App\Models\User::factory(10)->create();

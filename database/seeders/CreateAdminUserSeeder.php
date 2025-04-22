@@ -44,15 +44,45 @@ class CreateAdminUserSeeder extends Seeder
 
         $user->assignRole([$role->id]);
 
-        $user = User::create([
-            'id' => 2,
-            'name' => 'User',
-            'surname1' => 'User',
-            'alias' => 'user',
-            'email' => 'user@demo.com',
-            'password' => bcrypt('12345678')
-        ]);
-        $user->assignRole([$role2->id]);
+        $users = [
+            [
+                'id' => 2,
+                'name' => 'Santiago',
+                'surname1' => 'García',
+                'alias' => 'sgarcia',
+                'email' => 'sgarcia@demo.com',
+                'password' => bcrypt('12345678')
+            ],
+            [
+                'id' => 3,
+                'name' => 'María',
+                'surname1' => 'López',
+                'alias' => 'mlopez',
+                'email' => 'mlopez@demo.com',
+                'password' => bcrypt('12345678')
+            ],
+            [
+                'id' => 4,
+                'name' => 'Carlos',
+                'surname1' => 'Martínez',
+                'alias' => 'cmartinez',
+                'email' => 'cmartinez@demo.com',
+                'password' => bcrypt('12345678')
+            ],
+            [
+                'id' => 5,
+                'name' => 'Ana',
+                'surname1' => 'Rodríguez',
+                'alias' => 'arodriguez',
+                'email' => 'arodriguez@demo.com',
+                'password' => bcrypt('12345678')
+            ]
+        ];
+
+        foreach ($users as $userData) {
+            $user = User::create($userData);
+            $user->assignRole([$role2->id]);
+        }
 
     }
 }

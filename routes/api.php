@@ -26,10 +26,9 @@ Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
 
-
     Route::apiResource('users', UserController::class);
 
-    // Route::post('users/updateimg', [UserController::class, 'updateimg']); //Listar
+    Route::post('users/updateimg', [UserController::class, 'updateimg']); //Listar
 
     Route::apiResource('posts', PostControllerAdvance::class);
     Route::apiResource('categories', CategoryController::class);

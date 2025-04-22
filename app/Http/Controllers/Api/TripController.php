@@ -167,72 +167,71 @@ class TripController extends Controller
     }
 
         public function searchTrip(Request $request)
-    {
-        $startPoint = $request->input('start_point');
-        $localityStart = $request->input('locality_start');
-        $endPoint = $request->input('end_point');
-        $localityEnd = $request->input('locality_end');
-        $departureTime = $request->input('departure_time');
-        $requestedSeats = $request->input('available_seats', 1);
-        $user_id = auth()->user()->id;
+        {
+            $startPoint = $request->input('start_point');
+            $localityStart = $request->input('locality_start');
+            $endPoint = $request->input('end_point');
+            $localityEnd = $request->input('locality_end');
+            $departureTime = $request->input('departure_time');
+            $requestedSeats = $request->input('available_seats', 1);
+            $user_id = auth()->user()->id;
 
-        $trips = Trip::with(['reserves' => function ($query) {
-            $query->select('trip_id', 'seats_reserved');
-        }])
-        ->where('available_seats', '>=', $requestedSeats)
-        // Excluir viajes que el usuario ya ha reservado
-        ->whereDoesntHave('reserves', function($query) use ($user_id) {
-            $query->where('user_id', $user_id)
-                ->whereNull('cancelled_at');
-        })
-        ->when($departureTime, function ($query) use ($departureTime) {
-            $query->where('departure_time', '>=', $departureTime);
-        })
-        ->where('available_seats', '>=', $requestedSeats)
-        ->when($departureTime, function ($query) use ($departureTime) {
-            $query->where('departure_time', '>=', $departureTime);
-        })
-        ->when($startPoint, function ($query) use ($startPoint) {
-            $query->whereJsonContains('start_point->address', $startPoint);
-        })
-        ->when($localityStart, function ($query) use ($localityStart) {
-            $query->whereJsonContains('start_point->locality', $localityStart);
-        })
-        ->when($endPoint, function ($query) use ($endPoint) {
-            $query->whereJsonContains('end_point->address', $endPoint);
-        })
-        ->when($localityEnd, function ($query) use ($localityEnd) {
-            $query->whereJsonContains('end_point->locality', $localityEnd);
-        })
-        ->get()
-        ->map(function ($trip) {
-            $startPoint = is_string($trip->start_point) ? json_decode($trip->start_point) : (object)$trip->start_point;
-            $endPoint = is_string($trip->end_point) ? json_decode($trip->end_point) : (object)$trip->end_point;
-            
-            $reservedSeats = $trip->reserves->sum('seats_reserved') ?? 0;
-            $remainingSeats = $trip->available_seats - $reservedSeats;
+            $trips = Trip::with(['reserves' => function ($query) {
+                $query->select('trip_id', 'seats_reserved');
+            }])
+            ->where('available_seats', '>=', $requestedSeats)
+            ->whereDoesntHave('reserves', function($query) use ($user_id) {
+                $query->where('user_id', $user_id)
+                    ->whereNull('cancelled_at');
+            })
+            ->when($departureTime, function ($query) use ($departureTime) {
+                $query->where('departure_time', '>=', $departureTime);
+            })
+            ->where('available_seats', '>=', $requestedSeats)
+            ->when($departureTime, function ($query) use ($departureTime) {
+                $query->where('departure_time', '>=', $departureTime);
+            })
+            ->when($startPoint, function ($query) use ($startPoint) {
+                $query->whereJsonContains('start_point->address', $startPoint);
+            })
+            ->when($localityStart, function ($query) use ($localityStart) {
+                $query->whereJsonContains('start_point->locality', $localityStart);
+            })
+            ->when($endPoint, function ($query) use ($endPoint) {
+                $query->whereJsonContains('end_point->address', $endPoint);
+            })
+            ->when($localityEnd, function ($query) use ($localityEnd) {
+                $query->whereJsonContains('end_point->locality', $localityEnd);
+            })
+            ->get()
+            ->map(function ($trip) {
+                $startPoint = is_string($trip->start_point) ? json_decode($trip->start_point) : (object)$trip->start_point;
+                $endPoint = is_string($trip->end_point) ? json_decode($trip->end_point) : (object)$trip->end_point;
+                
+                $reservedSeats = $trip->reserves->sum('seats_reserved') ?? 0;
+                $remainingSeats = $trip->available_seats - $reservedSeats;
 
-            return [
-                'id' => $trip->id,
-                'user_id' => $trip->user_id,
-                'vehicle_id' => $trip->vehicle_id,
-                'start_address' => $startPoint->address ?? null,
-                'start_locality' => $startPoint->locality ?? null,
-                'end_address' => $endPoint->address ?? null,
-                'end_locality' => $endPoint->locality ?? null,
-                'departure_time' => $trip->departure_time,
-                'arrival_time' => $trip->arrival_time,
-                'available_seats' => $trip->available_seats,
-                'remaining_seats' => $remainingSeats,
-                'price' => $trip->price,
-                'created_at' => $trip->created_at,
-                'updated_at' => $trip->updated_at
-            ];
-        })
-        ->filter(function ($trip) use ($requestedSeats) {
-            return $trip['remaining_seats'] >= $requestedSeats;
-        })
-        ->values();
+                return [
+                    'id' => $trip->id,
+                    'user_id' => $trip->user_id,
+                    'vehicle_id' => $trip->vehicle_id,
+                    'start_address' => $startPoint->address ?? null,
+                    'start_locality' => $startPoint->locality ?? null,
+                    'end_address' => $endPoint->address ?? null,
+                    'end_locality' => $endPoint->locality ?? null,
+                    'departure_time' => $trip->departure_time,
+                    'arrival_time' => $trip->arrival_time,
+                    'available_seats' => $trip->available_seats,
+                    'remaining_seats' => $remainingSeats,
+                    'price' => $trip->price,
+                    'created_at' => $trip->created_at,
+                    'updated_at' => $trip->updated_at
+                ];
+            })
+            ->filter(function ($trip) use ($requestedSeats) {
+                return $trip['remaining_seats'] >= $requestedSeats;
+            })
+            ->values();
     
         return response()->json([
             "success" => true,

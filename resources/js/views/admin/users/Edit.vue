@@ -48,8 +48,7 @@
 
                                     <template #empty>
                                         <div class="flex justify-content-center align-items-center">
-                                            <img :src="user.value?.media?.[0]?.original_url || 'https://bootdey.com/img/Content/avatar/avatar7.png'"
-                                                :alt="user.value?.name || 'Default Avatar'"
+                                            <img :src="userImage" :alt="user.value?.[0]?.name || 'Default Avatar'"
                                                 class="object-fit-cover w-100 h-100 img-profile" />
                                         </div>
                                     </template>
@@ -66,9 +65,9 @@
 
                             <div class="form-group">
                                 <label for="roles">Roles</label>
-                                <MultiSelect id="roles" v-model="user.role_id" display="chip" :options="roleList"
-                                    optionLabel="name" dataKey="id" placeholder="Seleciona los roles" appendTo="self"
-                                    class="w-100" />
+                                <MultiSelect id="roles" v-model="selectedRole" :options="roleList" optionLabel="name"
+                                    optionValue="id" placeholder="Selecciona los roles" class="w-100"
+                                    :maxSelectedLabels="1" :selectionLimit="1" @change="handleRoleChange" />
                             </div>
 
 
@@ -91,70 +90,70 @@
                 <div class="card-body">
                     <h6 class="mb-2 text-primary">Personal Details</h6>
 
-                    <div class="form-group">
-                        <label for="name">Nombre</label>
-                        <input v-model="user.name" type="text" class="form-control" id="name"
-                            :class="{ 'is-invalid': validationErrors?.name }">
-                        <div class="text-danger mt-1">
-                            <div v-for="message in validationErrors?.name">
-                                {{ message }}
+                    <div v-if="tempUser">
+                        <div class="form-group">
+                            <label for="name">Nombre</label>
+                            <InputText v-model="tempUser[0].name" type="text" class="form-control" id="name"
+                                :class="{ 'is-invalid': validationErrors?.name }" />
+                            <div class="text-danger mt-1">
+                                <div v-for="message in validationErrors?.name">
+                                    {{ message }}
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="surname1">Apellido 1</label>
-                        <input v-model="user.surname1" type="text" class="form-control" id="surname1">
-                        <div class="text-danger mt-1">
-                            <div v-for="message in validationErrors?.surname1">
-                                {{ message }}
+                        <div class="form-group">
+                            <label for="surname1">Apellido 1</label>
+                            <input v-model="tempUser[0].surname1" type="text" class="form-control" id="surname1">
+                            <div class="text-danger mt-1">
+                                <div v-for="message in validationErrors?.surname1">
+                                    {{ message }}
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="surname2">Apellido 2</label>
-                        <input v-model="user.surname2" type="text" class="form-control" id="surname2">
-                        <div class="text-danger mt-1">
-                            <div v-for="message in validationErrors?.surname2">
-                                {{ message }}
+                        <div class="form-group">
+                            <label for="surname2">Apellido 2</label>
+                            <input v-model="tempUser[0].surname2" type="text" class="form-control" id="surname2">
+                            <div class="text-danger mt-1">
+                                <div v-for="message in validationErrors?.surname2">
+                                    {{ message }}
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="alias">Alias</label>
-                        <input v-model="user.alias" type="text" class="form-control" id="alias">
-                        <div class="text-danger mt-1">
-                            <div v-for="message in validationErrors?.alias">
-                                {{ message }}
+                        <div class="form-group">
+                            <label for="alias">Alias</label>
+                            <input v-model="tempUser[0].alias" type="text" class="form-control" id="alias">
+                            <div class="text-danger mt-1">
+                                <div v-for="message in validationErrors?.alias">
+                                    {{ message }}
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input v-model="user.email" type="email" class="form-control" id="email">
-                        <div class="text-danger mt-1">
-                            <div v-for="message in validationErrors?.email">
-                                {{ message }}
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input v-model="tempUser[0].email" type="email" class="form-control" id="email">
+                            <div class="text-danger mt-1">
+                                <div v-for="message in validationErrors?.email">
+                                    {{ message }}
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input v-model="user.password" type="password" class="form-control" id="password">
-                        <div class="text-danger mt-1">
-                            <div v-for="message in validationErrors?.password">
-                                {{ message }}
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input v-model="tempUser[0].password" type="password" class="form-control" id="password">
+                            <div class="text-danger mt-1">
+                                <div v-for="message in validationErrors?.password">
+                                    {{ message }}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
         </div>
     </div>
 
@@ -176,16 +175,40 @@ const { updateUser, getUser, user, createUserDB, deleteUserDB, changeUserPasswor
 
 
 const route = useRoute()
+const tempUser = ref(null);
+const selectedRole = ref([]);
 
+const userImage = ref('https://bootdey.com/img/Content/avatar/avatar7.png');
 
 onMounted(async () => {
     await getRoleList();
-    await getUser(route.params.id);    
+    await getUser(route.params.id); 
+    tempUser.value = user.value;
+
+    if (user.value?.[0]?.roles?.[0]) {
+        selectedRole.value = [user.value[0].roles[0].id];
+        console.log('Role set to:', selectedRole.value);
+    }
+
+    if (user.value?.[0]?.media?.[0]?.original_url) {
+        userImage.value = user.value[0].media[0].original_url;
+    }
 });
+
+const handleRoleChange = (event) => {
+    console.log('Role changed to:', event.value);
+    if (tempUser.value && tempUser.value[0]) {
+        tempUser.value[0].roles = [{
+            id: event.value
+        }];
+    }
+};
+
 // https://vuejs.org/api/reactivity-core.html#watcheffect
 const submitForm = async () => {
     try {
-        await updateUser(user.value);
+        console.log('submitForm', selectedRole.value);
+        await updateUser(tempUser.value, selectedRole.value);
         toast.add({ severity: 'success', summary: 'Success', detail: 'Usuario actualizado correctamente', life: 3000 });
     } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Error al actualizar el usuario', life: 3000 });
@@ -197,8 +220,8 @@ const totalSizePercent = ref(0);
 const files = ref([]);
 
 const onBeforeUpload = (event) => {
-    // console.log('onBeforeUpload')
-    event.formData.append('id', user.id)
+    console.log('onBeforeUpload')
+    event.formData.append('id', user.value[0].id)
 };
 const onRemoveTemplatingFile = (file, removeFileCallback, index) => {
     removeFileCallback(index);
@@ -273,10 +296,9 @@ const deleteUserDBView = async (id) => {
         })
 }
 
-
 const onTemplatedUpload = (event) => {
-    // console.log('onTemplatedUpload');
-    // console.log(event);
+    console.log('onTemplatedUpload');
+    console.log(event);
 };
 
 const formatSize = (bytes) => {

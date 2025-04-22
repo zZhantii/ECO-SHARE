@@ -55,6 +55,17 @@ export default function useVehicles() {
     const router = useRouter();
 
     // Método que consigue todos los vehículos de la API
+    const getVehiclesAdmin = async () => {
+        if (vehiclesList.value.length > 0) return;
+        axios.get("/api/vehicle/").then((response) => {
+            console.log(response.data);
+            for (const e of response.data.data) {
+                vehiclesList.value.push(e);
+            }
+        });
+    };
+
+    // Método que consigue todos los vehículos de la API
     const getVehicles = async () => {
         if (vehiclesList.value.length > 0) return;
         axios.get("/api/app/user-vehicle").then((response) => {
@@ -217,6 +228,7 @@ export default function useVehicles() {
         validationErrors,
         isLoading,
         getVehicles,
+        getVehiclesAdmin,
         getVehicle,
         createVehicle,
         updateVehicle,

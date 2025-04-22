@@ -66,7 +66,7 @@ import useVehicles from "../../../composables/vehicles";
 import { useAbility } from '@casl/vue'
 import { FilterMatchMode, FilterService } from "@primevue/core/api";
 
-const { vehiclesList, getVehicles, deleteVehicle } = useVehicles()
+const { vehiclesList, getVehiclesAdmin, deleteVehicle } = useVehicles()
 const { can } = useAbility()
 
 const filters = ref({
@@ -80,7 +80,7 @@ const initFilters = () => {
 };
 
 onMounted(() => {
-    getVehicles();
+    getVehiclesAdmin();
 })
 
 const deleteVehicleAdmin = async (vehicle) => {
@@ -91,7 +91,7 @@ const deleteVehicleAdmin = async (vehicle) => {
 
 const refreshVehicles = () =>{
     vehiclesList.value = [];
-    getVehicles();
+    getVehiclesAdmin();
 }
 
 </script>
