@@ -204,6 +204,6 @@ function setMarker(Points, Label) {
     width: 100% !important;
     min-height: 300px !important;
     max-height: 700px !important;
-    border-radius: 0px !important;
+    border-radius: 12px !important;
 }
 </style>
