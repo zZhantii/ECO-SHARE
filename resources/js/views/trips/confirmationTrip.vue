@@ -89,7 +89,7 @@
                                         <div
                                             class="user-image-container d-inline-block p-2"
                                         >
-                                            <img
+                                            <img v-if="user[0].media.length > 0" 
                                                 :src="
                                                     user[0].media &&
                                                     user[0].media.length > 0
@@ -240,7 +240,6 @@ import useRates from "@/composables/rates";
 import useTags from "@/composables/tags";
 import useReserves from "@/composables/reserves";
 
-const { createReserve } = useReserves();
 const { getTagWithID, tag } = useTags();
 const { getRateWithId2, rate } = useRates();
 const { getTrip, trip, reservedTrip, getTagTrips, tags } = useTrips();
@@ -364,7 +363,7 @@ const PostTrip = async () => {
 
         // console.log("newTrip", newTrip.value);
 
-        await createReserve(newTrip);
+        await reservedTrip(newTrip);
 
         router.push({ name: "ManageTrips" });
     } catch (error) {

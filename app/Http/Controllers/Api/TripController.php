@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 use App\Models\Trip;
 use App\Model\Tag;
 use Illuminate\Support\Facades\Validator;
@@ -240,22 +241,50 @@ class TripController extends Controller
         ], 200);
     }
 
-    public function reserve(Trip $trip, Request $request)
-    {
+   private function formatDateTime($dateTime)
+{
+    try {
+        return Carbon::parse($dateTime)->format('Y-m-d H:i:s');
+    } catch (\Exception $e) {
+        return Carbon::now()->format('Y-m-d H:i:s');
+    }
+}
+
+public function reserve(Trip $trip, Request $request)
+{
+    try {
         $user_id = auth()->user()->id;
-
-        $seats = $request->available_seats;
         $reserved_seats = $request->seats_reserved;
-
-        if ($seats >= $reserved_seats) {
-            $trip->reserves()->attach($user_id, [
-                'seats_reserved' => $request->seats_reserved,
-                'reservation_date' => $request->reservation_date,
-                'check_in' => $request->check_in
-            ]);
-            return response()->json(["success" => true, "data" => $trip], 200);
+    
+        if ($trip->user_id === $user_id) {
+            return response()->json([
+                "success" => false,
+                "message" => "No puedes reservar tu propio viaje"
+            ], 422);
         }
 
-        return response()->json(["success" => false, 'message' => 'Error al reservar'], 400);
+        $reservation_date = $this->formatDateTime($request->reservation_date);
+
+        $trip->reserves()->attach($user_id, [
+                'seats_reserved' => $request->seats_reserved,
+                'reservation_date' => $reservation_date,
+                'check_in' => $request->check_in
+            ]);
+
+        $trip->load('reserves');
+
+        return response()->json([
+            "success" => true,
+            "message" => "Reserva creada correctamente",
+            "data" => $trip
+        ], 200);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            "success" => false,
+            "message" => "Error al crear la reserva",
+            "error" => $e->getMessage()
+        ], 500);
     }
+}
 }

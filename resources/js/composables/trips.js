@@ -468,25 +468,18 @@ export default function useTrips() {
     //     }
     // }
 
-    const reservedTrip = async (trip, tripID, seats) => {
+    const reservedTrip = async (trip2) => {
         try {
-            const dataTrip = {
-                available_seats: trip.value.available_seats,
-                seats_reserved: seats,
-                reservation_date: new Date()
-                    .toISOString()
-                    .slice(0, 19)
-                    .replace("T", " "),
-                checkIn: null,
-            };
 
-            console.log(dataTrip);
+            // console.log("composable", trip2.value.trip_id);
 
-            const response = await axios.post(
-                "/api/trip/reserve/" + tripID,
-                dataTrip
-            );
+            const response = await axios.post("/api/trip/reserve/" + trip2.value.trip_id, trip2.value            );
             console.log("API response, Trip reservado: " + response.data.data);
+            swal({
+                icon: "success",
+                title: "Reserva creada correctamente",
+                text: response.data.message
+            });
         } catch (error) {
             console.log("Error updating: ", error);
         }

@@ -381,6 +381,29 @@ const start_point = ref("");
 const end_point = ref("");
 const departure_time = ref("");
 
+const calculateAverageRating = async (userId) => {
+    console.log('Calculating average rating for user:', userId);
+    await getRateWithId2(userId);
+
+    console.log('Raw rates data:', rate.value);
+
+    if (rate.value && Array.isArray(rate.value)) {
+        const sum = rate.value.reduce((acc, curr) => {
+            console.log('Current rate:', curr.pivot.rate);
+            return acc + curr.pivot.rate;
+        }, 0);
+        const average = sum / rate.value.length;
+        console.log('Average rating:', average);
+        return average;
+    } else if (rate.value?.pivot?.rate) {
+        console.log('Single rating:', rate.value.pivot.rate);
+        return rate.value.pivot.rate;
+    }
+
+    console.log('No ratings found, returning 0');
+    return 0;
+};
+
 const handleSearch = async (searchData) => {
     try {
         isLoading.value = true;
@@ -408,26 +431,19 @@ const handleSearch = async (searchData) => {
         const trip_id = ref(null);
 
         for (const element of searchTripList.value) {
-            user_id.value = element.user_id;
-            trip_id.value = element.id;
+            const user_id = element.user_id;
+            const trip_id = element.id;
 
-            await getRateWithId2(user_id.value);
+            const averageRating = await calculateAverageRating(user_id);
+            ratings.value[trip_id] = averageRating;
 
-            if (rate.value) {
-                ratings.value[trip_id.value] = rate.value.pivot.rate;
-            } else {
-                ratings.value[trip_id.value] = 0;
-            }
-
-            await getTagTrips(trip_id.value);
-
+            await getTagTrips(trip_id);
             const currentTripTags = [];
             for (const tagId of tags.value) {
                 await getTagWithID(tagId);
                 currentTripTags.push(tag.value.tag_name);
             }
-
-            tagsData.value[trip_id.value] = currentTripTags;
+            tagsData.value[trip_id] = currentTripTags;
         }
 
         await applyFilters();
@@ -481,13 +497,17 @@ const applyFilters = () => {
     }
 
     if (filters.value.lowestRating) {
-        orderedResults.sort(
-            (a, b) => parseFloat(a.rating || 0) - parseFloat(b.rating || 0)
-        );
+        orderedResults.sort((a, b) => {
+            const ratingA = ratings.value[a.id] || 0;
+            const ratingB = ratings.value[b.id] || 0;
+            return ratingA - ratingB;
+        });
     } else if (filters.value.highestRating) {
-        orderedResults.sort(
-            (a, b) => parseFloat(b.rating || 0) - parseFloat(a.rating || 0)
-        );
+        orderedResults.sort((a, b) => {
+            const ratingA = ratings.value[a.id] || 0;
+            const ratingB = ratings.value[b.id] || 0;
+            return ratingB - ratingA;
+        });
     }
 
     if (filters.value.earlyDeparture) {
