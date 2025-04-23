@@ -7,7 +7,6 @@ export default defineConfig({
     plugins: [
         laravel({
             input: ["resources/sass/app.scss", "resources/js/app.js"],
-            // reactivityTransform: true,
             refresh: true,
         }),
         vue({
@@ -19,9 +18,6 @@ export default defineConfig({
             },
         }),
     ],
-    // build: {
-    //     chunkSizeWarningLimit: 1600,
-    // },
     resolve: {
         alias: {
             vue: "vue/dist/vue.esm-bundler.js",
@@ -31,11 +27,15 @@ export default defineConfig({
     css: {
         preprocessorOptions: {
             scss: {
-                api: "modern-compiler", // or "modern"
+                api: "modern-compiler",
             },
         },
     },
     optimizeDeps: {
         include: ["@fawmi/vue-google-maps", "fast-deep-equal"],
+    },
+    build: {
+        outDir: 'public/build',
+        emptyOutDir: true,
     },
 });
