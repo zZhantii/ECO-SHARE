@@ -162,7 +162,7 @@
 
 <script setup>
 import { onMounted, reactive, ref, watchEffect } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { usePrimeVue } from 'primevue/config';
 import useRoles from "@/composables/roles";
 import useUsers from "@/composables/users";
@@ -175,6 +175,7 @@ const { updateUser, getUser, user, createUserDB, deleteUserDB, changeUserPasswor
 
 
 const route = useRoute()
+const router = useRouter();
 const tempUser = ref(null);
 const selectedRole = ref([]);
 
@@ -207,8 +208,8 @@ const handleRoleChange = (event) => {
 // https://vuejs.org/api/reactivity-core.html#watcheffect
 const submitForm = async () => {
     try {
-        console.log('submitForm', selectedRole.value);
         await updateUser(tempUser.value, selectedRole.value);
+        router.back();
         toast.add({ severity: 'success', summary: 'Success', detail: 'Usuario actualizado correctamente', life: 3000 });
     } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Error al actualizar el usuario', life: 3000 });

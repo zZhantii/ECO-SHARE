@@ -66,7 +66,7 @@ import useVehicles from "../../../composables/vehicles";
 import { useAbility } from '@casl/vue'
 import { FilterMatchMode, FilterService } from "@primevue/core/api";
 
-const { vehiclesList, getVehiclesAdmin, deleteVehicle } = useVehicles()
+const { vehiclesList, getVehiclesAdmin, deleteVehicle } = useVehicles();
 const { can } = useAbility()
 
 const filters = ref({
