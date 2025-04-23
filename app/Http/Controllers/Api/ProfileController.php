@@ -54,6 +54,10 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
 
+        $request->validate([
+            'avatar' => 'required|image|mimes:png,jpg,webp|max:2048',
+        ]);
+
         // Si existe el campo avatar, se borra la imagen previa y se sube la nueva a la colección de media
         if ($request->hasFile("avatar")) {
 

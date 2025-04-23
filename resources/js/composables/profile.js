@@ -69,9 +69,11 @@ export default function useProfile() {
                 user.value.avatar = response.data.data.media[0].original_url;
             })
             .catch((error) => {
-                if (error.response?.data) {
-                    validationErrors.value = error.response.data.errors;
-                }
+                swal({
+                    icon: "error",
+                    title: "No se ha podido actualizar la imagen",
+                    text: error.response.data.message,
+                });
             })
             .finally(() => (isLoading.value = false));
     };
