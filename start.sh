@@ -9,12 +9,6 @@ echo "🚀 Iniciando despliegue..."
 echo "📦 Instalando dependencias PHP con Composer..."
 composer install --no-dev --optimize-autoloader
 
-# 2. Crear archivo .env si no existe
-if [ ! -f ".env" ]; then
-  echo "🛠️  Copiando .env.example a .env..."
-  cp .env.example .env
-fi
-
 # 3. Reemplazar la clave de Google Maps si tienes la variable
 if [ ! -z "$VITE_GOOGLE_MAPS_API_KEY" ]; then
   echo "🗺️  Estableciendo clave de Google Maps en .env..."
