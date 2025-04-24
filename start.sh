@@ -19,6 +19,9 @@ php artisan db:seed --force || echo "✋ Seeders ya aplicados, continúo..."
 echo "🔗 Creando enlace simbólico de storage..."
 php artisan storage:link
 
+php artisan config:clear
+php artisan config:cache
+
 # 5. Levantar el servidor en el puerto que asigna Railway
 echo "🌐 Levantando servidor Laravel en puerto ${PORT}..."
 php artisan serve --host=0.0.0.0 --port="${PORT}"
