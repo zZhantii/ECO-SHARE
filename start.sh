@@ -20,6 +20,8 @@ echo "🔗 Creando enlace simbólico de storage..."
 php artisan storage:link
 
 php artisan config:clear
+php artisan route:clear
+php artisan view:clear
 php artisan config:cache
 
 # 5. Levantar el servidor en el puerto que asigna Railway
