@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 echo "🚀 Iniciando despliegue..."
 
@@ -7,22 +8,22 @@ echo "📦 Instalando dependencias PHP..."
 composer install --no-dev --optimize-autoloader
 
 # 2. Instalar y compilar assets con Vite
-echo "🧱 Instalando/compilando assets Frontend..."
+echo "🧱 Instalando y compilando assets Frontend..."
 npm install
 npm run build
 
-# 3. Migrar base de datos
+# 3. Ejecutar migraciones
 echo "📄 Ejecutando migraciones..."
 php artisan migrate --force
 
-# 4. (Opcional) Lanzar seeders; ignorar errores de duplicados
+# 4. Ejecutar seeders (ignora errores de duplicados)
 echo "🌱 Lanzando seeders..."
-php artisan db:seed --force || echo "✋ Algunos seeders ya estaban aplicados, continúo..."
+php artisan db:seed --force || echo "✋ Seeders ya aplicados, continúo..."
 
 # 5. Crear enlace simbólico para storage
-echo "🔗 Creando enlace simbólico a storage..."
+echo "🔗 Creando enlace simbólico para storage..."
 php artisan storage:link
 
-# 6. Iniciar servidor en el puerto que asigne Railway
-echo "🌐 Iniciando servidor Laravel en el puerto ${PORT:-8080}..."
-php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
+# 6. Iniciar servidor en el puerto que asigna Railway
+echo "🌐 Iniciando servidor Laravel en el puerto $PORT..."
+php artisan serve --host=0.0.0.0 --port="$PORT"
