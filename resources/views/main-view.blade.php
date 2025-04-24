@@ -17,7 +17,7 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
     <!--<link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">-->
     <script>
         window.config = @json($config);
@@ -30,9 +30,11 @@
         @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
 </head>
-<body class="font-sans antialiased" id="app">
+<body class="font-sans antialiased" >
    
-    <router-view></router-view>
-   
+    <div id="app">
+        <router-view></router-view>
+    </div>
+    
 </body>
 </html>
