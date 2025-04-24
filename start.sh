@@ -7,23 +7,29 @@ echo "🚀 Iniciando despliegue..."
 echo "📦 Instalando dependencias PHP..."
 composer install --no-dev --optimize-autoloader
 
-# 2. Instalar y compilar assets con Vite
-echo "🧱 Instalando y compilando assets Frontend..."
+# 2. Instalar dependencias de Node
+echo "📦 Instalando dependencias de Node..."
 npm install
+
+# 3. Aumentar límite de memoria de Node para evitar OOM en build
+export NODE_OPTIONS="--max_old_space_size=1024"
+
+# 4. Compilar assets con Vite
+echo "🧱 Compilando frontend con Vite (memoria aumentada)..."
 npm run build
 
-# 3. Ejecutar migraciones
+# 5. Ejecutar migraciones
 echo "📄 Ejecutando migraciones..."
 php artisan migrate --force
 
-# 4. Ejecutar seeders (ignora errores de duplicados)
+# 6. Lanzar seeders (ignora errores de duplicados)
 echo "🌱 Lanzando seeders..."
 php artisan db:seed --force || echo "✋ Seeders ya aplicados, continúo..."
 
-# 5. Crear enlace simbólico para storage
+# 7. Crear enlace simbólico para storage
 echo "🔗 Creando enlace simbólico para storage..."
 php artisan storage:link
 
-# 6. Iniciar servidor en el puerto que asigna Railway
+# 8. Iniciar servidor en el puerto que asigna Railway
 echo "🌐 Iniciando servidor Laravel en el puerto $PORT..."
 php artisan serve --host=0.0.0.0 --port="$PORT"
