@@ -271,6 +271,7 @@ export default function useTrips() {
 
     // Método API  para conseguir todos los viajes activos del usuario autenticado
     const getActiveTrips = async () => {
+        // console.log("Cargando viajes activos del usuario autenticado");
         const responseDriver = await axios.get("/api/app/driver-active-trip");
 
         // Recepción de los viajes activos como conductor
