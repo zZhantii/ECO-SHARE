@@ -231,7 +231,7 @@
                                     class="col-md-4 d-flex flex-column align-items-md-end align-items-center justify-content-center"
                                 >
                                     <h4 class="fw-bold text-primary mb-2">
-                                        ${{ trip.price }}
+                                        {{ trip.price }}€
                                     </h4>
                                     <router-link
                                         :to="{
