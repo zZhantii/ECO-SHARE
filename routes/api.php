@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\api\AppController;
+use App\Http\Controllers\Api\AppController;
 use App\Http\Controllers\Api\AuthorController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\PermissionController;
